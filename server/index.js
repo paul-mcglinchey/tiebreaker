@@ -5,7 +5,7 @@ const db = require('./db');
 const restaurantRouter = require('./routes/restaurant-router')
 
 const app = express();
-const apiPort = 3001;
+const apiPort = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -18,6 +18,14 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+app.use('/health', (req, res) => {
+  res.status(200).json({
+    appName: 'clientsplash-api',
+    version: process.env.npm_package_version,
+    status: 'OK',
+  });
+});
 
 app.use('/api', restaurantRouter)
 
