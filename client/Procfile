@@ -1,4 +1,1 @@
-web : npm install
-web : npm run-scripts build
-web : npm install -g serve
-web : serve -s build
+web : npm start
