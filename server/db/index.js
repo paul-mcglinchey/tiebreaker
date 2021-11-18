@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const dev_db_url = 'mongodb+srv://pmcglinchey:BXQXwJFeCZ2Xs6J@cluster0.tstzn.mongodb.net/sample_restaurants';
+const DB_URL = process.env.SAMPLE_DB_URL || 'mongodb+srv://pmcglinchey:BXQXwJFeCZ2Xs6J@cluster0.tstzn.mongodb.net';
 
 mongoose
-  .connect(process.env.MONGODB_URI || dev_db_url, { useNewUrlParser: true })
+  .connect(`${DB_URL}/sample_restaurants`, { useNewUrlParser: true })
   .catch(e => {
     console.error('Connection error', e.message)
   });
 
-const db = mongoose.connection;
+const restaurant_db = mongoose.connection;
 
-module.exports = db;
+module.exports = restaurant_db;

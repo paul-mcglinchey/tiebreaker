@@ -5,6 +5,9 @@
     "node": "14.16.0"
   },
   "description": "",
+  "engines": {
+    "node": "14.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

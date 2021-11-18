@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import RestaurantEntry from './RestaurantEntry';
+import ENDPOINTS from '../config/endpoints.js';
 
 const RestaurantList = (props) => {
 
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);  
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        'http://localhost:3000/api/restaurants',
+        ENDPOINTS.restaurants
       );
 
       setRestaurants(result.data.data);
