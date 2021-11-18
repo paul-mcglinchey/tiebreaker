@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const db = require('./db');
+const restaurant_db = require('./db');
 const restaurantRouter = require('./routes/restaurant-router')
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.urlencoded({
 }));
 app.use(cors());
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+restaurant_db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
