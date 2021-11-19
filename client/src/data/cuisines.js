@@ -1,19 +1,8 @@
-import axios from "axios";
 import ENDPOINTS from "../config/endpoints"
 
-export const getCuisines = () => {
-    
-    var cuisines = [];
-
-    const fetchData = async () => {
-        const result = await axios(
-            ENDPOINTS.cuisines
-        );
-
-        cuisines = result.data.data;
-    }
-
-    fetchData();
-
+export async function getCuisines() {
+    const cuisines = await fetch(ENDPOINTS.cuisines)
+        .then(response => response.json())
+        .then(data => data.data)
     return cuisines;
 }

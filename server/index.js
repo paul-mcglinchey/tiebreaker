@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const restaurant_db = require('./db');
-const restaurantRouter = require('./routes/restaurant-router')
+const customerRouter = require('./routes/customer-router')
 
 const app = express();
 const apiPort = process.env.PORT || 3001;
@@ -27,6 +27,6 @@ app.use('/health', (req, res) => {
   });
 });
 
-app.use('/api', restaurantRouter)
+app.use('/api', customerRouter)
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
