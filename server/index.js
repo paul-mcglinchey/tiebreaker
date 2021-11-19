@@ -1,22 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 
-const restaurant_db = require('./db');
-const customerRouter = require('./routes/customer-router')
-
 const app = express();
 const apiPort = process.env.PORT || 3001;
 
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-restaurant_db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Welcome to the clientsplash API')
 })
 
 app.use('/health', (req, res) => {
@@ -27,6 +20,19 @@ app.use('/health', (req, res) => {
   });
 });
 
-app.use('/api', customerRouter)
+const db = require('./models');
+db.mongoose
+  .connect(db.url, {
+    useNewUrlParser: true
+  })
+  .then(() => {
+    console.log('Connected to the database!');
+  })
+  .catch(err => {
+    console.log('Cannot connect to the database!', err);
+    process.exit();
+  });
+
+require('./routes/client.routes')(app);
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
