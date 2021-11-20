@@ -16,16 +16,16 @@ const ClientEntry = (props) => {
     <Fragment>
       <div className="flex flex-col p-3 my-2 border-black border-2 rounded space-y-2 filter drop-shadow-sm">
         <div className="container flex justify-between">
-          <div className="flex space-x-4 items-center">
+          <div className="flex space-x-4 items-start">
             <div className="flex flex-col">
-              <span className="inline-block font-bold">
+              <span className="inline-block font-bold uppercase text-gray-700">
                 {props.clientData.clientname.firstName} {props.clientData.clientname.lastName}
               </span>
-              <span className="inline-block text-sm text-purple-600 font-medium">
+              <span className="inline-block text-sm text-purple-600 font-medium uppercase">
                 Joined: {makeDate(props.clientData.createdAt)}
               </span>
             </div>
-            <div className="space-x-2 hidden sm:block">
+            <div className="space-x-2 hidden sm:block pt-1">
               <InfoPillBox data={props.clientData.sessions.length}>Sessions</InfoPillBox>
               <InfoPillBox data={makeDate(props.clientData.birthdate)}>Birthday</InfoPillBox>
             </div>
