@@ -9,5 +9,8 @@ module.exports = app => {
   // Get all clients
   router.get('/', clients.findAll);
 
+  // Get maximum number of pages of clients
+  router.get('/pagesofclients', clients.maxNumberOfPages);
+
   app.use('/api/clients', router);
 }

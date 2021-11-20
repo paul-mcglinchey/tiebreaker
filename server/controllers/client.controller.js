@@ -35,16 +35,38 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all tutorials from the database
+// Retrieve all clients from the database
 exports.findAll = (req, res) => {
+  const numClients = 0;
+
+  if (req.query.page) {
+    Client.find({}).limit(10).skip(req.query.page * 10)
+  }
   Client.find({})
     .then(data => {
-      res.send(data);
+      res.send({
+        data
+      })
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving clients."
+          err.message || 'Some error occurred while retrieving clients.'
       });
     });
 };
+
+exports.maxNumberOfPages = (req, res) => {
+  Client.find({})
+    .then(data => {
+      res.send({
+        maxPagesClients: Math.floor(data.length / 10)
+      })
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occured while retrieving number of clients.'
+      })
+    })
+}

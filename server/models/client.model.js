@@ -22,6 +22,8 @@ module.exports = mongoose => {
         address: { type: String, required: true },
         birthdate: { type: Date, required: true },
         contactinfo: {
+          primaryPhoneNumber: Number,
+          primaryEmail: String,
           emails: [String],
           phoneNumbers: [Number]
         },
