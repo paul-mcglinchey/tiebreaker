@@ -30,7 +30,7 @@ const AddNewClient = (props) => {
       >
         {({ errors, touched }) => (
           <Form className="flex flex-col py-2 space-y-1">
-            <div className="sm:flex flex-col sm:space-x-2 space-x-0 space-y-1 sm:space-y-0">
+            <div className="flex flex-col sm:flex-row sm:space-x-2 space-x-0 space-y-1 sm:space-y-0">
               <StyledField name="firstName" placeholder="First name">
                 {errors.firstName && touched.firstName ? (
                   <StyledErrorMessage>{errors.firstName}</StyledErrorMessage>
