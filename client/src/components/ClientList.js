@@ -33,9 +33,12 @@ const ClientList = (props) => {
 
       setMaxPages(pages.data.maxPagesClients)
     }
-
-    fetchData();
-  }, [pageNumber])
+    
+    setTimeout(() => {
+      fetchData();
+    }, 500);
+    
+  })
 
   return (
     <div>

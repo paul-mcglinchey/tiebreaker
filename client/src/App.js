@@ -1,8 +1,8 @@
 import AddNewButton from './components/AddNewButton';
-import CustomerList from './components/ClientList';
 import { useState } from 'react';
 import AddNewClient from './components/AddNewClient';
 import { Transition } from '@headlessui/react';
+import ClientList from './components/ClientList';
 
 function App() {
 
@@ -29,7 +29,7 @@ function App() {
           leaveFrom="transform opacity-100"
           leaveTo="transform opacity-0"
         >
-          <CustomerList />
+          <ClientList />
         </Transition>
         <Transition
           show={newClientActive}

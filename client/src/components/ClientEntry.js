@@ -1,5 +1,6 @@
 import { ChevronDownIcon, XIcon, PlusIcon } from "@heroicons/react/solid";
 import { Fragment, useState } from 'react';
+import endpoints from "../config/endpoints";
 import InfoPillBox from "./InfoPillBox";
 
 const ClientEntry = (props) => {
@@ -7,6 +8,20 @@ const ClientEntry = (props) => {
   const makeDate = (isoDate) => {
     var date = new Date(isoDate);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  }
+
+  const deleteClient = () => {
+    fetch((endpoints.deleteclient + '?clientId=' + props.clientData._id), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type':'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(result => console.log(result))
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   const [expanded, setExpanded] = useState(false);
@@ -51,7 +66,7 @@ const ClientEntry = (props) => {
                 </button>
               </div>
               <div className="flex border-2 rounded-xl border-red-500 bg-red-500 items-center transform transition-all hover:scale-110">
-                <button>
+                <button onClick={() => deleteClient()}>
                   <XIcon className="h-8 w-8 text-white" />
                 </button>
               </div>
