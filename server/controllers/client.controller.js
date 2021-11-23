@@ -16,12 +16,20 @@ exports.create = (req, res) => {
       lastName: req.body.lastName,
       middleNames: req.body.middleNames
     },
-    address: req.body.address,
+    address: {
+      firstLine: req.body.addressLineOne,
+      secondLine: req.body.addressLineTwo,
+      thirdLine: req.body.addressLineThree,
+      city: req.body.city,
+      country: req.body.country,
+      postCode: req.body.postCode
+    },
     birthdate: req.body.birthdate,
     contactinfo: {
-      emails: req.body.emails,
-      phoneNumbers: req.body.phoneNumbers
-    }
+      primaryEmail: req.body.email,
+      primaryPhoneNumber: req.body.phoneNumber
+    },
+    sessions: []
   });
 
   // Save client in the database
@@ -54,6 +62,7 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Get the maximum number of pages of clients
 exports.maxNumberOfPages = (req, res) => {
   Client.find({})
     .then(data => {
@@ -69,26 +78,40 @@ exports.maxNumberOfPages = (req, res) => {
     })
 }
 
+// Update a client's sessions
+exports.addSession = (req, res) => {
+
+  const newSession = { title: req.body.title, description: req.body.description, notes: req.body.notes, date: req.body.date };
+
+  Client.findOneAndUpdate({ _id: req.body._id }, { $push: { sessions: newSession } },
+    function (error, success) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(success);
+      }
+    });
+}
+
 // Deletes a client by ID
 exports.deleteClient = (req, res) => {
-  console.log(req.query)
   Client.findByIdAndRemove(req.query.clientId)
-  .then(client => {
-    if (!client) {
-      return res.status(404).send({
-        message: 'Client not found with id ' + req.query.clientId
-      });
-    };
+    .then(client => {
+      if (!client) {
+        return res.status(404).send({
+          message: 'Client not found with id ' + req.query.clientId
+        });
+      };
 
-    res.send({ message: 'Client deleted successfully' });
-  }).catch(err => {
-    if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-      return res.status(404).send({
-        message: 'Client not found with id ' + req.query.clientId
+      res.send({ message: 'Client deleted successfully' });
+    }).catch(err => {
+      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+        return res.status(404).send({
+          message: 'Client not found with id ' + req.query.clientId
+        });
+      };
+      return res.status(500).send({
+        message: 'Could not delete note with id ' + req.query.clientId
       });
-    };
-    return res.status(500).send({
-      message: 'Could not delete note with id ' + req.query.clientId
     });
-  });
 }

@@ -8,6 +8,9 @@ module.exports = {
     maxWidth: {
       '2/3': '66.67%',
       '1/3': '33.33%',
+      '1/5': '20%',
+      '3/10': '30%',
+      '7/10': '70%'
     },
     extend: {
       backgroundImage: {

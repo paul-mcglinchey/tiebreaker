@@ -21,6 +21,8 @@ const StyledField = (props) => {
       <Field
         className="appearance-none focus:outline-none border-2 border-gray-200 rounded focus:border-purple-500 focus:bg-white placeholder-gray-700 bg-gray-200 rounded-sm py-2 px-4 text-gray-700 leading-tight"
         name={props.name}
+        autoComplete={props.autocomplete}
+        component={props.component}
       />
     </div>
   )

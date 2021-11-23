@@ -15,5 +15,8 @@ module.exports = app => {
   // Get maximum number of pages of clients
   router.get('/pagesofclients', clients.maxNumberOfPages);
 
+  // Add a session to a client's sessions array
+  router.put('/sessions', clients.addSession);
+
   app.use('/api/clients', router);
 }

@@ -3,7 +3,7 @@ const CustomDate = ({
   ...props
 }) => (
   <div>
-    <input type="date" {...field} {...props} min="1990-01-01" />
+    <input type="date" {...field} {...props} min="1900-01-01" placeholder="1970-01-01" />
   </div>
 );
 

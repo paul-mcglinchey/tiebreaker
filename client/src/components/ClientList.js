@@ -33,20 +33,20 @@ const ClientList = (props) => {
 
       setMaxPages(pages.data.maxPagesClients)
     }
-    
+
     setTimeout(() => {
       fetchData();
     }, 500);
-    
+
   })
 
   return (
     <div>
       <div>
-        {clients && clients.map((r, i) => {
+        {clients && clients.map(r => {
           return (
             <CustomerEntry
-              key={i}
+              key={r._id}
               clientData={r}
             />
           )

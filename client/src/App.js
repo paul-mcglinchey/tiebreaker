@@ -10,9 +10,9 @@ function App() {
   const toggleNewClientActive = () => setNewClientActive(!newClientActive);
 
   return (
-    <div className="App max-w-screen-lg mx-auto font-sans subpixel-antialiased">
-      <div className="container mx-auto mt-5 sm:border-4 rounded-xl p-2 border-purple-600">
-        <div className="flex justify-between items-center mb-4">
+    <div className="font-sans subpixel-antialiased md:pt-5 bg-gradient-to-b from-blue-500 via-green-500">
+      <div className="md:container mx-auto md:rounded-xl p-2 bg-white filter md:drop-shadow-lg">
+        <div className="flex justify-between items-end mb-4">
           <div className="bg-clip-text bg-gradient-to-r from-blue-500 to-green-500bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 text-transparent text-5xl font-extrabold">
             <h1>ClientSplash</h1>
           </div>
