@@ -8,7 +8,6 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Content cannot be empty!" });
     return;
   }
-  console.log(req.body.firstName);
   // Create a new client
   const client = new Client({
     clientname: {
@@ -111,7 +110,7 @@ exports.deleteClient = (req, res) => {
         });
       };
       return res.status(500).send({
-        message: 'Could not delete note with id ' + req.query.clientId
+        message: 'Could not delete client with id ' + req.query.clientId
       });
     });
 }

@@ -1,11 +1,13 @@
-const dbConfig = require('../config/db.config.js');
-
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const db = {};
 db.mongoose = mongoose;
-db.url = `${dbConfig.url}/clientbase`;
-db.clients = require('./client.model.js')(mongoose);
+
+db.user = require('./user.model.js');
+db.role = require('./role.model.js');
+db.client = require('./client.model.js');
+
+db.ROLES = ["user", "admin"];
 
 module.exports = db;

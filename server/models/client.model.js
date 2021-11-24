@@ -1,4 +1,5 @@
-const { Schema } = require("mongoose");
+const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 
 const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
@@ -29,20 +30,15 @@ const SessionSchema = new Schema({
   date: { type: Date, required: true }
 });
 
-module.exports = mongoose => {
-  const Client = mongoose.model(
-    "clients",
-    mongoose.Schema(
-      {
-        clientname: NameSchema,
-        address: AddressSchema,
-        birthdate: { type: Date, required: true },
-        contactInfo: ContactInfoSchema,
-        sessions: [SessionSchema]
-      },
-      { timestamps: true }
-    )
-  );
+const Client = mongoose.model(
+  "Client",
+  new Schema({
+    clientName: NameSchema,
+    address: AddressSchema,
+    birthdate: { type: Date, required: true },
+    contactInfo: ContactInfoSchema,
+    sessions: [SessionSchema]
+  }, { timestamps: true })
+);
 
-  return Client;
-};
+module.exports = Client;
