@@ -1,50 +1,76 @@
-import AddNewButton from './components/AddNewButton';
-import { useState } from 'react';
-import AddNewClient from './components/AddNewClient';
-import { Transition } from '@headlessui/react';
-import ClientList from './components/ClientList';
+import Home from './components/Home.js';
+import Login from './components/Login.js';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import allActions from './actions';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation
+} from 'react-router-dom';
+import axios from 'axios';
+import endpoints from './config/endpoints.js';
 
-function App() {
+export default function App() {
 
-  const [newClientActive, setNewClientActive] = useState(false);
-  const toggleNewClientActive = () => setNewClientActive(!newClientActive);
+  const currentUser = useSelector(state => state.currentUser);
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  function PrivateRoute({ children }) {
+    return currentUser.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />;
+  }
+
+  axios.interceptors.request.use(
+    config => {
+      const { origin } = new URL(config.url);
+      const allowedOrigins = [endpoints.origin];
+      const token = localStorage.getItem('token');
+
+      if (allowedOrigins.includes(origin)) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
+
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+  )
 
   return (
-    <div className="font-sans subpixel-antialiased md:pt-5 bg-gradient-to-b from-blue-500 via-green-500">
-      <div className="md:container mx-auto md:rounded-xl p-2 bg-white filter md:drop-shadow-lg">
-        <div className="flex justify-between items-end mb-4">
-          <div className="bg-clip-text bg-gradient-to-r from-blue-500 to-green-500bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 text-transparent text-5xl font-extrabold">
-            <h1>ClientSplash</h1>
+    <div>
+      <div>
+        {currentUser.loggedIn &&
+          <div className="flex justify-between px-3 py-3">
+            <span>{currentUser.user.name}</span>
+            <button
+              onClick={() => dispatch(allActions.userActions.logOut())}
+              className="px-2 border-2 border-blue-500 rounded"
+            >
+              Log Out
+            </button>
           </div>
-          <div className="flex space-x-2">
-            <AddNewButton toggleNewClientActive={() => toggleNewClientActive()} newClientActive={newClientActive} />
-          </div>
-        </div>
-        <Transition
-          show={!newClientActive}
-          enter="transition ease-out duration-75"
-          enterFrom="transform opacity-0"
-          enterTo="transform opacity-100"
-          leave="transition ease-in duration-150"
-          leaveFrom="transform opacity-100"
-          leaveTo="transform opacity-0"
-        >
-          <ClientList />
-        </Transition>
-        <Transition
-          show={newClientActive}
-          enter="transition ease-out duration-150"
-          enterFrom="transform opacity-0"
-          enterTo="transform opacity-100"
-          leave="transition ease-in duration-150"
-          leaveFrom="transform opacity-100"
-          leaveTo="transform opacity-0"
-        >
-          <AddNewClient />
-        </Transition>
+        }
       </div>
-    </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <Login />
+          }
+        />
+      </Routes>
+    </div >
   );
 }
-
-export default App;

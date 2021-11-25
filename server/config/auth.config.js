@@ -1,3 +1,3 @@
 module.exports = {
-  secret: "pmcglinchey-secret-key"
+  secret: process.env.SECRET_KEY || "pmcglinchey-secret-key"
 };

@@ -23,6 +23,7 @@ const StyledField = (props) => {
         name={props.name}
         autoComplete={props.autocomplete}
         component={props.component}
+        type={props.type}
       />
     </div>
   )
