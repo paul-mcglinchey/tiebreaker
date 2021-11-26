@@ -3,11 +3,16 @@ import { useState } from 'react';
 import AddNewButton from './AddNewButton';
 import AddNewClient from './AddNewClient';
 import ClientList from './ClientList';
+import Userfront from "@userfront/core";
 
-const Home = (props) => {
+const Dashboard = (props) => {
 
   const [newClientActive, setNewClientActive] = useState(false);
   const toggleNewClientActive = () => setNewClientActive(!newClientActive);
+
+  const handleLogout = () => {
+    Userfront.logout();
+  }
 
   return (
     <div className="font-sans subpixel-antialiased md:pt-5 bg-gradient-to-b from-blue-500 via-green-500">
@@ -17,7 +22,15 @@ const Home = (props) => {
             <h1>ClientSplash</h1>
           </div>
           <div className="flex space-x-2">
-            <AddNewButton toggleNewClientActive={() => toggleNewClientActive()} newClientActive={newClientActive} />
+            <div className="flex space-x-2">
+              <AddNewButton toggleNewClientActive={() => toggleNewClientActive()} newClientActive={newClientActive} />
+            </div>
+            <button
+              onClick={() => handleLogout()}
+              className="px-2 border border-purple-300 rounded-md text-sm font-medium text-purple-500 px-2 py-2 shadow-sm bg-white hover:text-white hover:bg-purple-500 transition-all"
+            >
+              Log Out
+            </button>
           </div>
         </div>
         <Transition
@@ -47,4 +60,4 @@ const Home = (props) => {
   )
 }
 
-export default Home;
+export default Dashboard;
