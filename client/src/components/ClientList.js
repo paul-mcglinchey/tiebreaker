@@ -3,6 +3,7 @@ import axios from 'axios';
 import endpoints from '../config/endpoints.js';
 import CustomerEntry from './ClientEntry';
 import PageChanger from './PageChanger';
+import Userfront from '@userfront/core';
 
 const ClientList = (props) => {
 
@@ -21,24 +22,30 @@ const ClientList = (props) => {
     const fetchData = async () => {
       const clientsresult = await axios({
         method: 'get',
-        url: `${endpoints.clients}?page=${pageNumber}`
+        url: `${endpoints.clients}?page=${pageNumber}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Userfront.tokens.accessToken}`
+        }
       });
 
       setClients(clientsresult.data.data);
 
       const pages = await axios({
         method: 'get',
-        url: `${endpoints.pagesofclients}`
+        url: `${endpoints.pagesofclients}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Userfront.tokens.accessToken}`
+        }
       });
 
       setMaxPages(pages.data.maxPagesClients)
     }
 
-    setTimeout(() => {
-      fetchData();
-    }, 500);
+    fetchData();
 
-  })
+  }, [pageNumber])
 
   return (
     <div>

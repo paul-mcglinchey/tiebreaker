@@ -6,7 +6,9 @@ const endpoints = {
     "pagesofclients": BASE_URL + "clients/pagesofclients",
     "deleteclient": BASE_URL + "clients/deleteclient",
     "addsession": BASE_URL + "clients/sessions",
-    "signin": BASE_URL + "auth/signin"
+    "configureuser": BASE_URL + "users/configureuser",
+    "creategroup": BASE_URL + "users/creategroup",
+    "getgroups": BASE_URL + "users/groups"
 }
 
 export default endpoints;

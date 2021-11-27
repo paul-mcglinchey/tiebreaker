@@ -9,6 +9,7 @@ import CustomDate from './forms/CustomDate';
 import endpoints from '../config/endpoints';
 import SpinnerSVG from './svg/SpinnerSVG';
 import CustomCheckbox from './CustomCheckbox';
+import Userfront from '@userfront/core';
 
 const AddNewClient = (props) => {
 
@@ -30,12 +31,14 @@ const AddNewClient = (props) => {
     setHasMessage(true);
     setFailed(false);
 
-    console.log("posting", values);
+    values.group = props.userGroup;
+    console.log('posting:', values);
 
     fetch((endpoints.clients), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
       },
       body: JSON.stringify(values)
     })

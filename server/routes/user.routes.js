@@ -1,22 +1,16 @@
-const { authJwt } = require('../middlewares');
-const controller = require('../controllers/user.controller');
+module.exports = app => {
+  const user = require('../controllers/user.controller.js');
 
-module.exports = function (app) {
-  app.use(function (req, res, next) {
-    res.header(
-      'Access-Control-Allow-Headers',
-      'x-access-token, Origin, Content-Type, Accept'
-    );
-    next();
-  });
+  var router = require('express').Router();
 
-  app.get('/api/test/all', controller.allAccess);
+  // Create a new client
+  router.post('/configureuser', user.configureUser);
 
-  app.get('/api/test/user', [authJwt.verifyToken], controller.userBoard);
+  // Create a new group
+  router.post('/creategroup', user.createGroup);
 
-  app.get(
-    '/api/test/admin',
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
-  );
-};
+  // Get all groups that the user belongs to
+  router.get('/groups', user.getGroups);
+
+  app.use('/api/users', router);
+}

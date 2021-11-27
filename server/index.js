@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { verifyToken } = require('./middlewares/authJwt');
 
 const app = express();
 const apiPort = process.env.PORT || 3001;
@@ -22,49 +23,24 @@ app.use('/health', (req, res) => {
 
 const dbConfig = require('./config/db.config');
 const db = require('./models');
-const Role = db.role;
 
 db.mongoose
-  .connect((process.env.CLIENTS_DB_URL || dbConfig.url) + '/clientbase', {
+  .connect((dbConfig.url) + '/clientbase', {
     useNewUrlParser: true
   })
   .then(() => {
     console.log('Connected to the database!');
-    initial();
   })
   .catch(err => {
     console.log('Cannot connect to the database!', err);
     process.exit();
   });
 
-function initial() {
-  Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: 'user'
-      }).save(err => {
-        if (err) {
-          console.log('error', err);
-        }
-
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: 'admin'
-      }).save(err => {
-        if (err) {
-          console.log('error', err);
-        }
-
-        console.log("added 'admin' to roles collection");
-      })
-    }
-  })
-}
+// Auth
+app.use(verifyToken);
 
 // routes
-require('./routes/auth.routes')(app);
+require('./routes/client.routes')(app);
 require('./routes/user.routes')(app);
 
 // set port, listen for requests

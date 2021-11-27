@@ -5,9 +5,7 @@ const db = {};
 db.mongoose = mongoose;
 
 db.user = require('./user.model.js');
-db.role = require('./role.model.js');
 db.client = require('./client.model.js');
-
-db.ROLES = ["user", "admin"];
+db.group = require('./group.model.js');
 
 module.exports = db;

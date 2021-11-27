@@ -11,7 +11,6 @@ import Userfront from "@userfront/core";
 import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
 
-
 export default function App() {
 
   const location = useLocation();
@@ -25,7 +24,7 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={<Navigate to ="/dashboard"/>}
+          element={<Navigate to="/dashboard" />}
         />
         <Route
           path="dashboard"

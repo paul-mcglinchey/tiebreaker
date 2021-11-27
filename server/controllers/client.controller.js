@@ -1,5 +1,7 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
-const Client = db.clients;
+const Group = require('../models/group.model');
+const Client = db.client;
 
 // Create and save a new client
 exports.create = (req, res) => {
@@ -10,10 +12,10 @@ exports.create = (req, res) => {
   }
   // Create a new client
   const client = new Client({
-    clientname: {
+    clientName: {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      middleNames: req.body.middleNames
+      middleNames: req.body.middleNames.split(" ")
     },
     address: {
       firstLine: req.body.addressLineOne,
@@ -35,6 +37,14 @@ exports.create = (req, res) => {
   client
     .save(client)
     .then(data => {
+      Group.updateOne({ groupname: req.body.groupname }, { $push: { clients: new ObjectId(data._id) } })
+        .then(group => {
+          console.log(group);
+
+        })
+        .catch(err => {
+          console.log(err.message);
+        })
       res.send(data);
     })
     .catch(err => {
@@ -44,20 +54,17 @@ exports.create = (req, res) => {
       });
     });
 };
-
 // Retrieve all clients from the database
-exports.findAll = (req, res) => {
-  Client.find({}).limit(10).skip(req.query.page * 10)
+exports.findAll = (req, res, next) => {
+
+  Client.find({ userId: req.auth.userId }).limit(10).skip(req.query.page * 10)
     .then(data => {
       res.send({
         data
       })
     })
     .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving clients.'
-      });
+      res.sendStatus(500).send({ error: err.message });
     });
 };
 

@@ -3,21 +3,12 @@ const mongoose = require('mongoose');
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-    clients: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Client'
-      }
-    ],
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Role'
-      }
-    ]
+    email: { type: String, required: true },
+    username: { type: String, required: true },
+    userId: { type: String, required: true },
+    lastLogin: { type: Date, required: true }
+  }, {
+    timestamps: true
   })
 )
 

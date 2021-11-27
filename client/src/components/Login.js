@@ -5,6 +5,7 @@ import StyledField from "./forms/StyledField";
 import LoginSchema from "../helpers/loginSchema";
 import Userfront from "@userfront/core";
 import { Link } from 'react-router-dom';
+import endpoints from '../config/endpoints';
 
 Userfront.init("wn9p69b5");
 
@@ -13,7 +14,6 @@ const Login = (props) => {
   const [error, setError] = useState();
 
   const handleSubmit = (values) => {
-    console.log('here');
     setError();
 
     Userfront.login({
@@ -21,9 +21,26 @@ const Login = (props) => {
       emailOrUsername: values.emailOrUsername,
       password: values.password
     })
-    .catch((error) => {
-      setError(error.message);
-    })
+      .then(() => {
+        fetch(endpoints.configureuser, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Userfront.tokens.accessToken}`
+          },
+          body: JSON.stringify(Userfront.user)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch((error) => {
+            setError(error.message);
+          })
+      })
+      .catch((error) => {
+        setError(error.message);
+      })
   }
 
   return (
@@ -37,7 +54,6 @@ const Login = (props) => {
           }}
           validationSchema={LoginSchema}
           onSubmit={(values) => {
-            console.log('here')
             handleSubmit(values);
           }}
         >
@@ -60,7 +76,7 @@ const Login = (props) => {
                 </div>
                 <div className="flex justify-center">
                   <Link to='/passwordresetrequest'>
-                    <button type="button" className="font-bold text-gray-500 hover:text-gray-800 transition-all px-4 py-2 mt-24">
+                    <button type="button" className="font-bold text-gray-500 hover:text-gray-800 transition-all px-4 py-2 mt-10">
                       Forgot password?
                     </button>
                   </Link>
