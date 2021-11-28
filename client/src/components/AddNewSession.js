@@ -42,7 +42,7 @@ const AddNewSession = (props) => {
       <div className="flex flex-col h-full">
         <div className="flex justify-between items-center">
           <div className="text-3xl font-bold">
-            Add a new session for <span className="text-green-500">{props.clientData.clientname.firstName} {props.clientData.clientname.lastName}</span>.
+            Add a new session for <span className="text-green-500">{props.clientData.clientName.firstName} {props.clientData.clientName.lastName}</span>.
           </div>
           <button onClick={() => props.toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
             Cancel

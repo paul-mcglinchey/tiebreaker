@@ -7,6 +7,8 @@ import StyledField from './forms/StyledField';
 
 const CreateGroupForm = (props) => {
 
+  const { getGroups } = props;
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -29,6 +31,7 @@ const CreateGroupForm = (props) => {
           setError(data.message)
         } else {
           setSuccess(data.success);
+          getGroups();
         }
       })
       .catch((error) => {

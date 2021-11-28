@@ -1,10 +1,11 @@
 module.exports = app => {
   const clients = require('../controllers/client.controller.js');
+  const middleware = require('../middlewares');
 
   var router = require('express').Router();
 
   // Create a new client
-  router.post('/', clients.create);
+  router.post('/', middleware.createClient.isGroupNameSet, clients.create);
 
   // Get all clients
   router.get('/', clients.findAll);

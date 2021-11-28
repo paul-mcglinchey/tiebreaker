@@ -8,6 +8,8 @@ import Userfront from "@userfront/core";
 import CreateGroup from './CreateGroup';
 import CreateGroupButton from './CreateGroupButton';
 import DropdownMenu from './DropdownMenu';
+import getClients from '../fetches/getClients';
+import getGroups from '../fetches/getGroups';
 
 const Dashboard = (props) => {
 
@@ -16,6 +18,10 @@ const Dashboard = (props) => {
 
   const [newClientActive, setNewClientActive] = useState(false);
   const toggleNewClientActive = () => setNewClientActive(!newClientActive);
+
+  const [clients, setClients] = useState([]);
+  const [maxPages, setMaxPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
 
   const [groups, setGroups] = useState([]);
   const [userGroup, setUserGroup] = useState();
@@ -37,10 +43,10 @@ const Dashboard = (props) => {
               <CreateGroupButton setNewClientActive={setNewClientActive} setFormVisible={toggleFormVisible} className="px-2 border border-purple-300 rounded-md text-sm font-medium text-purple-500 px-2 py-2 shadow-sm bg-white hover:text-white hover:bg-purple-500 transition-all" />
             </div>
             <div>
-              <DropdownMenu groups={groups} setGroups={setGroups} userGroup={userGroup} setUserGroup={setUserGroup} />
+              <DropdownMenu groups={groups} getGroups={() => getGroups(setGroups)} userGroup={userGroup} setUserGroup={setUserGroup} />
             </div>
             <div className="">
-              <AddNewButton toggleNewClientActive={() => toggleNewClientActive()} newClientActive={newClientActive} />
+              <AddNewButton toggleNewClientActive={() => toggleNewClientActive()} newClientActive={newClientActive} setFormVisible={setFormVisible} />
             </div>
             <button
               onClick={() => handleLogout()}
@@ -59,7 +65,7 @@ const Dashboard = (props) => {
           leaveFrom="transform opacity-100"
           leaveTo="transform opacity-0"
         >
-          <ClientList />
+          <ClientList getClients={() => getClients(userGroup, setMaxPages, pageNumber, setClients)} clients={clients} maxPages={maxPages} pageNumber={pageNumber} setPageNumber={setPageNumber} userGroup={userGroup} />
         </Transition>
         <Transition
           show={newClientActive}
@@ -71,8 +77,8 @@ const Dashboard = (props) => {
           leaveTo="transform opacity-0"
         >
           {groups.length > 0 && !formVisible
-            ? <AddNewClient userGroup={userGroup} />
-            : <CreateGroup setGroups={setGroups} setNewClientActive={setNewClientActive} setFormVisible={setFormVisible} formVisible={formVisible} />}
+            ? <AddNewClient userGroup={userGroup} getClients={() => getClients(userGroup, setMaxPages, pageNumber, setClients)} />
+            : <CreateGroup setGroups={setGroups} setNewClientActive={setNewClientActive} setFormVisible={setFormVisible} formVisible={formVisible} getGroups={() => getGroups(setGroups)} />}
         </Transition>
       </div>
     </div>

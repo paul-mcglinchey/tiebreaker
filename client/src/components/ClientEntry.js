@@ -9,6 +9,8 @@ import { makeDate } from "../helpers/dateParser";
 
 const ClientEntry = (props) => {
 
+  const { getClients } = props;
+
   const [expanded, setExpanded] = useState(false);
   const toggleExpansion = () => setExpanded(!expanded);
 
@@ -22,7 +24,7 @@ const ClientEntry = (props) => {
           <div className="flex space-x-4 items-center">
             <div className="flex flex-col">
               <span className="inline-block font-bold uppercase text-gray-700">
-                {props.clientData.clientname.firstName} {props.clientData.clientname.lastName}
+                {props.clientData.clientName.firstName} {props.clientData.clientName.lastName}
               </span>
               <span className="inline-block text-sm text-purple-600 font-medium uppercase">
                 Joined: {makeDate(props.clientData.createdAt, '/')}
@@ -64,7 +66,7 @@ const ClientEntry = (props) => {
                   No sessions for this client
                 </div>
               }
-              <DeleteClient clientId={props.clientData._id} setExpanded={() => setExpanded()} />
+              <DeleteClient clientId={props.clientData._id} setExpanded={() => setExpanded()} getClients={getClients}/>
             </div>
           </div>
         </Transition>

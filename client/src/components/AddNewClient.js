@@ -13,6 +13,8 @@ import Userfront from '@userfront/core';
 
 const AddNewClient = (props) => {
 
+  const { getClients } = props;
+
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
 
@@ -31,7 +33,7 @@ const AddNewClient = (props) => {
     setHasMessage(true);
     setFailed(false);
 
-    values.group = props.userGroup;
+    values.groupname = props.userGroup;
     console.log('posting:', values);
 
     fetch((endpoints.clients), {
@@ -45,17 +47,21 @@ const AddNewClient = (props) => {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
+          if (result.message) {
+            setMessage(result.message);
+            setFailed(true);
+          } else if (result.success) {
+            setMessage(result.success);
+          }
           setIsLoading(false);
-          setMessage('Client added');
+          getClients();
         }
       )
       .catch(
         (error) => {
-          console.log(error);
           setIsLoading(false);
           setFailed(true);
-          setMessage('Failed to add client');
+          console.log(error.message);
         }
       )
   }

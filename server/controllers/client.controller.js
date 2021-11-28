@@ -1,6 +1,6 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
-const Group = require('../models/group.model');
+const Group = db.group;
 const Client = db.client;
 
 // Create and save a new client
@@ -38,12 +38,11 @@ exports.create = (req, res) => {
     .save(client)
     .then(data => {
       Group.updateOne({ groupname: req.body.groupname }, { $push: { clients: new ObjectId(data._id) } })
-        .then(group => {
-          console.log(group);
-
-        })
         .catch(err => {
-          console.log(err.message);
+          res.status(500).send({
+            message:
+              err.message || 'Could not add the client to this group.'
+          })
         })
       res.send(data);
     })
@@ -56,15 +55,27 @@ exports.create = (req, res) => {
 };
 // Retrieve all clients from the database
 exports.findAll = (req, res, next) => {
-
-  Client.find({ userId: req.auth.userId }).limit(10).skip(req.query.page * 10)
-    .then(data => {
-      res.send({
-        data
-      })
+  Group.findOne({ groupname: req.query.groupname })
+    .then(group => {
+      let clientIds = group.clients;
+      Client.find({ _id: { $in: clientIds } })
+        .then(clients => {
+          res.status(200).send({
+            data: clients
+          })
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || 'A problem occurred fetching clients.'
+          })
+        })
     })
     .catch(err => {
-      res.sendStatus(500).send({ error: err.message });
+      res.status(500).send({
+        message:
+          err.message || 'A problem occurred fetching clients.'
+      });
     });
 };
 
@@ -101,16 +112,9 @@ exports.addSession = (req, res) => {
 
 // Deletes a client by ID
 exports.deleteClient = (req, res) => {
-  Client.findByIdAndRemove(req.query.clientId)
-    .then(client => {
-      if (!client) {
-        return res.status(404).send({
-          message: 'Client not found with id ' + req.query.clientId
-        });
-      };
-
-      res.send({ message: 'Client deleted successfully' });
-    }).catch(err => {
+  // Delete the client from it's group
+  Group.findOneAndUpdate({ groupname: req.body.groupname }, { $pull: { _id: new ObjectId(req.query.clientId)}})
+    .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
           message: 'Client not found with id ' + req.query.clientId

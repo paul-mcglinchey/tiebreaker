@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { verifyToken } = require('./middlewares/authJwt');
+const middleware = require('./middlewares');
 
 const app = express();
 const apiPort = process.env.PORT || 3001;
@@ -37,7 +37,7 @@ db.mongoose
   });
 
 // Auth
-app.use(verifyToken);
+app.use(middleware.authJwt.verifyToken);
 
 // routes
 require('./routes/client.routes')(app);

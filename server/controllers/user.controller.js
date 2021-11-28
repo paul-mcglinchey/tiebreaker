@@ -55,9 +55,9 @@ exports.createGroup = async (req, res) => {
     res.status(400).send({ message: "Content cannot be empty!" });
     return;
   }
-
-  if (await checkIfGroupExists(req, res)) {
-    res.status(400).send({ message: "Content cannot be empty!" });
+  
+  if (req.groupexists) {
+    res.status(400).send({ message: "Group already exists!" });
     return;
   }
 
@@ -88,28 +88,12 @@ exports.createGroup = async (req, res) => {
     });
 }
 
-const checkIfGroupExists = async (req, res) => {
-  await Group.find({ groupname: req.body.groupname })
-    .then((data) => {
-      if (data.length !== 0) {
-        return true;
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while trying to find existing groups.'
-      })
-    })
-}
-
 exports.getGroups = (req, res) => {
   User.findOne({ userId: req.auth.userId }, { _id: 1 })
     .then((user) => {
       if (user) {
         Group.find({ users: new ObjectId(user._id) }, { groupname: 1 })
           .then((groups) => {
-            console.log(groups);
             return res.status(200).send({
               groups: groups
             })

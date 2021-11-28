@@ -1,8 +1,11 @@
 import { Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import endpoints from "../config/endpoints";
+import Userfront from '@userfront/core';
 
 const DeleteClient = (props) => {
+
+  const { getClients } = props;
 
   const [confirming, setConfirming] = useState(false);
 
@@ -17,11 +20,11 @@ const DeleteClient = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Userfront.tokens.accessToken}`
         },
       })
         .then(res => res.json())
         .then(result => {
-          console.log(result);
           props.setExpanded(false);
         })
         .catch(err => {
@@ -30,6 +33,8 @@ const DeleteClient = (props) => {
     } else {
       setConfirming(false);
     }
+
+    getClients();
 
   }
 

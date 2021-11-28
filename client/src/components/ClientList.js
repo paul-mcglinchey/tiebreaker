@@ -1,16 +1,11 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import endpoints from '../config/endpoints.js';
-import CustomerEntry from './ClientEntry';
+import { useMountEffect } from '../helpers/useMountEffect';
+import ClientEntry from './ClientEntry';
 import PageChanger from './PageChanger';
-import Userfront from '@userfront/core';
 
 const ClientList = (props) => {
 
-  const [clients, setClients] = useState([]);
-  const [maxPages, setMaxPages] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-
+  const { pageNumber, maxPages, clients, setPageNumber, getClients, userGroup } = props;
+  
   const increasePageNumber = () => {
     (pageNumber < maxPages) && setPageNumber(pageNumber + 1);
   }
@@ -18,43 +13,17 @@ const ClientList = (props) => {
     (pageNumber >= 1) && setPageNumber(pageNumber - 1);
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const clientsresult = await axios({
-        method: 'get',
-        url: `${endpoints.clients}?page=${pageNumber}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-        }
-      });
-
-      setClients(clientsresult.data.data);
-
-      const pages = await axios({
-        method: 'get',
-        url: `${endpoints.pagesofclients}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-        }
-      });
-
-      setMaxPages(pages.data.maxPagesClients)
-    }
-
-    fetchData();
-
-  }, [pageNumber])
+  useMountEffect(getClients, [userGroup]);
 
   return (
     <div>
       <div>
         {clients && clients.map(r => {
           return (
-            <CustomerEntry
+            <ClientEntry
               key={r._id}
               clientData={r}
+              getClients={getClients}
             />
           )
         })}
