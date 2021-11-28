@@ -1,3 +1,6 @@
+const db = require('../models');
+const User = db.user;
+
 const jwt = require('jsonwebtoken');
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
@@ -28,8 +31,33 @@ verifyToken = (req, res, next) => {
   });
 };
 
+// Userfront user has a userId, this is mapped to an ObjectId in the mongo db
+// We want to use the ObjectId so here we're adding the corresponding ObjectId to
+// the request body
+getUserId = (req, res, next) => {
+  User.findOne({ userId: req.auth.userId })
+    .then(user => {
+      if (user) {
+        req.body.uid = user._id;
+        next();
+      } else {
+        res.status(500).send({
+          mesage:
+            `Could not find a user with id ${req.auth.userId}.`
+        })
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || `Some error occurred while trying to find the user with id ${req.auth.userId}.`
+      })
+    });
+}
+
 const authJwt = {
-  verifyToken
+  verifyToken,
+  getUserId
 };
 
 module.exports = authJwt;

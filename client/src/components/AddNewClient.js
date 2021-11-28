@@ -52,6 +52,7 @@ const AddNewClient = (props) => {
             setFailed(true);
           } else if (result.success) {
             setMessage(result.success);
+            setFailed(false);
           }
           setIsLoading(false);
           getClients();
@@ -179,10 +180,6 @@ const AddNewClient = (props) => {
                   font-bold rounded-lg transition-all
                   `}
                 >
-                  {failed &&
-                    <div>
-                      {message}
-                    </div>}
                   {isLoading &&
                     <div className="w-8 h-8">
                       <SpinnerSVG />

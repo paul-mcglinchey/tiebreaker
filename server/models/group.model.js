@@ -5,8 +5,14 @@ const Group = mongoose.model(
   "Group",
   new mongoose.Schema({
     groupname: { type: String, required: true },
-    users: [Schema.Types.ObjectId],
-    clients: [Schema.Types.ObjectId]
+    users: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+    clients: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Client'
+    }]
   })
 )
 

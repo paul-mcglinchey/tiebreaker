@@ -3,13 +3,27 @@ const db = require('../models');
 const User = db.user;
 const Group = db.group;
 
-exports.configureUser = (req, res) => {
-  // Validate request
-  if (!req.body) {
-    res.status(400).send({ message: "Content cannot be empty!" });
-    return;
-  }
+// Read Operations
+exports.getGroups = (req, res) => {
+  User.findOne({ userId: req.auth.userId }, { _id: 1 })
+    .then((user) => {
+      if (user) {
+        Group.find({ users: new ObjectId(user._id) }, { groupname: 1 })
+          .then((groups) => {
+            return res.status(200).send({
+              groups: groups
+            })
+          })
+      } else {
+        return res.status(400).send({
+          message: 'No users found'
+        })
+      }
+    })
+}
 
+// CUD Operations
+exports.configureUser = (req, res) => {
   User.find({ username: req.body.username, email: req.body.email, userId: req.auth.userId })
     .then((data) => {
       if (data.length == 0) {
@@ -50,12 +64,6 @@ const createUser = (req, res) => {
 }
 
 exports.createGroup = async (req, res) => {
-  // Validate request
-  if (!req.body) {
-    res.status(400).send({ message: "Content cannot be empty!" });
-    return;
-  }
-  
   if (req.groupexists) {
     res.status(400).send({ message: "Group already exists!" });
     return;
@@ -86,22 +94,4 @@ exports.createGroup = async (req, res) => {
           err.message || 'Some error occurred while finding the user.'
       })
     });
-}
-
-exports.getGroups = (req, res) => {
-  User.findOne({ userId: req.auth.userId }, { _id: 1 })
-    .then((user) => {
-      if (user) {
-        Group.find({ users: new ObjectId(user._id) }, { groupname: 1 })
-          .then((groups) => {
-            return res.status(200).send({
-              groups: groups
-            })
-          })
-      } else {
-        return res.status(400).send({
-          message: 'No users found'
-        })
-      }
-    })
 }

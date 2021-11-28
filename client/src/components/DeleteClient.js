@@ -5,7 +5,7 @@ import Userfront from '@userfront/core';
 
 const DeleteClient = (props) => {
 
-  const { getClients } = props;
+  const { getClients, clientId, userGroup, setExpanded } = props;
 
   const [confirming, setConfirming] = useState(false);
 
@@ -16,16 +16,16 @@ const DeleteClient = (props) => {
   const deleteClient = (confirmed) => {
 
     if (confirmed) {
-      fetch((endpoints.deleteclient + '?clientId=' + props.clientId), {
+      fetch((endpoints.deleteclient), {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${Userfront.tokens.accessToken}`
         },
+        body: JSON.stringify({ clientId: clientId, groupname: userGroup })
       })
-        .then(res => res.json())
-        .then(result => {
-          props.setExpanded(false);
+        .then(() => {
+          setExpanded(false);
         })
         .catch(err => {
           console.log(err);

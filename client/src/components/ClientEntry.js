@@ -9,7 +9,7 @@ import { makeDate } from "../helpers/dateParser";
 
 const ClientEntry = (props) => {
 
-  const { getClients } = props;
+  const { getClients, clientData, userGroup } = props;
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpansion = () => setExpanded(!expanded);
@@ -24,15 +24,15 @@ const ClientEntry = (props) => {
           <div className="flex space-x-4 items-center">
             <div className="flex flex-col">
               <span className="inline-block font-bold uppercase text-gray-700">
-                {props.clientData.clientName.firstName} {props.clientData.clientName.lastName}
+                {clientData.clientName.firstName} {clientData.clientName.lastName}
               </span>
               <span className="inline-block text-sm text-purple-600 font-medium uppercase">
-                Joined: {makeDate(props.clientData.createdAt, '/')}
+                Joined: {makeDate(clientData.createdAt, '/')}
               </span>
             </div>
             <div className="space-x-2 hidden md:block">
-              <InfoPillBox data={props.clientData.sessions.length}>Sessions</InfoPillBox>
-              <InfoPillBox data={makeDate(props.clientData.birthdate, '/')}>Birthday</InfoPillBox>
+              <InfoPillBox data={clientData.sessions.length}>Sessions</InfoPillBox>
+              <InfoPillBox data={makeDate(clientData.birthdate, '/')}>Birthday</InfoPillBox>
             </div>
           </div>
           <div className="flex space-x-2 self-center">
@@ -59,19 +59,19 @@ const ClientEntry = (props) => {
           className="origin-top"
         >
           <div className="flex flex-col">
-            <ClientSessions clientData={props.clientData.sessions} />
+            <ClientSessions clientData={clientData.sessions} />
             <div className="flex justify-between">
-              {props.clientData.sessions.length === 0 &&
+              {clientData.sessions.length === 0 &&
                 <div className="self-end italic px-1 text-gray-500 py-1">
                   No sessions for this client
                 </div>
               }
-              <DeleteClient clientId={props.clientData._id} setExpanded={() => setExpanded()} getClients={getClients}/>
+              <DeleteClient clientId={clientData._id} userGroup={userGroup} setExpanded={() => setExpanded()} getClients={getClients}/>
             </div>
           </div>
         </Transition>
       </div>
-      <AddNewSession clientData={props.clientData} addSessionOpen={addSessionOpen} toggleAddSession={() => toggleAddSession()} />
+      <AddNewSession clientData={props.clientData} addSessionOpen={addSessionOpen} toggleAddSession={() => toggleAddSession()} getClients={getClients} />
     </Fragment>
   )
 }

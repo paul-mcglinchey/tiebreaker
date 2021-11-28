@@ -38,6 +38,7 @@ db.mongoose
 
 // Auth
 app.use(middleware.authJwt.verifyToken);
+app.use(middleware.authJwt.getUserId);
 
 // routes
 require('./routes/client.routes')(app);

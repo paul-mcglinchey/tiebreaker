@@ -24,6 +24,7 @@ const ClientList = (props) => {
               key={r._id}
               clientData={r}
               getClients={getClients}
+              userGroup={userGroup}
             />
           )
         })}

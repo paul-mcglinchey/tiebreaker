@@ -6,22 +6,28 @@ import StyledDatePicker from "./forms/StyledDatePicker";
 import StyledField from "./forms/StyledField";
 import { makeUSDate } from "../helpers/dateParser";
 import endpoints from "../config/endpoints";
+import Userfront from '@userfront/core';
 
 const AddNewSession = (props) => {
 
+  const {clientData, addSessionOpen, toggleAddSession, getClients} = props;
+
   const updateSessions = (values) => {
-    values._id = props.clientData._id;
+    values._id = clientData._id;
 
     fetch(endpoints.addsession, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
       },
       body: JSON.stringify(values),
     })
       .then(response => response.json())
       .then(data => {
         console.log('Success: ', data);
+        toggleAddSession();
+        getClients();
       })
       .catch((error) => {
         console.log('Error: ', error);
@@ -30,21 +36,21 @@ const AddNewSession = (props) => {
 
   return (
     <Transition
-      show={props.addSessionOpen}
+      show={addSessionOpen}
       enter="transition ease-in-out duration-500"
       enterFrom="transform opacity-0 scale-y-0"
       enterTo="transform opacity-100 scale-y-100"
       leave="transition ease-in-out duration-500"
       leaveFrom="transform opacity-100 scale-y-100"
       leaveTo="transform opacity-0 scale-y-0"
-      className="absolute bg-white z-20 rounded-lg w-full h-full top-0 left-0 p-4 filter drop-shadow-md"
+      className="absolute bg-white z-20 rounded-lg w-full h-auto top-0 left-0 p-4 filter drop-shadow-md"
     >
       <div className="flex flex-col h-full">
         <div className="flex justify-between items-center">
           <div className="text-3xl font-bold">
-            Add a new session for <span className="text-green-500">{props.clientData.clientName.firstName} {props.clientData.clientName.lastName}</span>.
+            Add a new session for <span className="text-green-500">{clientData.clientName.firstName} {clientData.clientName.lastName}</span>.
           </div>
-          <button onClick={() => props.toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
+          <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
             Cancel
           </button>
         </div>

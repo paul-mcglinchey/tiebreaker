@@ -39,7 +39,7 @@ const ClientSchema = Yup.object().shape({
   postCode: Yup.string()
     .min(2, 'Too Short!')
     .max(100, 'Too Long!')
-    .matches(/^\S+ {1}\S+$/, 'Enter a valid Post Code'),
+    .matches(/^\S+ ?\S+$/, 'Enter a valid Post Code'),
 });
 
 export default ClientSchema;
