@@ -10,6 +10,8 @@ import Signup from './components/Signup.js';
 import Userfront from "@userfront/core";
 import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
+import AddNewClient from './components/AddNewClient.js';
+import GroupSelector from './components/GroupSelector';
 
 export default function App() {
 
@@ -20,45 +22,55 @@ export default function App() {
   }
 
   return (
-    <div>
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" />}
-        />
-        <Route
-          path="dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="login"
-          element={
-            <Login />
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <Signup />
-          }
-        />
-        <Route
-          path="passwordresetrequest"
-          element={
-            <PasswordResetRequest />
-          }
-        />
-        <Route
-          path="passwordreset"
-          element={
-            <PasswordReset />
-          }
-        />
-      </Routes>
-    </div >
+    <Routes>
+      <Route
+        path="/"
+        element={<Navigate to="/dashboard" />}
+      />
+      <Route
+        path="dashboard"
+        element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="addclients"
+        element={
+          <AddNewClient />
+        }
+      />
+      <Route
+        path="groups"
+        element={
+          <GroupSelector />
+        }
+      />
+      <Route
+        path="login"
+        element={
+          <Login />
+        }
+      />
+      <Route
+        path="signup"
+        element={
+          <Signup />
+        }
+      />
+      <Route
+        path="passwordresetrequest"
+        element={
+          <PasswordResetRequest />
+        }
+      />
+      <Route
+        path="passwordreset"
+        element={
+          <PasswordReset />
+        }
+      />
+    </Routes>
   );
 }
