@@ -7,10 +7,11 @@ import StyledField from "./forms/StyledField";
 import { makeUSDate } from "../helpers/dateParser";
 import endpoints from "../config/endpoints";
 import Userfront from '@userfront/core';
+import CustomTagger from "./forms/CustomTagger";
 
 const AddNewSession = (props) => {
 
-  const {clientData, addSessionOpen, toggleAddSession, getClients} = props;
+  const { clientData, addSessionOpen, toggleAddSession, getClients } = props;
 
   const updateSessions = (values) => {
     values._id = clientData._id;
@@ -38,12 +39,12 @@ const AddNewSession = (props) => {
     <Transition
       show={addSessionOpen}
       enter="transition ease-in-out duration-500"
-      enterFrom="transform opacity-0 scale-y-0"
-      enterTo="transform opacity-100 scale-y-100"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
       leave="transition ease-in-out duration-500"
-      leaveFrom="transform opacity-100 scale-y-100"
-      leaveTo="transform opacity-0 scale-y-0"
-      className="absolute bg-white z-20 rounded-lg w-full h-auto top-0 left-0 p-4 filter drop-shadow-md"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
+      className="absolute bg-white z-20 rounded-lg w-3/4 left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 p-4 filter shadow-md"
     >
       <div className="flex flex-col h-full">
         <div className="flex justify-between items-center">
@@ -51,7 +52,7 @@ const AddNewSession = (props) => {
             Add a new session for <span className="text-green-500">{clientData.clientName.firstName} {clientData.clientName.lastName}</span>.
           </div>
           <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
-            Cancel
+            Close
           </button>
         </div>
         <div className="h-full">
@@ -59,22 +60,26 @@ const AddNewSession = (props) => {
             initialValues={{
               title: '',
               description: '',
-              notes: '',
+              notes: [
+                {
+                  content: ''
+                },
+              ],
               date: makeUSDate(Date.now(), '-')
             }}
             validationSchema={SessionSchema}
-            onSubmit={(values) => {
-              console.log(values);
+            onSubmit={(errors, values) => {
+              console.log(errors);
               updateSessions(values);
             }}
           >
-            {({ errors, touched }) => (
+            {({ errors, touched, values }) => (
               <div className="md:flex flex-grow">
                 <Form className="flex flex-grow flex-col py-2 mt-8">
                   <div className="flex flex-1 flex-col space-y-3">
                     <StyledField name="title" placeholder="Title" errors={errors.title} touched={touched.title} />
                     <StyledField name="description" placeholder="Description" component="textarea" errors={errors.description} touched={touched.description} />
-                    <StyledField name="notes" placeholder="Notes" errors={errors.notes} touched={touched.notes} />
+                    <CustomTagger />
                     <StyledDatePicker name="date" label="Date of Session" component={CustomDate} errors={errors.date} touched={touched.date} />
                   </div>
                   <div className="flex flex-grow items-end justify-end">

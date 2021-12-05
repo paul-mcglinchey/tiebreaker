@@ -1,8 +1,9 @@
 import endpoints from "../config/endpoints";
 import Userfront from '@userfront/core';
 
-const getClients = (groupname, setMaxPages, pageNumber, setClients) => {
-    fetch(`${endpoints.pagesofclients}?groupname=${groupname}`, {
+const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
+  const fetchClients = () => {
+    fetch(`${endpoints.pagesofclients}?userGroup=${userGroup}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +18,7 @@ const getClients = (groupname, setMaxPages, pageNumber, setClients) => {
         console.log(err);
       })
 
-    fetch(`${endpoints.clients}?page=${pageNumber}&groupname=${groupname}`, {
+    fetch(`${endpoints.clients}?page=${pageNumber}&userGroup=${userGroup}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -26,12 +27,14 @@ const getClients = (groupname, setMaxPages, pageNumber, setClients) => {
     })
       .then(response => response.json())
       .then(clients => {
-        console.log(clients);
         setClients(clients.data);
       })
       .catch(err => {
         console.log(err);
       })
   }
+
+  return fetchClients;
+}
 
 export default getClients;
