@@ -8,7 +8,7 @@ exports.getGroups = (req, res) => {
   User.findOne({ userId: req.auth.userId }, { _id: 1 })
     .then((user) => {
       if (user) {
-        Group.find({ users: new ObjectId(user._id) }, { groupname: 1 })
+        Group.find({ users: new ObjectId(user._id) })
           .then((groups) => {
             return res.status(200).send({
               groups: groups
@@ -73,13 +73,13 @@ exports.createGroup = async (req, res) => {
 
   User.find({ userId: req.auth.userId }, { _id: 1 })
     .then((result) => {
-      group.groupname = req.body.groupname;
+      group.groupname = req.body.userGroup;
       group.users = result;
 
       group
         .save(group)
         .then(data => {
-          res.status(200).send({ data: data, success: `Group ${req.body.groupname} added.` })
+          res.status(200).send({ data: data, success: `Group ${req.body.userGroup} added.` })
         })
         .catch(err => {
           res.status(500).send({

@@ -9,18 +9,17 @@ import { makeDate } from "../helpers/dateParser";
 
 const ClientEntry = (props) => {
 
-  const { getClients, clientData, userGroup } = props;
+  const { getClients, clientData, userGroup, addSessionOpen, toggleAddSession } = props;
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpansion = () => setExpanded(!expanded);
 
-  const [addSessionOpen, setAddSessionOpen] = useState(false);
-  const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
+  console.log(clientData);
 
   return (
     <Fragment>
-      <div className="flex flex-col p-3 my-2 border-black border-2 rounded space-y-2 filter drop-shadow-sm">
-        <div className="container flex justify-between">
+      <div className="flex flex-col py-2 my-2 border-b-2 border-purple-brand space-y-2 filter drop-shadow-sm">
+        <div className="flex justify-between">
           <div className="flex space-x-4 items-center">
             <div className="flex flex-col">
               <span className="inline-block font-bold uppercase text-gray-700">
@@ -41,7 +40,7 @@ const ClientEntry = (props) => {
                 Add session
               </button>
             </div>
-            <div className="flex border-2 rounded-xl border-purple-500 hover:bg-purple-500 text-purple-500 hover:text-white items-center">
+            <div className="flex border-2 rounded-xl border-purple-500 hover:bg-purple-brand text-purple-brand hover:text-white items-center">
               <button onClick={() => toggleExpansion()}>
                 <ChevronDownIcon className={`h-8 w-8 transform transition-all hover:scale-110 duration-300 ${expanded ? "rotate-180" : ""}`} />
               </button>
@@ -66,7 +65,7 @@ const ClientEntry = (props) => {
                   No sessions for this client
                 </div>
               }
-              <DeleteClient clientId={clientData._id} userGroup={userGroup} setExpanded={() => setExpanded()} getClients={getClients}/>
+              <DeleteClient clientId={clientData._id} userGroup={userGroup} setExpanded={() => setExpanded()} getClients={getClients} />
             </div>
           </div>
         </Transition>

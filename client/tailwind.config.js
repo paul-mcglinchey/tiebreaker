@@ -2,6 +2,13 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    extend: {
+      colors: {
+        purple: {
+          brand: '#7025ffff'
+        }
+      }
+    },
     fontFamily: {
       'sans': ['Intel Var', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
     },
@@ -12,12 +19,7 @@ module.exports = {
       '3/10': '30%',
       '7/10': '70%',
       'login': '24rem'
-    },
-    extend: {
-      backgroundImage: {
-        'wind-turbines': "url('https://res.cloudinary.com/pmcglinchey/image/upload/v1620280344/wp2100354-wind-energy-wallpapers_vsummw.jpg')",
-      }
-    },
+    }
   },
   variants: {
     extend: {

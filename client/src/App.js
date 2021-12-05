@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Dashboard from './components/Dashboard.js';
 import Login from './components/Login.js';
 import {
@@ -12,8 +13,14 @@ import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
 import AddNewClient from './components/AddNewClient.js';
 import GroupSelector from './components/GroupSelector';
+import NavMenu from './components/NavMenu';
+import getGroups from './fetches/getGroups.js';
+import getClients from './fetches/getClients.js';
 
 export default function App() {
+
+  const [groups, setGroups] = useState([]);
+  const [userGroup, setUserGroup] = useState();
 
   const location = useLocation();
 
@@ -22,55 +29,69 @@ export default function App() {
   }
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Navigate to="/dashboard" />}
+    <div>
+      <NavMenu
+        getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
+        userGroup={userGroup}
+        setUserGroup={setUserGroup}
+        groups={groups}
       />
-      <Route
-        path="dashboard"
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="addclients"
-        element={
-          <AddNewClient />
-        }
-      />
-      <Route
-        path="groups"
-        element={
-          <GroupSelector />
-        }
-      />
-      <Route
-        path="login"
-        element={
-          <Login />
-        }
-      />
-      <Route
-        path="signup"
-        element={
-          <Signup />
-        }
-      />
-      <Route
-        path="passwordresetrequest"
-        element={
-          <PasswordResetRequest />
-        }
-      />
-      <Route
-        path="passwordreset"
-        element={
-          <PasswordReset />
-        }
-      />
-    </Routes>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" />}
+        />
+        <Route
+          path="dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard
+                userGroup={userGroup}
+                getClients={getClients}
+              />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="addclients"
+          element={
+            <AddNewClient
+              getClients={getClients}
+              userGroup={userGroup}
+            />
+          }
+        />
+        <Route
+          path="groups"
+          element={
+            <GroupSelector />
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <Login />
+          }
+        />
+        <Route
+          path="signup"
+          element={
+            <Signup />
+          }
+        />
+        <Route
+          path="passwordresetrequest"
+          element={
+            <PasswordResetRequest />
+          }
+        />
+        <Route
+          path="passwordreset"
+          element={
+            <PasswordReset />
+          }
+        />
+      </Routes>
+    </div>
   );
 }
