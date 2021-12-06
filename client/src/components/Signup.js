@@ -25,6 +25,7 @@ const Signup = (props) => {
     })
       .then(() => {
         fetch(endpoints.configureuser, {
+          mode: 'cors',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -17,6 +17,7 @@ const AddNewSession = (props) => {
     values._id = clientData._id;
 
     fetch(endpoints.addsession, {
+      mode: 'cors',
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

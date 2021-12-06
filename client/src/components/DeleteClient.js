@@ -17,6 +17,7 @@ const DeleteClient = (props) => {
 
     if (confirmed) {
       fetch((endpoints.deleteclient), {
+        mode: 'cors',
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

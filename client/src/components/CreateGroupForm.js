@@ -18,6 +18,7 @@ const CreateGroupForm = (props) => {
     setSuccess();
 
     fetch(endpoints.creategroup, {
+      mode: 'cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
