@@ -9,13 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/', (req, res, next) => {
-  const origin = (req.headers.origin == 'http://localhost:3000') ? 'http://localhost:3000' : 'https://clientsplash.herokuapp.com/'
-  res.setHeader('Access-Control-Allow-Origin', origin)
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  next()
+app.get('/', (req, res) => {
+  res.send('Welcome to the clientsplash API')
 })
 
 app.use('/health', (req, res) => {
@@ -25,11 +20,6 @@ app.use('/health', (req, res) => {
     status: 'OK',
   });
 });
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the clientsplash API')
-})
-
 
 const dbConfig = require('./config/db.config');
 const db = require('./models');
