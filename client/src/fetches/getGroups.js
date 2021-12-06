@@ -1,14 +1,8 @@
 import endpoints from "../config/endpoints";
-import Userfront from '@userfront/core';
+import { requestBuilder } from "../helpers/requestBuilder";
 
 const getGroups = (setGroups, userGroup, setUserGroup) => {
-  fetch(endpoints.getgroups, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-    }
-  })
+  fetch(endpoints.getgroups, requestBuilder("GET"))
     .then(response => response.json())
     .then((data) => {
       setGroups(data.groups);

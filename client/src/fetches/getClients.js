@@ -1,15 +1,9 @@
 import endpoints from "../config/endpoints";
-import Userfront from '@userfront/core';
+import { requestBuilder } from '../helpers/requestBuilder';
 
 const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
   const fetchClients = () => {
-    fetch(`${endpoints.pagesofclients}?userGroup=${userGroup}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-      }
-    })
+    fetch(`${endpoints.pagesofclients}?userGroup=${userGroup}`, requestBuilder("GET"))
       .then(response => response.json())
       .then(pages => {
         setMaxPages(pages.maxPagesClients)
@@ -18,13 +12,7 @@ const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
         console.log(err);
       })
 
-    fetch(`${endpoints.clients}?page=${pageNumber}&userGroup=${userGroup}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-      }
-    })
+    fetch(`${endpoints.clients}?page=${pageNumber}&userGroup=${userGroup}`, requestBuilder("GET"))
       .then(response => response.json())
       .then(clients => {
         setClients(clients.data);

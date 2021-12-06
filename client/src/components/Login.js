@@ -5,7 +5,6 @@ import StyledField from "./forms/StyledField";
 import LoginSchema from "../helpers/loginSchema";
 import Userfront from "@userfront/core";
 import { Link } from 'react-router-dom';
-import endpoints from '../config/endpoints';
 
 Userfront.init("wn9p69b5");
 
@@ -21,23 +20,6 @@ const Login = (props) => {
       emailOrUsername: values.emailOrUsername,
       password: values.password
     })
-      .then(() => {
-        fetch(endpoints.configureuser, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-          },
-          body: JSON.stringify(Userfront.user)
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-          })
-          .catch((error) => {
-            setError(error.message);
-          })
-      })
       .catch((error) => {
         setError(error.message);
       })

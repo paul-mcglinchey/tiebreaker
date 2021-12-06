@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const publicKey = secrets.secret;
 
 verifyToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+  const authHeader = JSON.parse(req.headers.authorization).token;
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
@@ -23,14 +23,14 @@ verifyToken = (req, res, next) => {
 // We want to use the ObjectId so here we're adding the corresponding ObjectId to
 // the request body
 getUserId = (req, res, next) => {
-  User.findOne({ userId: req.auth.userId })
+  User.findOne({ userUuid: req.auth.userUuid })
     .then(user => {
       if (user) {
         req.body.uid = user._id;
         next();
       } else {
         res.status(500).send({
-          mesage:
+          message:
             `Could not find a user with id ${req.auth.userId}.`
         })
       }

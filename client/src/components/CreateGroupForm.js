@@ -40,32 +40,34 @@ const CreateGroupForm = (props) => {
   }
 
   return (
-    <Formik
-      initialValues={{
-        'groupname': ''
-      }}
-      validationSchema={GroupSchema}
-      onSubmit={(values) => {
-        console.log(values);
-        createGroup(values);
-      }}
-    >
-      {({ errors, touched }) => (
-        <Form className="flex md:w-1/2 w-full">
-          <div className="flex flex-col flex-grow space-y-4">
-            <StyledField name="groupname" placeholder="Group name" errors={errors.groupname} touched={touched.groupname} />
-            <div className="flex flex-grow justify-end text-center mb-10">
-              <button type="submit" className="py-1 px-3 bg-white text-gray-500 border-2 border-green-500 rounded-lg font-medium hover:text-white hover:bg-green-500 transition-all">Create</button>
-            </div>
-            {(error || success) &&
-              <div className="flex flex-grow justify-center text-center">
-                <div type="submit" className={`w-full py-1 px-3 bg-white text-gray-500 border-2 ${success ? "border-green-500" : "border-red-500"} rounded-lg font-medium`}>{error}{success}</div>
+    <div>
+      <Formik
+        initialValues={{
+          'groupname': ''
+        }}
+        validationSchema={GroupSchema}
+        onSubmit={(values) => {
+          console.log(values);
+          createGroup(values);
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form className="flex md:w-1/2 w-full">
+            <div className="flex flex-col flex-grow space-y-4">
+              <StyledField name="groupname" placeholder="Group name" errors={errors.groupname} touched={touched.groupname} />
+              <div className="flex flex-grow justify-end text-center mb-10">
+                <button type="submit" className="py-1 px-3 bg-white text-gray-500 border-2 border-green-500 rounded-lg font-medium hover:text-white hover:bg-green-500 transition-all">Create</button>
               </div>
-            }
-          </div>
-        </Form>
-      )}
-    </Formik>
+              {(error || success) &&
+                <div className="flex flex-grow justify-center text-center">
+                  <div type="submit" className={`w-full py-1 px-3 bg-white text-gray-500 border-2 ${success ? "border-green-500" : "border-red-500"} rounded-lg font-medium`}>{error}{success}</div>
+                </div>
+              }
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   )
 }
 

@@ -21,6 +21,9 @@ app.use('/health', (req, res) => {
   });
 });
 
+const user = require('./controllers/user.controller');
+app.use('/api/configureuser', user.configureUser);
+
 const dbConfig = require('./config/db.config');
 const db = require('./models');
 

@@ -48,6 +48,7 @@ export default function App() {
               <Dashboard
                 userGroup={userGroup}
                 getClients={getClients}
+                groups={groups}
               />
             </PrivateRoute>
           }
