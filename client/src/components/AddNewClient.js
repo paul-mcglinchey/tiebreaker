@@ -1,19 +1,18 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import StyledField from './forms/StyledField';
 import StyledDatePicker from './forms/StyledDatePicker';
 import { Transition } from '@headlessui/react';
-import { SelectorIcon, UserAddIcon, CheckIcon } from '@heroicons/react/solid';
+import { SelectorIcon, UserAddIcon, CheckIcon, XCircleIcon } from '@heroicons/react/solid';
 import ClientSchema from '../helpers/clientValidationSchema';
 import CustomDate from './forms/CustomDate';
-import endpoints from '../config/endpoints';
 import SpinnerSVG from './svg/SpinnerSVG';
 import CustomCheckbox from './CustomCheckbox';
-import Userfront from '@userfront/core';
+import addNewClient from '../fetches/addNewClient';
 
 const AddNewClient = (props) => {
 
-  const { getClients } = props;
+  const { getClients, userGroup } = props;
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -26,49 +25,28 @@ const AddNewClient = (props) => {
   const [addressActive, setAddressActive] = useState(false);
   const toggleAddressActive = () => setAddressActive(!addressActive);
 
-  const postData = async (values) => {
 
-    setIsLoading(true);
-    setMessage('Loading');
-    setHasMessage(true);
-    setFailed(false);
+  const handleSubmit = async (values) => {
 
-    values.groupname = props.userGroup;
+    values.userGroup = userGroup;
     console.log('posting:', values);
 
-    fetch((endpoints.clients), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          if (result.message) {
-            setMessage(result.message);
-            setFailed(true);
-          } else if (result.success) {
-            setMessage(result.success);
-            setFailed(false);
-          }
-          setIsLoading(false);
-          getClients();
-        }
-      )
-      .catch(
-        (error) => {
-          setIsLoading(false);
-          setFailed(true);
-          console.log(error.message);
-        }
-      )
+    addNewClient(
+      values,
+      setMessage,
+      setHasMessage,
+      setFailed,
+      setIsLoading,
+      getClients
+    );
   }
 
   return (
-    <Fragment>
+    <div className="px-2 sm:px-6 lg:px-8">
+      <div className="flex lg:hidden text-2xl sm:text-3xl font-bold py-2 sm:py-4 my-4 bg-purple-brand justify-center items-center text-white rounded">
+        Add your clients here
+        <UserAddIcon className="inline-block h-8 w-8 ml-4" />
+      </div>
       <Formik
         initialValues={{
           firstName: '',
@@ -86,13 +64,12 @@ const AddNewClient = (props) => {
         }}
         validationSchema={ClientSchema}
         onSubmit={(values) => {
-          console.log(values);
-          postData(values);
+          handleSubmit(values);
         }}
       >
         {({ errors, touched }) => (
-          <div className="md:flex flex-initial">
-            <Form className="flex flex-grow flex-col py-2 space-y-3 lg:max-w-7/10 content-end">
+          <div className="lg:flex flex-col md:flex-row flex-initial space-x-4 py-2">
+            <Form className="flex flex-grow flex-col space-y-3 lg:max-w-7/10 content-end">
               <div className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-1 md:space-y-0">
                 <StyledField name="firstName" placeholder="First name" errors={errors.firstName} touched={touched.firstName} />
                 {middleNamesRequired ? (
@@ -151,17 +128,17 @@ const AddNewClient = (props) => {
                 </div>
               </Transition>
               <div className="flex justify-end">
-                <button className="px-3 py-1 mt-10 border-2 border-purple-500 text-purple-500 hover:text-white hover:bg-purple-500 transition-all font-bold rounded-lg flex" type="submit">
+                <button className="px-3 py-1 mt-10 border-2 border-purple-brand text-purple-brand hover:text-white hover:bg-purple-brand transition-all font-bold rounded-lg flex" type="submit">
                   Add Client
                 </button>
               </div>
             </Form>
 
-            <div className="lg:flex flex-col lg:max-w-3/10 py-2 justify-end hidden">
-              <div className="flex flex-grow bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 lg:text-4xl xl:text-5xl font-extrabold text-right mt-10">
+            <div className="flex lg:flex-col lg:max-w-3/10 max-w-full lg:justify-end justify-center mt-10 lg:mt-0">
+              <div className="lg:flex flex-grow bg-purple-brand text-white rounded-xl filter drop-shadow-sm lg:text-4xl xl:text-5xl font-extrabold text-right pt-10 px-4 hidden">
                 <span>
                   Add your clients here
-                  <UserAddIcon className="inline-block text-blue-500 h-8 w-8 ml-2" />
+                  <UserAddIcon className="inline-block h-8 w-8 ml-2" />
                 </span>
               </div>
               <Transition
@@ -172,29 +149,36 @@ const AddNewClient = (props) => {
                 leave="transition ease-in duration-150"
                 leaveFrom="transform opacity-100"
                 leaveTo="transform opacity-0"
-                className="flex justify-end"
+                className="flex sm:flex-initial flex-grow lg:justify-end justify-center mt-4"
               >
                 <div className={`
-                  flex flex-shrink inline-block px-3 py-1 border-2 
-                  ${failed ? "border-red-500 text-red-500" : (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500")} 
-                  font-bold rounded-lg transition-all
+                  flex px-3 py-1 border-2 space-x-2 items-center font-bold rounded-lg
+                  ${!failed ? (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500") : "border-red-500 text-red-500"}
                   `}
                 >
-                  {isLoading &&
-                    <div className="w-8 h-8">
-                      <SpinnerSVG />
-                    </div>}
-                  {message &&
-                    <div>
-                      {message} {!failed && <CheckIcon className="inline-block h-6 w-6" />}
-                    </div>}
+                  <div>
+                    {message}
+                  </div>
+                  <div>
+                    {message && !failed ? (
+                      isLoading ? (
+                        <div className="w-4 h-4">
+                          <SpinnerSVG />
+                        </div>
+                      ) : (
+                        <CheckIcon className="inline-block h-6 w-6" />
+                      )
+                    ) : (
+                      <XCircleIcon className="inline-block h-6 w-6" />
+                    )}
+                  </div>
                 </div>
               </Transition>
             </div>
           </div>
         )}
       </Formik>
-    </Fragment>
+    </div>
   )
 }
 

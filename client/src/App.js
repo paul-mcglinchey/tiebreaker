@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Dashboard from './components/Dashboard.js';
 import Login from './components/Login.js';
 import {
@@ -10,8 +11,16 @@ import Signup from './components/Signup.js';
 import Userfront from "@userfront/core";
 import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
+import AddNewClient from './components/AddNewClient.js';
+import GroupSelector from './components/GroupSelector';
+import NavMenu from './components/NavMenu';
+import getGroups from './fetches/getGroups.js';
+import getClients from './fetches/getClients.js';
 
 export default function App() {
+
+  const [groups, setGroups] = useState([]);
+  const [userGroup, setUserGroup] = useState();
 
   const location = useLocation();
 
@@ -21,6 +30,12 @@ export default function App() {
 
   return (
     <div>
+      <NavMenu
+        getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
+        userGroup={userGroup}
+        setUserGroup={setUserGroup}
+        groups={groups}
+      />
       <Routes>
         <Route
           path="/"
@@ -30,8 +45,26 @@ export default function App() {
           path="dashboard"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <Dashboard
+                userGroup={userGroup}
+                getClients={getClients}
+              />
             </PrivateRoute>
+          }
+        />
+        <Route
+          path="addclients"
+          element={
+            <AddNewClient
+              getClients={getClients}
+              userGroup={userGroup}
+            />
+          }
+        />
+        <Route
+          path="groups"
+          element={
+            <GroupSelector />
           }
         />
         <Route
@@ -59,6 +92,6 @@ export default function App() {
           }
         />
       </Routes>
-    </div >
+    </div>
   );
 }

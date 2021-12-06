@@ -4,8 +4,8 @@ import PageChanger from './PageChanger';
 
 const ClientList = (props) => {
 
-  const { pageNumber, maxPages, clients, setPageNumber, getClients, userGroup } = props;
-  
+  const { pageNumber, maxPages, clients, setPageNumber, getClients, userGroup, addSessionOpen, toggleAddSession } = props;
+
   const increasePageNumber = () => {
     (pageNumber < maxPages) && setPageNumber(pageNumber + 1);
   }
@@ -13,10 +13,10 @@ const ClientList = (props) => {
     (pageNumber >= 1) && setPageNumber(pageNumber - 1);
   }
 
-  useMountEffect(getClients, [userGroup]);
+  useMountEffect(getClients);
 
   return (
-    <div>
+    <div className="px-2 sm:px-6 lg:px-8">
       <div>
         {clients && clients.map(r => {
           return (
@@ -25,6 +25,8 @@ const ClientList = (props) => {
               clientData={r}
               getClients={getClients}
               userGroup={userGroup}
+              addSessionOpen={addSessionOpen}
+              toggleAddSession={toggleAddSession}
             />
           )
         })}

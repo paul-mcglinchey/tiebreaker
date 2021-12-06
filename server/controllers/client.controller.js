@@ -6,7 +6,8 @@ const Client = db.client;
 // Read operations
 // Retrieve all clients from the database
 exports.findAll = (req, res, next) => {
-  Group.findOne({ groupname: req.query.groupname })
+  console.log(req.query.userGroup);
+  Group.findOne({ groupname: req.query.userGroup })
     .then(group => {
       let clientIds = group.clients;
       Client.find({ _id: { $in: clientIds } })
@@ -77,7 +78,7 @@ exports.create = (req, res) => {
     .save(client)
     .then(data => {
       // Add the client to the group which was selected
-      Group.updateOne({ groupname: req.body.groupname }, { $push: { clients: new ObjectId(data._id) } })
+      Group.updateOne({ groupname: req.body.userGroup }, { $push: { clients: new ObjectId(data._id) } })
         .then(() => {
           res.status(200).send({
             success: 'Client created successfully.'
@@ -101,11 +102,11 @@ exports.create = (req, res) => {
 // Update a client's sessions
 exports.addSession = (req, res) => {
 
-  const newSession = { 
-    title: req.body.title, 
-    description: req.body.description, 
-    notes: req.body.notes, 
-    date: req.body.date 
+  const newSession = {
+    title: req.body.title,
+    description: req.body.description,
+    notes: req.body.notes,
+    date: req.body.date
   };
 
   Client.findOneAndUpdate({ _id: req.body._id }, { $push: { sessions: newSession } })
@@ -116,14 +117,14 @@ exports.addSession = (req, res) => {
     })
     .catch(err => {
       message:
-        err.message || `Some error occurred while updating sessions for client ${req.body._id}`
+      err.message || `Some error occurred while updating sessions for client ${req.body._id}`
     })
 }
 
 // Deletes a client by ID
 exports.deleteClient = (req, res) => {
   // Update the group clients array to remove this client
-  Group.findOneAndUpdate({ groupname: req.body.groupname }, { $pull: { clients: req.body.clientId }})
+  Group.findOneAndUpdate({ groupname: req.body.userGroup }, { $pull: { clients: req.body.clientId } })
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
