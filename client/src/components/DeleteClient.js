@@ -17,7 +17,6 @@ const DeleteClient = (props) => {
 
     if (confirmed) {
       fetch((endpoints.deleteclient), {
-        credentials: 'include',
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -3,7 +3,6 @@ import Userfront from '@userfront/core';
 
 const getGroups = (setGroups, userGroup, setUserGroup) => {
   fetch(endpoints.getgroups, {
-    credentials: 'include',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

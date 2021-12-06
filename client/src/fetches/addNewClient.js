@@ -9,7 +9,6 @@ const addNewClient = async (values, setMessage, setHasMessage, setFailed, setIsL
   setFailed(false);
 
   fetch((endpoints.clients), {
-    credentials: 'include',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

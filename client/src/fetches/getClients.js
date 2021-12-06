@@ -4,7 +4,6 @@ import Userfront from '@userfront/core';
 const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
   const fetchClients = () => {
     fetch(`${endpoints.pagesofclients}?userGroup=${userGroup}`, {
-      credentials: 'include',
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

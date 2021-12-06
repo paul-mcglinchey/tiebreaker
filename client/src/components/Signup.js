@@ -25,7 +25,6 @@ const Signup = (props) => {
     })
       .then(() => {
         fetch(endpoints.configureuser, {
-          credentials: 'include',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

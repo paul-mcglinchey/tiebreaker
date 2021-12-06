@@ -17,7 +17,6 @@ const AddNewSession = (props) => {
     values._id = clientData._id;
 
     fetch(endpoints.addsession, {
-      credentials: 'include',
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
