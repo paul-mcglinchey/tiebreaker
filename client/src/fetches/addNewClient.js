@@ -9,7 +9,6 @@ const addNewClient = async (values, setMessage, setHasMessage, setFailed, setIsL
   setFailed(false);
 
   fetch((endpoints.clients), {
-    mode: 'cors',
     credentials: 'include',
     method: 'POST',
     headers: {

@@ -3,7 +3,6 @@ import Userfront from '@userfront/core';
 
 const getGroups = (setGroups, userGroup, setUserGroup) => {
   fetch(endpoints.getgroups, {
-    mode: 'cors',
     credentials: 'include',
     method: 'GET',
     headers: {
