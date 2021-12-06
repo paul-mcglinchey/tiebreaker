@@ -18,10 +18,6 @@ app.use('/', (req, res, next) => {
   next()
 })
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the clientsplash API')
-})
-
 app.use('/health', (req, res) => {
   res.status(200).json({
     appName: 'clientsplash-api',
@@ -29,6 +25,11 @@ app.use('/health', (req, res) => {
     status: 'OK',
   });
 });
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the clientsplash API')
+})
+
 
 const dbConfig = require('./config/db.config');
 const db = require('./models');
