@@ -18,6 +18,7 @@ const AddNewSession = (props) => {
 
     fetch(endpoints.addsession, {
       mode: 'cors',
+      credentials: 'include',
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

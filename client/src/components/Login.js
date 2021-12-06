@@ -23,6 +23,8 @@ const Login = (props) => {
     })
       .then(() => {
         fetch(endpoints.configureuser, {
+          mode: 'cors',
+          credentials: 'include',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
