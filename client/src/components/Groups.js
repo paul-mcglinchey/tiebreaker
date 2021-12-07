@@ -5,7 +5,7 @@ const Groups = (props) => {
   const { getGroups } = props;
 
   return (
-    <div className="px-2 sm:px-6 lg:px-8">
+    <div className="">
       <CreateGroup getGroups={getGroups} />
     </div>
   )

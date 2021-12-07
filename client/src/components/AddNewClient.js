@@ -42,7 +42,7 @@ const AddNewClient = (props) => {
   }
 
   return (
-    <div className="px-2 sm:px-6 lg:px-8">
+    <div className="">
       <Formik
         initialValues={{
           firstName: '',

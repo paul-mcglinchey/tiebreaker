@@ -1,5 +1,7 @@
 import { React } from 'react';
 import { useState } from 'react';
+import { useMountEffect } from '../helpers/useMountEffect';
+import AddFirstClient from './AddFirstClient';
 import ClientList from './ClientList';
 import CreateGroup from './CreateGroup'
 
@@ -13,21 +15,31 @@ const Dashboard = (props) => {
   const [addSessionOpen, setAddSessionOpen] = useState(false);
   const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
 
+  useMountEffect(getClients(userGroup, setMaxPages, pageNumber, setClients));
+
   return (
-    <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
+    <div className="">
       {groups && groups.length !== 0 ? (
-        <ClientList
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-          maxPages={maxPages}
-          clients={clients}
-          getClients={getClients(userGroup, setMaxPages, pageNumber, setClients)}
-          userGroup={userGroup}
-          addSessionOpen={addSessionOpen}
-          toggleAddSession={toggleAddSession}
-        />
+        <div>
+          {clients && clients.length !== 0 ? (
+            <ClientList
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              maxPages={maxPages}
+              clients={clients}
+              getClients={getClients(userGroup, setMaxPages, pageNumber, setClients)}
+              userGroup={userGroup}
+              addSessionOpen={addSessionOpen}
+              toggleAddSession={toggleAddSession}
+            />
+          ) : (
+            <AddFirstClient />
+          )}
+        </div>
       ) : (
-        <CreateGroup getGroups={getGroups} />
+        <CreateGroup
+          getGroups={getGroups}
+        />
       )}
     </div>
   )

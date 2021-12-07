@@ -36,66 +36,68 @@ export default function App() {
         setUserGroup={setUserGroup}
         groups={groups}
       />
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" />}
-        />
-        <Route
-          path="dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard
-                userGroup={userGroup}
+      <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/dashboard" />}
+          />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard
+                  userGroup={userGroup}
+                  getClients={getClients}
+                  getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
+                  groups={groups}
+                />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="addclients"
+            element={
+              <AddNewClient
                 getClients={getClients}
-                getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
-                groups={groups}
+                userGroup={userGroup}
               />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="addclients"
-          element={
-            <AddNewClient
-              getClients={getClients}
-              userGroup={userGroup}
-            />
-          }
-        />
-        <Route
-          path="groups"
-          element={
-            <Groups
-              getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
-            />
-          }
-        />
-        <Route
-          path="login"
-          element={
-            <Login />
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <Signup />
-          }
-        />
-        <Route
-          path="passwordresetrequest"
-          element={
-            <PasswordResetRequest />
-          }
-        />
-        <Route
-          path="passwordreset"
-          element={
-            <PasswordReset />
-          }
-        />
-      </Routes>
+            }
+          />
+          <Route
+            path="groups"
+            element={
+              <Groups
+                getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
+              />
+            }
+          />
+          <Route
+            path="login"
+            element={
+              <Login />
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <Signup />
+            }
+          />
+          <Route
+            path="passwordresetrequest"
+            element={
+              <PasswordResetRequest />
+            }
+          />
+          <Route
+            path="passwordreset"
+            element={
+              <PasswordReset />
+            }
+          />
+        </Routes>
+      </div>
     </div>
   );
 }
