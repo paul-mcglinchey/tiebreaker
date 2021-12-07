@@ -22,7 +22,7 @@ const Dashboard = (props) => {
 
   return (
     <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
-      {groups.length !== 0 ? (
+      {groups && groups.length !== 0 ? (
         <ClientList
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}

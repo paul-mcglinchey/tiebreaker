@@ -5,6 +5,7 @@ const Group = mongoose.model(
   "Group",
   new mongoose.Schema({
     groupname: { type: String, required: true },
+    default: { type: Boolean, required: true },
     users: [{
       type: Schema.Types.ObjectId,
       ref: 'User'

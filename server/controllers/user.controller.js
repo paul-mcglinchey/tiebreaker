@@ -5,7 +5,7 @@ const Group = db.group;
 
 // Read Operations
 exports.getGroups = (req, res) => {
-  User.findOne({ userId: req.auth.userId }, { _id: 1 })
+  User.findOne({ userUuid: req.auth.userUuid }, { _id: 1 })
     .then((user) => {
       if (user) {
         Group.find({ users: new ObjectId(user._id) })
@@ -31,9 +31,10 @@ exports.createGroup = async (req, res) => {
 
   const group = new Group;
 
-  User.find({ userId: req.auth.userId }, { _id: 1 })
+  User.find({ userUuid: req.auth.userUuid }, { _id: 1 })
     .then((result) => {
       group.groupname = req.body.userGroup;
+      group.default = req.body.default;
       group.users = result;
 
       group
