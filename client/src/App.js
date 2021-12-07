@@ -12,10 +12,10 @@ import Userfront from "@userfront/core";
 import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
 import AddNewClient from './components/AddNewClient.js';
-import GroupSelector from './components/GroupSelector';
 import NavMenu from './components/NavMenu';
 import getGroups from './fetches/getGroups.js';
 import getClients from './fetches/getClients.js';
+import Groups from './components/Groups.js';
 
 export default function App() {
 
@@ -48,6 +48,7 @@ export default function App() {
               <Dashboard
                 userGroup={userGroup}
                 getClients={getClients}
+                getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
                 groups={groups}
               />
             </PrivateRoute>
@@ -65,7 +66,9 @@ export default function App() {
         <Route
           path="groups"
           element={
-            <GroupSelector />
+            <Groups
+              getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
+            />
           }
         />
         <Route

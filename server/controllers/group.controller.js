@@ -4,7 +4,7 @@ const Group = db.group;
 
 // Read Operations
 exports.getGroups = (req, res) => {
-  Group.find({ "users.userUuid": req.auth.userUuid })
+  Group.find({ users: req.auth.userUuid })
     .then((groups) => {
       return res.status(200).send({
         groups: groups
@@ -20,6 +20,7 @@ exports.getGroups = (req, res) => {
 
 // CUD Operations
 exports.createGroup = async (req, res) => {
+  console.log(req.groupexists);
   if (req.groupexists) {
     res.status(400).send({ message: "Group already exists!" });
     return;
@@ -27,7 +28,7 @@ exports.createGroup = async (req, res) => {
 
   // Create a new group model instance with the request body
   const group = new Group({
-    groupname: req.body.userGroup,
+    groupname: req.body.groupname,
     default: req.body.default,
     users: req.auth.userUuid
   });
@@ -36,7 +37,7 @@ exports.createGroup = async (req, res) => {
   group
     .save(group)
     .then(data => {
-      res.status(200).send({ data: data, success: `Group ${req.body.userGroup} added.` })
+      res.status(200).send({ data: data, success: `Group ${req.body.groupname} added.` })
     })
     .catch(err => {
       res.status(500).send({

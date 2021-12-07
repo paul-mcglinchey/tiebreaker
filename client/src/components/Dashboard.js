@@ -5,7 +5,7 @@ import CreateGroup from './CreateGroup'
 
 const Dashboard = (props) => {
 
-  const { userGroup, getClients, groups } = props;
+  const { userGroup, getClients, getGroups, groups } = props;
 
   const [clients, setClients] = useState([]);
   const [maxPages, setMaxPages] = useState(0);
@@ -27,7 +27,7 @@ const Dashboard = (props) => {
           toggleAddSession={toggleAddSession}
         />
       ) : (
-        <CreateGroup />
+        <CreateGroup getGroups={getGroups} />
       )}
     </div>
   )
