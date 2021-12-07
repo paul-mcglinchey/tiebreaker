@@ -4,7 +4,6 @@ mongoose.Promise = global.Promise;
 const db = {};
 db.mongoose = mongoose;
 
-db.user = require('./user.model.js');
 db.client = require('./client.model.js');
 db.group = require('./group.model.js');
 

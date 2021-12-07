@@ -1,13 +1,11 @@
-const db = require('../models');
 const secrets = require('../config/auth.config');
-const User = db.user;
-
 const jwt = require('jsonwebtoken');
 
-const publicKey = secrets.secret;
+const publicKey = secrets.publicKey;
 
+// Verifies that every request has an authorized access token
 verifyToken = (req, res, next) => {
-  const authHeader = JSON.parse(req.headers.authorization).token;
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
@@ -19,33 +17,8 @@ verifyToken = (req, res, next) => {
   });
 };
 
-// Userfront user has a userId, this is mapped to an ObjectId in the mongo db
-// We want to use the ObjectId so here we're adding the corresponding ObjectId to
-// the request body
-getUserId = (req, res, next) => {
-  User.findOne({ userUuid: req.auth.userUuid })
-    .then(user => {
-      if (user) {
-        req.body.uid = user._id;
-        next();
-      } else {
-        res.status(500).send({
-          message:
-            `Could not find a user with id ${req.auth.userId}.`
-        })
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || `Some error occurred while trying to find the user with id ${req.auth.userId}.`
-      })
-    });
-}
-
 const authJwt = {
-  verifyToken,
-  getUserId
+  verifyToken
 };
 
 module.exports = authJwt;

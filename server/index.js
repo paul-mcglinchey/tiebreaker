@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the clientsplash API')
+  res.send('Welcome to the pyrobooks API')
 })
 
 app.use('/health', (req, res) => {
@@ -20,9 +20,6 @@ app.use('/health', (req, res) => {
     status: 'OK',
   });
 });
-
-const user = require('./controllers/user.controller');
-app.use('/api/configureuser', user.configureUser);
 
 const dbConfig = require('./config/db.config');
 const db = require('./models');
@@ -41,11 +38,10 @@ db.mongoose
 
 // Auth
 app.use(middleware.authJwt.verifyToken);
-app.use(middleware.authJwt.getUserId);
 
 // routes
 require('./routes/client.routes')(app);
-require('./routes/user.routes')(app);
+require('./routes/group.routes')(app);
 
 // set port, listen for requests
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
