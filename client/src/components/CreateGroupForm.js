@@ -1,9 +1,10 @@
 import Userfront from '@userfront/core';
 import { useState } from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import endpoints from '../config/endpoints';
 import GroupSchema from '../helpers/groupValidationSchema';
 import StyledField from './forms/StyledField';
+import CustomCheckbox from './CustomCheckbox';
 
 const CreateGroupForm = (props) => {
 
@@ -42,26 +43,31 @@ const CreateGroupForm = (props) => {
   return (
     <Formik
       initialValues={{
-        'groupname': ''
+        'groupname': '',
+        'default': false
       }}
       validationSchema={GroupSchema}
       onSubmit={(values) => {
-        console.log(values);
         createGroup(values);
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex md:w-1/2 w-full">
-          <div className="flex flex-col flex-grow space-y-4">
-            <StyledField name="groupname" placeholder="Group name" errors={errors.groupname} touched={touched.groupname} />
-            <div className="flex flex-grow justify-end text-center mb-10">
-              <button type="submit" className="py-1 px-3 bg-white text-gray-500 border-2 border-green-500 rounded-lg font-medium hover:text-white hover:bg-green-500 transition-all">Create</button>
-            </div>
-            {(error || success) &&
-              <div className="flex flex-grow justify-center text-center">
-                <div type="submit" className={`w-full py-1 px-3 bg-white text-gray-500 border-2 ${success ? "border-green-500" : "border-red-500"} rounded-lg font-medium`}>{error}{success}</div>
+        <Form className="flex flex-col">
+          <div className="flex flex-grow">
+            <StyledField name="groupname" placeholder="Groupname" errors={errors.groupname} touched={touched.groupname} />
+            <div className="flex flex-col">
+              <label className="block font-bold text-gray-500 mb-1 uppercase">
+                Default
+              </label>
+              <div className="self-center">
+                <CustomCheckbox />
               </div>
-            }
+            </div>
+          </div>
+          <div className="sm:relative absolute w-full bottom-0 left-0 p-2 lg:mb-4">
+            <button type="submit" className="w-full bg-gray-200 hover:bg-gray-300 font-bold rounded py-2">
+              Add group
+            </button>
           </div>
         </Form>
       )}

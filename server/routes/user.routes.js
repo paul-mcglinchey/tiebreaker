@@ -10,9 +10,6 @@ module.exports = app => {
   // CUD Operations, need a request body
   router.use(middleware.validation.validateRequest);
 
-  // Create a new client
-  router.post('/configureuser', user.configureUser);
-
   // Create a new group
   router.post('/creategroup', middleware.createGroup.checkIfGroupExists, user.createGroup);
 

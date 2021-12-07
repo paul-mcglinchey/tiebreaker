@@ -6,7 +6,7 @@ const endpoints = {
     "pagesofclients": BASE_URL + "clients/pagesofclients",
     "deleteclient": BASE_URL + "clients/deleteclient",
     "addsession": BASE_URL + "clients/sessions",
-    "configureuser": BASE_URL + "users/configureuser",
+    "configureuser": BASE_URL + "configureuser",
     "creategroup": BASE_URL + "users/creategroup",
     "getgroups": BASE_URL + "users/groups"
 }

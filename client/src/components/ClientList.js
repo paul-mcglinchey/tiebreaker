@@ -16,7 +16,7 @@ const ClientList = (props) => {
   useMountEffect(getClients);
 
   return (
-    <div className="px-2 sm:px-6 lg:px-8">
+    <div>
       <div>
         {clients && clients.map(r => {
           return (

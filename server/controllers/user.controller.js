@@ -5,7 +5,7 @@ const Group = db.group;
 
 // Read Operations
 exports.getGroups = (req, res) => {
-  User.findOne({ userId: req.auth.userId }, { _id: 1 })
+  User.findOne({ userUuid: req.auth.userUuid }, { _id: 1 })
     .then((user) => {
       if (user) {
         Group.find({ users: new ObjectId(user._id) })
@@ -23,46 +23,6 @@ exports.getGroups = (req, res) => {
 }
 
 // CUD Operations
-exports.configureUser = (req, res) => {
-  User.find({ username: req.body.username, email: req.body.email, userId: req.auth.userId })
-    .then((data) => {
-      if (data.length == 0) {
-        createUser(req, res);
-      } else {
-        res.status(200).send({
-          message: 'User already exists'
-        })
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: error.message || 'An error occured while checking if the user exists'
-      })
-    })
-}
-
-const createUser = (req, res) => {
-  const user = new User({
-    email: req.body.email,
-    username: req.body.username,
-    userId: req.auth.userId,
-    lastLogin: Date.now()
-  });
-
-  // Save user in the database
-  user
-    .save(user)
-    .then(data => {
-      res.status(200).send({ data: data, message: `User ${data.username} added.` })
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the user.'
-      });
-    });
-}
-
 exports.createGroup = async (req, res) => {
   if (req.groupexists) {
     res.status(400).send({ message: "Group already exists!" });
@@ -71,9 +31,10 @@ exports.createGroup = async (req, res) => {
 
   const group = new Group;
 
-  User.find({ userId: req.auth.userId }, { _id: 1 })
+  User.find({ userUuid: req.auth.userUuid }, { _id: 1 })
     .then((result) => {
       group.groupname = req.body.userGroup;
+      group.default = req.body.default;
       group.users = result;
 
       group
@@ -94,4 +55,48 @@ exports.createGroup = async (req, res) => {
           err.message || 'Some error occurred while finding the user.'
       })
     });
+}
+
+// This middleware is responsible for ensuring that Userfront users exist in the database
+// Happens once each time a user hits the dashboard
+exports.configureUser = (req, res, next) => {
+  console.log(JSON.parse(req.headers.authorization))
+  const userfront = JSON.parse(req.headers.authorization).user;
+
+  User.find({ username: userfront.username, email: userfront.email, userUuid: userfront.userUuid })
+    .then((users) => {
+      if (users.length == 0) {
+        const user = new User({
+          email: userfront.email,
+          username: userfront.username,
+          userUuid: userfront.userUuid,
+          lastLogin: Date.now()
+        });
+
+        // Save the new user
+        user
+          .save(user)
+          .then(savedUser => {
+            res.status(200).send({
+              message: `New user added with UUID ${savedUser.userUuid}.`
+            })
+          })
+          .catch(err => {
+            res.status(401).send({
+              message:
+                err.message || 'Some error occurred while creating a new user.'
+            });
+          });
+      } else {
+        res.status(200).send({
+          message: 'User already exists.'
+        })
+      }
+    })
+    .catch(err => {
+      res.status(401).send({
+        message:
+          err.message || 'Some error occurred while checking if the user exists.'
+      })
+    })
 }

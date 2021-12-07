@@ -5,7 +5,7 @@ const User = mongoose.model(
   new mongoose.Schema({
     email: { type: String, required: true },
     username: { type: String, required: true },
-    userId: { type: String, required: true },
+    userUuid: { type: String, required: true },
     lastLogin: { type: Date, required: true }
   }, {
     timestamps: true
