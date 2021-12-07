@@ -17,7 +17,7 @@ const CustomTagger = (props) => {
 
   return (
     <div className="flex flex-col flex-1">
-      <label for="notes">Notes</label>
+      <label htmlFor="notes">Notes</label>
       <input name="notes" onChange={() => handleChange()} className="border border-blue-500" type="text"></input>
     </div>
   )

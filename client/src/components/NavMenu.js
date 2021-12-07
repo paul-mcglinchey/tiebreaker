@@ -42,7 +42,7 @@ const NavMenu = (props) => {
   useMountEffect(handleReload);
 
   return (
-    <div className={`flex flex-col ${Userfront.accessToken() ? "" : "hidden"}`}>
+    <div className={`flex flex-col mb-4 space-y-4 ${Userfront.accessToken() ? "" : "hidden"}`}>
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
           <>
@@ -168,7 +168,7 @@ const NavMenu = (props) => {
         )
         }
       </Disclosure >
-      <div className="flex justify-end px-2 sm:px-6 lg:px-8 py-2">
+      <div className="flex justify-end px-2 sm:px-6 lg:px-8">
         <GroupSelector
           getGroups={getGroups}
           userGroup={userGroup}

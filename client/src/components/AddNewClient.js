@@ -43,10 +43,6 @@ const AddNewClient = (props) => {
 
   return (
     <div className="px-2 sm:px-6 lg:px-8">
-      <div className="flex lg:hidden text-2xl sm:text-3xl font-bold py-2 sm:py-4 my-4 bg-purple-brand justify-center items-center text-white rounded">
-        Add your clients here
-        <UserAddIcon className="inline-block h-8 w-8 ml-4" />
-      </div>
       <Formik
         initialValues={{
           firstName: '',
@@ -68,7 +64,15 @@ const AddNewClient = (props) => {
         }}
       >
         {({ errors, touched }) => (
-          <div className="lg:flex flex-col md:flex-row flex-initial space-x-4 py-2">
+          <div className="flex flex-col lg:flex-row lg:flex-row-reverse flex-initial space-y-4 lg:space-y-0">
+            <div className="flex text-white bg-purple-brand justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
+              <div className="inline-block">
+                Add your clients here
+                <span className="inline-block align-middle">
+                  <UserAddIcon className="h-6 w-6 sm:h-8 sm:w-8 lg:h-12 lg:w-12 ml-2 md:ml-4 mb-2" />
+                </span>
+              </div>
+            </div>
             <Form className="flex flex-grow flex-col space-y-3 lg:max-w-7/10 content-end">
               <div className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-1 md:space-y-0">
                 <StyledField name="firstName" placeholder="First name" errors={errors.firstName} touched={touched.firstName} />
@@ -134,50 +138,42 @@ const AddNewClient = (props) => {
               </div>
             </Form>
 
-            <div className="flex lg:flex-col lg:max-w-3/10 max-w-full lg:justify-end justify-center mt-10 lg:mt-0">
-              <div className="lg:flex flex-grow bg-purple-brand text-white rounded-xl filter drop-shadow-sm lg:text-4xl xl:text-5xl font-extrabold text-right pt-10 px-4 hidden">
-                <span>
-                  Add your clients here
-                  <UserAddIcon className="inline-block h-8 w-8 ml-2" />
-                </span>
-              </div>
-              <Transition
-                show={hasMessage}
-                enter="transition ease-out duration-75"
-                enterFrom="transform opacity-0"
-                enterTo="transform opacity-100"
-                leave="transition ease-in duration-150"
-                leaveFrom="transform opacity-100"
-                leaveTo="transform opacity-0"
-                className="flex sm:flex-initial flex-grow lg:justify-end justify-center mt-4"
-              >
-                <div className={`
-                  flex px-3 py-1 border-2 space-x-2 items-center font-bold rounded-lg
-                  ${!failed ? (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500") : "border-red-500 text-red-500"}
-                  `}
-                >
-                  <div>
-                    {message}
-                  </div>
-                  <div>
-                    {message && !failed ? (
-                      isLoading ? (
-                        <div className="w-4 h-4">
-                          <SpinnerSVG />
-                        </div>
-                      ) : (
-                        <CheckIcon className="inline-block h-6 w-6" />
-                      )
-                    ) : (
-                      <XCircleIcon className="inline-block h-6 w-6" />
-                    )}
-                  </div>
-                </div>
-              </Transition>
-            </div>
           </div>
         )}
       </Formik>
+      <Transition
+        show={hasMessage}
+        enter="transition ease-out duration-75"
+        enterFrom="transform opacity-0"
+        enterTo="transform opacity-100"
+        leave="transition ease-in duration-150"
+        leaveFrom="transform opacity-100"
+        leaveTo="transform opacity-0"
+        className="flex sm:flex-initial flex-grow lg:justify-end justify-center mt-4"
+      >
+        <div className={`
+                  flex px-3 py-1 border-2 space-x-2 items-center font-bold rounded-lg
+                  ${!failed ? (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500") : "border-red-500 text-red-500"}
+                  `}
+        >
+          <div>
+            {message}
+          </div>
+          <div>
+            {message && !failed ? (
+              isLoading ? (
+                <div className="w-4 h-4">
+                  <SpinnerSVG />
+                </div>
+              ) : (
+                <CheckIcon className="inline-block h-6 w-6" />
+              )
+            ) : (
+              <XCircleIcon className="inline-block h-6 w-6" />
+            )}
+          </div>
+        </div>
+      </Transition>
     </div>
   )
 }

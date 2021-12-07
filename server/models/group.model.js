@@ -6,9 +6,7 @@ const Group = mongoose.model(
   new mongoose.Schema({
     groupname: { type: String, required: true },
     default: { type: Boolean, required: true },
-    users: [
-      { userUuid: { type: String, required: true } }
-    ],
+    users: [String],
     clients: [{
       type: Schema.Types.ObjectId,
       ref: 'Client'

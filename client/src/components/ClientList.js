@@ -16,7 +16,7 @@ const ClientList = (props) => {
   useMountEffect(getClients);
 
   return (
-    <div>
+    <div className="bg-gray-800 rounded-lg p-2 text-white">
       <div>
         {clients && clients.map(r => {
           return (

@@ -20,7 +20,7 @@ const StyledDatePicker = (props) => {
         </div>
       </div>
       <Field
-        className="w-full appearance-none focus:outline-none border-2 border-gray-200 rounded focus:border-purple-500 focus:bg-white placeholder-gray-700 bg-gray-200 rounded-sm py-2 px-4 text-gray-700 leading-tight"
+        className="w-full appearance-none focus:outline-none border-2 border-gray-800 rounded focus:border-purple-500 focus:bg-white text-gray-500 bg-gray-800 rounded-sm py-2 px-4 leading-tight"
         name={props.name}
         component={props.component}
       />

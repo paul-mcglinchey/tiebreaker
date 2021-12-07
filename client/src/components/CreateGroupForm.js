@@ -1,10 +1,9 @@
-import Userfront from '@userfront/core';
 import { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import endpoints from '../config/endpoints';
 import GroupSchema from '../helpers/groupValidationSchema';
 import StyledField from './forms/StyledField';
-import CustomCheckbox from './CustomCheckbox';
+import { requestBuilder } from '../helpers/requestBuilder';
 
 const CreateGroupForm = (props) => {
 
@@ -18,14 +17,7 @@ const CreateGroupForm = (props) => {
     setError();
     setSuccess();
 
-    fetch(endpoints.creategroup, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-      },
-      body: JSON.stringify(values)
-    })
+    fetch(endpoints.creategroup, requestBuilder('POST', values))
       .then((response => response.json()))
       .then((data) => {
         if (data.message) {
@@ -52,22 +44,26 @@ const CreateGroupForm = (props) => {
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex flex-col">
-          <div className="flex flex-grow">
+        <Form className="flex flex-1 flex-col space-y-8">
+          <div className="flex">
             <StyledField name="groupname" placeholder="Groupname" errors={errors.groupname} touched={touched.groupname} />
-            <div className="flex flex-col">
-              <label className="block font-bold text-gray-500 mb-1 uppercase">
-                Default
-              </label>
-              <div className="self-center">
-                <CustomCheckbox />
-              </div>
-            </div>
           </div>
-          <div className="sm:relative absolute w-full bottom-0 left-0 p-2 lg:mb-4">
-            <button type="submit" className="w-full bg-gray-200 hover:bg-gray-300 font-bold rounded py-2">
+          <div className="flex justify-end">
+            <button type="submit" className="hover:bg-purple-brand hover:text-white border-2 border-purple-brand font-bold text-purple-brand rounded-lg py-1 px-3 transition-all">
               Add group
             </button>
+          </div>
+          <div className="flex justify-end space-y-4">
+            {error && (
+              <div className="p-2 font-medium rounded-lg border-2 border-red-500 text-red-500">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="p-2 font-medium rounded-lg border-2 border-green-500 text-green-500">
+                {success}
+              </div>
+            )}
           </div>
         </Form>
       )}

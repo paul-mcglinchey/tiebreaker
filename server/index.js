@@ -25,7 +25,7 @@ const dbConfig = require('./config/db.config');
 const db = require('./models');
 
 db.mongoose
-  .connect((dbConfig.url) + '/' + process.env.DB_NAME || 'clientbase', {
+  .connect((dbConfig.url) + '/' + (process.env.DB_NAME || 'clientbase'), {
     useNewUrlParser: true
   })
   .then(() => {
