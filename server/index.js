@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 app.use('/health', (req, res) => {
   res.status(200).json({
-    appName: 'clientsplash-api',
+    appName: 'pyrobooks-api',
     version: process.env.npm_package_version,
     status: 'OK',
   });
@@ -28,7 +28,7 @@ const dbConfig = require('./config/db.config');
 const db = require('./models');
 
 db.mongoose
-  .connect((dbConfig.url) + '/clientbase', {
+  .connect((dbConfig.url) + '/' + process.env.DB_NAME || 'clientbase', {
     useNewUrlParser: true
   })
   .then(() => {
