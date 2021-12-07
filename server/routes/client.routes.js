@@ -17,7 +17,7 @@ module.exports = app => {
   router.post('/', middleware.createClient.isUserGroupSetSet, clients.create);
 
   // Delete a client by id
-  router.delete('/deleteclient', clients.deleteClient);
+  router.delete('/', clients.delete);
 
   // Add a session to a client's sessions array
   router.put('/sessions', clients.addSession);

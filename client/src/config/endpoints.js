@@ -4,11 +4,10 @@ const endpoints = {
     "origin": BASE_URL,
     "clients": BASE_URL + "clients",
     "pagesofclients": BASE_URL + "clients/pagesofclients",
-    "deleteclient": BASE_URL + "clients/deleteclient",
+    "deleteclient": BASE_URL + "clients",
     "addsession": BASE_URL + "clients/sessions",
-    "configureuser": BASE_URL + "configureuser",
-    "creategroup": BASE_URL + "users/creategroup",
-    "getgroups": BASE_URL + "users/groups"
+    "getgroups": BASE_URL + "groups",
+    "creategroup": BASE_URL + "groups",
 }
 
 export default endpoints;

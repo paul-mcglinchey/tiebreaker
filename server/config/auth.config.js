@@ -1,5 +1,5 @@
 module.exports = {
-  secret: process.env.SECRET_KEY ||
+  publicKey: process.env.SECRET_KEY ||
     `-----BEGIN PUBLIC KEY-----
 MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtwia657YMu2B65yBueF0
 E63BP5NQCAJOGFhl5Aa/RvN836hPG0ulbkNGwU6I0t450/DbJInyPdCk4A3jVkDj

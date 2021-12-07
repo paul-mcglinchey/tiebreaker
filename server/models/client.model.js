@@ -10,8 +10,14 @@ const NameSchema = new Schema({
 const ContactInfoSchema = new Schema({
   primaryPhoneNumber: { type: String, trim: true, required: false },
   primaryEmail: { type: String, trim: true, required: false },
-  emails: { type: [String], required: false },
-  phoneNumbers: { type: [Number], required: false }
+  emails: [{
+    name: { type: String, required: false },
+    email: { type: String, required: false }
+  }],
+  phoneNumbers: [{
+    name: { type: String, required: false },
+    number: { type: Number, required: false }
+  }]
 });
 
 const AddressSchema = new Schema({

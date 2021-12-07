@@ -4,6 +4,22 @@ const Group = db.group;
 const Client = db.client;
 
 // Read operations
+// Get the maximum number of pages of clients
+exports.maxNumberOfPages = (req, res) => {
+  Client.find({})
+    .then(data => {
+      res.send({
+        maxPagesClients: Math.floor(data.length / 10)
+      })
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occured while retrieving number of clients.'
+      })
+    })
+}
+
 // Retrieve all clients from the database
 exports.findAll = (req, res, next) => {
   console.log(req.query.userGroup);
@@ -24,28 +40,12 @@ exports.findAll = (req, res, next) => {
         })
     })
     .catch(err => {
-      res.status(500).send({
+      res.status(401).send({
         message:
-          err.message || 'A problem occurred fetching clients.'
+          err.message || `A problem occurred finding group "${req.query.userGroup}".`
       });
     });
 };
-
-// Get the maximum number of pages of clients
-exports.maxNumberOfPages = (req, res) => {
-  Client.find({})
-    .then(data => {
-      res.send({
-        maxPagesClients: Math.floor(data.length / 10)
-      })
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occured while retrieving number of clients.'
-      })
-    })
-}
 
 // CUD Operations
 // Create and save a new client
@@ -68,7 +68,9 @@ exports.create = (req, res) => {
     birthdate: req.body.birthdate,
     contactinfo: {
       primaryEmail: req.body.email,
-      primaryPhoneNumber: req.body.phoneNumber
+      primaryPhoneNumber: req.body.phoneNumber,
+      emails: req.body.emails,
+      phoneNumbers: req.body.phoneNumbers
     },
     sessions: []
   });
@@ -85,16 +87,16 @@ exports.create = (req, res) => {
           })
         })
         .catch(err => {
-          res.status(500).send({
+          res.status(401).send({
             message:
-              err.message || 'Could not add the client to this group.'
+              err.message || `Could not add client ${data._id} to group ${req.body.userGroup}.`
           })
         })
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while creating the client.'
+          err.message || `Some error occurred while creating client.`
       });
     });
 };
@@ -116,13 +118,15 @@ exports.addSession = (req, res) => {
       })
     })
     .catch(err => {
-      message:
-      err.message || `Some error occurred while updating sessions for client ${req.body._id}`
-    })
+      res.status(401).send({
+        message:
+          err.message || `Some error occurred while updating sessions for client ${req.body._id}`
+      });
+    });
 }
 
 // Deletes a client by ID
-exports.deleteClient = (req, res) => {
+exports.delete = (req, res) => {
   // Update the group clients array to remove this client
   Group.findOneAndUpdate({ groupname: req.body.userGroup }, { $pull: { clients: req.body.clientId } })
     .catch(err => {

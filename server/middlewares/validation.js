@@ -1,3 +1,4 @@
+// validates all requests that should have a body, do have a body
 validateRequest = (req, res, next) => {
     // Validate request
     if (!req.body) {
