@@ -22,7 +22,6 @@ exports.maxNumberOfPages = (req, res) => {
 
 // Retrieve all clients from the database
 exports.findAll = (req, res, next) => {
-  console.log(req.query.userGroup);
   Group.findOne({ groupname: req.query.userGroup })
     .then(group => {
       let clientIds = group.clients;
