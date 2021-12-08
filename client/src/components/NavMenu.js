@@ -94,6 +94,9 @@ const NavMenu = (props) => {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                   {/* Profile dropdown */}
+                  <div className="font-semibold tracking-wide text-white hidden md:block">
+                    {Userfront.user.username}
+                  </div>
                   <Menu as="div" className="ml-3 relative">
                     <div>
                       <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -111,6 +114,9 @@ const NavMenu = (props) => {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                        <div className="px-4 py-2 font-semibold tracking-wide block md:hidden">
+                          {Userfront.user.username}
+                        </div>
                         <Menu.Item>
                           {({ active }) => (
                             <button
