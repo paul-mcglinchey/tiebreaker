@@ -44,4 +44,4 @@ require('./routes/client.routes')(app);
 require('./routes/group.routes')(app);
 
 // set port, listen for requests
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+app.listen(apiPort, () => console.log(`Server running on port ${apiPort} in environment ${process.env.NODE_ENV || 'dev'}`))
