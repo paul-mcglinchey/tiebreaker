@@ -9,10 +9,10 @@ const ClientEntry = (props) => {
 
   const { getClients, clientData, userGroup, addSessionOpen, toggleAddSession } = props;
 
+  let sessions = clientData.sessions;
+
   const [expanded, setExpanded] = useState(false);
   const toggleExpansion = () => setExpanded(!expanded);
-
-  console.log(clientData);
 
   return (
     <Fragment>
@@ -43,8 +43,8 @@ const ClientEntry = (props) => {
         </div>
         {expanded && (
           <div className="flex flex-col">
-            <ClientSessions clientData={clientData.sessions} />
-            <div className="flex justify-between">
+            <ClientSessions sessions={sessions} />
+            <div className={`flex ${sessions.length === 0 ? 'justify-between' : 'justify-end'}`}>
               {clientData.sessions.length === 0 &&
                 <div className="self-end italic px-1 text-gray-500 py-1">
                   No sessions for this client
@@ -55,7 +55,7 @@ const ClientEntry = (props) => {
           </div>
         )}
       </div>
-      <AddNewSession clientData={props.clientData} addSessionOpen={addSessionOpen} toggleAddSession={() => toggleAddSession()} getClients={getClients} />
+      <AddNewSession clientData={clientData} addSessionOpen={addSessionOpen} toggleAddSession={() => toggleAddSession()} getClients={getClients} />
     </Fragment>
   )
 }

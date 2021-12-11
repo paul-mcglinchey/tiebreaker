@@ -12,7 +12,7 @@ import addNewClient from '../fetches/addNewClient';
 
 const AddNewClient = (props) => {
 
-  const { getClients, userGroup } = props;
+  const { userGroup } = props;
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -37,7 +37,6 @@ const AddNewClient = (props) => {
       setHasMessage,
       setFailed,
       setIsLoading,
-      getClients
     );
   }
 

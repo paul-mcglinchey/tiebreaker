@@ -14,7 +14,6 @@ import PasswordReset from './components/PasswordReset.js';
 import AddNewClient from './components/AddNewClient.js';
 import NavMenu from './components/NavMenu';
 import getGroups from './fetches/getGroups.js';
-import getClients from './fetches/getClients.js';
 import Groups from './components/Groups.js';
 
 export default function App() {
@@ -48,7 +47,6 @@ export default function App() {
               <PrivateRoute>
                 <Dashboard
                   userGroup={userGroup}
-                  getClients={getClients}
                   getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
                   groups={groups}
                 />
@@ -59,7 +57,6 @@ export default function App() {
             path="addclients"
             element={
               <AddNewClient
-                getClients={getClients}
                 userGroup={userGroup}
               />
             }
