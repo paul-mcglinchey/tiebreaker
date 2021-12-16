@@ -3,39 +3,47 @@ import { useState } from 'react';
 import { useMountEffect } from '../helpers/useMountEffect';
 import AddFirstClient from './AddFirstClient';
 import ClientList from './ClientList';
-import CreateGroup from './CreateGroup'
+import CreateGroup from './CreateGroup';
+import getClients from '../fetches/getClients.js';
 
 const Dashboard = (props) => {
 
-  const { userGroup, getClients, getGroups, groups } = props;
+  const { userGroup, getGroups, groups } = props;
 
   const [clients, setClients] = useState([]);
+  const [clientsLoading, setClientsLoading] = useState(false);
+
   const [maxPages, setMaxPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
+
   const [addSessionOpen, setAddSessionOpen] = useState(false);
   const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
 
-  useMountEffect(getClients(userGroup, setMaxPages, pageNumber, setClients));
+  useMountEffect(getClients(userGroup, setMaxPages, pageNumber, setClients, setClientsLoading));
 
   return (
     <div className="">
       {groups && groups.length !== 0 ? (
-        <div>
-          {clients && clients.length !== 0 ? (
-            <ClientList
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-              maxPages={maxPages}
-              clients={clients}
-              getClients={getClients(userGroup, setMaxPages, pageNumber, setClients)}
-              userGroup={userGroup}
-              addSessionOpen={addSessionOpen}
-              toggleAddSession={toggleAddSession}
-            />
+        clients && clients.length !== 0 ? (
+          <ClientList
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            maxPages={maxPages}
+            clients={clients}
+            getClients={getClients(userGroup, setMaxPages, pageNumber, setClients, setClientsLoading)}
+            userGroup={userGroup}
+            addSessionOpen={addSessionOpen}
+            toggleAddSession={toggleAddSession}
+          />
+        ) : (
+          clientsLoading ? (
+            <div className="text-5xl font-extrabold tracking-wide text-white">
+              Loading Clients
+            </div>
           ) : (
             <AddFirstClient />
-          )}
-        </div>
+          )
+        )
       ) : (
         <CreateGroup
           getGroups={getGroups}

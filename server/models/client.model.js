@@ -32,7 +32,7 @@ const AddressSchema = new Schema({
 const SessionSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: false },
-  notes: { type: String, required: false },
+  notes: { type: [String], required: false },
   date: { type: Date, required: true }
 });
 

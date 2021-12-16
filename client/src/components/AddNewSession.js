@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 import SessionSchema from "../helpers/sessionValidationSchema";
@@ -7,14 +8,19 @@ import StyledField from "./forms/StyledField";
 import { makeUSDate } from "../helpers/dateParser";
 import endpoints from "../config/endpoints";
 import Userfront from '@userfront/core';
-import CustomTagger from "./forms/CustomTagger";
 
 const AddNewSession = (props) => {
 
   const { clientData, addSessionOpen, toggleAddSession, getClients } = props;
 
-  const updateSessions = (values) => {
+  const [note, setNote] = useState('');
+  const [notes, setNotes] = useState([]);
+
+  const updateSessions = async (values) => {
     values._id = clientData._id;
+    values.notes = notes;
+
+    console.log(values);
 
     fetch(endpoints.addsession, {
       method: 'PUT',
@@ -35,6 +41,21 @@ const AddNewSession = (props) => {
       })
   }
 
+  const handleChange = noteValue => {
+    if (noteValue.includes(" ") && noteValue.trim().length > 0) {
+      setNotes(notes.concat(noteValue.split(" ")[0]))
+      setNote('');
+    } else if (noteValue.trim().length === 0) {
+      setNote('');
+    } else {
+      setNote(noteValue);
+    }
+  }
+
+  const removeNote = index => {
+    setNotes(notes.filter(n => n !== notes[index]));
+  }
+
   return (
     <Transition
       show={addSessionOpen}
@@ -44,14 +65,14 @@ const AddNewSession = (props) => {
       leave="transition ease-in-out duration-500"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
-      className="absolute bg-white z-20 rounded-lg w-3/4 left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 p-4 filter shadow-md"
+      className="absolute bg-gray-900 z-20 rounded-lg w-3/4 left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 p-4 filter shadow-md"
     >
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full text">
         <div className="flex justify-between items-center">
           <div className="text-3xl font-bold">
             Add a new session for <span className="text-green-500">{clientData.clientName.firstName} {clientData.clientName.lastName}</span>.
           </div>
-          <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
+          <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-transparent hover:border-red-500 rounded-xl text-red-500 transition-all">
             Close
           </button>
         </div>
@@ -60,16 +81,10 @@ const AddNewSession = (props) => {
             initialValues={{
               title: '',
               description: '',
-              notes: [
-                {
-                  content: ''
-                },
-              ],
               date: makeUSDate(Date.now(), '-')
             }}
             validationSchema={SessionSchema}
-            onSubmit={(errors, values) => {
-              console.log(errors);
+            onSubmit={(values) => {
               updateSessions(values);
             }}
           >
@@ -79,11 +94,28 @@ const AddNewSession = (props) => {
                   <div className="flex flex-1 flex-col space-y-3">
                     <StyledField name="title" placeholder="Title" errors={errors.title} touched={touched.title} />
                     <StyledField name="description" placeholder="Description" component="textarea" errors={errors.description} touched={touched.description} />
-                    <CustomTagger />
+                    <div className="flex flex-col">
+                      <label htmlFor="notes" className="uppercase tracking-wide text-gray-500 font-bold">Notes</label>
+                      <div className="inline-flex flex-wrap flex-1 border-2 border-gray-800 bg-gray-800 rounded h-10 py-2">
+                        {notes.map((n, i) => {
+                          return (
+                            <button
+                              type="button"
+                              key={i}
+                              className="flex my-1 mx-1 px-2 rounded text-white tracking-wide uppercase text-xs font-medium border items-center hover:text-red-500 hover:border-red-500"
+                              onClick={() => removeNote(i)}
+                            >
+                              <span>{n}</span>
+                            </button>
+                          )
+                        })}
+                        <input className="bg-transparent max-w-full flex-1 ring-0 focus:ring-0 outline-none focus:outline-none" name="notes" value={note} onChange={(e) => handleChange(e.target.value)} />
+                      </div>
+                    </div>
                     <StyledDatePicker name="date" label="Date of Session" component={CustomDate} errors={errors.date} touched={touched.date} />
                   </div>
                   <div className="flex flex-grow items-end justify-end">
-                    <button className="px-3 py-1 mt-10 border-2 border-purple-500 text-purple-500 hover:text-white hover:bg-purple-500 transition-all font-bold rounded-lg flex" type="submit">
+                    <button type="submit" className="px-3 py-1 mt-10 border-2 border-transparent text-purple-500 hover:border-purple-brand transition-all font-bold rounded-lg flex">
                       Add Session
                     </button>
                   </div>
@@ -93,7 +125,7 @@ const AddNewSession = (props) => {
           </Formik>
         </div>
       </div>
-    </Transition>
+    </Transition >
   )
 }
 

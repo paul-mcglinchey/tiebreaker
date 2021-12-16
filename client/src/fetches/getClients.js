@@ -1,8 +1,11 @@
 import endpoints from "../config/endpoints";
 import { requestBuilder } from '../helpers/requestBuilder';
 
-const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
+const getClients = (userGroup, setMaxPages, pageNumber, setClients, setClientsLoading) => {
   const fetchClients = () => {
+
+    setClientsLoading(true);
+
     fetch(`${endpoints.pagesofclients}?userGroup=${userGroup}`, requestBuilder("GET"))
       .then(response => response.json())
       .then(pages => {
@@ -16,9 +19,11 @@ const getClients = (userGroup, setMaxPages, pageNumber, setClients) => {
       .then(response => response.json())
       .then(clients => {
         setClients(clients.data);
+        setClientsLoading(false);
       })
       .catch(err => {
         console.log(err);
+        setClientsLoading(false);
       })
   }
 
