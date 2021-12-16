@@ -48,8 +48,15 @@ const ClientSessions = (props) => {
                           })}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {makeDate(s.date, '/')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">
+                        <div className="flex items-center justify-end">
+                          <button className="text-red-500 font-medium px-2 py-1">
+                            delete session
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )

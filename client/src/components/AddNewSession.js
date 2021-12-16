@@ -72,7 +72,7 @@ const AddNewSession = (props) => {
           <div className="text-3xl font-bold">
             Add a new session for <span className="text-green-500">{clientData.clientName.firstName} {clientData.clientName.lastName}</span>.
           </div>
-          <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-red-500 rounded-xl text-red-500 hover:bg-red-500 hover:text-white">
+          <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-transparent hover:border-red-500 rounded-xl text-red-500 transition-all">
             Close
           </button>
         </div>
@@ -96,13 +96,13 @@ const AddNewSession = (props) => {
                     <StyledField name="description" placeholder="Description" component="textarea" errors={errors.description} touched={touched.description} />
                     <div className="flex flex-col">
                       <label htmlFor="notes" className="uppercase tracking-wide text-gray-500 font-bold">Notes</label>
-                      <div className="flex border-2 border-gray-800 bg-gray-800 rounded h-10 py-2">
+                      <div className="inline-flex flex-wrap flex-1 border-2 border-gray-800 bg-gray-800 rounded h-10 py-2">
                         {notes.map((n, i) => {
                           return (
                             <button
                               type="button"
                               key={i}
-                              className="flex mx-1 px-2 rounded text-white tracking-wide uppercase text-xs font-medium border items-center hover:text-red-500 hover:border-red-500"
+                              className="flex my-1 mx-1 px-2 rounded text-white tracking-wide uppercase text-xs font-medium border items-center hover:text-red-500 hover:border-red-500"
                               onClick={() => removeNote(i)}
                             >
                               <span>{n}</span>
@@ -115,7 +115,7 @@ const AddNewSession = (props) => {
                     <StyledDatePicker name="date" label="Date of Session" component={CustomDate} errors={errors.date} touched={touched.date} />
                   </div>
                   <div className="flex flex-grow items-end justify-end">
-                    <button type="submit" className="px-3 py-1 mt-10 border-2 border-purple-500 text-purple-500 hover:text-white hover:bg-purple-500 transition-all font-bold rounded-lg flex" type="submit">
+                    <button type="submit" className="px-3 py-1 mt-10 border-2 border-transparent text-purple-500 hover:border-purple-brand transition-all font-bold rounded-lg flex">
                       Add Session
                     </button>
                   </div>
