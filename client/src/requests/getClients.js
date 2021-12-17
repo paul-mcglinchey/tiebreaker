@@ -1,5 +1,5 @@
 import endpoints from "../config/endpoints";
-import { requestBuilder } from '../helpers/requestBuilder';
+import { requestBuilder } from '../helpers/requestService';
 
 const getClients = (userGroup, setMaxPages, pageNumber, setClients, setClientsLoading) => {
   const fetchClients = () => {

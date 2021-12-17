@@ -13,19 +13,25 @@ import PasswordResetRequest from './components/PasswordResetRequest.js';
 import PasswordReset from './components/PasswordReset.js';
 import AddNewClient from './components/AddNewClient.js';
 import NavMenu from './components/NavMenu';
-import getGroups from './fetches/getGroups.js';
+import getGroups from './requests/getGroups.js';
 import Groups from './components/Groups.js';
+import { links, setActiveLink } from './helpers/activeLinkController';
 
 export default function App() {
 
+  
   const [groups, setGroups] = useState([]);
   const [userGroup, setUserGroup] = useState();
-
+  
+  console.log(groups);
+  
   const location = useLocation();
 
   function PrivateRoute({ children }) {
     return Userfront.accessToken() ? children : <Navigate to="/login" state={{ from: location }} />;
   }
+
+  setActiveLink(location);
 
   return (
     <div>
@@ -34,6 +40,7 @@ export default function App() {
         userGroup={userGroup}
         setUserGroup={setUserGroup}
         groups={groups}
+        links={links}
       />
       <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
         <Routes>
@@ -65,6 +72,7 @@ export default function App() {
             path="groups"
             element={
               <Groups
+                groups={groups}
                 getGroups={() => getGroups(setGroups, userGroup, setUserGroup)}
               />
             }

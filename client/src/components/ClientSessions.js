@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { makeDate } from "../helpers/dateParser";
 
 const cols = [
@@ -21,7 +20,7 @@ const ClientSessions = (props) => {
                     return (
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                        className="py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
                         key={i}
                       >
                         {c}

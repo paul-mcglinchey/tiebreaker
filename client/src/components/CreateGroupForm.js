@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import endpoints from '../config/endpoints';
 import GroupSchema from '../helpers/groupValidationSchema';
 import StyledField from './forms/StyledField';
-import { requestBuilder } from '../helpers/requestBuilder';
+import { requestBuilder } from '../helpers/requestService';
 
 const CreateGroupForm = (props) => {
 

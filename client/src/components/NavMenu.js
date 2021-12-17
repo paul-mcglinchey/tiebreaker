@@ -1,10 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Userfront from '@userfront/core';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import GroupSelector from './GroupSelector';
-import { useMountEffect } from '../helpers/useMountEffect';
 
 // Public functions
 function classNames(...classes) {
@@ -16,30 +15,7 @@ const handleLogout = () => {
 
 const NavMenu = (props) => {
 
-  const { getGroups, userGroup, setUserGroup, groups } = props;
-  const location = useLocation();
-
-  const [links, setLinks] = useState([
-    { name: 'Dashboard', href: '/dashboard', current: true },
-    { name: 'Add Clients', href: '/addclients', current: false },
-    { name: 'Groups', href: '/groups', current: false }
-  ])
-
-  // this is triggered when a user interacts with a navlink
-  const handleClick = (name) => {
-    let linksCopy = [...links];
-    linksCopy.forEach(link => link.current = link.name === name ? true : false);
-    setLinks(linksCopy);
-  }
-
-  // this is triggered on component mount
-  const handleReload = () => {
-    let linksCopy = [...links];
-    linksCopy.forEach(link => link.current = link.href === location.pathname ? true : false);
-    setLinks(linksCopy);
-  }
-
-  useMountEffect(handleReload);
+  const { getGroups, userGroup, setUserGroup, groups, links } = props;
 
   return (
     <div className={`flex flex-col mb-4 space-y-4 ${Userfront.accessToken() ? "" : "hidden"}`}>
@@ -78,7 +54,6 @@ const NavMenu = (props) => {
                         <Link
                           key={item.name}
                           to={item.href}
-                          onClick={() => handleClick(item.name)}
                           className={classNames(
                             item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                             'px-3 py-2 rounded-md text-sm font-medium'
@@ -158,7 +133,6 @@ const NavMenu = (props) => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    onClick={() => handleClick(item.name)}
                     className={classNames(
                       item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'block px-3 py-2 rounded-md text-base font-medium'

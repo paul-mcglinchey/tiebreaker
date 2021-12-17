@@ -8,7 +8,7 @@ import ClientSchema from '../helpers/clientValidationSchema';
 import CustomDate from './forms/CustomDate';
 import SpinnerSVG from './svg/SpinnerSVG';
 import CustomCheckbox from './CustomCheckbox';
-import addNewClient from '../fetches/addNewClient';
+import addNewClient from '../requests/addNewClient';
 
 const AddNewClient = (props) => {
 

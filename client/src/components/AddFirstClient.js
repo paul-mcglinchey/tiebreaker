@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const AddFirstClient = (props) => {
   return (
-    <Link to='/addClients' className="flex justify-center">
+    <Link to='/addclients' className="flex justify-center">
       <div className="flex bg-purple-brand text-3xl sm:text-5xl text-white font-extrabold p-4 rounded-lg transform hover:scale-105 transition-all text-center mt-32">
         <div className="inline-block">
           Add your first client

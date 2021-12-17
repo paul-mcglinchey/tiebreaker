@@ -1,8 +1,8 @@
 import endpoints from "../config/endpoints";
-import { requestBuilder } from "../helpers/requestBuilder";
+import { requestBuilder } from "../helpers/requestService";
 
 const getGroups = (setGroups, userGroup, setUserGroup) => {
-  fetch(endpoints.getgroups, requestBuilder("GET"))
+  fetch(endpoints.groups, requestBuilder("GET"))
     .then(response => response.json())
     .then((data) => {
       setGroups(data.groups);

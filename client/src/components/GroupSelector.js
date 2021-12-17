@@ -19,7 +19,7 @@ const GroupSelector = (props) => {
       {groups && groups.length !== 0 &&
         <Menu as="div" className="relative inline-block text-left">
           <div>
-            <Menu.Button className="inline-flex justify-center w-full rounded-md px-4 py-2 bg-purple-brand border-2 border-purple-brand text-sm font-medium text-white hover:text-purple-brand hover:bg-white hover:border-purple-brand focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+            <Menu.Button className="inline-flex justify-center w-full rounded-md px-4 py-2 bg-purple-brand border-2 border-purple-brand text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
               {userGroup ? userGroup : 'Groups'}
               <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
             </Menu.Button>
@@ -34,7 +34,7 @@ const GroupSelector = (props) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className={`z-50 origin-top-right absolute right-0 mt-2 w-full rounded-md bg-white ring-1 ring-black ring-opacity-5 focus:outline-none ${groups ? '' : 'hidden'}`}>
+            <Menu.Items className={`z-50 origin-top-right absolute right-0 mt-2 w-full rounded-md bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none ${groups ? '' : 'hidden'}`}>
               <div className="py-1">
                 {groups && groups.map((g) => {
                   return (
@@ -43,7 +43,7 @@ const GroupSelector = (props) => {
                         <button
                           onClick={() => setUserGroup(g.groupname)}
                           className={classNames(
-                            active ? 'text-gray-900' : 'text-purple-700',
+                            active ? 'text-purple-brand' : 'text-white',
                             'block px-4 py-2 text-sm'
                           )}
                         >

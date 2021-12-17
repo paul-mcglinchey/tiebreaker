@@ -4,7 +4,7 @@ import { useMountEffect } from '../helpers/useMountEffect';
 import AddFirstClient from './AddFirstClient';
 import ClientList from './ClientList';
 import CreateGroup from './CreateGroup';
-import getClients from '../fetches/getClients.js';
+import getClients from '../requests/getClients.js';
 
 const Dashboard = (props) => {
 

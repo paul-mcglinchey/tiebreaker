@@ -1,28 +1,12 @@
 import endpoints from "../config/endpoints";
-import Userfront from '@userfront/core';
+import { requestMaker } from "../helpers/requestService";
 
 const DeleteClient = (props) => {
 
   const { getClients, clientId, userGroup, toggleClientDeletion } = props;
 
   const deleteClient = () => {
-    fetch((endpoints.deleteclient), {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Userfront.tokens.accessToken}`
-      },
-      body: JSON.stringify({ clientId: clientId, groupname: userGroup })
-    })
-      .then(() => {
-        toggleClientDeletion();
-      })
-      .catch(err => {
-        console.log(err);
-      })
-
-    getClients();
-
+    requestMaker(endpoints.clients, 'DELETE', { clientId: clientId, groupname: userGroup }, toggleClientDeletion, getClients);
   }
 
   return (

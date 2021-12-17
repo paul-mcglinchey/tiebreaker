@@ -68,7 +68,7 @@ const ClientEntry = (props) => {
             <ClientSessions sessions={sessions} />
             <div className={`flex ${sessions.length === 0 ? 'justify-between' : 'justify-end'}`}>
               {clientData.sessions.length === 0 &&
-                <div className="self-end italic px-6 text-gray-500 py-1">
+                <div className="self-end italic text-gray-500 py-1">
                   No sessions for this client
                 </div>
               }
@@ -81,9 +81,8 @@ const ClientEntry = (props) => {
         <DeleteClient
           toggleClientDeletion={toggleClientDeletion}
           getClients={getClients}
-          clientId={clientData.clientId}
+          clientId={clientData._id}
           userGroup={userGroup}
-
         />
       }
     </Fragment>
