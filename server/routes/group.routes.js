@@ -13,5 +13,8 @@ module.exports = app => {
   // Create a new group
   router.post('/', middleware.createGroup.checkIfGroupExists, group.createGroup);
 
+  // Delete a group
+  router.delete('/', middleware.createGroup.checkIfGroupExists, group.deleteGroup);
+
   app.use('/api/groups', router);
 }

@@ -1,28 +1,30 @@
-import { React } from 'react';
+import { Fragment, React } from 'react';
 import { useState } from 'react';
 import { useMountEffect } from '../helpers/useMountEffect';
 import AddFirstClient from './AddFirstClient';
 import ClientList from './ClientList';
 import CreateGroup from './CreateGroup';
-import getClients from '../requests/getClients.js';
 
 const Dashboard = (props) => {
 
-  const { userGroup, getGroups, groups } = props;
-
-  const [clients, setClients] = useState([]);
-  const [clientsLoading, setClientsLoading] = useState(false);
-
-  const [maxPages, setMaxPages] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
+  const { 
+    userGroup, 
+    groups, 
+    clients, 
+    pageNumber, 
+    setPageNumber, 
+    maxPages, 
+    clientsLoading, 
+    getClients 
+  } = props;
 
   const [addSessionOpen, setAddSessionOpen] = useState(false);
   const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
 
-  useMountEffect(getClients(userGroup, setMaxPages, pageNumber, setClients, setClientsLoading));
+  console.log(clients);
 
   return (
-    <div className="">
+    <Fragment>
       {groups && groups.length !== 0 ? (
         clients && clients.length !== 0 ? (
           <ClientList
@@ -30,10 +32,10 @@ const Dashboard = (props) => {
             setPageNumber={setPageNumber}
             maxPages={maxPages}
             clients={clients}
-            getClients={getClients(userGroup, setMaxPages, pageNumber, setClients, setClientsLoading)}
             userGroup={userGroup}
             addSessionOpen={addSessionOpen}
             toggleAddSession={toggleAddSession}
+            getClients={getClients}
           />
         ) : (
           clientsLoading ? (
@@ -46,10 +48,9 @@ const Dashboard = (props) => {
         )
       ) : (
         <CreateGroup
-          getGroups={getGroups}
         />
       )}
-    </div>
+    </Fragment>
   )
 }
 

@@ -15,7 +15,12 @@ const handleLogout = () => {
 
 const NavMenu = (props) => {
 
-  const { getGroups, userGroup, setUserGroup, groups, links } = props;
+  const {
+    userGroup, 
+    setUserGroup, 
+    groups, 
+    links
+  } = props;
 
   return (
     <div className={`flex flex-col mb-4 space-y-4 ${Userfront.accessToken() ? "" : "hidden"}`}>
@@ -150,7 +155,6 @@ const NavMenu = (props) => {
       </Disclosure >
       <div className="flex justify-end px-2 sm:px-6 lg:px-8">
         <GroupSelector
-          getGroups={getGroups}
           userGroup={userGroup}
           setUserGroup={setUserGroup}
           groups={groups}

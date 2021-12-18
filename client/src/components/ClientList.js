@@ -13,8 +13,6 @@ const ClientList = (props) => {
     (pageNumber >= 1) && setPageNumber(pageNumber - 1);
   }
 
-  useMountEffect(getClients);
-
   return (
     <div className="bg-gray-800 rounded-lg p-2 text-white">
       <div>
@@ -23,7 +21,6 @@ const ClientList = (props) => {
             <ClientEntry
               key={r._id}
               clientData={r}
-              getClients={getClients}
               userGroup={userGroup}
               addSessionOpen={addSessionOpen}
               toggleAddSession={toggleAddSession}

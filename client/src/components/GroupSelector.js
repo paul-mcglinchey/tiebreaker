@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { useMountEffect } from '../helpers/useMountEffect';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
@@ -9,9 +8,11 @@ function classNames(...classes) {
 
 const GroupSelector = (props) => {
 
-  const { getGroups, userGroup, setUserGroup, groups } = props;
-
-  useMountEffect(getGroups);
+  const { 
+    userGroup, 
+    setUserGroup, 
+    groups 
+  } = props;
 
   return (
     <Fragment>

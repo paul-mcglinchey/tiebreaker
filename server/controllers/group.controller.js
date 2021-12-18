@@ -1,6 +1,7 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
 const Group = db.group;
+const Client = db.client;
 
 // Read Operations
 exports.getGroups = (req, res) => {
@@ -20,7 +21,6 @@ exports.getGroups = (req, res) => {
 
 // CUD Operations
 exports.createGroup = async (req, res) => {
-  console.log(req.groupexists);
   if (req.groupexists) {
     res.status(400).send({ message: "Group already exists!" });
     return;
@@ -45,4 +45,48 @@ exports.createGroup = async (req, res) => {
           err.message || 'Some error occurred while creating the group.'
       });
     });
+}
+
+exports.deleteGroup = async (req, res) => {
+  if (!req.groupexists) {
+    res.status(500).send({ message: "Group doesn't exist" });
+    return;
+  }
+
+  Group.findOne({ groupname: req.body.groupname })
+    .then(group => {
+      var clientIds = group.clients;
+      Client.deleteMany({ _id: clientIds })
+        .then(() => {
+          Group.updateOne({ groupname: req.body.groupname }, { clients: [] })
+            .catch(err => {
+              res.status(500).send({
+                message: err.message || `Could not update the group with name \"${req.body.groupname}\"`
+              });
+            })
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupname}`
+          })
+        });
+    })
+    .then(() => {
+      Group.findByIdAndDelete({ _id: req.body._id })
+        .then(group => {
+          res.status(200).send({
+            success: `Group ${group.groupname} successfully deleted.`
+          })
+        })
+        .catch(err => {
+          if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+              message: 'Group not found with id ' + req.body._id
+            });
+          };
+          return res.status(500).send({
+            message: 'Could not delete group with id ' + req.body._id
+          });
+        });
+    })
 }

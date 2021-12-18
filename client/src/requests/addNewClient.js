@@ -1,7 +1,7 @@
 import endpoints from '../config/endpoints';
 import Userfront from '@userfront/core';
 
-const addNewClient = async (values, setMessage, setHasMessage, setFailed, setIsLoading) => {
+const addNewClient = async (values, setMessage, setHasMessage, setFailed, setIsLoading, getClients) => {
 
   setIsLoading(true);
   setMessage('Loading');
@@ -36,6 +36,8 @@ const addNewClient = async (values, setMessage, setHasMessage, setFailed, setIsL
         console.log(error.message);
       }
     )
+  
+  getClients();
 }
 
 export default addNewClient;

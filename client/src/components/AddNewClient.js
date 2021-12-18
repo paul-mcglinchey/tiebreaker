@@ -12,7 +12,10 @@ import addNewClient from '../requests/addNewClient';
 
 const AddNewClient = (props) => {
 
-  const { userGroup } = props;
+  const { 
+    userGroup, 
+    getClients 
+  } = props;
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -28,7 +31,7 @@ const AddNewClient = (props) => {
 
   const handleSubmit = async (values) => {
 
-    values.userGroup = userGroup;
+    values.groupname = userGroup;
     console.log('posting:', values);
 
     addNewClient(
@@ -37,6 +40,7 @@ const AddNewClient = (props) => {
       setHasMessage,
       setFailed,
       setIsLoading,
+      getClients
     );
   }
 
@@ -63,7 +67,7 @@ const AddNewClient = (props) => {
         }}
       >
         {({ errors, touched }) => (
-          <div className="flex flex-col lg:flex-row lg:flex-row-reverse flex-initial space-y-4 lg:space-y-0">
+          <div className="flex flex-col lg:flex-row-reverse flex-initial space-y-4 lg:space-y-0">
             <div className="flex text-white bg-purple-brand justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
               <div className="inline-block">
                 Add your clients here

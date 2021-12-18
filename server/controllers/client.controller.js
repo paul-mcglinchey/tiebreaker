@@ -65,7 +65,7 @@ exports.create = (req, res) => {
       postCode: req.body.postCode
     },
     birthdate: req.body.birthdate,
-    contactinfo: {
+    contactInfo: {
       primaryEmail: req.body.email,
       primaryPhoneNumber: req.body.phoneNumber,
       emails: req.body.emails,
@@ -79,10 +79,10 @@ exports.create = (req, res) => {
     .save(client)
     .then(data => {
       // Add the client to the group which was selected
-      Group.updateOne({ groupname: req.body.userGroup }, { $push: { clients: new ObjectId(data._id) } })
+      Group.updateOne({ groupname: req.body.groupname }, { $push: { clients: new ObjectId(data._id) } })
         .then(() => {
           res.status(200).send({
-            success: 'Client created successfully.'
+            success: `Client created successfully in ${req.body.groupname}.`
           })
         })
         .catch(err => {
@@ -127,7 +127,7 @@ exports.addSession = (req, res) => {
 // Deletes a client by ID
 exports.delete = (req, res) => {
   // Update the group clients array to remove this client
-  Group.findOneAndUpdate({ groupname: req.body.userGroup }, { $pull: { clients: req.body.clientId } })
+  Group.findOneAndUpdate({ groupname: req.body.groupname }, { $pull: { clients: req.body.clientId } })
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({

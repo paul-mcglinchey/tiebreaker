@@ -17,13 +17,15 @@ export const requestBuilder = (method, body = null) => {
   return request;
 }
 
-export const requestMaker = (endpoint, method, body = null, resolver = null, callback = null) => {
+export const requestMaker = (endpoint, method, body = null, resolver = null, callback = null, catchHandler = null) => {
   const makeRequest = () => {
     fetch((endpoint), requestBuilder(method, body))
       .then((res => res.json()))
-      .then(resolver())
+      .then(response => {
+        resolver && resolver(response)
+      })
       .catch(error => {
-        console.log(error);
+        catchHandler ? catchHandler(error) : console.log(error);
       })
 
     callback();

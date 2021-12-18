@@ -14,7 +14,7 @@ module.exports = app => {
   router.use(middleware.validation.validateRequest);
 
   // Create a new client
-  router.post('/', middleware.createClient.isUserGroupSetSet, clients.create);
+  router.post('/', middleware.createClient.isGroupNameSet, clients.create);
 
   // Delete a client by id
   router.delete('/', clients.delete);

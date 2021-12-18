@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react';
 import ClientSessions from "./ClientSessions";
 import DeleteClient from "./DeleteClient";
 import AddNewSession from "./AddNewSession";
+import { makeDate } from "../helpers/dateParser";
 
 const ClientEntry = (props) => {
 
@@ -28,6 +29,14 @@ const ClientEntry = (props) => {
               <span className="inline-block font-medium uppercase tracking-wider">
                 {clientData.clientName.firstName} {clientData.clientName.lastName}
               </span>
+              <span className="inline-block font-medium uppercase tracking-wider text-gray-400">
+                DOB: {makeDate(clientData.birthdate, "/")}
+              </span>
+              {typeof clientData.contactInfo !== "undefined" && clientData.contactInfo.primaryPhoneNumber !== "undefined" &&
+                <span className="inline-block font-medium uppercase tracking-wider text-gray-400">
+                  Phone: {clientData.contactInfo.primaryPhoneNumber}
+                </span>
+              }
             </div>
           </div>
           <div className="flex items-center">
