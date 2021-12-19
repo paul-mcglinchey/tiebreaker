@@ -22,13 +22,13 @@ exports.maxNumberOfPages = (req, res) => {
 
 // Retrieve all clients from the database
 exports.findAll = (req, res, next) => {
-  Group.findOne({ groupname: req.query.userGroup })
+  Group.findOne({ groupname: req.query.groupname })
     .then(group => {
       let clientIds = group.clients;
       Client.find({ _id: { $in: clientIds } })
         .then(clients => {
           res.status(200).send({
-            data: clients
+            clients: clients
           })
         })
         .catch(err => {

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import parseDateString from '../helpers/dateParser';
+import { dateHelper } from '../helpers';
 
 const SessionSchema = Yup.object().shape({
   title: Yup.string()
@@ -11,7 +11,7 @@ const SessionSchema = Yup.object().shape({
     .max(500, 'Too Long!'),
   notes: Yup.array(),
   date: Yup.date()
-    .transform(parseDateString)
+    .transform(dateHelper.parseDateString)
     .max(new Date(), 'Cannot be later than the current date')
     .min(new Date(1900, 0), 'Too Long Ago')
     .required('Required')

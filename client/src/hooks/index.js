@@ -1,1 +1,1 @@
-export { default } from './useFetch.js';
+export { fetchHooks } from './useFetch'

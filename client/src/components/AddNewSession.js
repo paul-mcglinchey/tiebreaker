@@ -5,19 +5,19 @@ import SessionSchema from "../schema/sessionValidationSchema";
 import CustomDate from "./forms/CustomDate";
 import StyledDatePicker from "./forms/StyledDatePicker";
 import StyledField from "./forms/StyledField";
-import { makeUSDate } from "../helpers/dateParser";
+import { dateHelper } from "../helpers";
 import endpoints from "../config/endpoints";
 import Userfront from '@userfront/core';
 
 const AddNewSession = (props) => {
 
-  const { clientData, addSessionOpen, toggleAddSession, getClients } = props;
+  const { c, addSessionOpen, toggleAddSession } = props;
 
   const [note, setNote] = useState('');
   const [notes, setNotes] = useState([]);
 
   const updateSessions = async (values) => {
-    values._id = clientData._id;
+    values._id = c._id;
     values.notes = notes;
 
     console.log(values);
@@ -34,7 +34,6 @@ const AddNewSession = (props) => {
       .then(data => {
         console.log('Success: ', data);
         toggleAddSession();
-        getClients();
       })
       .catch((error) => {
         console.log('Error: ', error);
@@ -58,7 +57,7 @@ const AddNewSession = (props) => {
 
   return (
     <Transition
-      show={addSessionOpen}
+      show={false}
       enter="transition ease-in-out duration-500"
       enterFrom="opacity-0"
       enterTo="opacity-100"
@@ -70,7 +69,7 @@ const AddNewSession = (props) => {
       <div className="flex flex-col h-full text">
         <div className="flex justify-between items-center">
           <div className="text-3xl font-bold">
-            Add a new session for <span className="text-green-500">{clientData.clientName.firstName} {clientData.clientName.lastName}</span>.
+            Add a new session for <span className="text-green-500">{c.clientName.firstName} {c.clientName.lastName}</span>.
           </div>
           <button onClick={() => toggleAddSession()} className="font-bold px-3 py-1 border-2 border-transparent hover:border-red-500 rounded-xl text-red-500 transition-all">
             Close
@@ -81,7 +80,7 @@ const AddNewSession = (props) => {
             initialValues={{
               title: '',
               description: '',
-              date: makeUSDate(Date.now(), '-')
+              date: dateHelper.makeUSDate(Date.now(), '-')
             }}
             validationSchema={SessionSchema}
             onSubmit={(values) => {
