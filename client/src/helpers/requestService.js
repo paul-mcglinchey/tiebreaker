@@ -17,18 +17,18 @@ export const requestBuilder = (method, body = null) => {
   return request;
 }
 
-export const requestMaker = (endpoint, method, body = null, resolver = null, callback = null, catchHandler = null) => {
+export const requestMaker = (endpoint, method, body = null, resolver = [], catchHandler = null) => {
   const makeRequest = () => {
     fetch((endpoint), requestBuilder(method, body))
       .then((res => res.json()))
-      .then(response => {
-        resolver && resolver(response)
+      .then(() => {
+        resolver && resolver.length > 0 && (
+          resolver.forEach(r => r())
+        )
       })
       .catch(error => {
         catchHandler ? catchHandler(error) : console.log(error);
       })
-
-    callback();
   }
 
   makeRequest();

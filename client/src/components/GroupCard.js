@@ -4,9 +4,9 @@ import endpoints from '../config/endpoints';
 import { requestMaker } from '../helpers/requestService';
 
 const GroupCard = props => {
-  const { 
-    g, 
-    setUserGroup 
+  const {
+    g,
+    setUserGroup
   } = props;
 
   const [cardFlipped, setCardFlipped] = useState(false);
@@ -37,7 +37,7 @@ const GroupCard = props => {
   }
 
   return (
-    <div onClick={() => toggleCardFlipped()} className="flex flex-auto flex-col relative h-48 m-2 transform hover:scale-105 transition-all">
+    <div onClick={() => toggleCardFlipped()} className="flex flex-auto flex-col relative h-48 m-2 transform hover:scale-102 transition-all">
       <div className={`px-6 pt-6 bg-purple-brand text-white rounded-lg transform transition-all ${cardFlipped ? 'scale-y-0' : 'scale-y-100'}`}>
         <div className="flex-grow">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>

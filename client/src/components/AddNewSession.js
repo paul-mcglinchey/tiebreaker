@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
-import SessionSchema from "../helpers/sessionValidationSchema";
+import SessionSchema from "../schema/sessionValidationSchema";
 import CustomDate from "./forms/CustomDate";
 import StyledDatePicker from "./forms/StyledDatePicker";
 import StyledField from "./forms/StyledField";

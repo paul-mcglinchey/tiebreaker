@@ -1,42 +1,23 @@
 import { Fragment, React } from 'react';
-import { useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useMountEffect } from '../helpers/useMountEffect';
 import AddFirstClient from './AddFirstClient';
-import ClientList from './ClientList';
-import CreateGroup from './CreateGroup';
 
 const Dashboard = (props) => {
 
-  const { 
-    userGroup, 
-    groups, 
-    clients, 
-    pageNumber, 
-    setPageNumber, 
-    maxPages, 
-    clientsLoading, 
-    getClients 
+  const {
+    groups,
+    groupsLoading,
+    clients,
+    clientsLoading
   } = props;
 
-  const [addSessionOpen, setAddSessionOpen] = useState(false);
-  const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
-
-  console.log(clients);
-
+  const location = useLocation();
   return (
     <Fragment>
       {groups && groups.length !== 0 ? (
         clients && clients.length !== 0 ? (
-          <ClientList
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            maxPages={maxPages}
-            clients={clients}
-            userGroup={userGroup}
-            addSessionOpen={addSessionOpen}
-            toggleAddSession={toggleAddSession}
-            getClients={getClients}
-          />
+          <Navigate to="clients" state={{ from: location }} />
         ) : (
           clientsLoading ? (
             <div className="text-5xl font-extrabold tracking-wide text-white">
@@ -47,8 +28,13 @@ const Dashboard = (props) => {
           )
         )
       ) : (
-        <CreateGroup
-        />
+        groupsLoading ? (
+          <div className="text-6xl font-extrabold text-white">
+            Groups Loading
+          </div>
+        ) : (
+          < Navigate to="/creategroup" state={{ from: location }} />
+        )
       )}
     </Fragment>
   )

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import endpoints from '../config/endpoints';
-import GroupSchema from '../helpers/groupValidationSchema';
+import GroupSchema from '../schema/groupValidationSchema';
 import StyledField from './forms/StyledField';
 import { requestBuilder } from '../helpers/requestService';
 
 const CreateGroupForm = (props) => {
 
-  const { getGroups } = props;
+  const { update } = props;
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -24,7 +24,7 @@ const CreateGroupForm = (props) => {
           setError(data.message)
         } else {
           setSuccess(data.success);
-          getGroups();
+          update();
         }
       })
       .catch((error) => {

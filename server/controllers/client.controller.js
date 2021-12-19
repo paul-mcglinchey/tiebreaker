@@ -141,6 +141,11 @@ exports.delete = (req, res) => {
 
   // Delete the client from the clients db
   Client.findOneAndDelete({ _id: req.body.clientId })
+    .then(() => {
+      res.status(200).send({
+        success: `Successfully deleted client ${req.body.clientId}`
+      })
+    })
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({

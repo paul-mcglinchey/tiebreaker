@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 import StyledField from "./forms/StyledField";
-import LoginSchema from "../helpers/loginSchema";
+import LoginSchema from "../schema/loginSchema";
 import Userfront from "@userfront/core";
 import { Link } from 'react-router-dom';
 

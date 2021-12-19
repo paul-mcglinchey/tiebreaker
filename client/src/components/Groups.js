@@ -1,16 +1,17 @@
-import { useMountEffect } from "../helpers/useMountEffect";
-import CreateGroup from "./CreateGroup"
+import { useEffect } from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
+import { useMountEffect } from '../helpers/useMountEffect';
 import GroupCard from "./GroupCard";
 
 const Groups = (props) => {
 
-  const { 
-    groups, 
+  const {
+    groups,
     setUserGroup,
-    getGroups
+    update
   } = props;
 
-  useMountEffect(getGroups);
+  const location = useLocation();
 
   return (
     <div className="">
@@ -18,7 +19,7 @@ const Groups = (props) => {
         <div className="flex flex-wrap -m-2">
           {groups.map((g, i) => {
             return (
-              <GroupCard 
+              <GroupCard
                 g={g}
                 key={i}
                 setUserGroup={setUserGroup}
@@ -27,9 +28,7 @@ const Groups = (props) => {
           })}
         </div>
       ) : (
-        <CreateGroup 
-          getGroups={getGroups}
-        />
+        <Navigate to="/creategroup" state={{ from: location }} />
       )}
     </div>
   )

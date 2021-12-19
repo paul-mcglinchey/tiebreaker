@@ -16,9 +16,9 @@ const handleLogout = () => {
 const NavMenu = (props) => {
 
   const {
-    userGroup, 
-    setUserGroup, 
-    groups, 
+    userGroup,
+    setUserGroup,
+    groups,
     links
   } = props;
 
@@ -153,7 +153,7 @@ const NavMenu = (props) => {
         )
         }
       </Disclosure >
-      <div className="flex justify-end px-2 sm:px-6 lg:px-8">
+      <div className="flex justify-end items-center px-2 sm:px-6 lg:px-8">
         <GroupSelector
           userGroup={userGroup}
           setUserGroup={setUserGroup}

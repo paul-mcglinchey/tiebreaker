@@ -7,6 +7,9 @@ module.exports = {
         purple: {
           brand: '#7025ffff'
         }
+      },
+      scale: {
+        '102': '1.02',
       }
     },
     fontFamily: {

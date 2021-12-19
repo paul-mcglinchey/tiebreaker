@@ -3,10 +3,10 @@ import { requestMaker } from "../helpers/requestService";
 
 const DeleteClient = (props) => {
 
-  const { getClients, clientId, userGroup, toggleClientDeletion } = props;
+  const { update, clientId, userGroup, toggleClientDeletion } = props;
 
   const deleteClient = () => {
-    requestMaker(endpoints.clients, 'DELETE', { clientId: clientId, groupname: userGroup }, toggleClientDeletion, getClients);
+    requestMaker(endpoints.clients, 'DELETE', { clientId: clientId, groupname: userGroup }, [toggleClientDeletion, update]);
   }
 
   return (

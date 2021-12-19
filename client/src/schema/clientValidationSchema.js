@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import parseDateString from './dateParser';
+import parseDateString from '../helpers/dateParser';
 
 const ClientSchema = Yup.object().shape({
   firstName: Yup.string()

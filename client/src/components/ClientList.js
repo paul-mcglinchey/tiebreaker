@@ -1,10 +1,19 @@
-import { useMountEffect } from '../helpers/useMountEffect';
+import { useState } from 'react';
+import { useFetch } from '../hooks';
+import AddFirstClient from './AddFirstClient';
 import ClientEntry from './ClientEntry';
 import PageChanger from './PageChanger';
 
 const ClientList = (props) => {
 
-  const { pageNumber, maxPages, clients, setPageNumber, getClients, userGroup, addSessionOpen, toggleAddSession } = props;
+  const {
+    pageNumber,
+    setPageNumber,
+    maxPages,
+    clients,
+    userGroup,
+    update
+  } = props;
 
   const increasePageNumber = () => {
     (pageNumber < maxPages) && setPageNumber(pageNumber + 1);
@@ -13,27 +22,36 @@ const ClientList = (props) => {
     (pageNumber >= 1) && setPageNumber(pageNumber - 1);
   }
 
+  const [addSessionOpen, setAddSessionOpen] = useState(false);
+  const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
+
   return (
-    <div className="bg-gray-800 rounded-lg p-2 text-white">
-      <div>
-        {clients && clients.map(r => {
-          return (
-            <ClientEntry
-              key={r._id}
-              clientData={r}
-              userGroup={userGroup}
-              addSessionOpen={addSessionOpen}
-              toggleAddSession={toggleAddSession}
-            />
-          )
-        })}
-      </div>
-      <div>
-        {clients &&
-          <PageChanger pageNumber={pageNumber} decreasePageNumber={() => decreasePageNumber} increasePageNumber={() => increasePageNumber} />
-        }
-      </div>
-    </div>
+    clients && clients.length > 0 ? (
+      <div className="bg-gray-800 rounded-lg p-2 text-white" >
+        <div>
+          {clients && clients.length > 0 && clients.map(c => {
+            return (
+              <ClientEntry
+                key={c._id}
+                clientData={c}
+                userGroup={userGroup}
+                addSessionOpen={addSessionOpen}
+                toggleAddSession={toggleAddSession}
+                update={update}
+              />
+            )
+          })}
+        </div>
+        <div>
+          {clients &&
+            <PageChanger pageNumber={pageNumber} decreasePageNumber={() => decreasePageNumber} increasePageNumber={() => increasePageNumber} />
+          }
+        </div>
+      </div >
+    ) : (
+      <AddFirstClient />
+    )
+
   )
 }
 

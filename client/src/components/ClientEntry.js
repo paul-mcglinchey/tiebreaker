@@ -7,7 +7,14 @@ import { makeDate } from "../helpers/dateParser";
 
 const ClientEntry = (props) => {
 
-  const { getClients, clientData, addSessionOpen, toggleAddSession, userGroup } = props;
+  const {
+    getClients,
+    clientData,
+    addSessionOpen,
+    toggleAddSession,
+    userGroup,
+    update
+  } = props;
 
   let sessions = clientData.sessions;
 
@@ -29,12 +36,12 @@ const ClientEntry = (props) => {
               <span className="inline-block font-medium uppercase tracking-wider">
                 {clientData.clientName.firstName} {clientData.clientName.lastName}
               </span>
-              <span className="inline-block font-medium uppercase tracking-wider text-gray-400">
-                DOB: {makeDate(clientData.birthdate, "/")}
+              <span className="inline-block font-medium uppercase tracking-wider text-green-400">
+                {makeDate(clientData.birthdate, "/")}
               </span>
               {typeof clientData.contactInfo !== "undefined" && clientData.contactInfo.primaryPhoneNumber !== "undefined" &&
-                <span className="inline-block font-medium uppercase tracking-wider text-gray-400">
-                  Phone: {clientData.contactInfo.primaryPhoneNumber}
+                <span className="inline-block font-medium uppercase tracking-wider text-blue-400">
+                  {clientData.contactInfo.primaryPhoneNumber}
                 </span>
               }
             </div>
@@ -89,7 +96,7 @@ const ClientEntry = (props) => {
       {clientDeletion &&
         <DeleteClient
           toggleClientDeletion={toggleClientDeletion}
-          getClients={getClients}
+          update={update}
           clientId={clientData._id}
           userGroup={userGroup}
         />

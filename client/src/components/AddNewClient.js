@@ -4,17 +4,18 @@ import StyledField from './forms/StyledField';
 import StyledDatePicker from './forms/StyledDatePicker';
 import { Transition } from '@headlessui/react';
 import { SelectorIcon, UserAddIcon, CheckIcon, XCircleIcon } from '@heroicons/react/solid';
-import ClientSchema from '../helpers/clientValidationSchema';
+import ClientSchema from '../schema/clientValidationSchema';
 import CustomDate from './forms/CustomDate';
 import SpinnerSVG from './svg/SpinnerSVG';
 import CustomCheckbox from './CustomCheckbox';
-import addNewClient from '../requests/addNewClient';
+import endpoints from '../config/endpoints';
+import { requestBuilder } from '../helpers/requestService';
 
 const AddNewClient = (props) => {
 
-  const { 
-    userGroup, 
-    getClients 
+  const {
+    userGroup,
+    update
   } = props;
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
@@ -28,20 +29,34 @@ const AddNewClient = (props) => {
   const [addressActive, setAddressActive] = useState(false);
   const toggleAddressActive = () => setAddressActive(!addressActive);
 
-
   const handleSubmit = async (values) => {
 
     values.groupname = userGroup;
     console.log('posting:', values);
 
-    addNewClient(
-      values,
-      setMessage,
-      setHasMessage,
-      setFailed,
-      setIsLoading,
-      getClients
-    );
+    await fetch((endpoints.clients), requestBuilder('POST', values))
+      .then(res => res.json())
+      .then(
+        (result) => {
+          if (result.message) {
+            setMessage(result.message);
+            setFailed(true);
+          } else if (result.success) {
+            setMessage(result.success);
+            setFailed(false);
+          }
+          setIsLoading(false);
+        }
+      )
+      .catch(
+        (error) => {
+          setIsLoading(false);
+          setFailed(true);
+          console.log(error.message);
+        }
+      )
+
+    update();
   }
 
   return (
@@ -145,7 +160,7 @@ const AddNewClient = (props) => {
         )}
       </Formik>
       <Transition
-        show={hasMessage}
+        show={message.length > 0}
         enter="transition ease-out duration-75"
         enterFrom="transform opacity-0"
         enterTo="transform opacity-100"
@@ -155,9 +170,9 @@ const AddNewClient = (props) => {
         className="flex sm:flex-initial flex-grow lg:justify-end justify-center mt-4"
       >
         <div className={`
-                  flex px-3 py-1 border-2 space-x-2 items-center font-bold rounded-lg
-                  ${!failed ? (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500") : "border-red-500 text-red-500"}
-                  `}
+          flex px-3 py-1 border-2 space-x-2 items-center font-bold rounded-lg
+          ${!failed ? (isLoading ? "border-blue-500 text-blue-500" : "border-green-500 text-green-500") : "border-red-500 text-red-500"}
+          `}
         >
           <div>
             {message}

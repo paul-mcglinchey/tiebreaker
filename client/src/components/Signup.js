@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import StyledField from "./forms/StyledField";
 import Userfront from "@userfront/core";
 import { Link } from 'react-router-dom';
-import SignupSchema from '../helpers/signupSchema';
+import SignupSchema from '../schema/signupSchema';
 
 Userfront.init("wn9p69b5");
 
