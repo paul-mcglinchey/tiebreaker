@@ -3,7 +3,9 @@ import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Userfront from '@userfront/core';
 import { Link } from 'react-router-dom';
-import GroupSelector from './GroupSelector';
+import links from '../config/links';
+import ThumbIcon from './icons/ThumbIcon';
+import PyrobooksIcon from './icons/PyrobooksIcon';
 
 // Public functions
 function classNames(...classes) {
@@ -14,13 +16,6 @@ const handleLogout = () => {
 }
 
 const NavMenu = (props) => {
-
-  const {
-    userGroup,
-    setUserGroup,
-    groups,
-    links
-  } = props;
 
   return (
     <div className={`flex flex-col mb-4 space-y-4 ${Userfront.accessToken() ? "" : "hidden"}`}>
@@ -42,14 +37,12 @@ const NavMenu = (props) => {
                 </div>
                 <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex-shrink-0 flex items-center">
-                    <img
-                      className="block lg:hidden h-8 w-auto"
-                      src="https://res.cloudinary.com/pmcglinchey/image/upload/v1638719678/logo_npttuo.svg"
+                    <ThumbIcon
+                      className="lg:hidden h-10 w-10 text-white"
                       alt="pyrobooks"
                     />
-                    <img
-                      className="hidden lg:block h-8 w-auto"
-                      src="https://res.cloudinary.com/pmcglinchey/image/upload/v1638645717/wideLogo_oy6aiy.svg"
+                    <PyrobooksIcon
+                      className="hidden text-white lg:block w-48"
                       alt="pyrobooks"
                     />
                   </div>
@@ -153,13 +146,6 @@ const NavMenu = (props) => {
         )
         }
       </Disclosure >
-      <div className="flex justify-end items-center px-2 sm:px-6 lg:px-8">
-        <GroupSelector
-          userGroup={userGroup}
-          setUserGroup={setUserGroup}
-          groups={groups}
-        />
-      </div>
     </div>
   )
 }

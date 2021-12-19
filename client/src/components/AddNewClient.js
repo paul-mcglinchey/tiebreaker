@@ -6,16 +6,15 @@ import { Transition } from '@headlessui/react';
 import { SelectorIcon, UserAddIcon, CheckIcon, XCircleIcon } from '@heroicons/react/solid';
 import ClientSchema from '../schema/clientValidationSchema';
 import CustomDate from './forms/CustomDate';
-import SpinnerSVG from './svg/SpinnerSVG';
 import CustomCheckbox from './CustomCheckbox';
 import endpoints from '../config/endpoints';
-import { requestBuilder } from '../helpers/requestService';
+import { requestHelper } from '../helpers';
+import SpinnerIcon from './icons/SpinnerIcon';
 
 const AddNewClient = (props) => {
 
   const {
-    userGroup,
-    update
+    userGroup
   } = props;
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
@@ -23,7 +22,6 @@ const AddNewClient = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [hasMessage, setHasMessage] = useState(false);
   const [failed, setFailed] = useState(false);
 
   const [addressActive, setAddressActive] = useState(false);
@@ -34,7 +32,7 @@ const AddNewClient = (props) => {
     values.groupname = userGroup;
     console.log('posting:', values);
 
-    await fetch((endpoints.clients), requestBuilder('POST', values))
+    await fetch((endpoints.clients), requestHelper.requestBuilder('POST', values))
       .then(res => res.json())
       .then(
         (result) => {
@@ -55,8 +53,6 @@ const AddNewClient = (props) => {
           console.log(error.message);
         }
       )
-
-    update();
   }
 
   return (
@@ -181,7 +177,7 @@ const AddNewClient = (props) => {
             {message && !failed ? (
               isLoading ? (
                 <div className="w-4 h-4">
-                  <SpinnerSVG />
+                  <SpinnerIcon />
                 </div>
               ) : (
                 <CheckIcon className="inline-block h-6 w-6" />

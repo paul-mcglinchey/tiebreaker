@@ -3,11 +3,9 @@ import { Formik, Form } from 'formik';
 import endpoints from '../config/endpoints';
 import GroupSchema from '../schema/groupValidationSchema';
 import StyledField from './forms/StyledField';
-import { requestBuilder } from '../helpers/requestService';
+import { requestHelper } from '../helpers';
 
 const CreateGroupForm = (props) => {
-
-  const { update } = props;
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -17,14 +15,13 @@ const CreateGroupForm = (props) => {
     setError();
     setSuccess();
 
-    fetch(endpoints.creategroup, requestBuilder('POST', values))
+    fetch(endpoints.creategroup, requestHelper.requestBuilder('POST', values))
       .then((response => response.json()))
       .then((data) => {
         if (data.message) {
           setError(data.message)
         } else {
           setSuccess(data.success);
-          update();
         }
       })
       .catch((error) => {

@@ -1,19 +1,18 @@
 import { XIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
-import endpoints from '../config/endpoints';
-import { requestMaker } from '../helpers/requestService';
+import endpoints from '../../config/endpoints';
+import { requestHelper } from '../../helpers';
 
 const GroupCard = props => {
   const {
-    g,
-    setUserGroup
+    g
   } = props;
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
 
   const deleteGroup = () => {
-    requestMaker(endpoints.groups, 'DELETE', { _id: g._id, groupname: g.groupname }, setUserGroup(null));
+    requestHelper.requestMaker(endpoints.groups, 'DELETE', { _id: g._id, groupname: g.groupname });
   }
 
   // eslint-disable-next-line no-extend-native

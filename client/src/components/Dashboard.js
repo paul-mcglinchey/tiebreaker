@@ -1,42 +1,57 @@
-import { Fragment, React } from 'react';
+import { Fragment, React, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useMountEffect } from '../helpers/useMountEffect';
-import AddFirstClient from './AddFirstClient';
+import Fetch from './Fetch/Fetch';
+import endpoints from '../config/endpoints';
+import { requestHelper } from '../helpers';
+import { fetchHooks } from '../hooks';
+import ClientList from './ClientList';
+import SpinnerIcon from './icons/SpinnerIcon';
+import GroupToolbar from './GroupToolbar/GroupToolbar';
 
 const Dashboard = (props) => {
 
   const {
-    groups,
-    groupsLoading,
-    clients,
-    clientsLoading
+    userGroup,
+    setUserGroup
   } = props;
 
+  const [clientsLoading, setClientsLoading] = useState(false);
+
   const location = useLocation();
+
   return (
-    <Fragment>
-      {groups && groups.length !== 0 ? (
-        clients && clients.length !== 0 ? (
-          <Navigate to="clients" state={{ from: location }} />
-        ) : (
-          clientsLoading ? (
-            <div className="text-5xl font-extrabold tracking-wide text-white">
-              Loading Clients
-            </div>
-          ) : (
-            <AddFirstClient />
-          )
-        )
-      ) : (
-        groupsLoading ? (
-          <div className="text-6xl font-extrabold text-white">
-            Groups Loading
-          </div>
-        ) : (
-          < Navigate to="/creategroup" state={{ from: location }} />
-        )
+    <Fetch
+      fetchOutput={fetchHooks.useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
+      render={({ response }) => (
+        <div>
+          {response && response.groups && (
+            response.groups.length > 0 ? (
+              <Fragment>
+                <div className="flex justify-between pb-4 text-white">
+                  <div className="flex space-x-4 text-4xl font-bold text-white tracking-wider items-baseline">
+                    <span>Dashboard</span>
+                    {clientsLoading && <SpinnerIcon className="text-white h-6 w-6" />}
+                  </div>
+                  <GroupToolbar
+                    userGroup={userGroup}
+                    setUserGroup={setUserGroup}
+                    groups={response.groups}
+                  />
+                </div>
+                {userGroup && (
+                  <ClientList
+                    userGroup={userGroup}
+                    setClientsLoading={setClientsLoading}
+                  />
+                )}
+              </Fragment>
+            ) : (
+              <Navigate to="/creategroup" state={{ from: location }} />
+            )
+          )}
+        </div>
       )}
-    </Fragment>
+    />
   )
 }
 

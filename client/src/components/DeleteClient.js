@@ -1,12 +1,14 @@
 import endpoints from "../config/endpoints";
-import { requestMaker } from "../helpers/requestService";
+import { requestHelper } from "../helpers";
 
 const DeleteClient = (props) => {
 
-  const { update, clientId, userGroup, toggleClientDeletion } = props;
+  const { clientId, userGroup, toggleClientDeletion } = props;
 
   const deleteClient = () => {
-    requestMaker(endpoints.clients, 'DELETE', { clientId: clientId, groupname: userGroup }, [toggleClientDeletion, update]);
+    let body = { clientId: clientId, groupname: userGroup };
+    requestHelper.requestMaker(endpoints.clients, "DELETE", body);
+    toggleClientDeletion();
   }
 
   return (

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import parseDateString from '../helpers/dateParser';
+import { dateHelper } from '../helpers';
 
 const ClientSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -17,7 +17,7 @@ const ClientSchema = Yup.object().shape({
     .email('Invalid email')
     .required('Required'),
   birthdate: Yup.date()
-    .transform(parseDateString)
+    .transform(dateHelper.parseDateString)
     .max(new Date(), 'DOB Cannot be later than the current date')
     .min(new Date(1900, 0), 'Nobody is that old...')
     .required('Required'),

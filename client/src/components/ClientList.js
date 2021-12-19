@@ -1,57 +1,37 @@
-import { useState } from 'react';
-import { useFetch } from '../hooks';
-import AddFirstClient from './AddFirstClient';
+import endpoints from '../config/endpoints';
+import { fetchHooks } from '../hooks';
+import { requestHelper } from '../helpers';
+import Fetch from './Fetch/Fetch';
 import ClientEntry from './ClientEntry';
-import PageChanger from './PageChanger';
+import AddFirstClient from './AddFirstClient';
 
 const ClientList = (props) => {
 
-  const {
-    pageNumber,
-    setPageNumber,
-    maxPages,
-    clients,
-    userGroup,
-    update
-  } = props;
+  const { userGroup, setClientsLoading } = props;
 
-  const increasePageNumber = () => {
-    (pageNumber < maxPages) && setPageNumber(pageNumber + 1);
-  }
-  const decreasePageNumber = () => {
-    (pageNumber >= 1) && setPageNumber(pageNumber - 1);
-  }
-
-  const [addSessionOpen, setAddSessionOpen] = useState(false);
-  const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
+  // const [addSessionOpen, setAddSessionOpen] = useState(false);
+  // const toggleAddSession = () => setAddSessionOpen(!addSessionOpen);
 
   return (
-    clients && clients.length > 0 ? (
-      <div className="bg-gray-800 rounded-lg p-2 text-white" >
-        <div>
-          {clients && clients.length > 0 && clients.map(c => {
-            return (
-              <ClientEntry
-                key={c._id}
-                clientData={c}
-                userGroup={userGroup}
-                addSessionOpen={addSessionOpen}
-                toggleAddSession={toggleAddSession}
-                update={update}
-              />
+    <Fetch
+      fetchOutput={fetchHooks.useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup}`, requestHelper.requestBuilder("GET"))}
+      render={({ response, error, isLoading }) => (
+        <div className="border-2 border-blue-900 rounded-lg px-2 flex flex-col space-y-0 pb-2">
+          {isLoading ? setClientsLoading(true) : setClientsLoading(false)}
+          {response && response.clients && (
+            response.clients.length > 0 ? (
+              response.clients.map((c) => {
+                return (
+                  <ClientEntry c={c} key={c._id} userGroup={userGroup} />
+                )
+              })
+            ) : (
+              <AddFirstClient />
             )
-          })}
+          )}
         </div>
-        <div>
-          {clients &&
-            <PageChanger pageNumber={pageNumber} decreasePageNumber={() => decreasePageNumber} increasePageNumber={() => increasePageNumber} />
-          }
-        </div>
-      </div >
-    ) : (
-      <AddFirstClient />
-    )
-
+      )}
+    />
   )
 }
 
