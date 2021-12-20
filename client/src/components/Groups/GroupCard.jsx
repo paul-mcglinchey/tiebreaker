@@ -1,7 +1,7 @@
-import { XIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
-import endpoints from '../../config/endpoints';
-import { requestHelper } from '../../helpers';
+import { XIcon } from '@heroicons/react/solid';
+
+import { endpoints, requestHelper } from '../../utilities';
 
 const GroupCard = props => {
   const {

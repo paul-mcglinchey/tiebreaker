@@ -1,10 +1,9 @@
 import { Fragment } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
-import { fetchHooks } from '../../hooks';
-import { requestHelper } from '../../helpers';
-import endpoints from '../../config/endpoints';
-import Fetch from '../Fetch/Fetch';
-import GroupCard from "./GroupCard";
+
+import { Fetch, GroupCard } from '..';
+
+import { useFetch, requestHelper, endpoints } from '../../utilities';
 
 const Groups = (props) => {
 
@@ -12,7 +11,7 @@ const Groups = (props) => {
 
   return (
     <Fetch
-      fetchOutput={fetchHooks.useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
       render={({ response, error, isLoading }) => (
         <Fragment>
           <div className="text-white">

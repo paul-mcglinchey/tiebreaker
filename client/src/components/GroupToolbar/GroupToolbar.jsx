@@ -1,6 +1,4 @@
-import GroupSelector from "./GroupSelector";
-import GroupInfoDisplay from "./GroupInfoDisplay";
-import GroupCreateButton from "./GroupCreateButton";
+import { GroupInfoDisplay, GroupCreateButton, GroupSelector } from ".";
 
 const GroupToolbar = props => {
 

@@ -1,21 +1,26 @@
 import { useState } from 'react';
-import Dashboard from './components/Dashboard.js';
-import Login from './components/Login.js';
+import Userfront from "@userfront/core";
+import { activeLinkHelper } from './utilities';
+
 import {
   Routes,
   Route,
   Navigate,
   useLocation
 } from 'react-router-dom';
-import Signup from './components/Signup.js';
-import Userfront from "@userfront/core";
-import PasswordResetRequest from './components/PasswordResetRequest.js';
-import PasswordReset from './components/PasswordReset.js';
-import AddNewClient from './components/AddNewClient.js';
-import NavMenu from './components/NavMenu';
-import Groups from './components/Groups'
-import { activeLinkHelper } from './helpers';
-import CreateGroup from './components/CreateGroup.js';
+
+import {
+  Dashboard,
+  NavMenu,
+  AddNewClient,
+  Groups,
+  CreateGroup,
+  Login,
+  Signup,
+  PasswordReset,
+  PasswordResetRequest
+} from './components';
+
 
 export default function App() {
 
