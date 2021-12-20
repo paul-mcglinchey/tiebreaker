@@ -9,9 +9,9 @@ const ClientList = (props) => {
     <Fetch
       fetchOutput={useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup}`, requestHelper.requestBuilder("GET"))}
       render={({ response, error, isLoading }) => (
-        <div className="border-2 border-blue-900 rounded-lg px-2 flex flex-col space-y-0 pb-2">
+        < div className="rounded-lg px-2 flex flex-col space-y-0 pb-2">
           {isLoading && (
-            <div className="flex justify-center pt-10">
+            <div className="flex justify-center py-10">
               <SpinnerIcon className="text-white h-12 w-12" />
             </div>
           )}
@@ -27,7 +27,8 @@ const ClientList = (props) => {
             )
           )}
         </div>
-      )}
+      )
+      }
     />
   )
 }

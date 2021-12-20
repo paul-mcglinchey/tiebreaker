@@ -111,7 +111,7 @@ const AddNewSession = (props) => {
                     <StyledDatePicker name="date" label="Date of Session" component={CustomDate} errors={errors.date} touched={touched.date} />
                   </div>
                   <div className="flex flex-grow items-end justify-end">
-                    <button type="submit" className="px-3 py-1 mt-10 border-2 border-transparent text-purple-500 hover:border-purple-brand transition-all font-bold rounded-lg flex">
+                    <button type="submit" className="px-3 py-1 mt-10 border-2 border-transparent text-purple-500 hover:border-blue-800 transition-all font-bold rounded-lg flex">
                       Add Session
                     </button>
                   </div>

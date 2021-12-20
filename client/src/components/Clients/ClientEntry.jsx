@@ -44,7 +44,7 @@ const ClientEntry = (props) => {
           <div className="flex relative items-center">
             <ClientOptions />
             <div className="relative space-x-2 self-center">
-              <div className="flex border-2 rounded-xl border-transparent text-gray-400 hover:text-purple-brand transition-all">
+              <div className="flex border-2 rounded-xl border-transparent text-gray-400 hover:text-blue-800 transition-all">
                 <button className="flex items-center px-2 font-medium tracking-wide" onClick={() => toggleExpansion()}>
                   Sessions
                   <ChevronDownIcon className={`h-8 w-8 transition-all hover:scale-110 ${expanded ? "rotate-180" : ""}`} />

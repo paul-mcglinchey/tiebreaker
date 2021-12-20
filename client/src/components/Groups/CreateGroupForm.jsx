@@ -45,7 +45,7 @@ const CreateGroupForm = (props) => {
             <StyledField name="groupname" placeholder="Groupname" errors={errors.groupname} touched={touched.groupname} />
           </div>
           <div className="flex justify-end">
-            <button type="submit" className="hover:bg-purple-brand hover:text-white border-2 border-purple-brand font-bold text-purple-brand rounded-lg py-1 px-3 transition-all">
+            <button type="submit" className="hover:bg-blue-800 hover:text-white border-2 border-blue-800 font-bold text-blue-800 rounded-lg py-1 px-3 transition-all">
               Add group
             </button>
           </div>

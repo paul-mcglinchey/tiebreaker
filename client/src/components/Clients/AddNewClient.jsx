@@ -76,7 +76,7 @@ const AddNewClient = (props) => {
       >
         {({ errors, touched }) => (
           <div className="flex flex-col lg:flex-row-reverse flex-initial space-y-4 lg:space-y-0">
-            <div className="flex text-white bg-purple-brand justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
+            <div className="flex text-white bg-blue-900 justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
               <div className="inline-block">
                 Add your clients here
                 <span className="inline-block align-middle">
@@ -143,7 +143,7 @@ const AddNewClient = (props) => {
                 </div>
               </Transition>
               <div className="flex justify-end">
-                <button className="px-3 py-1 mt-10 border-2 border-purple-brand text-purple-brand hover:text-white hover:bg-purple-brand transition-all font-bold rounded-lg flex" type="submit">
+                <button className="px-3 py-1 mt-10 border-2 border-blue-800 text-blue-800 hover:text-white hover:bg-blue-800 transition-all font-bold rounded-lg flex" type="submit">
                   Add Client
                 </button>
               </div>

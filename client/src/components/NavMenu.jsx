@@ -75,7 +75,7 @@ const NavMenu = (props) => {
                     <div>
                       <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
-                        <FireIcon className="w-8 h-auto text-gray-300 hover:text-purple-brand transition-all" />
+                        <FireIcon className="w-8 h-auto text-gray-300 hover:text-blue-800 transition-all" />
                       </Menu.Button>
                     </div>
                     <Transition

@@ -37,7 +37,7 @@ const GroupCard = props => {
 
   return (
     <div onClick={() => toggleCardFlipped()} className="flex flex-auto flex-col relative h-48 m-2 transform hover:scale-102 transition-all">
-      <div className={`px-6 pt-6 bg-purple-brand text-white rounded-lg transform transition-all ${cardFlipped ? 'scale-y-0' : 'scale-y-100'}`}>
+      <div className={`px-6 pt-6 bg-blue-800 text-white rounded-lg transform transition-all ${cardFlipped ? 'scale-y-0' : 'scale-y-100'}`}>
         <div className="flex-grow">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
         </div>
@@ -46,7 +46,7 @@ const GroupCard = props => {
           <span className="font-bold text-gray-400">clients</span>
         </div>
       </div>
-      <div className={`px-6 pt-6 bg-white text-purple-brand rounded-lg top-0 left-0 absolute w-full h-full transition-all transform ${cardFlipped ? 'scale-y-100' : 'scale-y-0'}`}>
+      <div className={`px-6 pt-6 bg-white text-blue-800 rounded-lg top-0 left-0 absolute w-full h-full transition-all transform ${cardFlipped ? 'scale-y-100' : 'scale-y-0'}`}>
         <div className="flex-grow">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
         </div>

@@ -10,7 +10,7 @@ const CustomCheckbox = (props) => {
   }
 
   return (
-    <div onClick={() => toggleChecked()} className="bg-gray-800 rounded h-10 w-10 hover:bg-gray-700 transition-all text-purple-500">
+    <div onClick={() => toggleChecked()} className="bg-gray-800 rounded h-10 w-10 hover:bg-gray-700 transition-all text-blue-800">
       <div>
         {checked &&
           <CheckIcon />
