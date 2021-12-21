@@ -1,8 +1,6 @@
 import { UsersIcon } from "@heroicons/react/outline";
 
-const GroupInfoDisplay = props => {
-
-  const { groups } = props;
+const GroupInfoDisplay = ({ groups }) => {
 
   return (
     <div className="flex items-center text-gray-400">

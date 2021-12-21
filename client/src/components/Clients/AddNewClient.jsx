@@ -8,11 +8,7 @@ import { StyledField, StyledDatePicker, CustomDate, CustomCheckbox } from '..';
 import { endpoints, requestHelper, clientValidationSchema } from '../../utilities';
 import { SpinnerIcon } from '..';
 
-const AddNewClient = (props) => {
-
-  const {
-    userGroup
-  } = props;
+const AddNewClient = ({ userGroup }) => {
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -26,7 +22,7 @@ const AddNewClient = (props) => {
 
   const handleSubmit = async (values) => {
 
-    values.groupname = userGroup;
+    values.groupname = userGroup.groupname;
     console.log('posting:', values);
 
     await fetch((endpoints.clients), requestHelper.requestBuilder('POST', values))
