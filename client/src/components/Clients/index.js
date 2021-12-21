@@ -1,5 +1,4 @@
 export { default as ClientOptions } from './ClientOptions';
-export { default as AddFirstClient } from './AddFirstClient';
 export { default as AddNewClient } from './AddNewClient';
 export { default as AddNewSession } from './AddNewSession';
 export { default as ClientEntry } from './ClientEntry';

@@ -33,7 +33,8 @@ module.exports = {
   variants: {
     extend: {
       rotate: ['group-hover'],
-      animation: ['hover']
+      animation: ['hover'],
+      fill: ['hover']
     },
   },
   plugins: [],

@@ -1,45 +1,39 @@
+import { UserGroupIcon } from '@heroicons/react/solid';
 import { Fragment, React } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
 
-import { Fetch, GroupToolbar, ClientList } from '.';
+import { ClientList, Fetch, Toolbar, Prompter, SpinnerIcon } from '.';
+import { useFetch, endpoints, requestHelper } from '../utilities';
 
-import { endpoints, requestHelper, useFetch } from '../utilities'
-
-const Dashboard = (props) => {
-
-  const {
-    userGroup,
-    setUserGroup
-  } = props;
-
-  const location = useLocation();
+const Dashboard = ({ userGroup, setUserGroup }) => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-      render={({ response }) => (
+      fetchOutput={useFetch(endpoints.groupcount, requestHelper.requestBuilder("GET"))}
+      render={({ response, isLoading }) => (
         <div>
-          {response && response.groups && (
-            response.groups.length > 0 ? (
-              <Fragment>
-                <div className="flex justify-between pb-4 text-white">
-                  <div className="flex space-x-4 text-4xl font-bold text-white tracking-wider items-baseline">
-                    <span>Dashboard</span>
-                  </div>
-                  <GroupToolbar
+          {isLoading ? (
+            <SpinnerIcon className="h-8 w-8 text-white"/>
+          ) : (
+            response && response.count && (
+              response.count > 0 ? (
+                <Fragment>
+                  <Toolbar
                     userGroup={userGroup}
                     setUserGroup={setUserGroup}
-                    groups={response.groups}
-                  />
-                </div>
-                {userGroup && (
+                  >
+                    Dashboard
+                  </Toolbar>
                   <ClientList
                     userGroup={userGroup}
                   />
-                )}
-              </Fragment>
-            ) : (
-              <Navigate to="/creategroup" state={{ from: location }} />
+                </Fragment>
+              ) : (
+                <Prompter
+                  Icon={UserGroupIcon}
+                  title="Create a group to get started"
+                  route="/creategroup"
+                />
+              )
             )
           )}
         </div>

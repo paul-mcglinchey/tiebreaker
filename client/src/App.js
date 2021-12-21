@@ -24,7 +24,7 @@ import {
 
 export default function App() {
 
-  const [userGroup, setUserGroup] = useState(null);
+  const [userGroup, setUserGroup] = useState(JSON.parse(sessionStorage.getItem('userGroup')));
 
   const location = useLocation();
 
@@ -38,42 +38,44 @@ export default function App() {
     <div>
       <NavMenu />
       <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
-        <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="/dashboard" />}
-          />
-          <Route
-            path="dashboard"
-            element={
-              <PrivateRoute>
+        <PrivateRoute>
+          <Routes>
+            <Route
+              path="/"
+              element={<Navigate to="/dashboard" />}
+            />
+            <Route
+              path="dashboard"
+              element={
                 <Dashboard
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
                 />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="addclients"
-            element={
-              <AddNewClient
-                userGroup={userGroup}
-              />
-            }
-          />
-          <Route
-            path="groups"
-            element={
-              <Groups />
-            }
-          />
-          <Route
-            path="creategroup"
-            element={
-              <CreateGroup />
-            }
-          />
+              }
+            />
+            <Route
+              path="addclients"
+              element={
+                <AddNewClient
+                  userGroup={userGroup}
+                />
+              }
+            />
+            <Route
+              path="groups"
+              element={
+                <Groups />
+              }
+            />
+            <Route
+              path="creategroup"
+              element={
+                <CreateGroup />
+              }
+            />
+          </Routes>
+        </PrivateRoute>
+        <Routes>
           <Route
             path="login"
             element={

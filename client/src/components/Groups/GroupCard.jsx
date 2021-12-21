@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 
 import { endpoints, requestHelper } from '../../utilities';
+import { HeartIcon } from '@heroicons/react/outline';
 
 const GroupCard = props => {
   const {
@@ -38,8 +39,11 @@ const GroupCard = props => {
   return (
     <div onClick={() => toggleCardFlipped()} className="flex flex-auto flex-col relative h-48 m-2 transform hover:scale-102 transition-all">
       <div className={`px-6 pt-6 bg-blue-800 text-white rounded-lg transform transition-all ${cardFlipped ? 'scale-y-0' : 'scale-y-100'}`}>
-        <div className="flex-grow">
+        <div className="flex flex-grow justify-between">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
+          <button>
+            <HeartIcon className={`w-8 h-8 ${g.default ? 'fill-current' : 'fill-transparent' }`}/>
+          </button>
         </div>
         <div className="my-4">
           <span className="text-8xl font-bold">{numberParser(g.clients.length)}</span>

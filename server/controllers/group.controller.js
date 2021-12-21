@@ -4,6 +4,21 @@ const Group = db.group;
 const Client = db.client;
 
 // Read Operations
+exports.getCount = (req, res) => {
+  Group.countDocuments({ users: req.auth.userUuid })
+    .then(count => {
+      return res.status(200).send({
+        count: count
+      })
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || `An error occurred counting the number of groups that user ${req.auth.userUuid} belongs to.`
+      })
+    })
+}
+
 exports.getGroups = (req, res) => {
   Group.find({ users: req.auth.userUuid })
     .then((groups) => {
@@ -25,6 +40,7 @@ exports.createGroup = async (req, res) => {
     res.status(400).send({ message: "Group already exists!" });
     return;
   }
+  console.log(req.body.default);
 
   // Create a new group model instance with the request body
   const group = new Group({

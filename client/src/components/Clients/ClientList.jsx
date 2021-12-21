@@ -1,15 +1,15 @@
-import { Fetch, ClientEntry, AddFirstClient, SpinnerIcon } from '..';
+import { UserAddIcon } from '@heroicons/react/outline';
+
+import { Fetch, ClientEntry, SpinnerIcon, Prompter } from '..';
 import { endpoints, useFetch, requestHelper } from '../../utilities';
 
-const ClientList = (props) => {
-
-  const { userGroup } = props;
+const ClientList = ({ userGroup }) => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup}`, requestHelper.requestBuilder("GET"))}
+      fetchOutput={useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup.groupname}`, requestHelper.requestBuilder("GET"))}
       render={({ response, error, isLoading }) => (
-        < div className="rounded-lg px-2 flex flex-col space-y-0 pb-2">
+        <div className="rounded-lg flex flex-col space-y-0 pb-2">
           {isLoading && (
             <div className="flex justify-center py-10">
               <SpinnerIcon className="text-white h-12 w-12" />
@@ -23,7 +23,11 @@ const ClientList = (props) => {
                 )
               })
             ) : (
-              <AddFirstClient />
+              <Prompter
+                Icon={UserAddIcon}
+                title="Add your first client"
+                route="/addclients"
+              />
             )
           )}
         </div>

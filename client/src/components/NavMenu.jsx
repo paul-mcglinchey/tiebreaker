@@ -19,7 +19,7 @@ const handleLogout = () => {
 const NavMenu = (props) => {
 
   return (
-    <div className={`flex flex-col mb-4 space-y-4 ${Userfront.accessToken() ? "" : "hidden"}`}>
+    <div className="flex flex-col mb-4 space-y-4">
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
           <>
