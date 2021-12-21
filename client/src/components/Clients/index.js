@@ -6,3 +6,4 @@ export { default as ClientList } from './ClientList';
 export { default as ClientSessions } from './ClientSessions';
 export { default as DeleteClient } from './DeleteClient';
 export { default as PageChanger } from './PageChanger';
+export { default as ClientPrompter } from './ClientPrompter';

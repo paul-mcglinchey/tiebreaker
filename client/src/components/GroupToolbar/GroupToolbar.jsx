@@ -26,17 +26,17 @@ const GroupToolbar = ({ userGroup, setUserGroup}) => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-      render={({ response, error, isLoading }) => (
+      render={({ response, isLoading }) => (
         <Fragment>
           <div className="text-white">
             {isLoading && <span className="text-6xl font-extrabold tracking-wide">LOADING</span>}
-            {response && response.groups && (
+            {response && Array.isArray(response) && (
               <Fragment>
                 <div className="flex space-x-4">
-                  <GroupInfoDisplay groups={response.groups} />
+                  <GroupInfoDisplay groups={response} />
                   <GroupCreateButton />
                   <GroupSelector
-                    groups={response.groups}
+                    groups={response}
                     userGroup={userGroup}
                     updateUserGroup={updateUserGroup}
                     setDefaultGroup={setDefaultGroup}

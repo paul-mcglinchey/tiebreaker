@@ -72,7 +72,7 @@ const AddNewClient = ({ userGroup }) => {
       >
         {({ errors, touched }) => (
           <div className="flex flex-col lg:flex-row-reverse flex-initial space-y-4 lg:space-y-0">
-            <div className="flex text-white bg-blue-900 justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
+            <div className="flex text-white bg-blue-800 justify-center font-bold rounded-xl sm:py-4 py-6 lg:ml-4 lg:font-extrabold text-2xl sm:text-3xl lg:text-5xl lg:px-4 lg:max-w-4/10 shadow-sm text-center lg:text-right">
               <div className="inline-block">
                 Add your clients here
                 <span className="inline-block align-middle">

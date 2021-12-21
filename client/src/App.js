@@ -25,6 +25,7 @@ import {
 export default function App() {
 
   const [userGroup, setUserGroup] = useState(JSON.parse(sessionStorage.getItem('userGroup')));
+  const [groups, setGroups] = useState([]);
 
   const location = useLocation();
 
@@ -38,44 +39,54 @@ export default function App() {
     <div>
       <NavMenu />
       <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
-        <PrivateRoute>
-          <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="/dashboard" />}
-            />
-            <Route
-              path="dashboard"
-              element={
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/dashboard" />}
+          />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute>
                 <Dashboard
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
                 />
-              }
-            />
-            <Route
-              path="addclients"
-              element={
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="addclients"
+            element={
+              <PrivateRoute>
                 <AddNewClient
                   userGroup={userGroup}
                 />
-              }
-            />
-            <Route
-              path="groups"
-              element={
-                <Groups />
-              }
-            />
-            <Route
-              path="creategroup"
-              element={
-                <CreateGroup />
-              }
-            />
-          </Routes>
-        </PrivateRoute>
-        <Routes>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="groups"
+            element={
+              <PrivateRoute>
+                <Groups 
+                  groups={groups}
+                  setGroups={setGroups}
+                />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="creategroup"
+            element={
+              <PrivateRoute>
+                <CreateGroup 
+                  groups={groups}
+                  setGroups={setGroups}
+                />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="login"
             element={

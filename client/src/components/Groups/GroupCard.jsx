@@ -1,20 +1,11 @@
 import { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
-
-import { endpoints, requestHelper } from '../../utilities';
 import { HeartIcon } from '@heroicons/react/outline';
 
-const GroupCard = props => {
-  const {
-    g
-  } = props;
+const GroupCard = ({ g, deleteGroup }) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
-
-  const deleteGroup = () => {
-    requestHelper.requestMaker(endpoints.groups, 'DELETE', { _id: g._id, groupname: g.groupname });
-  }
 
   // eslint-disable-next-line no-extend-native
   String.prototype.insert = function (index, string) {
@@ -60,7 +51,7 @@ const GroupCard = props => {
             <span className="font-bold text-gray-400">users</span>
           </div>
           <div>
-            <button onClick={() => deleteGroup()} className="p-2 rounded-lg bg-gray-100 shadow-sm">
+            <button onClick={deleteGroup} className="p-2 rounded-lg bg-gray-100 shadow-sm">
               <XIcon className="text-red-600 h-8 w-8" />
             </button>
           </div>

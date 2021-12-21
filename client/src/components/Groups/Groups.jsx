@@ -1,33 +1,27 @@
 import { Fragment } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
 
-import { Fetch, GroupCard } from '..';
+import { Fetch, GroupCard, GroupPrompter, SpinnerIcon } from '..';
 
-import { useFetch, requestHelper, endpoints } from '../../utilities';
+import { endpoints, useFetch, requestHelper } from '../../utilities';
 
-const Groups = (props) => {
-
-  const location = useLocation();
-
+const Groups = () => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-      render={({ response, error, isLoading }) => (
+      render={({ response, isLoading }) => (
         <Fragment>
-          <div className="text-white">
-            {isLoading && <span className="text-6xl font-extrabold tracking-wide">LOADING</span>}
-            {response && response.groups && (
-              response.groups.length > 0 ? (
-                <div className="flex flex-wrap">
-                  {response.groups.map(g => (
-                    <GroupCard key={g._id} g={g} />
-                  ))}
-                </div>
-              ) : (
-                <Navigate to="/creategroup" state={{ from: location }} />
-              )
-            )}
-          </div>
+          {isLoading && <SpinnerIcon className="w-10 h-10 text-white" />}
+          {response && Array.isArray(response) && (
+            response.length > 0 ? (
+              <div className="flex flex-wrap">
+                {response.map(g => (
+                  <GroupCard g={g} key={g._id} />
+                ))}
+              </div>
+            ) : (
+              <GroupPrompter />
+            )
+          )}
         </Fragment>
       )}
     />

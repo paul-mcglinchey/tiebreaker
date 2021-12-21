@@ -7,9 +7,7 @@ const Client = db.client;
 exports.getCount = (req, res) => {
   Group.countDocuments({ users: req.auth.userUuid })
     .then(count => {
-      return res.status(200).send({
-        count: count
-      })
+      return res.status(200).send({count: count})
     })
     .catch(err => {
       res.status(500).send({
@@ -22,9 +20,7 @@ exports.getCount = (req, res) => {
 exports.getGroups = (req, res) => {
   Group.find({ users: req.auth.userUuid })
     .then((groups) => {
-      return res.status(200).send({
-        groups: groups
-      })
+      return res.status(200).send(groups)
     })
     .catch(err => {
       res.status(401).send({
