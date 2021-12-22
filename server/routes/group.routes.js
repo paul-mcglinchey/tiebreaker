@@ -24,5 +24,8 @@ module.exports = app => {
   // Delete a group
   router.delete('/', middleware.createGroup.checkIfGroupExists, group.deleteGroup);
 
+  // Update default group
+  router.put('/default', group.setDefaultGroup);
+
   app.use('/api/groups', router);
 }

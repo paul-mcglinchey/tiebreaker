@@ -7,6 +7,7 @@ const endpoints = {
     "addsession": BASE_URL + "clients/sessions",
     "groups": BASE_URL + "groups",
     "groupcount": BASE_URL + "groups/count",
+    "groupdefault": BASE_URL + "groups/default",
     "creategroup": BASE_URL + "groups",
 }
 

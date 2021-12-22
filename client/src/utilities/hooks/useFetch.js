@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const useFetch = (url, options) => {
+const useFetch = (url, options, deps = []) => {
   const [response, setResponse] = useState({});
   const [error, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ const useFetch = (url, options) => {
 
     _fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, deps);
 
   return { response, error, isLoading };
 }

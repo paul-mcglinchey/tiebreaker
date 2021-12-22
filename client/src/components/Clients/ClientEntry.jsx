@@ -31,25 +31,25 @@ const ClientEntry = (props) => {
               <span className="inline-block font-medium tracking-wider">
                 {c.clientName.firstName} {c.clientName.lastName}
               </span>
-              <span className="inline-block font-medium uppercase tracking-wider text-green-400">
-                {dateHelper.makeDate(c.birthdate, "/")}
-              </span>
-              {typeof c.contactInfo !== "undefined" && c.contactInfo.primaryPhoneNumber !== "undefined" &&
-                <span className="inline-block font-medium uppercase tracking-wider text-blue-400">
-                  {c.contactInfo.primaryPhoneNumber}
+              <div className="hidden md:flex space-x-2">
+                <span className="inline-block font-medium uppercase tracking-wider text-green-400">
+                  {dateHelper.makeDate(c.birthdate, "/")}
                 </span>
-              }
+                {typeof c.contactInfo !== "undefined" && c.contactInfo.primaryPhoneNumber !== "undefined" &&
+                  <span className="inline-block font-medium uppercase tracking-wider text-blue-400">
+                    {c.contactInfo.primaryPhoneNumber}
+                  </span>
+                }
+              </div>
             </div>
           </div>
           <div className="flex relative items-center">
             <ClientOptions />
-            <div className="relative space-x-2 self-center">
-              <div className="flex border-2 rounded-xl border-transparent text-gray-400 hover:text-blue-800 transition-all">
-                <button className="flex items-center px-2 font-medium tracking-wide" onClick={() => toggleExpansion()}>
+            <div className="relative inline-block text-left">
+              <button onClick={() => toggleExpansion()} className="inline-flex justify-center items-center w-full rounded-md px-3 py-1 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-white">
                   Sessions
-                  <ChevronDownIcon className={`h-8 w-8 transition-all hover:scale-110 ${expanded ? "rotate-180" : ""}`} />
-                </button>
-              </div>
+                  <ChevronDownIcon className={`-mr-1 ml-2 h-5 w-5 transform transition-all ${expanded ? "rotate-180" : ""}`} aria-hidden="true" />
+              </button>
             </div>
           </div>
         </div>

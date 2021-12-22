@@ -1,33 +1,32 @@
-import { Fragment } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { Fragment, useState } from 'react';
+import { Fetch, GroupCard, GroupPrompter, Toolbar } from '..';
+import { endpoints, useFetch, requestHelper } from '../../utilities';
 
-import { Fetch, GroupCard } from '..';
-
-import { useFetch, requestHelper, endpoints } from '../../utilities';
-
-const Groups = (props) => {
-
-  const location = useLocation();
+const Groups = ({ userGroup, setUserGroup }) => {
+  const [isGroupLoading, setIsGroupLoading] = useState(false);
+  const [success, setSuccess] = useState('');
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-      render={({ response, error, isLoading }) => (
+      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [success])}
+      render={({ response, isLoading }) => (
         <Fragment>
-          <div className="text-white">
-            {isLoading && <span className="text-6xl font-extrabold tracking-wide">LOADING</span>}
-            {response && response.groups && (
-              response.groups.length > 0 ? (
-                <div className="flex flex-wrap">
-                  {response.groups.map(g => (
-                    <GroupCard key={g._id} g={g} />
-                  ))}
-                </div>
-              ) : (
-                <Navigate to="/creategroup" state={{ from: location }} />
-              )
-            )}
-          </div>
+          <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} isLoading={isGroupLoading || isLoading} success={success}>
+            Group Management
+          </Toolbar>
+          {response && response.groups && (
+            response.groups.length > 0 ? (
+              <div className="flex flex-wrap -m-2 mb-2">
+                {response.groups.map(g => (
+                  <GroupCard g={g} key={g._id} setIsLoading={setIsGroupLoading} setSuccess={setSuccess}/>
+                ))}
+              </div>
+            ) : (
+              <div>
+                <GroupPrompter />
+              </div>
+            )
+          )}
         </Fragment>
       )}
     />

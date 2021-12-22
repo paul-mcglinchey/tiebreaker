@@ -2,11 +2,15 @@ const db = require('../models');
 const Group = db.group;
 
 // This middleware intercepts any request to create a new group and checks if it's
-// the first group to be created
+// the first group to be created or if a default group already exists
 const checkIfFirstGroup = (req, res, next) => {
   Group.find({ users: req.auth.userUuid })
     .then(groups => {
-      req.body.default = groups.length > 0 ? false : true;
+      if (groups.length > 0) {
+        req.body.default = groups.filter(g => g.default).length > 0 ? false : true;
+      } else {
+        req.body.default = true;
+      }
 
       next();
     })
