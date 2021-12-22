@@ -5,7 +5,7 @@ import { Fetch } from '..';
 
 import { endpoints, requestHelper, useFetch } from '../../utilities'
 
-const GroupToolbar = ({ userGroup, setUserGroup}) => {
+const GroupToolbar = ({ userGroup, setUserGroup }) => {
 
   const updateUserGroup = group => {
     sessionStorage.setItem(
@@ -13,8 +13,6 @@ const GroupToolbar = ({ userGroup, setUserGroup}) => {
       JSON.stringify(group)
     )
     setUserGroup(group);
-
-    console.log(userGroup);
   }
 
   const setDefaultGroup = groups => {
@@ -29,14 +27,15 @@ const GroupToolbar = ({ userGroup, setUserGroup}) => {
       render={({ response, isLoading }) => (
         <Fragment>
           <div className="text-white">
-            {isLoading && <span className="text-6xl font-extrabold tracking-wide">LOADING</span>}
-            {response && Array.isArray(response) && (
+            {response && Array.isArray(response.groups) && (
               <Fragment>
-                <div className="flex space-x-4">
-                  <GroupInfoDisplay groups={response} />
-                  <GroupCreateButton />
+                <div className="flex md:space-x-4 justify-end">
+                  <div className="hidden md:flex space-x-4">
+                    <GroupInfoDisplay groups={response.groups} />
+                    <GroupCreateButton />
+                  </div>
                   <GroupSelector
-                    groups={response}
+                    groups={response.groups}
                     userGroup={userGroup}
                     updateUserGroup={updateUserGroup}
                     setDefaultGroup={setDefaultGroup}

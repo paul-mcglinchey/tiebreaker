@@ -1,25 +1,30 @@
-import { Fragment } from 'react';
-
-import { Fetch, GroupCard, GroupPrompter, SpinnerIcon } from '..';
-
+import { Fragment, useState } from 'react';
+import { Fetch, GroupCard, GroupPrompter, Toolbar } from '..';
 import { endpoints, useFetch, requestHelper } from '../../utilities';
 
-const Groups = () => {
+const Groups = ({ userGroup, setUserGroup }) => {
+  const [isGroupLoading, setIsGroupLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [success])}
       render={({ response, isLoading }) => (
         <Fragment>
-          {isLoading && <SpinnerIcon className="w-10 h-10 text-white" />}
-          {response && Array.isArray(response) && (
-            response.length > 0 ? (
-              <div className="flex flex-wrap">
-                {response.map(g => (
-                  <GroupCard g={g} key={g._id} />
+          <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} isLoading={isGroupLoading || isLoading} success={success}>
+            Group Management
+          </Toolbar>
+          {response && response.groups && (
+            response.groups.length > 0 ? (
+              <div className="flex flex-wrap -m-2 mb-2">
+                {response.groups.map(g => (
+                  <GroupCard g={g} key={g._id} setIsLoading={setIsGroupLoading} setSuccess={setSuccess}/>
                 ))}
               </div>
             ) : (
-              <GroupPrompter />
+              <div>
+                <GroupPrompter />
+              </div>
             )
           )}
         </Fragment>

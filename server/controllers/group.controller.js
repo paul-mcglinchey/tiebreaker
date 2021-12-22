@@ -20,7 +20,7 @@ exports.getCount = (req, res) => {
 exports.getGroups = (req, res) => {
   Group.find({ users: req.auth.userUuid })
     .then((groups) => {
-      return res.status(200).send(groups)
+      return res.status(200).send({groups: groups})
     })
     .catch(err => {
       res.status(401).send({
@@ -79,7 +79,7 @@ exports.deleteGroup = async (req, res) => {
         })
         .catch(err => {
           res.status(500).send({
-            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupname}`
+            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupname}.`
           })
         });
     })
@@ -101,4 +101,24 @@ exports.deleteGroup = async (req, res) => {
           });
         });
     })
+}
+
+exports.setDefaultGroup = async (req, res) => {
+  Group.updateMany({ users: req.auth.userUuid }, { $set: { default: false }})
+    .then(() => {
+      Group.updateOne({ _id: req.body._id, groupname: req.body.groupname }, { $set: { default: true }})
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: err.message || `Could not update default status for group ${req.body._id}.`
+          })
+        })
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || `Could not update default status for groups belonging to user ${req.auth.userUuid}.`
+      })
+    });
 }

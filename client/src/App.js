@@ -24,8 +24,13 @@ import {
 
 export default function App() {
 
-  const [userGroup, setUserGroup] = useState(JSON.parse(sessionStorage.getItem('userGroup')));
-  const [groups, setGroups] = useState([]);
+  const [userGroup, setUserGroup] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('userGroup'));
+    } catch (e) {
+      return null;
+    }
+  });
 
   const location = useLocation();
 
@@ -61,6 +66,7 @@ export default function App() {
               <PrivateRoute>
                 <AddNewClient
                   userGroup={userGroup}
+                  setUserGroup={setUserGroup}
                 />
               </PrivateRoute>
             }
@@ -70,8 +76,8 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Groups 
-                  groups={groups}
-                  setGroups={setGroups}
+                  userGroup={userGroup}
+                  setUserGroup={setUserGroup}
                 />
               </PrivateRoute>
             }
@@ -80,9 +86,7 @@ export default function App() {
             path="creategroup"
             element={
               <PrivateRoute>
-                <CreateGroup 
-                  groups={groups}
-                  setGroups={setGroups}
+                <CreateGroup
                 />
               </PrivateRoute>
             }

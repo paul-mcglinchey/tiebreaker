@@ -12,7 +12,10 @@ module.exports = {
         '102': '1.02',
       },
       animation: {
-        'spin-slow': 'spin 3s linear, infinite'
+        'spin-slow': 'spin 2s linear infinite'
+      },
+      transitionProperty: {
+        'fill': 'fill'
       }
     },
     fontFamily: {
