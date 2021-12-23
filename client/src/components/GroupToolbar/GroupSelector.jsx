@@ -2,16 +2,14 @@ import { Fragment } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
-import { endpoints, requestHelper, useFetch } from '../../utilities';
+import { endpoints, requestHelper, useFetch, useMountEffect } from '../../utilities';
 import { Fetch } from '..';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const GroupSelector = ({ userGroup, updateUserGroup }) => {
-
-  const location = useLocation();
+const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
 
   const getUserInStorage = () => {
     try {
@@ -21,19 +19,20 @@ const GroupSelector = ({ userGroup, updateUserGroup }) => {
     }
   }
 
+  const location = useLocation();
+
+  const sessionHasValidUserGroup = groups && groups.filter(g => g.groupname == getUserInStorage() && getUserInStorage().groupname).length > 0;
+  const defaultUserGroup = groups && groups.filter(g => g.default).length > 0 ? groups.filter(g => g.default)[0] : groups[0];
+
+  useMountEffect(() => { !sessionHasValidUserGroup && updateUserGroup(defaultUserGroup) })
+
   return (
     <div className="flex flex-grow items-center justify-end">
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-white">
-          <Fetch
-            fetchOutput={useFetch(`${endpoints.groups}?id=${getUserInStorage() && getUserInStorage()._id}`, requestHelper.requestBuilder("GET"))}
-            render={({ response }) => (
-              <div>
-                {response.groups && response.groups.length > 0 && updateUserGroup(response.groups[0])}
-                {userGroup ? userGroup.groupname : 'Groups'}
-              </div>
-            )}
-          />
+          <div>
+            {userGroup ? userGroup.groupname : 'Groups'}
+          </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
 
@@ -61,28 +60,21 @@ const GroupSelector = ({ userGroup, updateUserGroup }) => {
                   <PlusIcon className="h-6 w-6 hover:text-gray-400" />
                 </Link>
               </div>
-              <Fetch
-                fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-                render={({ response, isLoading }) => {
-                  return (
-                    response && response.groups && response.groups.map(g => (
-                      <Menu.Item key={g._id}>
-                        {({ active }) => (
-                          <button
-                            onClick={() => updateUserGroup(g)}
-                            className={classNames(
-                              active ? 'text-gray-400' : '',
-                              'block px-4 py-2 text-sm font-medium'
-                            )}
-                          >
-                            {g.groupname}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    ))
-                  )
-                }}
-              />
+              {groups.map(g => (
+                <Menu.Item key={g._id}>
+                  {({ active }) => (
+                    <button
+                      onClick={() => updateUserGroup(g)}
+                      className={classNames(
+                        active ? 'text-gray-400' : '',
+                        'block px-4 py-2 text-sm font-medium'
+                      )}
+                    >
+                      {g.groupname}
+                    </button>
+                  )}
+                </Menu.Item>
+              ))}
             </div>
           </Menu.Items>
         </Transition>

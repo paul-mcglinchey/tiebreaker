@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Userfront from "@userfront/core";
-import { activeLinkHelper, endpoints, requestHelper } from './utilities';
+import { activeLinkHelper, endpoints, requestHelper, useFetch } from './utilities';
 
 import {
   Routes,
@@ -24,7 +24,15 @@ import {
 
 export default function App() {
 
-  const [userGroup, setUserGroup] = useState();
+  const getUserInStorage = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem("userGroup"));
+    } catch {
+      return null;
+    }
+  }
+
+  const [userGroup, setUserGroup] = useState(getUserInStorage());
 
   const location = useLocation();
 
@@ -69,7 +77,7 @@ export default function App() {
             path="groups"
             element={
               <PrivateRoute>
-                <Groups 
+                <Groups
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
                 />

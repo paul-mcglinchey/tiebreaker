@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { StyledField, StyledDatePicker, CustomCheckbox, CustomDate, SpinnerIcon } from "..";
+import { SelectorIcon } from "@heroicons/react/solid";
+import { StyledField, StyledDatePicker, CustomCheckbox, CustomDate } from "..";
 import { clientValidationSchema, endpoints, requestHelper } from "../../utilities";
 import SubmitButton from "../Common/SubmitButton";
 
