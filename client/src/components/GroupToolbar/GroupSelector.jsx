@@ -2,25 +2,38 @@ import { Fragment } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
-import { useMountEffect } from '../../utilities';
+import { endpoints, requestHelper, useFetch } from '../../utilities';
+import { Fetch } from '..';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const GroupSelector = ({ userGroup, updateUserGroup, setDefaultGroup, groups }) => {
+const GroupSelector = ({ userGroup, updateUserGroup }) => {
 
   const location = useLocation();
 
-  useMountEffect(() => setDefaultGroup(groups));
+  const getUserInStorage = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem("userGroup"));
+    } catch {
+      return null;
+    }
+  }
 
   return (
-
-    <div className="flex items-center justify-end">
-
-      <Menu as="div" className="relative inline-block text-left">
+    <div className="flex flex-grow items-center justify-end">
+      <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-white">
-          {userGroup ? userGroup.groupname : 'Groups'}
+          <Fetch
+            fetchOutput={useFetch(`${endpoints.groups}?id=${getUserInStorage() && getUserInStorage()._id}`, requestHelper.requestBuilder("GET"))}
+            render={({ response }) => (
+              <div>
+                {response.groups && response.groups.length > 0 && updateUserGroup(response.groups[0])}
+                {userGroup ? userGroup.groupname : 'Groups'}
+              </div>
+            )}
+          />
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
 
@@ -48,23 +61,28 @@ const GroupSelector = ({ userGroup, updateUserGroup, setDefaultGroup, groups }) 
                   <PlusIcon className="h-6 w-6 hover:text-gray-400" />
                 </Link>
               </div>
-              {groups && groups.map((g) => {
-                return (
-                  <Menu.Item key={g._id}>
-                    {({ active }) => (
-                      <button
-                        onClick={() => updateUserGroup(g)}
-                        className={classNames(
-                          active ? 'text-gray-400' : '',
-                          'block px-4 py-2 text-sm font-medium'
+              <Fetch
+                fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
+                render={({ response, isLoading }) => {
+                  return (
+                    response && response.groups && response.groups.map(g => (
+                      <Menu.Item key={g._id}>
+                        {({ active }) => (
+                          <button
+                            onClick={() => updateUserGroup(g)}
+                            className={classNames(
+                              active ? 'text-gray-400' : '',
+                              'block px-4 py-2 text-sm font-medium'
+                            )}
+                          >
+                            {g.groupname}
+                          </button>
                         )}
-                      >
-                        {g.groupname}
-                      </button>
-                    )}
-                  </Menu.Item>
-                )
-              })}
+                      </Menu.Item>
+                    ))
+                  )
+                }}
+              />
             </div>
           </Menu.Items>
         </Transition>

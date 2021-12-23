@@ -5,7 +5,7 @@ const ClientList = ({ userGroup }) => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup && userGroup.groupname}`, requestHelper.requestBuilder("GET"))}
+      fetchOutput={useFetch(`${endpoints.clients}?page=${0}&groupname=${userGroup && userGroup.groupname}`, requestHelper.requestBuilder("GET"), [userGroup])}
       render={({ response, error, isLoading }) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2">
           {isLoading && (

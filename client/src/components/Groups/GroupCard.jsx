@@ -4,7 +4,7 @@ import { HeartIcon } from '@heroicons/react/outline';
 import { endpoints, requestHelper } from '../../utilities';
 import { SquareIconButton } from '..';
 
-const GroupCard = ({ g, setRequestData, setSuccess, setIsLoading }) => {
+const GroupCard = ({ g, setStatus }) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
@@ -32,32 +32,44 @@ const GroupCard = ({ g, setRequestData, setSuccess, setIsLoading }) => {
   }
 
   const deleteGroup = () => {
-    setSuccess('');
-    setIsLoading(true);
+    setStatus({
+      isLoading: true,
+      success: '',
+      error: ''
+    })
 
     fetch(endpoints.groups, requestHelper.requestBuilder("DELETE", { _id: g._id, groupname: g.groupname }))
-      .then(() => {
-        setSuccess(`Deleted ${g.groupname}`)
-        setIsLoading(false);
+      .then(res => {
+        if (res.ok) {
+          setStatus({ isLoading: false, success: `Successfully deleted ${g.groupname}`, error: '' })
+        } else {
+          setStatus({ isLoading: false, success: `A problem occurred deleting ${g.groupname}`, error: '' })
+        }
       })
       .catch(err => {
-        console.log(err);
-        setIsLoading(false);
+        console.log(`Error: ${err}`);
+        setStatus({ isLoading: false, success: '', error: '' })
       })
   }
 
   const setDefaultGroup = () => {
-    setSuccess('');
-    setIsLoading(true);
+    setStatus({
+      isLoading: true,
+      success: '',
+      error: ''
+    })
 
     fetch(endpoints.groupdefault, requestHelper.requestBuilder("PUT", { _id: g._id, groupname: g.groupname }))
-      .then(() => {
-        setSuccess(`Set ${g.groupname} as the default group`);
-        setIsLoading(false);
+      .then(res => {
+        if (res.ok) {
+          setStatus({ isLoading: false, success: `Successfully set default group`, error: '' })
+        } else {
+          setStatus({ isLoading: false, success: `A problem occurred setting default group`, error: '' })
+        }
       })
       .catch(err => {
-        console.log(err);
-        setIsLoading(false);
+        console.log(`Error: ${err}`);
+        setStatus({ isLoading: false, success: '', error: '' })
       })
   }
 
@@ -67,8 +79,8 @@ const GroupCard = ({ g, setRequestData, setSuccess, setIsLoading }) => {
         <div className="flex flex-grow justify-between items-start space-x-4">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
           <div>
-            <SquareIconButton Icon={HeartIcon} action={() => !g.default && setDefaultGroup()} additionalClasses={`${g.default ? 'fill-current' : 'fill-transparent'} hover:fill-current`}/>
-            <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`}/>
+            <SquareIconButton Icon={HeartIcon} action={() => !g.default && setDefaultGroup()} additionalClasses={`${g.default ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
+            <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
           </div>
         </div>
         <div className="flex justify-between items-end my-4">
