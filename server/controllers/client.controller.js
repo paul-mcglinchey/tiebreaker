@@ -49,27 +49,34 @@ exports.findAll = (req, res, next) => {
 // CUD Operations
 // Create and save a new client
 exports.create = (req, res) => {
+  const {
+    firstName, lastName, middleNames,
+    addressLineOne, addressLineTwo, addressLineThree, city, country, postCode,
+    birthdate,
+    email, phoneNumber, emails, phoneNumbers
+  } = req.body;
+
   // Create a new client
   const client = new Client({
     clientName: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      middleNames: req.body.middleNames.split(" ")
+      firstName: firstName,
+      lastName: lastName,
+      middleNames: middleNames.split(" ")
     },
     address: {
-      firstLine: req.body.addressLineOne,
-      secondLine: req.body.addressLineTwo,
-      thirdLine: req.body.addressLineThree,
-      city: req.body.city,
-      country: req.body.country,
-      postCode: req.body.postCode
+      firstLine: addressLineOne,
+      secondLine: addressLineTwo,
+      thirdLine: addressLineThree,
+      city: city,
+      country: country,
+      postCode: postCode
     },
-    birthdate: req.body.birthdate,
+    birthdate: birthdate,
     contactInfo: {
-      primaryEmail: req.body.email,
-      primaryPhoneNumber: req.body.phoneNumber,
-      emails: req.body.emails,
-      phoneNumbers: req.body.phoneNumbers
+      primaryEmail: email,
+      primaryPhoneNumber: phoneNumber,
+      emails: emails,
+      phoneNumbers: phoneNumbers
     },
     sessions: []
   });
@@ -103,11 +110,13 @@ exports.create = (req, res) => {
 // Update a client's sessions
 exports.addSession = (req, res) => {
 
+  const { title, description, notes, date } = req.body;
+
   const newSession = {
-    title: req.body.title,
-    description: req.body.description,
-    notes: req.body.notes,
-    date: req.body.date
+    title: title,
+    description: description,
+    notes: notes,
+    date: date
   };
 
   Client.findOneAndUpdate({ _id: req.body._id }, { $push: { sessions: newSession } })

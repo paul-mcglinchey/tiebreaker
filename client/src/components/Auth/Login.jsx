@@ -4,8 +4,10 @@ import Userfront from "@userfront/core";
 import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 
+import { IconWrapper } from '.';
 import { StyledField } from '..';
 import { loginValidationSchema } from '../../utilities';
+import SubmitButton from '../Common/SubmitButton';
 
 Userfront.init("wn9p69b5");
 
@@ -27,9 +29,8 @@ const Login = (props) => {
   }
 
   return (
-    <div className="relative max-w-login h-screen mx-auto">
-
-      <div className="absolute top-1/4 rounded w-full p-4 filter drop-shadow-sm">
+    <IconWrapper>
+      <div className="absolute top-32 rounded w-full p-4 filter drop-shadow-sm">
         <Formik
           initialValues={{
             emailOrUsername: '',
@@ -49,17 +50,15 @@ const Login = (props) => {
                 </div>
                 <div className="flex justify-between">
                   <Link to='/signup'>
-                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-800 filter drop-shadow-none shadow-none transition-all">
+                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-300 filter drop-shadow-none shadow-none transition-all">
                       Sign Up
                     </button>
                   </Link>
-                  <button type="submit" className="px-4 py-2 border-purple-500 border-2 rounded font-bold hover:bg-purple-500 hover:text-white transition-all">
-                    Login
-                  </button>
+                  <SubmitButton content="Login"/>
                 </div>
                 <div className="flex justify-center">
                   <Link to='/passwordresetrequest'>
-                    <button type="button" className="font-bold text-gray-500 hover:text-gray-800 transition-all px-4 py-2 mt-10">
+                    <button type="button" className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2 mt-10">
                       Forgot password?
                     </button>
                   </Link>
@@ -82,7 +81,7 @@ const Login = (props) => {
           </div>
         </Transition>
       </div>
-    </div>
+    </IconWrapper>
   )
 }
 

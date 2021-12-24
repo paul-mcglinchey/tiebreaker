@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 import Userfront from "@userfront/core";
+import { IconWrapper } from '.';
 import { StyledField } from '..'
+import SubmitButton from '../Common/SubmitButton';
 
 Userfront.init("wn9p69b5");
 
@@ -28,8 +30,7 @@ const PasswordReset = (props) => {
   }
 
   return (
-    <div className="relative max-w-login h-screen mx-auto">
-
+    <IconWrapper>
       <div className="absolute top-1/4 rounded w-full p-4 filter drop-shadow-sm">
         <Formik
           initialValues={{
@@ -48,9 +49,7 @@ const PasswordReset = (props) => {
                   <StyledField name="password2" type="password" placeholder="password2" errors={errors.password2} touched={touched.password2} />
                 </div>
                 <div className="flex justify-between">
-                  <button type="submit" className="px-4 py-2 border-purple-500 border-2 rounded font-bold hover:bg-purple-500 hover:text-white transition-all">
-                    Reset Password
-                  </button>
+                  <SubmitButton content="Reset password" />
                 </div>
               </div>
             </Form>
@@ -70,7 +69,8 @@ const PasswordReset = (props) => {
           </div>
         </Transition>
       </div>
-    </div>
+    </IconWrapper>
+
   )
 }
 

@@ -38,6 +38,16 @@ const GroupCard = ({ g, setStatus }) => {
       error: ''
     })
 
+    if (g.default) {
+      setStatus({
+        isLoading: false,
+        success: '',
+        error: 'Cannot delete the default group'
+      })
+
+      return;
+    }
+
     fetch(endpoints.groups, requestHelper.requestBuilder("DELETE", { _id: g._id, groupname: g.groupname }))
       .then(res => {
         if (res.ok) {

@@ -50,7 +50,9 @@ export default function App() {
 
   return (
     <div>
-      <NavMenu />
+      {Userfront.accessToken() && (
+        <NavMenu />
+      )}
       <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
         <Routes>
           <Route

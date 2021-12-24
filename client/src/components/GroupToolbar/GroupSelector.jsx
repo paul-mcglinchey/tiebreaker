@@ -33,7 +33,6 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
         return groups[0];
       }
     }
-    console.log('here')
     updateUserGroup(validUserGroup());
   }
 

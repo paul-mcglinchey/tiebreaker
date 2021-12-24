@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 import Userfront from "@userfront/core";
 
+import { IconWrapper } from '.';
 import { StyledField } from "..";
+import SubmitButton from '../Common/SubmitButton';
 
 Userfront.init("wn9p69b5");
 
 const PasswordResetRequest = (props) => {
 
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = (values) => {
 
@@ -19,14 +21,18 @@ const PasswordResetRequest = (props) => {
     Userfront.sendResetLink(
       values.email
     )
+      .then((res) => {
+        if (res.ok) {
+          setMessage("Request sent");
+        }
+      })
       .catch((error) => {
         setError(error.message);
       })
   }
 
   return (
-    <div className="relative max-w-login h-screen mx-auto">
-
+    <IconWrapper>
       <div className="absolute top-1/4 rounded w-full p-4 filter drop-shadow-sm">
         <Formik
           initialValues={{
@@ -44,33 +50,28 @@ const PasswordResetRequest = (props) => {
                 </div>
                 <div className="flex justify-between">
                   <Link to='/login'>
-                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-800 transition-all">
+                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-300 transition-all">
                       Cancel
                     </button>
                   </Link>
-                  <button type="submit" className="px-4 py-2 border-purple-500 border-2 rounded font-bold hover:bg-purple-500 hover:text-white transition-all">
-                    Reset Password
-                  </button>
+                  <SubmitButton content="Request password reset" />
                 </div>
               </div>
             </Form>
           )}
         </Formik>
-        <Transition
-          show={error ? true : false}
-          enter="transition ease-in-out duration-150"
-          enterFrom="transform opacity-0 scale-y-0"
-          enterTo="transform opacity-100 scale-y-100"
-          leave="transition ease-in-out duration-150"
-          leaveFrom="transform opacity-100 scale-y-100"
-          leaveTo="transform opacity-0 scale-y-0"
-        >
+        {error && (
           <div className="mt-10 flex border-2 border-red-500 text-red-500 p-2 justify-center rounded">
             {error}
           </div>
-        </Transition>
+        )}
+        {message && (
+          <div className="mt-10 flex border-2 border-green-500 text-green-500 p-2 justify-center rounded">
+            {message}
+          </div>
+        )}
       </div>
-    </div>
+    </IconWrapper>
   )
 }
 

@@ -21,7 +21,6 @@ const GroupToolbar = ({ userGroup, setUserGroup, status }) => {
           fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [status])}
           render={({ response, isLoading }) => (
             <Fragment>
-              {console.log(status)}
               {response && response.groups && (
                 <div className="flex md:space-x-4 justify-end">
                   <div className="hidden md:flex space-x-4">

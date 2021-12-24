@@ -5,8 +5,10 @@ import { Formik, Form } from 'formik';
 import Userfront from "@userfront/core";
 import { Transition } from "@headlessui/react";
 
+import { IconWrapper } from '.';
 import { StyledField } from '..';
 import { signupValidationSchema } from '../../utilities';
+import SubmitButton from '../Common/SubmitButton';
 
 
 Userfront.init("wn9p69b5");
@@ -31,9 +33,8 @@ const Signup = (props) => {
   }
 
   return (
-    <div className="relative max-w-login h-screen mx-auto">
-
-      <div className="absolute top-1/4 rounded w-full p-4 filter drop-shadow-sm">
+    <IconWrapper>
+      <div className="absolute top-32 rounded w-full p-4 filter drop-shadow-sm">
         <Formik
           initialValues={{
             email: '',
@@ -53,15 +54,15 @@ const Signup = (props) => {
                   <StyledField name="username" placeholder="Username" errors={errors.username} touched={touched.username} />
                   <StyledField name="password" type="password" placeholder="Password" errors={errors.password} touched={touched.password} />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-grow justify-end">
+                  <SubmitButton content="Sign up" />
+                </div>
+                <div className="flex justify-center">
                   <Link to='/login'>
-                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-800 filter drop-shadow-none shadow-none transition-all">
-                      Log In
+                    <button type="button" className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2 mt-10">
+                      Already a user?
                     </button>
                   </Link>
-                  <button type="submit" className="px-4 py-2 border-purple-500 border-2 rounded font-bold hover:bg-purple-500 hover:text-white transition-all">
-                    Sign Up
-                  </button>
                 </div>
               </div>
             </Form>
@@ -81,7 +82,7 @@ const Signup = (props) => {
           </div>
         </Transition>
       </div>
-    </div>
+    </IconWrapper>
   )
 }
 

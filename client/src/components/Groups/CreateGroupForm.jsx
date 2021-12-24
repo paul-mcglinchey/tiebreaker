@@ -17,10 +17,13 @@ const CreateGroupForm = ({ status, setStatus }) => {
       .then(res => {
         if (res.ok) {
           setStatus({ isLoading: false, success: `Successfully created ${values.groupname}`, error: '' })
+        } else if (res.status === 400) {
+          setStatus({ isLoading: false, success: '', error: 'Group already exists'})
         } else {
           setStatus({ isLoading: false, success: '', error: `A problem occurred creating ${values.groupname}` })
         }
       })
+
       .catch((err) => {
         console.log(err)
         setStatus({ isLoading: false, success: '', error: '' })
