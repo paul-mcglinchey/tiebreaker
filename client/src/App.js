@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Userfront from "@userfront/core";
-import { activeLinkHelper, endpoints, requestHelper, useFetch } from './utilities';
+import { activeLinkHelper } from './utilities';
 
 import {
   Routes,
@@ -32,6 +32,12 @@ export default function App() {
     }
   }
 
+  const [status, setStatus] = useState({
+    isLoading: false,
+    success: '',
+    error: ''
+  });
+
   const [userGroup, setUserGroup] = useState(getUserInStorage());
 
   const location = useLocation();
@@ -58,6 +64,8 @@ export default function App() {
                 <Dashboard
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -69,6 +77,8 @@ export default function App() {
                 <AddNewClient
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -80,6 +90,8 @@ export default function App() {
                 <Groups
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -91,6 +103,8 @@ export default function App() {
                 <CreateGroup
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }

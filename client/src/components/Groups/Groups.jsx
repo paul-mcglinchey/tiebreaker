@@ -1,19 +1,15 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Fetch, GroupCard, GroupPrompter, Toolbar } from '..';
 import { endpoints, useFetch, requestHelper } from '../../utilities';
 
-const Groups = ({ userGroup, setUserGroup }) => {
-  const [status, setStatus] = useState({
-    isLoading: false,
-    success: '',
-    error: ''
-  });
+const Groups = ({ userGroup, setUserGroup, status, setStatus }) => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [status.success])}
+      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [status])}
       render={({ response, isLoading }) => (
         <Fragment>
+          {status.isFetchLoading = isLoading}
           <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} status={status}>
             Group Management
           </Toolbar>

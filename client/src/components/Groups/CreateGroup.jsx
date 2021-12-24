@@ -1,16 +1,10 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { UserGroupIcon } from '@heroicons/react/solid';
 
 import { CreateGroupForm } from '.';
 import { Toolbar } from '..';
 
-const CreateGroup = ({ userGroup, setUserGroup }) => {
-
-  const [status, setStatus] = useState({
-    isLoading: false,
-    success: '',
-    error: ''
-  });
+const CreateGroup = ({ userGroup, setUserGroup, status, setStatus }) => {
 
   return (
     <Fragment>

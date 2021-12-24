@@ -1,8 +1,8 @@
 import { BanIcon, CheckIcon } from "@heroicons/react/solid";
 
-const StatusBar = ({ status = { isLoading: false, success: '', error: '' } }) => {
+const StatusBar = ({ status = { isLoading: false, isFetchLoading: false, success: '', error: ''} }) => {
 
-  const { success, error } = status;
+  const {success, error} = status;
 
   return (
     <div className="flex lg:hidden mb-4">

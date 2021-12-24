@@ -21,7 +21,17 @@ const AddNewClientForm = ({ userGroup, status, setStatus }) => {
       error: ''
     })
 
-    values.groupname = userGroup.groupname;
+    if (!userGroup) {
+      setStatus({
+        isLoading: false,
+        success: '',
+        error: 'Group must be set'
+      })
+
+      return;
+    }
+
+    values.groupname = userGroup && userGroup.groupname;
 
     await fetch((endpoints.clients), requestHelper.requestBuilder('POST', values))
       .then(res => {

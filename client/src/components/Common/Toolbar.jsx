@@ -8,6 +8,7 @@ const Toolbar = ({ userGroup, setUserGroup, status, children }) => {
         <GroupToolbar
           userGroup={userGroup}
           setUserGroup={setUserGroup}
+          status={status}
         />
       </div>
       <StatusBar status={status} />

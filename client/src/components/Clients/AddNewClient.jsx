@@ -1,13 +1,7 @@
-import { useState } from 'react';
 import { AddNewClientForm } from '.';
 import { Toolbar } from '..';
 
-const AddNewClient = ({ userGroup, setUserGroup }) => {
-  const [status, setStatus] = useState({
-    isLoading: false,
-    success: '',
-    error: ''
-  });
+const AddNewClient = ({ userGroup, setUserGroup, status, setStatus }) => {
 
   return (
     <div className="">

@@ -1,9 +1,9 @@
 import { BanIcon, CheckIcon } from "@heroicons/react/solid";
 import { SpinnerIcon } from ".."
 
-const StatusHeader = ({ status = { isLoading: false, success: '', error: '' }, children }) => {
+const StatusHeader = ({ status = { isLoading: false, isFetchLoading: false, success: '', error: ''}, children }) => {
   
-  const { isLoading, success, error } = status;
+  const { isLoading, isFetchLoading, success, error } = status;
 
   return (
     <div className="flex items-center space-x-2">
@@ -11,7 +11,7 @@ const StatusHeader = ({ status = { isLoading: false, success: '', error: '' }, c
         {children}
       </div>
       <div>
-        {isLoading && <SpinnerIcon className="h-6 w-6 text-green-500" />}
+        {(isLoading || isFetchLoading) && <SpinnerIcon className="h-6 w-6 text-green-500" />}
         {(success || error) && (
           <div className={`hidden lg:flex ml-4 space-x-2 font-medium ${success && 'text-green-500'} ${error && 'text-red-500'} border border-current rounded px-2 py-1`}>
             <div>{success || error}</div>
