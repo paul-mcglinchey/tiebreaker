@@ -24,13 +24,21 @@ import {
 
 export default function App() {
 
-  const [userGroup, setUserGroup] = useState(() => {
+  const getUserInStorage = () => {
     try {
-      return JSON.parse(sessionStorage.getItem('userGroup'));
-    } catch (e) {
+      return JSON.parse(sessionStorage.getItem("userGroup"));
+    } catch {
       return null;
     }
+  }
+
+  const [status, setStatus] = useState({
+    isLoading: false,
+    success: '',
+    error: ''
   });
+
+  const [userGroup, setUserGroup] = useState(getUserInStorage());
 
   const location = useLocation();
 
@@ -56,6 +64,8 @@ export default function App() {
                 <Dashboard
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -67,6 +77,8 @@ export default function App() {
                 <AddNewClient
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -75,9 +87,11 @@ export default function App() {
             path="groups"
             element={
               <PrivateRoute>
-                <Groups 
+                <Groups
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }
@@ -87,6 +101,10 @@ export default function App() {
             element={
               <PrivateRoute>
                 <CreateGroup
+                  userGroup={userGroup}
+                  setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </PrivateRoute>
             }

@@ -8,7 +8,7 @@ import { endpoints, dateHelper, sessionValidationSchema } from '../../utilities'
 
 const AddNewSession = (props) => {
 
-  const { c, addSessionOpen, toggleAddSession } = props;
+  const { c, toggleAddSession } = props;
 
   const [note, setNote] = useState('');
   const [notes, setNotes] = useState([]);

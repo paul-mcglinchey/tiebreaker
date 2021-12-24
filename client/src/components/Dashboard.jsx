@@ -1,9 +1,9 @@
 import { Fragment, React } from 'react';
 
-import { ClientList, Fetch, Toolbar, GroupPrompter, StatusHeader } from '.';
+import { ClientList, Fetch, Toolbar, GroupPrompter } from '.';
 import { useFetch, endpoints, requestHelper } from '../utilities';
 
-const Dashboard = ({ userGroup, setUserGroup }) => {
+const Dashboard = ({ userGroup, setUserGroup, status, setStatus }) => {
 
   return (
     <Fetch
@@ -13,9 +13,8 @@ const Dashboard = ({ userGroup, setUserGroup }) => {
           {Number.isInteger(response.count) && (
             response.count > 0 ? (
               <Fragment>
-                <Toolbar userGroup={userGroup} setUserGroup={setUserGroup}>
-                  <StatusHeader isLoading={isLoading}>Dashboard</StatusHeader>
-                </Toolbar>
+                {status.isFetchLoading = isLoading}
+                <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} status={status}>Dashboard</Toolbar>
                 <ClientList
                   userGroup={userGroup}
                 />

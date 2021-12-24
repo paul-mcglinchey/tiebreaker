@@ -1,16 +1,17 @@
 import { GroupToolbar, StatusBar, StatusHeader } from "..";
 
-const Toolbar = ({ userGroup, setUserGroup, isLoading, success, children }) => {
+const Toolbar = ({ userGroup, setUserGroup, status, children }) => {
   return (
     <div className="flex-col xl:flex">
-      <div className="flex justify-between pb-4 text-white">
-        <StatusHeader isLoading={isLoading} success={success}>{children}</StatusHeader>
+      <div className="flex sm:flex-row flex-col sm:space-y-0 space-y-4 justify-between pb-4 text-white">
+        <StatusHeader status={status}>{children}</StatusHeader>
         <GroupToolbar
           userGroup={userGroup}
           setUserGroup={setUserGroup}
+          status={status}
         />
       </div>
-      <StatusBar success={success} />
+      <StatusBar status={status} />
     </div>
   )
 }

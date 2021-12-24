@@ -1,11 +1,9 @@
 import { Fragment } from 'react';
 import { GroupInfoDisplay, GroupCreateButton, GroupSelector } from ".";
-
 import { Fetch } from '..';
+import { endpoints, requestHelper, useFetch } from '../../utilities';
 
-import { endpoints, requestHelper, useFetch } from '../../utilities'
-
-const GroupToolbar = ({ userGroup, setUserGroup }) => {
+const GroupToolbar = ({ userGroup, setUserGroup, status }) => {
 
   const updateUserGroup = group => {
     sessionStorage.setItem(
@@ -15,38 +13,35 @@ const GroupToolbar = ({ userGroup, setUserGroup }) => {
     setUserGroup(group);
   }
 
-  const setDefaultGroup = groups => {
-    if (!userGroup) {
-      updateUserGroup(groups.filter(g => g.default)[0]);
-    }
-  }
-
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"))}
-      render={({ response, isLoading }) => (
-        <Fragment>
-          <div className="text-white">
-            {response && Array.isArray(response.groups) && (
-              <Fragment>
+
+    <Fragment>
+      <div className="text-white">
+        <Fetch
+          fetchOutput={useFetch(endpoints.groups, requestHelper.requestBuilder("GET"), [status])}
+          render={({ response, isLoading }) => (
+            <Fragment>
+              {console.log(status)}
+              {response && response.groups && (
                 <div className="flex md:space-x-4 justify-end">
                   <div className="hidden md:flex space-x-4">
-                    <GroupInfoDisplay groups={response.groups} />
+                    <GroupInfoDisplay groupCount={response.groups.length} />
                     <GroupCreateButton />
                   </div>
                   <GroupSelector
-                    groups={response.groups}
                     userGroup={userGroup}
+                    groups={response.groups}
                     updateUserGroup={updateUserGroup}
-                    setDefaultGroup={setDefaultGroup}
+                    status={status}
+                    isLoading={isLoading}
                   />
                 </div>
-              </Fragment>
-            )}
-          </div>
-        </Fragment>
-      )}
-    />
+              )}
+            </Fragment>
+          )}
+        />
+      </div>
+    </Fragment>
   )
 }
 

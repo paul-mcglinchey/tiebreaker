@@ -28,10 +28,9 @@ const ClientOptions = props => {
         <Menu.Items className={`z-50 origin-top-right absolute right-0 w-48 rounded-md bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none`}>
           <div className="py-1">
             {options.map((o, i) => (
-              <Menu.Item>
+              <Menu.Item key={i}>
                 {({ active }) => (
                   <button
-                    key={i}
                     className={`inline-flex justify-between items-center w-full px-3 py-2 text-sm font-medium ${o.classes}`}
                   >
                     {o.name}

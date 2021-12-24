@@ -1,30 +1,29 @@
-import { useState } from 'react';
 import { Formik, Form } from 'formik';
 
 import { StyledField } from '..';
 import { endpoints, requestHelper, groupValidationSchema } from '../../utilities';
+import SubmitButton from '../Common/SubmitButton';
 
-const CreateGroupForm = (props) => {
-
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+const CreateGroupForm = ({ status, setStatus }) => {
 
   const createGroup = (values) => {
-
-    setError();
-    setSuccess();
+    setStatus({
+      isLoading: true,
+      success: '',
+      error: ''
+    })
 
     fetch(endpoints.creategroup, requestHelper.requestBuilder('POST', values))
-      .then((response => response.json()))
-      .then((data) => {
-        if (data.message) {
-          setError(data.message)
+      .then(res => {
+        if (res.ok) {
+          setStatus({ isLoading: false, success: `Successfully created ${values.groupname}`, error: '' })
         } else {
-          setSuccess(data.success);
+          setStatus({ isLoading: false, success: '', error: `A problem occurred creating ${values.groupname}` })
         }
       })
-      .catch((error) => {
-        setError(error.message);
+      .catch((err) => {
+        console.log(err)
+        setStatus({ isLoading: false, success: '', error: '' })
       })
   }
 
@@ -45,21 +44,7 @@ const CreateGroupForm = (props) => {
             <StyledField name="groupname" placeholder="Groupname" errors={errors.groupname} touched={touched.groupname} />
           </div>
           <div className="flex justify-end">
-            <button type="submit" className="hover:bg-blue-800 hover:text-white border-2 border-blue-800 font-bold text-blue-800 rounded-lg py-1 px-3 transition-all">
-              Add group
-            </button>
-          </div>
-          <div className="flex justify-end space-y-4">
-            {error && (
-              <div className="p-2 font-medium rounded-lg border-2 border-red-500 text-red-500">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="p-2 font-medium rounded-lg border-2 border-green-500 text-green-500">
-                {success}
-              </div>
-            )}
+            <SubmitButton status={status} content='Create group' />
           </div>
         </Form>
       )}

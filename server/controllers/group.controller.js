@@ -20,7 +20,14 @@ exports.getCount = (req, res) => {
 exports.getGroups = (req, res) => {
   Group.find({ users: req.auth.userUuid })
     .then((groups) => {
-      return res.status(200).send({groups: groups})
+      if (req.query.id) {
+        let previous = groups.filter(g => g._id == req.query.id)
+        return previous.length > 0 
+          ? res.status(200).send({groups: previous}) 
+          : res.status(200).send({groups: groups.filter(g => g.default)})
+      } else {
+        return res.status(200).send({groups: groups})
+      }
     })
     .catch(err => {
       res.status(401).send({
