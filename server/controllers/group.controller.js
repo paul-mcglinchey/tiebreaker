@@ -1,4 +1,3 @@
-const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
 const Group = db.group;
 const Client = db.client;
@@ -43,7 +42,6 @@ exports.createGroup = async (req, res) => {
     res.status(400).send({ message: "Group already exists!" });
     return;
   }
-  console.log(req.body.default);
 
   // Create a new group model instance with the request body
   const group = new Group({

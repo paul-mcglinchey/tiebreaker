@@ -11,7 +11,7 @@ const Group = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'Client'
     }]
-  })
+  }, { timestamps: true })
 )
 
 module.exports = Group;
