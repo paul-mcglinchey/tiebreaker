@@ -10,12 +10,12 @@ const parseDateString = (value, originalValue) => {
 
 const makeDate = (isoDate, delimiter) => {
   var date = new Date(isoDate);
-  return `${date.getDate()}${delimiter}${date.getMonth() + 1}${delimiter}${date.getFullYear()}`;
+  return `${date.getUTCDate()}${delimiter}${date.getUTCMonth() + 1}${delimiter}${date.getFullYear()}`;
 }
 
 const makeUSDate = (isoDate, delimiter) => {
   var date = new Date(isoDate);
-  return `${date.getFullYear()}${delimiter}${date.getMonth() + 1}${delimiter}${date.getDate()}`
+  return `${date.getFullYear()}${delimiter}${date.getUTCMonth() + 1}${delimiter}${date.getUTCDate()}`
 }
 
 const dateHelper = {

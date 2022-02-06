@@ -85,7 +85,7 @@ const GroupCard = ({ g, setStatus }) => {
 
   return (
     <div className={`flex flex-auto flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${g.default && 'order-first basis-full'}`}>
-      <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-800' : 'bg-blue-800 text-white'}`}>
+      <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
         <div className="flex flex-grow justify-between items-start space-x-4">
           <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
           <div>

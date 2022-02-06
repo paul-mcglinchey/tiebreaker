@@ -10,12 +10,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the pyrobooks API')
+  res.send('Welcome to the tiebreaker API')
 })
 
 app.use('/health', (req, res) => {
   res.status(200).json({
-    appName: 'pyrobooks-api',
+    appName: 'tiebreaker-api',
     version: process.env.npm_package_version,
     status: 'OK',
   });

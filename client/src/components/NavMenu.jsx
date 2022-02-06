@@ -5,7 +5,7 @@ import Userfront from '@userfront/core';
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
-import { ThumbIcon, PyrobooksIcon } from '.';
+import { ThumbIcon, WideIcon } from '.';
 import { links } from '../utilities';
 
 // Public functions
@@ -40,11 +40,11 @@ const NavMenu = (props) => {
                   <div className="flex-shrink-0 flex items-center">
                     <ThumbIcon
                       className="lg:hidden h-10 w-10 text-white"
-                      alt="pyrobooks"
+                      alt="tiebreaker"
                     />
-                    <PyrobooksIcon
+                    <WideIcon
                       className="hidden text-white lg:block w-48"
-                      alt="pyrobooks"
+                      alt="tiebreaker"
                     />
                   </div>
                   <div className="hidden sm:block sm:ml-6">

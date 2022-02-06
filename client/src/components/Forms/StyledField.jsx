@@ -24,6 +24,7 @@ const StyledField = (props) => {
         autoComplete={props.autocomplete}
         component={props.component}
         type={props.type}
+        as={props.as}
       />
     </div>
   )

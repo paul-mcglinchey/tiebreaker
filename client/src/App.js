@@ -20,6 +20,7 @@ import {
   PasswordReset,
   PasswordResetRequest
 } from './components';
+import { NewSession } from './components/Sessions';
 
 
 export default function App() {
@@ -66,6 +67,17 @@ export default function App() {
                 <Dashboard
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
+                  status={status}
+                  setStatus={setStatus}
+                />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/clients/:id/newsession"
+            element={
+              <PrivateRoute>
+                <NewSession
                   status={status}
                   setStatus={setStatus}
                 />

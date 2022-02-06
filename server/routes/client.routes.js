@@ -7,6 +7,9 @@ module.exports = app => {
   // Get all clients
   router.get('/', clients.findAll);
 
+  // Get a client by id
+  router.get('/:clientId', clients.findById);
+
   // CUD Operations - Requests should have a body
   router.use(middleware.validation.validateRequest);
 

@@ -4,11 +4,11 @@ import { Toolbar } from '..';
 const AddNewClient = ({ userGroup, setUserGroup, status, setStatus }) => {
 
   return (
-    <div className="">
+    <div>
       <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} status={status}>
         Add new clients
       </Toolbar>
-      <AddNewClientForm userGroup={userGroup} status={status} setStatus={setStatus}/>
+      <AddNewClientForm userGroup={userGroup} status={status} setStatus={setStatus} />
     </div>
   )
 }

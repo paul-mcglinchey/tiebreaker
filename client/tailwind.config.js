@@ -7,11 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        zinc: colors.zinc,
-        slate: colors.slate,
-        neutral: colors.neutral,
-        gray: colors.gray,
-        stone: colors.stone,
+        gray: colors.zinc,
+        red: colors.rose,
+        green: colors.emerald,
+        blue: colors.sky
       },
       minHeight: {
         '96': '40rem'

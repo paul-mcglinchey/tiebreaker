@@ -11,7 +11,7 @@ const CreateGroup = ({ userGroup, setUserGroup, status, setStatus }) => {
       <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} status={status}>Create Group</Toolbar>
       <div className="flex justify-center lg:space-x-4">
         <CreateGroupForm status={status} setStatus={setStatus} />
-        <div className="hidden lg:flex text-white bg-blue-800 font-extrabold lg:text-5xl px-4 max-w-1/2 shadow-sm text-center md:text-right rounded pt-4">
+        <div className="hidden lg:flex text-white bg-blue-600 font-extrabold lg:text-5xl px-4 max-w-1/2 shadow-sm text-center md:text-right rounded pt-4">
           <div className="inline-block">
             Create a group to get started
             <span className="inline-block align-middle">

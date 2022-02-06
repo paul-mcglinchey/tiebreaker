@@ -53,6 +53,16 @@ exports.findAll = async (req, res, next) => {
     });
 };
 
+// Retrieve a specific client by Id
+exports.findById = async (req, res, next) => {
+  Client.findById(req.params.clientId)
+    .then(client => res.status(200).send(client))
+    .catch(err => res.status(500)
+      .send({
+        message: err.message || `A problem occurred fetching client with ID ${req.params.clientId}.`
+      }));
+}
+
 // CUD Operations
 // Create and save a new client
 exports.create = (req, res) => {

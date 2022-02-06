@@ -32,9 +32,16 @@ const AddressSchema = new Schema({
 const SessionSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: false },
-  notes: { type: [String], required: false },
-  date: { type: Date, required: true }
-});
+  tags: { type: [String], required: false },
+  createdBy: {
+    uuid: { type: String },
+    name: { type: String }
+  },
+  updatedBy: {
+    uuid: { type: String },
+    name: { type: String }
+  }
+}, { timestamps: true });
 
 const Client = mongoose.model(
   "Client",
