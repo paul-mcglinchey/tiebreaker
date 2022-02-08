@@ -25,9 +25,6 @@ module.exports = {
         'fill': 'fill'
       }
     },
-    fontFamily: {
-      'sans': ['Intel Var', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
-    },
     maxWidth: {
       '2/3': '66.67%',
       '1/3': '33.33%',

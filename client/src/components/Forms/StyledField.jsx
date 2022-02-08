@@ -7,7 +7,7 @@ const StyledField = (props) => {
     <div className="flex flex-1 flex-col">
       <div className="flex justify-between">
         <label className="block font-bold text-gray-500 mb-1 uppercase">
-          {props.placeholder}
+          {props.label}
         </label>
         <div className="flex justify-end">
           {props.errors && props.touched ? (
@@ -19,7 +19,7 @@ const StyledField = (props) => {
         </div>
       </div>
       <Field
-        className="appearance-none focus:outline-none border border-transparent focus:border-blue-800 placeholder-gray-700 bg-gray-800 rounded-sm py-2 px-4 text-gray-200 leading-tight"
+        className="w-full h-10 appearance-none focus:outline-none border-2 border-gray-800 focus:border-blue-500 text-gray-300 bg-gray-800 rounded-sm py-2 px-4 leading-tight"
         name={props.name}
         autoComplete={props.autocomplete}
         component={props.component}

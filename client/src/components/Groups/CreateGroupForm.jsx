@@ -44,7 +44,7 @@ const CreateGroupForm = ({ status, setStatus }) => {
       {({ errors, touched }) => (
         <Form className="flex flex-1 flex-col space-y-8">
           <div className="flex">
-            <StyledField name="groupname" placeholder="Groupname" errors={errors.groupname} touched={touched.groupname} />
+            <StyledField name="groupname" label="Groupname" errors={errors.groupname} touched={touched.groupname} />
           </div>
           <div className="flex justify-end">
             <SubmitButton status={status} content='Create group' />
