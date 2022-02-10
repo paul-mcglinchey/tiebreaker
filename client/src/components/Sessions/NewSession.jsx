@@ -34,7 +34,15 @@ const NewSession = ({ status, setStatus }) => {
         <span> / </span>
         <span> Add a session </span>
       </div>
-      <AddNewSessionForm client={id} status={status} setStatus={setStatus} />
+      <div className="flex space-x-4">
+        <div className="lg:basis-3/5">
+          <AddNewSessionForm client={id} status={status} setStatus={setStatus} />
+        </div>
+        <div className="basis-2/5 bg-gray-800 rounded p-3">
+          <h1 className="text-xl font-semibold text-gray-400">Supplementary sessions content</h1>
+        </div>
+
+      </div>
     </div>
   )
 }

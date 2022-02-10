@@ -6,5 +6,6 @@ db.mongoose = mongoose;
 
 db.client = require('./client.model.js');
 db.group = require('./group.model.js');
+db.session = require('./session.model.js').Session;
 
 module.exports = db;

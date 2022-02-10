@@ -13,7 +13,7 @@ const CreateGroupForm = ({ status, setStatus }) => {
       error: ''
     })
 
-    fetch(endpoints.creategroup, requestHelper.requestBuilder('POST', values))
+    fetch(endpoints.groups, requestHelper.requestBuilder('POST', values))
       .then(res => {
         if (res.ok) {
           setStatus({ isLoading: false, success: `Successfully created ${values.groupname}`, error: '' })

@@ -1,5 +1,6 @@
 const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
+const SessionSchema = require('./session.model').SessionSchema;
 
 const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
@@ -28,20 +29,6 @@ const AddressSchema = new Schema({
   country: { type: String, required: false },
   postCode: { type: String, required: false }
 })
-
-const SessionSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: false },
-  tags: { type: [String], required: false },
-  createdBy: {
-    uuid: { type: String },
-    name: { type: String }
-  },
-  updatedBy: {
-    uuid: { type: String },
-    name: { type: String }
-  }
-}, { timestamps: true });
 
 const Client = mongoose.model(
   "Client",

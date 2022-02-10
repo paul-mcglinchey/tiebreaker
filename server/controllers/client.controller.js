@@ -2,13 +2,14 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
 const Group = db.group;
 const Client = db.client;
+const Session = db.session;
 
 // Read operations
 
 // Retrieve all clients from the database
 exports.findAll = async (req, res, next) => {
 
-  let { pageSize, pageNumber, groupname } = await req.query;
+  let { pageSize, pageNumber, groupname, sortField, sortDirection, clientName } = await req.query;
 
   pageSize = parseInt(pageSize);
   pageNumber = parseInt(pageNumber);
@@ -29,9 +30,13 @@ exports.findAll = async (req, res, next) => {
           .send({
             message: err.message || `A problem occurred fetching the number of clients for group ${groupname}.`
           }));
+      
+      console.log(clientName === null);
+      if (clientName) clientQuery['clientName.firstName'] = { "$regex": clientName, "$options": "i" };
 
       const clients = await Client
         .find(clientQuery)
+        .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
         .skip(((pageNumber || 1) - 1) * pageSize)
         .limit(parseInt(pageSize))
         .then(clients => clients)
@@ -138,27 +143,37 @@ exports.create = (req, res) => {
 // Update a client's sessions
 exports.addSession = (req, res) => {
 
-  const { title, description, notes, date } = req.body;
+  const { clientId } = req.params;
+  console.log(req.body);
+  const { title, description, tags, sessionDate, createdBy, updatedBy } = req.body;
 
-  const newSession = {
+  const session = new Session({
     title: title,
     description: description,
-    notes: notes,
-    date: date
-  };
+    tags: tags,
+    sessionDate: sessionDate,
+    createdBy: {
+      uuid: req.auth.userUuid,
+      name: createdBy
+    },
+    updatedBy: {
+      uuid: req.auth.userUuid,
+      name: updatedBy
+    }
+  });
 
-  Client.findOneAndUpdate({ _id: req.body._id }, { $push: { sessions: newSession } })
-    .then(client => {
-      res.status(200).send({
-        sessions: client.sessions
-      })
-    })
+  Client.findByIdAndUpdate(clientId, { $push: { sessions: session } })
+    .then(client => res.status(200).send({ updatedClient: client }))
     .catch(err => {
-      res.status(401).send({
-        message:
-          err.message || `Some error occurred while updating sessions for client ${req.body._id}`
+      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+        return res.status(404).send({
+          message: 'Client not found with id ' + clientId
+        });
+      };
+      return res.status(500).send({
+        message: err || `Could not update client with id ${clientId}`
       });
-    });
+    })
 }
 
 // Deletes a client by ID

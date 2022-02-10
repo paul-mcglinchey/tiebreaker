@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { InlineButton, RowItem } from '.';
+import { ViewGridAddIcon } from '@heroicons/react/outline';
+import InlineLink from './InlineLink';
 
 const ClientRow = ({ client, userGroup }) => {
   return (
@@ -13,29 +15,38 @@ const ClientRow = ({ client, userGroup }) => {
         </div>
       </RowItem>
       <RowItem>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 min-w-40">
           <span>
             {new Date(client.updatedAt).toLocaleDateString()}
           </span>
           {client.updatedBy && (
-            <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg">
+            <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
               {client.updatedBy.name}
             </span>
           )}
         </div>
       </RowItem>
       <RowItem>
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold">{client.sessions.length}</span>
-          <Link to={`/clients/${client._id}/newsession`}>
-            <InlineButton color="text-green-500" title="Add" />
-          </Link>
+        <div className="flex flex-grow items-center justify-start">
+          {client.sessions.length > 0 ? (
+            <InlineLink to={`/clients/${client._id}/newsession`} color="text-amber-400">
+              <span>Sessions</span>
+              <div className="pr-1">
+                <span className="text-center text-lg">{client.sessions.length}</span>
+              </div>
+            </InlineLink>
+          ) : (
+            <InlineLink to={`/clients/${client._id}/newsession`} color="text-green-500">
+              <div className="whitespace-nowrap">Add session</div>
+              <ViewGridAddIcon className="w-6 h-6" />
+            </InlineLink>
+          )}
         </div>
       </RowItem>
       <RowItem>
         <div className="flex items-center space-x-2 justify-end">
-          <InlineButton color="text-blue-500" title="Edit" />
-          <InlineButton color="text-red-500" title="Delete" />
+          <InlineButton color="text-blue-500">Edit</InlineButton>
+          <InlineButton color="text-red-500">Delete</InlineButton>
         </div>
       </RowItem>
     </tr>

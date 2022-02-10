@@ -10,10 +10,14 @@ module.exports = {
         gray: colors.zinc,
         red: colors.rose,
         green: colors.emerald,
-        blue: colors.sky
+        blue: colors.sky,
+        amber: colors.amber
       },
       minHeight: {
         '96': '40rem'
+      },
+      minWidth: {
+        '40': '10rem',
       },
       scale: {
         '102': '1.02',

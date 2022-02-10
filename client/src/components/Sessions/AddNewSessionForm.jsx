@@ -7,7 +7,12 @@ import Userfront from '@userfront/core';
 import { requestHelper } from '../../utilities';
 import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '..';
 
+const currentDate = new Date();
+const currentDateAsString = currentDate.toISOString().split('T')[0];
+
 const AddNewSessionForm = ({ client, status, setStatus }) => {
+
+  console.log(currentDateAsString);
 
   const [tags, setTags] = useState([]);
 
@@ -32,7 +37,7 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
 
     values.createdBy = values.updatedBy = Userfront.user.username;
 
-    await fetch((endpoints.sessions(client)), requestHelper.requestBuilder('POST', values))
+    await fetch((endpoints.sessions(client)), requestHelper.requestBuilder('PUT', values))
       .then(res => {
         if (res.ok) {
           setStatus({ isLoading: false, success: `Added session successfully`, error: '' });
@@ -47,12 +52,12 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
   }
 
   return (
-    <div className="flex flex-1 space-x-6">
+    <div className="flex flex-1">
       <Formik
         initialValues={{
           title: '',
           description: '',
-          sessionDate: '',
+          sessionDate: currentDateAsString,
           tags: tags,
           createdBy: '',
         }}
@@ -63,7 +68,7 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
         }}
       >
         {({ errors, touched }) => (
-          <Form className="flex flex-grow flex-col lg:max-w-2/3">
+          <Form className="flex flex-grow flex-col">
             <div className="flex flex-col space-y-3 content-end">
               <div className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-1 md:space-y-0"></div>
               <StyledField name="title" label="Title" errors={errors.title} touched={touched.title} />
@@ -79,14 +84,6 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
           </Form>
         )}
       </Formik>
-      <div className="flex flex-grow px-4 py-4 bg-gray-900 rounded shadow-md text-gray-400 max-w-1/3">
-        <h1 className="text-gray-200 text-2xl font-semibold">Previous sessions</h1>
-        <div>
-          {client.sessions && client.sessions.map(s => (
-            <div>{s.title}</div>
-          ))}
-        </div>
-      </div>
     </div >
   )
 }

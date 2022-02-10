@@ -16,11 +16,11 @@ module.exports = app => {
   // Create a new client
   router.post('/', middleware.createClient.isGroupNameSet, clients.create);
 
+  // Add a session to a client
+  router.put('/:clientId/sessions', clients.addSession);
+
   // Delete a client by id
   router.delete('/', clients.delete);
-
-  // Add a session to a client's sessions array
-  router.put('/sessions', clients.addSession);
 
   app.use('/api/clients', router);
 }
