@@ -41,7 +41,7 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
   return (
     <div className="flex flex-grow items-center justify-end">
       <Menu as="div" className="relative inline-block text-left w-full">
-        <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-white">
+        <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
             {!sessionHasValidUserGroup && refreshUserGroup()}
             {userGroup ? userGroup.groupname : 'Groups'}

@@ -37,6 +37,10 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
 
     values.createdBy = values.updatedBy = Userfront.user.username;
 
+    tags.forEach(t => {
+      values.tags.push(t.value);
+    })
+
     await fetch((endpoints.sessions(client)), requestHelper.requestBuilder('PUT', values))
       .then(res => {
         if (res.ok) {
@@ -58,11 +62,11 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
           title: '',
           description: '',
           sessionDate: currentDateAsString,
-          tags: tags,
           createdBy: '',
         }}
         validationSchema={sessionValidationSchema}
         onSubmit={(values, { resetForm }) => {
+          console.log(values);
           handleSubmit(values);
           resetForm();
         }}

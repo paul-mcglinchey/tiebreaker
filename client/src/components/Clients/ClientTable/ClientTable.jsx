@@ -5,7 +5,7 @@ import InteractiveHeader from "./InteractiveHeader";
 const ClientTable = ({ clients, totalClients, userGroup, sortField, setSortField, sortDirection, setSortDirection, headers }) => {
 
   return (
-    <div className="shadow overflow-x-scroll sm:rounded-md">
+    <div className="shadow overflow-x-scroll md:overflow-x-auto sm:rounded-md">
       <table className="min-w-full">
         <thead className="bg-gray-800">
           <tr>

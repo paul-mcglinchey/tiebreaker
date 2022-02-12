@@ -22,10 +22,9 @@ import {
 } from './components';
 import { NewSession } from './components/Sessions';
 
-
 export default function App() {
 
-  const getUserInStorage = () => {
+  const getUserGroupInStorage = () => {
     try {
       return JSON.parse(sessionStorage.getItem("userGroup"));
     } catch {
@@ -39,7 +38,7 @@ export default function App() {
     error: ''
   });
 
-  const [userGroup, setUserGroup] = useState(getUserInStorage());
+  const [userGroup, setUserGroup] = useState(getUserGroupInStorage());
 
   const location = useLocation();
 

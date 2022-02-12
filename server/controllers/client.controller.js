@@ -31,11 +31,22 @@ exports.findAll = async (req, res, next) => {
             message: err.message || `A problem occurred fetching the number of clients for group ${groupname}.`
           }));
       
-      console.log(clientName === null);
-      if (clientName) clientQuery['clientName.firstName'] = { "$regex": clientName, "$options": "i" };
+      // create the aggregate object (functions like an IQueryable)
+      const aggregate = Client.aggregate();
 
-      const clients = await Client
-        .find(clientQuery)
+      // apply a match operator to the pipeline to only return clients for the current group
+      // add a new fullName field to filter on
+      await aggregate
+        .match(clientQuery)
+        .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } })
+      
+      // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
+      if (clientName) {
+          await aggregate.match({ fullName: { $regex: clientName, $options: 'i' } });
+      }
+
+      // finally build the other query parameters and return the aggregate as the clients queryable
+      const clients = await aggregate
         .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
         .skip(((pageNumber || 1) - 1) * pageSize)
         .limit(parseInt(pageSize))
@@ -146,6 +157,8 @@ exports.addSession = (req, res) => {
   const { clientId } = req.params;
   console.log(req.body);
   const { title, description, tags, sessionDate, createdBy, updatedBy } = req.body;
+
+  console.log(tags, typeof tags);
 
   const session = new Session({
     title: title,

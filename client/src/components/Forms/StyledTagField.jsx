@@ -7,14 +7,18 @@ const StyledTagField = ({ tags, setTags, label, errors, touched }) => {
   const [tag, setTag] = useState('');
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    document.getElementById("tagField").addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      document.getElementById("tagField").removeEventListener("keydown", handleKeyDown);
     };
   });
 
   const handleKeyDown = (e) => {
+    if (tag.length === 0) {
+      return;
+    }
+
     if (e.code === 'Enter') {
       e.preventDefault();
       addTag();
@@ -45,12 +49,12 @@ const StyledTagField = ({ tags, setTags, label, errors, touched }) => {
           ) : null}
         </div>
       </div>
-      <div className="flex w-full h-10 px-2 text-gray-200 items-center space-x-2 border-2 border-transparent bg-gray-800 focus-within:border-blue-500 rounded-sm">
-        <div className="flex space-x-2">
+      <div className="flex w-full px-2 py-1 text-gray-200 items-center space-x-2 border-2 border-transparent bg-gray-800 focus-within:border-blue-500 rounded-sm">
+        <div className="flex flex-1 flex-wrap">
           {tags && (
             tags.map((t) => (
               <button
-                className="bg-gray-900 px-2 rounded hover:bg-red-500 transition-all select-none"
+                className="bg-gray-900 px-2 m-0.5 rounded hover:bg-red-500 transition-all select-none text-left"
                 key={t.id}
                 onClick={() => removeTag(t.id)}
               >
@@ -58,10 +62,7 @@ const StyledTagField = ({ tags, setTags, label, errors, touched }) => {
               </button>
             ))
           )}
-        </div>
-        <input className="flex-grow bg-transparent focus:outline-none" id="tagField" name="tags" value={tag} onChange={(e) => setTag(e.target.value)} />
-        <div className="font-semibold text-gray-500/50">
-          Enter to add
+          <input className="flex-1 whitespace-pre-wrap bg-transparent focus:outline-none m-0.5" id="tagField" name="tags" value={tag} onChange={(e) => setTag(e.target.value)} />
         </div>
       </div>
     </div>
