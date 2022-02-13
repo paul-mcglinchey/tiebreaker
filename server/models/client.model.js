@@ -45,7 +45,8 @@ const Client = mongoose.model(
     updatedBy: {
       uuid: { type: String },
       name: { type: String }
-    }
+    },
+    clientColour: String
   }, { timestamps: true })
 );
 

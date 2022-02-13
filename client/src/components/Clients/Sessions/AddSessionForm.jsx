@@ -1,23 +1,20 @@
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { sessionValidationSchema } from '../../utilities/schema';
-import { SubmitButton } from '../Common';
-import { endpoints } from '../../utilities/config';
+import { sessionValidationSchema } from '../../../utilities/schema';
+import { SubmitButton } from '../../Common';
+import { endpoints } from '../../../utilities/config';
 import Userfront from '@userfront/core';
-import { requestHelper } from '../../utilities';
-import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '..';
+import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '../..';
+import { requestHelper } from '../../../utilities';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
-const AddNewSessionForm = ({ client, status, setStatus }) => {
-
-  console.log(currentDateAsString);
+const AddSessionForm = ({ client, status, setStatus }) => {
 
   const [tags, setTags] = useState([]);
 
   const handleSubmit = async (values) => {
-
     console.log('here');
     setStatus({
       isLoading: true,
@@ -31,11 +28,12 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
         success: '',
         error: 'No client found'
       })
-
       return;
     }
 
+    // Adding user metadata and tags to the post body
     values.createdBy = values.updatedBy = Userfront.user.username;
+    values.tags = [];
 
     tags.forEach(t => {
       values.tags.push(t.value);
@@ -92,4 +90,4 @@ const AddNewSessionForm = ({ client, status, setStatus }) => {
   )
 }
 
-export default AddNewSessionForm;
+export default AddSessionForm;

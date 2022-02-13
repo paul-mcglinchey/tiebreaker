@@ -48,12 +48,12 @@ const GroupCard = ({ g, setStatus }) => {
       return;
     }
 
-    fetch(endpoints.groups, requestHelper.requestBuilder("DELETE", { _id: g._id, groupname: g.groupname }))
+    fetch(endpoints.groups, requestHelper.requestBuilder("DELETE", { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully deleted ${g.groupname}`, error: '' })
+          setStatus({ isLoading: false, success: `Successfully deleted ${g.groupName}`, error: '' })
         } else {
-          setStatus({ isLoading: false, success: `A problem occurred deleting ${g.groupname}`, error: '' })
+          setStatus({ isLoading: false, success: `A problem occurred deleting ${g.groupName}`, error: '' })
         }
       })
       .catch(err => {
@@ -69,7 +69,7 @@ const GroupCard = ({ g, setStatus }) => {
       error: ''
     })
 
-    fetch(endpoints.groupdefault, requestHelper.requestBuilder("PUT", { _id: g._id, groupname: g.groupname }))
+    fetch(endpoints.groupdefault, requestHelper.requestBuilder("PUT", { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
           setStatus({ isLoading: false, success: `Successfully set default group`, error: '' })
@@ -87,7 +87,7 @@ const GroupCard = ({ g, setStatus }) => {
     <div className={`flex flex-auto flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${g.default && 'order-first basis-full'}`}>
       <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
         <div className="flex flex-grow justify-between items-start space-x-4">
-          <h1 className="text-3xl font-extrabold tracking-wide">{g.groupname}</h1>
+          <h1 className="text-3xl font-extrabold tracking-wide">{g.groupName}</h1>
           <div>
             <SquareIconButton Icon={HeartIcon} action={() => !g.default && setDefaultGroup()} additionalClasses={`${g.default ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
             <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />

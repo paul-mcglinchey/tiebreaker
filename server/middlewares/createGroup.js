@@ -25,7 +25,7 @@ const checkIfFirstGroup = (req, res, next) => {
 // This middleware intercepts any request to create a new group and checks that
 // the group doesn't already exist
 const checkIfGroupExists = (req, res, next) => {
-  Group.find({ groupname: req.body.groupname })
+  Group.find({ groupName: req.body.groupName })
     .then((data) => {
       if (data.length !== 0) {
         req.groupexists = true

@@ -16,11 +16,11 @@ const CreateGroupForm = ({ status, setStatus }) => {
     fetch(endpoints.groups, requestHelper.requestBuilder('POST', values))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully created ${values.groupname}`, error: '' })
+          setStatus({ isLoading: false, success: `Successfully created ${values.groupName}`, error: '' })
         } else if (res.status === 400) {
           setStatus({ isLoading: false, success: '', error: 'Group already exists'})
         } else {
-          setStatus({ isLoading: false, success: '', error: `A problem occurred creating ${values.groupname}` })
+          setStatus({ isLoading: false, success: '', error: `A problem occurred creating ${values.groupName}` })
         }
       })
 
@@ -33,7 +33,7 @@ const CreateGroupForm = ({ status, setStatus }) => {
   return (
     <Formik
       initialValues={{
-        'groupname': '',
+        'groupName': '',
         'default': false
       }}
       validationSchema={groupValidationSchema}
@@ -44,7 +44,7 @@ const CreateGroupForm = ({ status, setStatus }) => {
       {({ errors, touched }) => (
         <Form className="flex flex-1 flex-col space-y-8">
           <div className="flex">
-            <StyledField name="groupname" label="Groupname" errors={errors.groupname} touched={touched.groupname} />
+            <StyledField name="groupName" label="Groupname" errors={errors.groupName} touched={touched.groupName} />
           </div>
           <div className="flex justify-end">
             <SubmitButton status={status} content='Create group' />

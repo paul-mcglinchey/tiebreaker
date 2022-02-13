@@ -1,9 +1,8 @@
-export { default as ClientOptions } from './ClientOptions';
-export { default as AddNewClient } from './AddNewClient';
-export { default as AddNewClientForm } from './AddNewClientForm';
+export * from './AddClient';
+export * from './EditClient';
+export * from './DeleteClient';
+export * from './ViewClient';
+export * from './Sessions';
+export * from './Common';
+
 export { default as ClientList } from './ClientList';
-export { default as ClientSessions } from './ClientSessions';
-export { default as DeleteClient } from './DeleteClient';
-export { default as PageChanger } from './PageChanger';
-export { default as ClientPrompter } from './ClientPrompter';
-export { default as SearchBar } from './SearchBar';

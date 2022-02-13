@@ -1,5 +1,6 @@
-import { AddNewClientForm } from '.';
-import { Toolbar } from '..';
+import { AddClientForm } from ".";
+import { Toolbar } from "../..";
+
 
 const AddNewClient = ({ userGroup, setUserGroup, status, setStatus }) => {
 
@@ -8,7 +9,7 @@ const AddNewClient = ({ userGroup, setUserGroup, status, setStatus }) => {
       <Toolbar userGroup={userGroup} setUserGroup={setUserGroup} status={status}>
         Add new clients
       </Toolbar>
-      <AddNewClientForm userGroup={userGroup} status={status} setStatus={setStatus} />
+      <AddClientForm userGroup={userGroup} status={status} setStatus={setStatus} />
     </div>
   )
 }

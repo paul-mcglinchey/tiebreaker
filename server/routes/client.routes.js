@@ -16,6 +16,9 @@ module.exports = app => {
   // Create a new client
   router.post('/', middleware.createClient.isGroupNameSet, clients.create);
 
+  // Update a client
+  router.put('/:clientId', clients.updateClient);
+
   // Add a session to a client
   router.put('/:clientId/sessions', clients.addSession);
 

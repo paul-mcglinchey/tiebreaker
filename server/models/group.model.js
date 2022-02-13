@@ -4,7 +4,7 @@ const Schema = require('mongoose');
 const Group = mongoose.model(
   "Group",
   new mongoose.Schema({
-    groupname: { type: String, required: true },
+    groupName: { type: String, required: true },
     default: { type: Boolean, required: true },
     users: [String],
     clients: [{

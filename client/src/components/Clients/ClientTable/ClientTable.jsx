@@ -1,5 +1,5 @@
 import { ClientRow, Header } from ".";
-import { ClientPrompter } from "..";
+import { ClientPrompter } from "../Common";
 import InteractiveHeader from "./InteractiveHeader";
 
 const ClientTable = ({ clients, totalClients, userGroup, sortField, setSortField, sortDirection, setSortDirection, headers }) => {
@@ -10,7 +10,7 @@ const ClientTable = ({ clients, totalClients, userGroup, sortField, setSortField
         <thead className="bg-gray-800">
           <tr>
             {headers.map((h, i) => (
-              <Header>
+              <Header key={i}>
                 {h.interactive ? (
                   <InteractiveHeader sortField={sortField} sortDirection={sortDirection} setSortField={setSortField} setSortDirection={setSortDirection} key={i} value={h.value}>
                     {h.name}

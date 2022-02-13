@@ -20,7 +20,7 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
 
   const location = useLocation();
 
-  const sessionHasValidUserGroup = groups && getUserInStorage() && groups.filter(g => g.groupname === getUserInStorage().groupname).length > 0;
+  const sessionHasValidUserGroup = groups && getUserInStorage() && groups.filter(g => g.groupName === getUserInStorage().groupName).length > 0;
   const defaultUserGroup = groups && groups.filter(g => g.default).length > 0 ? groups.filter(g => g.default)[0] : groups[0];
 
   const refreshUserGroup = () => {
@@ -44,7 +44,7 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
             {!sessionHasValidUserGroup && refreshUserGroup()}
-            {userGroup ? userGroup.groupname : 'Groups'}
+            {userGroup ? userGroup.groupName : 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -83,7 +83,7 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
                         'block px-4 py-2 text-sm font-medium'
                       )}
                     >
-                      {g.groupname}
+                      {g.groupName}
                     </button>
                   )}
                 </Menu.Item>

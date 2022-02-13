@@ -3,9 +3,10 @@ import { Formik, Form } from "formik";
 import Userfront from '@userfront/core';
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { StyledField, StyledDatePicker, CustomCheckbox, CustomDate } from "..";
-import { clientValidationSchema, endpoints, requestHelper } from "../../utilities";
-import SubmitButton from "../Common/SubmitButton";
+import { StyledField, StyledDatePicker, CustomCheckbox, CustomDate } from "../..";
+import { clientValidationSchema, endpoints, getTailwindColourClass, profileColours, requestHelper } from "../../../utilities";
+import SubmitButton from "../../Common/SubmitButton";
+import tailwindColours from "../../../utilities/config/profileColours";
 
 const AddNewClientForm = ({ userGroup, status, setStatus }) => {
 
@@ -32,8 +33,11 @@ const AddNewClientForm = ({ userGroup, status, setStatus }) => {
       return;
     }
 
-    values.groupname = userGroup && userGroup.groupname;
+    values.groupName = userGroup && userGroup.groupName;
     values.createdBy = values.updatedBy = Userfront.user.username;
+
+    // generates a new random colour to be used for profile display
+    values.clientColour = profileColours[Math.floor(Math.random() * profileColours.length)];
 
     await fetch((endpoints.clients), requestHelper.requestBuilder('POST', values))
       .then(res => {

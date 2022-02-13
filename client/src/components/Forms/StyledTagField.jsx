@@ -8,10 +8,6 @@ const StyledTagField = ({ tags, setTags, label, errors, touched }) => {
 
   useEffect(() => {
     document.getElementById("tagField").addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.getElementById("tagField").removeEventListener("keydown", handleKeyDown);
-    };
   });
 
   const handleKeyDown = (e) => {

@@ -12,7 +12,10 @@ import {
 import {
   Dashboard,
   NavMenu,
-  AddNewClient,
+  AddClient,
+  AddSession,
+  ViewClient,
+  EditClient,
   Groups,
   CreateGroup,
   Login,
@@ -20,7 +23,6 @@ import {
   PasswordReset,
   PasswordResetRequest
 } from './components';
-import { NewSession } from './components/Sessions';
 
 export default function App() {
 
@@ -73,21 +75,38 @@ export default function App() {
             }
           />
           <Route
-            path="/clients/:id/newsession"
+            path="clients/:clientId"
             element={
               <PrivateRoute>
-                <NewSession
-                  status={status}
-                  setStatus={setStatus}
-                />
+                <ViewClient />
               </PrivateRoute>
             }
-          />
+          >
+            <Route
+              path="edit"
+              element={
+                <PrivateRoute>
+                  <EditClient />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="addsession"
+              element={
+                <PrivateRoute>
+                  <AddSession
+                    status={status}
+                    setStatus={setStatus}
+                  />
+                </PrivateRoute>
+              }
+            />
+          </Route>
           <Route
             path="addclients"
             element={
               <PrivateRoute>
-                <AddNewClient
+                <AddClient
                   userGroup={userGroup}
                   setUserGroup={setUserGroup}
                   status={status}

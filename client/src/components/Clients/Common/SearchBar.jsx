@@ -1,5 +1,4 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import { Selector } from "..";
 
 const SearchBar = ({ filters, setFilters }) => {
 

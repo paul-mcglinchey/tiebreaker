@@ -47,7 +47,7 @@ exports.createGroup = async (req, res) => {
 
   // Create a new group model instance with the request body
   const group = new Group({
-    groupname: req.body.groupname,
+    groupName: req.body.groupName,
     default: req.body.default,
     users: req.auth.userUuid
   });
@@ -56,7 +56,7 @@ exports.createGroup = async (req, res) => {
   group
     .save(group)
     .then(data => {
-      res.status(200).send({ data: data, success: `Group ${req.body.groupname} added.` })
+      res.status(200).send({ data: data, success: `Group ${req.body.groupName} added.` })
     })
     .catch(err => {
       res.status(500).send({
@@ -72,21 +72,21 @@ exports.deleteGroup = async (req, res) => {
     return;
   }
 
-  Group.findOne({ groupname: req.body.groupname })
+  Group.findOne({ groupName: req.body.groupName })
     .then(group => {
       var clientIds = group.clients;
       Client.deleteMany({ _id: clientIds })
         .then(() => {
-          Group.updateOne({ groupname: req.body.groupname }, { clients: [] })
+          Group.updateOne({ groupName: req.body.groupName }, { clients: [] })
             .catch(err => {
               res.status(500).send({
-                message: err.message || `Could not update the group with name \"${req.body.groupname}\"`
+                message: err.message || `Could not update the group with name \"${req.body.groupName}\"`
               });
             })
         })
         .catch(err => {
           res.status(500).send({
-            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupname}.`
+            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupName}.`
           })
         });
     })
@@ -94,7 +94,7 @@ exports.deleteGroup = async (req, res) => {
       Group.findByIdAndDelete({ _id: req.body._id })
         .then(group => {
           res.status(200).send({
-            success: `Group ${group.groupname} successfully deleted.`
+            success: `Group ${group.groupName} successfully deleted.`
           })
         })
         .catch(err => {
@@ -113,7 +113,7 @@ exports.deleteGroup = async (req, res) => {
 exports.setDefaultGroup = async (req, res) => {
   Group.updateMany({ users: req.auth.userUuid }, { $set: { default: false }})
     .then(() => {
-      Group.updateOne({ _id: req.body._id, groupname: req.body.groupname }, { $set: { default: true }})
+      Group.updateOne({ _id: req.body._id, groupName: req.body.groupName }, { $set: { default: true }})
         .then(() => {
           res.sendStatus(200);
         })

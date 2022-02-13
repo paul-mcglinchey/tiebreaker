@@ -7,14 +7,14 @@ const Session = db.session;
 // Read operations
 
 // Retrieve all clients from the database
-exports.findAll = async (req, res, next) => {
+exports.findAll = async (req, res) => {
 
-  let { pageSize, pageNumber, groupname, sortField, sortDirection, clientName } = await req.query;
+  let { pageSize, pageNumber, groupName, sortField, sortDirection, clientName } = await req.query;
 
   pageSize = parseInt(pageSize);
   pageNumber = parseInt(pageNumber);
 
-  Group.findOne({ groupname: groupname })
+  Group.findOne({ groupName: groupName })
     .then(async (group) => {
 
       // all the clients that belong to the requested group
@@ -28,7 +28,7 @@ exports.findAll = async (req, res, next) => {
         .then(clientCount => clientCount)
         .catch(err => res.status(500)
           .send({
-            message: err.message || `A problem occurred fetching the number of clients for group ${groupname}.`
+            message: err.message || `A problem occurred fetching the number of clients for group ${groupName}.`
           }));
       
       // create the aggregate object (functions like an IQueryable)
@@ -38,7 +38,7 @@ exports.findAll = async (req, res, next) => {
       // add a new fullName field to filter on
       await aggregate
         .match(clientQuery)
-        .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } })
+        .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
       
       // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
       if (clientName) {
@@ -53,7 +53,7 @@ exports.findAll = async (req, res, next) => {
         .then(clients => clients)
         .catch(err => res.status(500)
           .send({
-            message: err.message || `A problem occurred fetching the list of clients for group ${groupname}.`
+            message: err.message || `A problem occurred fetching the list of clients for group ${groupName}.`
           }))
 
       res.status(200).send({
@@ -70,13 +70,28 @@ exports.findAll = async (req, res, next) => {
 };
 
 // Retrieve a specific client by Id
-exports.findById = async (req, res, next) => {
-  Client.findById(req.params.clientId)
-    .then(client => res.status(200).send(client))
-    .catch(err => res.status(500)
-      .send({
-        message: err.message || `A problem occurred fetching client with ID ${req.params.clientId}.`
-      }));
+exports.findById = async (req, res) => {
+
+  // convert the clientId from a string to an ObjectId for the aggregation pipeline
+  const clientId = new ObjectId(req.params.clientId);
+
+  // create the aggregator so we can add custom fields
+  const aggregate = Client.aggregate();
+
+  // apply a match operator and add a fullname field
+  await aggregate
+    .match({ _id: clientId })
+    .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
+
+  const client = await aggregate
+    .then(client => client[0])
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || `A problem occurred fetching client with ID ${clientId}.`
+      })
+    });
+
+  res.status(200).send({ client });
 }
 
 // CUD Operations
@@ -87,7 +102,8 @@ exports.create = (req, res) => {
     addressLineOne, addressLineTwo, addressLineThree, city, country, postCode,
     birthdate,
     email, phoneNumber, emails, phoneNumbers,
-    createdBy, updatedBy
+    createdBy, updatedBy,
+    clientColour
   } = req.body;
 
   console.log(req.auth);
@@ -122,7 +138,8 @@ exports.create = (req, res) => {
     updatedBy: {
       uuid: req.auth.userUuid,
       name: updatedBy
-    }
+    },
+    clientColour: clientColour
   });
 
   // Save client in the database
@@ -130,10 +147,10 @@ exports.create = (req, res) => {
     .save(client)
     .then(data => {
       // Add the client to the group which was selected
-      Group.updateOne({ groupname: req.body.groupname }, { $push: { clients: new ObjectId(data._id) } })
+      Group.updateOne({ groupName: req.body.groupName }, { $push: { clients: new ObjectId(data._id) } })
         .then(() => {
           res.status(200).send({
-            success: `Client created successfully in ${req.body.groupname}.`
+            success: `Client created successfully in ${req.body.groupName}.`
           })
         })
         .catch(err => {
@@ -151,14 +168,28 @@ exports.create = (req, res) => {
     });
 };
 
-// Update a client's sessions
+// Update a client
+exports.updateClient = (req, res) => {
+  const { clientId } = req.params;
+
+  console.log(req.body);
+
+  Client.findByIdAndUpdate(clientId, req.body)
+    .then(client => {
+      res.status(200).send(client);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || `Could not update the client with ID ${clientId}.`
+      })
+    });
+}
+
+// Add a session to a specific client
 exports.addSession = (req, res) => {
 
   const { clientId } = req.params;
-  console.log(req.body);
   const { title, description, tags, sessionDate, createdBy, updatedBy } = req.body;
-
-  console.log(tags, typeof tags);
 
   const session = new Session({
     title: title,
@@ -176,7 +207,23 @@ exports.addSession = (req, res) => {
   });
 
   Client.findByIdAndUpdate(clientId, { $push: { sessions: session } })
-    .then(client => res.status(200).send({ updatedClient: client }))
+    .then(client => {
+
+      // update the metadata on the client
+      Client.findByIdAndUpdate(client._id, { updatedBy: { uuid: req.auth.userUuid, name: updatedBy }})
+        .catch(err => {
+          if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+              message: 'Client not found with id ' + clientId
+            });
+          };
+          return res.status(500).send({
+            message: err || `Could not update client with id ${clientId}`
+          });
+      });
+
+      res.status(200).send({ updatedClient: client })
+    })
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
@@ -192,7 +239,7 @@ exports.addSession = (req, res) => {
 // Deletes a client by ID
 exports.delete = (req, res) => {
   // Update the group clients array to remove this client
-  Group.findOneAndUpdate({ groupname: req.body.groupname }, { $pull: { clients: req.body.clientId } })
+  Group.findOneAndUpdate({ groupName: req.body.groupName }, { $pull: { clients: req.body.clientId } })
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({

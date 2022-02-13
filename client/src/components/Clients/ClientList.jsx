@@ -1,18 +1,9 @@
-import { SearchIcon } from '@heroicons/react/outline';
 import { Fragment, useState } from 'react';
 import { Fetch, SearchBar, SpinnerIcon } from '..';
 import { endpoints, useFetch, requestHelper } from '../../utilities';
 import { Paginator } from '..';
 import { ClientTable } from './ClientTable';
 import { ClientPrompter } from '.';
-import { queryString } from 'query-string';
-
-const filterOptions = [
-  { label: 'Name', value: 'clientName' },
-  { label: 'Last Updated By', value: 'updatedBy.name' },
-  { label: 'Last Visit', value: 'lastVisit' },
-  { label: 'Date of Birth', value: 'dateOfBirth' },
-]
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -26,9 +17,6 @@ const ClientList = ({ userGroup }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const [filter, setFilter] = useState(filterOptions[0]);
-  const [filterValue, setFilterValue] = useState(null);
-
   const [sortField, setSortField] = useState(headers[1].value);
   const [sortDirection, setSortDirection] = useState("descending");
 
@@ -36,25 +24,27 @@ const ClientList = ({ userGroup }) => {
     'clientName': { value: null, label: 'Name' }
   });
 
-  const buildFilterQueryString = () => {
+  const buildQueryString = () => {
     
-    var filterQueryString = "";
+    var queryString = "";
+
+    queryString += `pageNumber=${pageNumber}&pageSize=${pageSize}&`;
+    queryString += `groupName=${userGroup && userGroup.groupName}&`;
+    queryString += `sortField=${sortField}&sortDirection=${sortDirection}&`
 
     for (var key in filters) {
       if (filters[key].value) {
-        filterQueryString += `&${key}=${filters[key].value}`
+        queryString += `${key}=${filters[key].value}&`
       }
     }
 
-    return filterQueryString;
+    return queryString;
   }
-
-  const query = `pageNumber=${pageNumber}&pageSize=${pageSize}&groupname=${userGroup && userGroup.groupname}&sortField=${sortField}&sortDirection=${sortDirection}${buildFilterQueryString()}`;
 
   return (
     <Fetch
       fetchOutput={useFetch(
-        `${endpoints.clients}?${query}`, 
+        `${endpoints.clients}?${buildQueryString()}`, 
         requestHelper.requestBuilder("GET"), 
         [pageSize, pageNumber, filters, sortField, sortDirection]
       )}
