@@ -12,6 +12,8 @@ const ClientHeader = ({ client }) => {
         return " / Add session";
       case "edit":
         return " / Edit";
+      case "view":
+        return " / View";
       default:
         return "";
     }

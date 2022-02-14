@@ -1,8 +1,12 @@
+import { useContext } from "react";
 import { AddClientForm } from ".";
 import { Toolbar } from "../..";
+import { ApplicationContext } from "../../../utilities/contexts";
 
 
-const AddNewClient = ({ userGroup, setUserGroup, status, setStatus }) => {
+const AddNewClient = () => {
+
+  const { userGroup, setUserGroup, status, setStatus } = useContext(ApplicationContext);
 
   return (
     <div>

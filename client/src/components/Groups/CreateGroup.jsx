@@ -1,10 +1,13 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { UserGroupIcon } from '@heroicons/react/solid';
 
 import { CreateGroupForm } from '.';
 import { Toolbar } from '..';
+import { ApplicationContext } from '../../utilities/contexts';
 
-const CreateGroup = ({ userGroup, setUserGroup, status, setStatus }) => {
+const CreateGroup = () => {
+
+  const { userGroup, setUserGroup, status, setStatus } = useContext(ApplicationContext);
 
   return (
     <Fragment>

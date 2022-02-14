@@ -1,7 +1,12 @@
+import { useContext } from "react";
 import { AddSessionForm } from ".";
+import { ApplicationContext } from "../../../utilities/contexts";
 
 
-const AddSession = ({ status, setStatus, clientId }) => {
+const AddSession = ({ clientId }) => {
+
+  const { status, setStatus } = useContext(ApplicationContext);
+
   return (
     <div>
       <div className="flex space-x-4">

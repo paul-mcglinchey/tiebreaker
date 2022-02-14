@@ -1,8 +1,11 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { Fetch, GroupCard, GroupPrompter, Toolbar } from '..';
 import { endpoints, useFetch, requestHelper } from '../../utilities';
+import { ApplicationContext } from '../../utilities/contexts';
 
-const Groups = ({ userGroup, setUserGroup, status, setStatus }) => {
+const Groups = () => {
+
+  const { userGroup, setUserGroup, status, setStatus } = useContext(ApplicationContext);
 
   return (
     <Fetch

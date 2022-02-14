@@ -1,4 +1,5 @@
 export * from './AddClient';
+export * from './ClientPage';
 export * from './EditClient';
 export * from './DeleteClient';
 export * from './ViewClient';

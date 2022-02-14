@@ -30,6 +30,15 @@ const AddressSchema = new Schema({
   postCode: { type: String, required: false }
 })
 
+const ActivityLogSchema = new Schema({
+  task: { type: String, required: true },
+  supplementary: {},
+  actor: {
+    uuid: { type: String },
+    name: { type: String }
+  }
+}, { timestamps: true });
+
 const Client = mongoose.model(
   "Client",
   new Schema({
@@ -38,6 +47,8 @@ const Client = mongoose.model(
     birthdate: { type: Date, required: true },
     contactInfo: ContactInfoSchema,
     sessions: [SessionSchema],
+    clientColour: String,
+    activityLog: [ActivityLogSchema],
     createdBy: {
       uuid: { type: String },
       name: { type: String }
@@ -46,7 +57,6 @@ const Client = mongoose.model(
       uuid: { type: String },
       name: { type: String }
     },
-    clientColour: String
   }, { timestamps: true })
 );
 

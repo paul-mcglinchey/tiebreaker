@@ -1,9 +1,12 @@
-import { Fragment, React } from 'react';
+import { Fragment, React, useContext } from 'react';
 
 import { ClientList, Fetch, Toolbar, GroupPrompter } from '.';
 import { useFetch, endpoints, requestHelper } from '../utilities';
+import { ApplicationContext } from '../utilities/contexts';
 
-const Dashboard = ({ userGroup, setUserGroup, status, setStatus }) => {
+const Dashboard = () => {
+
+  const { userGroup, setUserGroup, status } = useContext(ApplicationContext);
 
   return (
     <Fetch

@@ -131,6 +131,14 @@ exports.create = (req, res) => {
       phoneNumbers: phoneNumbers
     },
     sessions: [],
+    clientColour: clientColour,
+    activityLog: {
+      task: "created",
+      actor: {
+        uuid: req.auth.userUuid,
+        name: createdBy
+      }
+    },
     createdBy: {
       uuid: req.auth.userUuid,
       name: createdBy
@@ -139,7 +147,6 @@ exports.create = (req, res) => {
       uuid: req.auth.userUuid,
       name: updatedBy
     },
-    clientColour: clientColour
   });
 
   // Save client in the database
@@ -172,9 +179,16 @@ exports.create = (req, res) => {
 exports.updateClient = (req, res) => {
   const { clientId } = req.params;
 
-  console.log(req.body);
+  var updateBody = req.body.updateBody;
+  updateBody.activityLog.push({
+    task: "updated",
+    actor: {
+      uuid: req.auth.userUuid,
+      name: req.body.updatedBy
+    }
+  })
 
-  Client.findByIdAndUpdate(clientId, req.body)
+  Client.findByIdAndUpdate(clientId, updateBody)
     .then(client => {
       res.status(200).send(client);
     })
@@ -210,7 +224,19 @@ exports.addSession = (req, res) => {
     .then(client => {
 
       // update the metadata on the client
-      Client.findByIdAndUpdate(client._id, { updatedBy: { uuid: req.auth.userUuid, name: updatedBy }})
+      Client.findByIdAndUpdate(client._id, { 
+          updatedBy: { 
+            uuid: req.auth.userUuid, 
+            name: updatedBy 
+          },
+          $push: { activityLog: {
+            task: "added session",
+            actor: {
+              uuid: req.auth.userUuid,
+              name: updatedBy
+            }
+          }}
+        })
         .catch(err => {
           if (err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({

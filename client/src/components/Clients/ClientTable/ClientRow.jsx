@@ -1,6 +1,6 @@
 import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
-import InlineLink from './InlineLink';
+import InlineLink from '../Common/InlineLink';
 import { Fragment, useState } from 'react';
 
 const ClientRow = ({ client, userGroup }) => {
@@ -50,7 +50,7 @@ const ClientRow = ({ client, userGroup }) => {
         </RowItem>
         <RowItem>
           <div className="flex items-center space-x-2 justify-end">
-            <InlineLink to={`/clients/${client._id}`} color="text-gray-500">View</InlineLink>
+            <InlineLink to={`/clients/${client._id}/view`} color="text-gray-500">View</InlineLink>
             <InlineLink to={`/clients/${client._id}/edit`} color="text-blue-500">Edit</InlineLink>
           </div>
         </RowItem>
