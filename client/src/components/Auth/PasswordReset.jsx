@@ -45,8 +45,8 @@ const PasswordReset = (props) => {
             <Form>
               <div className="flex flex-col space-y-4">
                 <div className="flex-col space-y-2">
-                  <StyledField name="password1" type="password" placeholder="password1" errors={errors.password1} touched={touched.password1} />
-                  <StyledField name="password2" type="password" placeholder="password2" errors={errors.password2} touched={touched.password2} />
+                  <StyledField name="password1" type="password" label="password1" errors={errors.password1} touched={touched.password1} />
+                  <StyledField name="password2" type="password" label="password2" errors={errors.password2} touched={touched.password2} />
                 </div>
                 <div className="flex justify-between">
                   <SubmitButton content="Reset password" />

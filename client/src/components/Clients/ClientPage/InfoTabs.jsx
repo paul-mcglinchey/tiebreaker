@@ -1,6 +1,12 @@
 import { Tab } from "@headlessui/react";
 import { classNames } from "../../../utilities";
-import { infoTabs } from "./Common/tabs.config";
+import ActivityLog from './ActivityLog';
+
+const infoTabs = [
+  { title: "Activity Log", component: ActivityLog },
+  { title: "Contact Info" },
+  { title: "Contributors" },
+]
 
 const InfoTabs = ({ client }) => {
 

@@ -11,7 +11,7 @@ import SubmitButton from '../Common/SubmitButton';
 
 Userfront.init("wn9p69b5");
 
-const Login = (props) => {
+const Login = () => {
 
   const [error, setError] = useState();
 
@@ -45,8 +45,8 @@ const Login = (props) => {
             <Form>
               <div className="flex flex-col space-y-4">
                 <div className="flex-col space-y-2">
-                  <StyledField name="emailOrUsername" placeholder="Email or Username" errors={errors.emailOrUsername} touched={touched.emailOrUsername} />
-                  <StyledField name="password" type="password" placeholder="Password" errors={errors.password} touched={touched.password} />
+                  <StyledField name="emailOrUsername" label="Email or Username" errors={errors.emailOrUsername} touched={touched.emailOrUsername} />
+                  <StyledField name="password" type="password" label="Password" errors={errors.password} touched={touched.password} />
                 </div>
                 <div className="flex justify-between">
                   <Link to='/signup'>

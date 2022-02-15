@@ -46,7 +46,7 @@ const PasswordResetRequest = (props) => {
             <Form>
               <div className="flex flex-col space-y-4">
                 <div className="flex-col space-y-2">
-                  <StyledField name="email" placeholder="Email" errors={errors.email} touched={touched.email} />
+                  <StyledField name="email" label="Email" errors={errors.email} touched={touched.email} />
                 </div>
                 <div className="flex justify-between">
                   <Link to='/login'>

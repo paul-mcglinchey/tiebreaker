@@ -19,7 +19,12 @@ const ClientOverview = ({ client }) => {
             <span className="text-gray-400 tracking-wide text-sm">Client since: {new Date(createdAt).toLocaleDateString()}</span>
           </div>
           <div className="border-t border-gray-600 pt-2">
-            <span className="text-gray-400 tracking-wide text-sm">Last updated: {new Date(updatedAt).toLocaleDateString()} by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">{updatedBy.name}</span></span>
+            <span className="text-gray-400 tracking-wide text-sm">
+              Last updated: {new Date(updatedAt).toLocaleDateString()}
+              {updatedBy && (
+                <span> by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">{updatedBy.name}</span></span>
+              )}
+            </span>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 const ActivityLog = ({ client }) => {
 
-  const { activityLog } = client;
-  console.log(activityLog)
+  const activityLog = { client };
 
   return (
     <div>

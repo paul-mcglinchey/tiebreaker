@@ -35,10 +35,8 @@ const ClientRow = ({ client, userGroup }) => {
           <div className="flex flex-grow items-center justify-start">
             {client.sessions.length > 0 ? (
               <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
-                <span>Sessions</span>
-                <div className="pr-1">
-                  <span className="text-center text-lg">{client.sessions.length}</span>
-                </div>
+                <span className="self-center pt-0.5">Sessions</span>
+                <span className="text-lg">{client.sessions.length}</span>
               </InlineLink>
             ) : (
               <InlineLink to={`/clients/${client._id}/addsession`} color="text-green-500">
