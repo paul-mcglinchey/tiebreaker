@@ -199,6 +199,21 @@ exports.updateClient = (req, res) => {
     });
 }
 
+// Get a client and update their profile colour
+exports.updateColour = (req, res) => {
+  const { clientId } = req.params;
+
+  var clientColour = req.body.clientColour;
+
+  Client.findByIdAndUpdate(clientId, { clientColour: clientColour })
+    .then(client => res.status(200).send({ client }))
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || `A problem occurred updating client ${clientId} with colour ${profileColour}.`
+      })
+    });
+}
+
 // Add a session to a specific client
 exports.addSession = (req, res) => {
 

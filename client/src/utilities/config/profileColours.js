@@ -7,33 +7,26 @@ const profileColours = [
   "#db2777", // pink-600
   "#be185d", // pink-700
   "#6d28d9", // violet-700
-  "#5b21b6", // violet-700
   "#4f46e5", // indigo-600
-  "#4338ca", // indigo-700
   "#3730a3", // indigo-700
   "#3b82f6", // blue-500
   "#2563eb", // blue-600
   "#1d4ed8", // blue-700
-  "#1e40af", // blue-800
   "#0284c7", // sky-600
   "#0369a1", // sky-700
   "#075985", // sky-800
   "#06b6d4", // cyan-500
   "#0891b2", // cyan-600
   "#0e7490", // cyan-700
-  "#2dd4bf", // teal-400
   "#14b8a6", // teal-500
   "#0d9488", // teal-600
   "#0f766e", // teal-700
-  "#115e59", // teal-800
   "#10b981", // emerald-500
   "#059669", // emerald-600
   "#047857", // emerald-700
-  "#065f46", // emerald-800
   "#22c55e", // green-500
   "#16a34a", // green-600
   "#15803d", // green-700
-  "#166534", // green-800
   "#65a30d", // lime-600
   "#3f6212", // lime-800
   "#eab308", // yellow-500

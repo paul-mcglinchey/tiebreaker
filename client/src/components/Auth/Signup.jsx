@@ -13,7 +13,7 @@ import SubmitButton from '../Common/SubmitButton';
 
 Userfront.init("wn9p69b5");
 
-const Signup = (props) => {
+const Signup = () => {
 
   const [error, setError] = useState('');
 
@@ -50,9 +50,9 @@ const Signup = (props) => {
             <Form>
               <div className="flex flex-col space-y-4">
                 <div className="flex-col space-y-2">
-                  <StyledField name="email" placeholder="Email" errors={errors.email} touched={touched.email} />
-                  <StyledField name="username" placeholder="Username" errors={errors.username} touched={touched.username} />
-                  <StyledField name="password" type="password" placeholder="Password" errors={errors.password} touched={touched.password} />
+                  <StyledField name="email" label="Email" errors={errors.email} touched={touched.email} />
+                  <StyledField name="username" label="Username" errors={errors.username} touched={touched.username} />
+                  <StyledField name="password" type="password" label="Password" errors={errors.password} touched={touched.password} />
                 </div>
                 <div className="flex flex-grow justify-end">
                   <SubmitButton content="Sign up" />

@@ -19,6 +19,9 @@ module.exports = app => {
   // Update a client
   router.put('/:clientId', clients.updateClient);
 
+  // Update a client's colour
+  router.put('/:clientId/colours', clients.updateColour);
+
   // Add a session to a client
   router.put('/:clientId/sessions', clients.addSession);
 

@@ -1,6 +1,11 @@
-import { operationsTabs } from "./Common/tabs.config";
 import { classNames } from "../../../utilities";
 import { SmartLink } from "../..";
+
+const operationsTabs = [
+  { href: "view", content: "View" },
+  { href: "edit", content: "Edit" },
+  { href: "addsession", content: "Add Session" },
+]
 
 const OperationsTabs = () => {
 
