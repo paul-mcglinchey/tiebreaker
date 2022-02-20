@@ -1,6 +1,7 @@
 const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
 const SessionSchema = require('./session.model').SessionSchema;
+const ActivityLogSchema = require('./activitylog.model').ActivityLogSchema;
 
 const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
@@ -28,16 +29,7 @@ const AddressSchema = new Schema({
   city: { type: String, trim: true, required: false },
   country: { type: String, required: false },
   postCode: { type: String, required: false }
-})
-
-const ActivityLogSchema = new Schema({
-  task: { type: String, required: true },
-  supplementary: {},
-  actor: {
-    uuid: { type: String },
-    name: { type: String }
-  }
-}, { timestamps: true });
+});
 
 const Client = mongoose.model(
   "Client",
@@ -49,14 +41,8 @@ const Client = mongoose.model(
     sessions: [SessionSchema],
     clientColour: String,
     activityLog: [ActivityLogSchema],
-    createdBy: {
-      uuid: { type: String },
-      name: { type: String }
-    },
-    updatedBy: {
-      uuid: { type: String },
-      name: { type: String }
-    },
+    createdBy: String,
+    updatedBy: String
   }, { timestamps: true })
 );
 

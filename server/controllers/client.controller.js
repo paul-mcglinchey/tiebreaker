@@ -3,6 +3,7 @@ const db = require('../models');
 const Group = db.group;
 const Client = db.client;
 const Session = db.session;
+const ActivityLog = db.activitylog;
 
 // Read operations
 
@@ -84,7 +85,18 @@ exports.findById = async (req, res) => {
     .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
 
   const client = await aggregate
-    .then(client => client[0])
+    .then(client => {
+
+      const activityLog = new ActivityLog({
+        task: "viewed",
+        actor: req.auth.userUuid
+      });
+
+      Client.findByIdAndUpdate(client[0]._id, { $push: { activityLog: activityLog } })
+        .then(client => console.log(client));
+      
+      return client[0]
+    })
     .catch(err => {
       res.status(500).send({
         message: err.message || `A problem occurred fetching client with ID ${clientId}.`
@@ -102,7 +114,6 @@ exports.create = (req, res) => {
     addressLineOne, addressLineTwo, addressLineThree, city, country, postCode,
     birthdate,
     email, phoneNumber, emails, phoneNumbers,
-    createdBy, updatedBy,
     clientColour
   } = req.body;
 
@@ -134,19 +145,10 @@ exports.create = (req, res) => {
     clientColour: clientColour,
     activityLog: {
       task: "created",
-      actor: {
-        uuid: req.auth.userUuid,
-        name: createdBy
-      }
+      actor: req.auth.userUuid
     },
-    createdBy: {
-      uuid: req.auth.userUuid,
-      name: createdBy
-    },
-    updatedBy: {
-      uuid: req.auth.userUuid,
-      name: updatedBy
-    },
+    createdBy: req.auth.userUuid,
+    updatedBy: req.auth.userUuid
   });
 
   // Save client in the database
@@ -182,10 +184,7 @@ exports.updateClient = (req, res) => {
   var updateBody = req.body.updateBody;
   updateBody.activityLog.push({
     task: "updated",
-    actor: {
-      uuid: req.auth.userUuid,
-      name: req.body.updatedBy
-    }
+    actor: req.auth.userUuid
   })
 
   Client.findByIdAndUpdate(clientId, updateBody)
@@ -225,14 +224,8 @@ exports.addSession = (req, res) => {
     description: description,
     tags: tags,
     sessionDate: sessionDate,
-    createdBy: {
-      uuid: req.auth.userUuid,
-      name: createdBy
-    },
-    updatedBy: {
-      uuid: req.auth.userUuid,
-      name: updatedBy
-    }
+    createdBy: req.auth.userUuid,
+    updatedBy: req.auth.userUuid
   });
 
   Client.findByIdAndUpdate(clientId, { $push: { sessions: session } })
@@ -240,16 +233,10 @@ exports.addSession = (req, res) => {
 
       // update the metadata on the client
       Client.findByIdAndUpdate(client._id, { 
-          updatedBy: { 
-            uuid: req.auth.userUuid, 
-            name: updatedBy 
-          },
+          updatedBy: req.auth.userUuid,
           $push: { activityLog: {
             task: "added session",
-            actor: {
-              uuid: req.auth.userUuid,
-              name: updatedBy
-            }
+            actor: req.auth.userUuid
           }}
         })
         .catch(err => {
