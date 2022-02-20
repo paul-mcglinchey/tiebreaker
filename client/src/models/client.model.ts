@@ -11,7 +11,7 @@ export interface IClient {
   updatedAt: Date,
   createdBy?: string,
   updatedBy?: string,
-  clientColour?: string,
+  clientColour?: string | undefined,
   activityLog?: IActivityLog[],
   fullName: string,
 }

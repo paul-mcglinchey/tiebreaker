@@ -5,8 +5,7 @@ import InteractiveHeader from "./InteractiveHeader";
 
 const ClientTable = ({ 
   clients, 
-  totalClients, 
-  userGroup, 
+  totalClients,
   sortField, 
   setSortField, 
   sortDirection, 

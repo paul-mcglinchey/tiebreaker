@@ -1,5 +1,3 @@
-import { IFetchProps } from "../../models";
-
-export default function Fetch({ render, fetchOutput }: IFetchProps) {
+export default function Fetch({ render, fetchOutput }: any) {
   return render(fetchOutput);
 }

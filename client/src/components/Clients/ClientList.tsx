@@ -20,7 +20,7 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const [sortField, setSortField] = useState(headers[1].value);
+  const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
 
   const [filters, setFilters] = useState<IFilter>({
@@ -36,8 +36,8 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
     queryString += `sortField=${sortField}&sortDirection=${sortDirection}&`
 
     for (var key in filters) {
-      if (filters[key].value) {
-        queryString += `${key}=${filters[key].value}&`
+      if (filters[key]!.value) {
+        queryString += `${key}=${filters[key]!.value}&`
       }
     }
 
@@ -51,7 +51,7 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
         requestBuilder(), 
         [pageSize, pageNumber, filters, sortField, sortDirection]
       )}
-      render={({ response, error, isLoading }: any) => (
+      render={({ response, isLoading }: any) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {isLoading ? (
             <div className="flex justify-center py-10">
@@ -64,7 +64,7 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
                   <SearchBar
                     filters={filters}
                     setFilters={setFilters}
-                    key='clientName'
+                    searchField='clientName'
                   />
                   <ClientTable
                     clients={response.clients}

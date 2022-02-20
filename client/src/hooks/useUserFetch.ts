@@ -12,13 +12,18 @@ const useUserFetch = (url: string, options: RequestInit, uuid: string, deps: any
     const _fetch = async () => {
       fetch(url, options)
         .then(res => res.json())
-        .then(json => setResponse(json))
+        .then(json => console.log('json:', json))
         .catch(err => setError(err))
     }
-
-    if (response) {
+    console.log('response:', response)
+    if (!response) {
       _fetch();
+      console.log('response after fetching:', response)
       updateUsersInStorage(uuid, response);
+    }
+
+    if (error) {
+      console.error(error);
     }
 
     setIsLoading(false);

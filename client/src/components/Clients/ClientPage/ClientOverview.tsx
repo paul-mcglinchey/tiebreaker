@@ -27,10 +27,10 @@ const ClientOverview = ({ client }: IClientProps) => {
             <span className="text-gray-400 tracking-wide text-sm">
               Last updated: {new Date(updatedAt).toLocaleDateString()}
                 <Fetch
-                  fetchOutput={useUserFetch(endpoints.user(updatedBy || ""), requestBuilder("GET", userfrontapi), updatedBy || "")}
+                  fetchOutput={useUserFetch(endpoints.user(updatedBy || ""), requestBuilder("GET", userfrontapi()), updatedBy || "")}
                   render={({ response }: IFetch) => (
                     <span> by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">
-                      
+                      {response && (<span>Hello</span>)}
                     </span></span>
                   )}
                 />

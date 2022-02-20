@@ -1,11 +1,11 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import { ISearchBarProps } from "../../../models";
 
-const SearchBar = ({ filters, setFilters, key }: ISearchBarProps) => {
+const SearchBar = ({ filters, setFilters, searchField }: ISearchBarProps) => {
 
   const handleChange = (value: string) => {
     setFilters({
-      ...filters, [key]: { ...filters[key], value: value }
+      ...filters, [searchField]: { ...filters[searchField]!, value: value }
     });
   }
 

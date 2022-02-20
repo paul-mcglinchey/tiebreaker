@@ -60,9 +60,7 @@ export default function App() {
             {/* Dashboard Routes */}
             <Route path="/" element={<Navigate to="/dashboard" />} />
             <Route path="dashboard" element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
+              <Dashboard />
             } />
 
             {/* Client specific routes */}

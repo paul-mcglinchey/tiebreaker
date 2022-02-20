@@ -1,7 +1,7 @@
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api/';
+const BASE_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/api/';
 const USERS_URL = 'https://api.userfront.com/';
 
-const endpoints = {
+export const endpoints = {
     "origin": BASE_URL,
     "clients": BASE_URL + "clients",
     "colours": (clientId: string) => BASE_URL + `clients/${clientId}/colours`,
@@ -11,5 +11,3 @@ const endpoints = {
     "groupdefault": BASE_URL + "groups/default",
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
 }
-
-export default endpoints;

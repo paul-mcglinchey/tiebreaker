@@ -10,7 +10,7 @@ const ColourPicker = ({ client }: IClientProps) => {
   const { setStatus } = useContext(ApplicationContext);
 
   const setProfileColour = () => {
-    const clientColour = generateColour();
+    const clientColour = generateColour() || "";
 
     updateProfileColour(clientColour);
 

@@ -24,5 +24,5 @@ export const getUserInStorage = (uuid: string) => {
 }
 
 export const updateUsersInStorage = (uuid: string, user: any) => {
-  sessionStorage.setItem("users", { ...getUsersInStorage(), [uuid]: user });
+  sessionStorage.setItem("users", JSON.stringify({ ...getUsersInStorage(), [uuid]: user }));
 }
