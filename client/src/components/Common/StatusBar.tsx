@@ -1,6 +1,7 @@
 import { BanIcon, CheckIcon } from "@heroicons/react/solid";
+import { IStatusReadOnlyProps } from "../../models";
 
-const StatusBar = ({ status = { isLoading: false, isFetchLoading: false, success: '', error: ''} }) => {
+const StatusBar = ({ status }: IStatusReadOnlyProps) => {
 
   const {success, error} = status;
 

@@ -13,18 +13,15 @@ import { getUserGroupInStorage } from './services';
 import { IApplicationContext, IStatus, IUserGroup } from './models';
 import {
   AddClient,
-  AddSession,
   ClientPage,
-  CreateGroup,
+  AddGroup,
   Dashboard,
-  EditClient,
   Groups,
   Login,
   NavMenu,
   PasswordReset,
   PasswordResetRequest,
-  Signup,
-  ViewClient
+  Signup
 } from './components';
 
 export default function App() {
@@ -73,12 +70,7 @@ export default function App() {
               <PrivateRoute>
                 <ClientPage />
               </PrivateRoute>
-            }>
-              <Route index element={<ViewClient />} />
-              <Route path="view" element={<ViewClient />} />
-              <Route path="edit" element={<EditClient />} />
-              <Route path="addsession" element={<AddSession />} />
-            </Route>
+            }/>
 
             {/* Navbar routes */}
             <Route path="addclients"
@@ -100,7 +92,7 @@ export default function App() {
             <Route path="creategroup"
               element={
                 <PrivateRoute>
-                  <CreateGroup />
+                  <AddGroup />
                 </PrivateRoute>
               }
             />

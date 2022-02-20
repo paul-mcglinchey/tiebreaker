@@ -3,19 +3,19 @@ import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../../utilities/schema';
 import { SubmitButton } from '../../Common';
 import { endpoints } from '../../../utilities/config';
-import Userfront from '@userfront/core';
 import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '../..';
 import { requestBuilder } from '../../../services';
+import { IClientProps, IStatusProps, ITag } from '../../../models';
+import { IAddSession } from '../../../models/add-session.model';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
-const AddSessionForm = ({ client, status, setStatus }) => {
+const AddSessionForm = ({ client, status, setStatus }: IClientProps & IStatusProps) => {
 
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<ITag[]>([]);
 
-  const handleSubmit = async (values) => {
-    console.log('here');
+  const handleSubmit = async (values: IAddSession) => {
     setStatus({
       isLoading: true,
       success: '',
@@ -32,14 +32,13 @@ const AddSessionForm = ({ client, status, setStatus }) => {
     }
 
     // Adding user metadata and tags to the post body
-    values.createdBy = values.updatedBy = Userfront.user.username;
     values.tags = [];
 
-    tags.forEach(t => {
-      values.tags.push(t.value);
+    tags.forEach((t: ITag) => {
+      values.tags!.push(t.value);
     })
 
-    await fetch((endpoints.sessions(client)), requestBuilder('PUT', undefined, values))
+    await fetch((endpoints.sessions(client._id)), requestBuilder('PUT', undefined, values))
       .then(res => {
         if (res.ok) {
           setStatus({ isLoading: false, success: `Added session successfully`, error: '' });
@@ -64,7 +63,6 @@ const AddSessionForm = ({ client, status, setStatus }) => {
         }}
         validationSchema={sessionValidationSchema}
         onSubmit={(values, { resetForm }) => {
-          console.log(values);
           handleSubmit(values);
           resetForm();
         }}

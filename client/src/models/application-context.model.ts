@@ -1,9 +1,8 @@
-import { IUserGroup } from ".";
-import { IStatus } from "./status.model";
+import { IStatus, IUserGroup } from ".";
 
 export interface IApplicationContext {
-  userGroup: IUserGroup | null,
-  setUserGroup: ((userGroup: IUserGroup) => void) | null,
-  status: IStatus | null,
-  setStatus: ((status: IStatus) => void) | null
+  userGroup: IUserGroup,
+  setUserGroup: ((userGroup: IUserGroup) => void),
+  status: IStatus,
+  setStatus: ((status: IStatus) => void)
 }

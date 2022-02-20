@@ -1,13 +1,14 @@
 import { Formik, Form } from 'formik';
 
 import { StyledField } from '..';
+import { IAddGroup, IStatusProps } from '../../models';
 import { requestBuilder } from '../../services';
 import { endpoints, groupValidationSchema } from '../../utilities';
 import SubmitButton from '../Common/SubmitButton';
 
-const CreateGroupForm = ({ status, setStatus }) => {
+const AddGroupForm = ({ status, setStatus }: IStatusProps) => {
 
-  const createGroup = (values) => {
+  const addGroup = (values: IAddGroup) => {
     setStatus({
       isLoading: true,
       success: '',
@@ -39,7 +40,7 @@ const CreateGroupForm = ({ status, setStatus }) => {
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
-        createGroup(values);
+        addGroup(values);
       }}
     >
       {({ errors, touched }) => (
@@ -56,4 +57,4 @@ const CreateGroupForm = ({ status, setStatus }) => {
   )
 }
 
-export default CreateGroupForm;
+export default AddGroupForm;

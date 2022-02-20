@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
 import { requestBuilder } from "../../../services";
 import { CustomCheckbox, CustomDate, StyledDatePicker, StyledField, SubmitButton } from "../..";
-import { clientValidationSchema, endpoints, profileColours } from "../../../utilities";
-import { IAddClient, IApplicationContext } from "../../../models";
+import { ApplicationContext, clientValidationSchema, endpoints, profileColours } from "../../../utilities";
+import { IAddClient } from "../../../models";
 
-const AddNewClientForm = ({ userGroup, status, setStatus }: IApplicationContext) => {
+const AddNewClientForm = () => {
+
+  const { userGroup, status, setStatus } = useContext(ApplicationContext);
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -124,7 +126,7 @@ const AddNewClientForm = ({ userGroup, status, setStatus }: IApplicationContext)
                 </div>
                 <div className="flex flex-1 md:flex-row flex-col md:space-x-2 space-x-0 space-y-2 md:space-y-0">
                   <div className="md:max-w-1/5">
-                    <StyledField autocomplete="false" name="city" label="City" errors={errors.city} touched={touched.city} />
+                    <StyledField autoComplete="false" name="city" label="City" errors={errors.city} touched={touched.city} />
                   </div>
                   <div className="relative">
                     <StyledField name="country" label="Country" errors={errors.country} touched={touched.country} />

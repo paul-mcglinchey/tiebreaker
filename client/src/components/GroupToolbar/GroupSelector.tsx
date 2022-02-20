@@ -3,19 +3,23 @@ import { Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
 import { combineClassNames } from '../../services';
+import { IGroup, IProps } from '../../models';
 
-const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
+const GroupSelector = ({ userGroup, updateUserGroup, groups }: IProps) => {
 
   const getUserInStorage = () => {
     try {
-      return JSON.parse(sessionStorage.getItem("userGroup"));
+      return JSON.parse(sessionStorage.getItem("userGroup") || "");
     } catch {
       return null;
     }
   }
 
-  const sessionHasValidUserGroup = groups && getUserInStorage() && groups.filter(g => g.groupName === getUserInStorage().groupName).length > 0;
-  const defaultUserGroup = groups && groups.filter(g => g.default).length > 0 ? groups.filter(g => g.default)[0] : groups[0];
+  const sessionHasValidUserGroup = groups && getUserInStorage() && groups.filter((g: IGroup) => g.groupName === getUserInStorage().groupName).length > 0;
+  const defaultUserGroup = groups && 
+    groups
+      .filter((g: IGroup) => g.default).length > 0 ?
+        groups.filter((g: IGroup) => g.default)[0] : groups[0];
 
   const refreshUserGroup = () => {
     let validUserGroup = () => {
@@ -63,7 +67,7 @@ const GroupSelector = ({ userGroup, updateUserGroup, groups }) => {
                   <PlusIcon className="h-6 w-6 hover:text-gray-400" />
                 </Link>
               </div>
-              {groups.map(g => (
+              {groups.map((g: IGroup) => (
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button

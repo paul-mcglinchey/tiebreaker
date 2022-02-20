@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/solid';
+import { IProps } from '../../models';
 
-const CustomCheckbox = (props) => {
+const CustomCheckbox = ({ action }: IProps) => {
 
   const [checked, setChecked] = useState(false);
   const toggleChecked = () => {
-    props.action();
+    action();
     setChecked(!checked);
   }
 

@@ -2,8 +2,9 @@ import { Transition } from "@headlessui/react";
 import { InlineButton } from "../ClientTable";
 import { endpoints } from '../../../utilities';
 import { requestBuilder } from "../../../services";
+import { IClientProps, IDeleteClientProps } from "../../../models";
 
-const DeleteClient = ({ client, groupName, isDeleteClientOpen, toggleDeleteClientOpen, setStatus }) => {
+const DeleteClient = ({ client, groupName, isDeleteClientOpen, toggleDeleteClientOpen, setStatus }: IClientProps & IDeleteClientProps) => {
 
   const deleteClient = () => {
     let body = { clientId: client._id, groupName: groupName };

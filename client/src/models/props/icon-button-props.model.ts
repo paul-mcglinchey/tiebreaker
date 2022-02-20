@@ -2,5 +2,5 @@ export interface IIconButtonProps {
   Icon: any,
   action?: () => void,
   textColor?: string,
-  additionalClasses?: string
+  additionalClasses?: string | boolean
 }

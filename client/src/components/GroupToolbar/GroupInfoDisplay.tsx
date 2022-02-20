@@ -1,6 +1,7 @@
 import { UsersIcon } from "@heroicons/react/outline";
+import { IProps } from "../../models";
 
-const GroupInfoDisplay = ({ groupCount }) => {
+const GroupInfoDisplay = ({ groupCount }: IProps) => {
 
   return (
     <div className="hidden xl:flex items-center text-gray-400 space-x-1">

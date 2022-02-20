@@ -1,12 +1,17 @@
+import { useContext } from "react";
 import { GroupInfoDisplay, GroupCreateButton, GroupSelector } from ".";
 import { Fetch } from '..';
 import { useFetch } from "../../hooks";
+import { IUserGroup } from "../../models";
+import { IFetch } from "../../models/fetch.model";
 import { requestBuilder } from "../../services";
-import { endpoints } from "../../utilities";
+import { ApplicationContext, endpoints } from "../../utilities";
 
-const GroupToolbar = ({ userGroup, setUserGroup, status }) => {
+const GroupToolbar = () => {
 
-  const updateUserGroup = group => {
+  const { userGroup, setUserGroup, status } = useContext(ApplicationContext); 
+
+  const updateUserGroup = (group: IUserGroup) => {
     sessionStorage.setItem(
       'userGroup',
       JSON.stringify(group)
@@ -20,7 +25,7 @@ const GroupToolbar = ({ userGroup, setUserGroup, status }) => {
       <div className="text-white">
         <Fetch
           fetchOutput={useFetch(endpoints.groups, requestBuilder(), [status])}
-          render={({ response, isLoading }) => (
+          render={({ response }: IFetch) => (
             <>
               {response && response.groups && (
                 <div className="flex md:space-x-4 justify-end">

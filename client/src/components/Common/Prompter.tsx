@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
+import { IPrompterProps } from '../../models';
 
-const Prompter = ({ Icon, title, route }) => {
+const Prompter = ({ Icon, title, route }: IPrompterProps) => {
 
   return (
     <Link to={route} className="flex justify-center mt-32">

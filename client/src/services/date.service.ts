@@ -1,11 +1,13 @@
 import { parse, isDate } from "date-fns";
 
-export const parseDateString = (originalValue: string) => {
-  const parsedDate = isDate(originalValue)
-    ? originalValue
-    : parse(originalValue, "yyyy-MM-dd", new Date());
+export const parseDateString = (originalValue: string)  => {
+  if (isDate(originalValue)) return originalValue;
 
-  return parsedDate;
+  if (typeof originalValue === "string") {
+    return parse(originalValue, "yyyy-MM-dd", new Date());
+  } else {
+    return new Date();
+  }
 }
 
 export const makeDate = (isoDate: Date, delimiter: string) => {

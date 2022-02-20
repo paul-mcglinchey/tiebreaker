@@ -1,7 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { SquareIconButton } from ".";
+import { IPaginatorProps } from "../../models";
 
-const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClients }) => {
+const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClients }: IPaginatorProps) => {
 
   const isMinPage = () => pageNumber <= 1;
   const isMaxPage = () => pageNumber >= Math.ceil(totalClients / pageSize);
@@ -14,7 +15,7 @@ const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClie
     !isMaxPage() && setPageNumber(pageNumber + 1);
   }
 
-  const updatePageSize = (ps) => {
+  const updatePageSize = (ps: number) => {
     if (ps >= pageSize && (totalClients / (pageNumber * ps) < 1)) {
       setPageNumber(Math.ceil(totalClients / ps));
     }

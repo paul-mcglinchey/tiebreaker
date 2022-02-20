@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { StyledConfirmationMessage, StyledErrorMessage } from ".";
+import { ITagFieldProps } from "../../models";
 
-const StyledTagField = ({ name, tags, setTags, label, errors, touched }) => {
+const StyledTagField = ({ name, tags, setTags, label, errors, touched }: ITagFieldProps) => {
 
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState<string>('');
 
   useEffect(() => {
-    document.getElementById("tagField").addEventListener("keydown", handleKeyDown);
+    document.getElementById("tagField")!.addEventListener("keydown", handleKeyDown);
   });
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (tag.length === 0) {
       return;
     }
@@ -26,7 +27,7 @@ const StyledTagField = ({ name, tags, setTags, label, errors, touched }) => {
     setTag('');
   }
 
-  const removeTag = (tagId) => {
+  const removeTag = (tagId: string) => {
     setTags(tags.filter(t => t.id !== tagId));
   }
 

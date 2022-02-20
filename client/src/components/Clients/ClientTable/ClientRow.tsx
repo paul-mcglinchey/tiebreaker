@@ -1,13 +1,10 @@
 import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
 import InlineLink from '../Common/InlineLink';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { IClientProps } from '../../../models';
 
 const ClientRow = ({ client }: IClientProps) => {
-
-  const [isDeleteClientOpen, setIsDeleteClientOpen] = useState(false);
-  const toggleDeleteClientOpen = () => setIsDeleteClientOpen(!isDeleteClientOpen);
 
   return (
     <Fragment>

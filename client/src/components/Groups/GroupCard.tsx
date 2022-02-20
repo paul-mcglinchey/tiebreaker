@@ -4,8 +4,9 @@ import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';
 import { endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
+import { IGroupCardProps } from '../../models/props/group-card-props.model';
 
-const GroupCard = ({ g, setStatus }) => {
+const GroupCard = ({ g, setStatus }: IGroupCardProps) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
@@ -13,7 +14,7 @@ const GroupCard = ({ g, setStatus }) => {
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
 
   // eslint-disable-next-line no-extend-native
-  const stringInsert = function (index: number, string: string): string {
+  const stringInsert = function (this: any, index: number, string: string): string {
     if (index > 0) {
       return this.substring(0, index) + string + this.substring(index);
     }

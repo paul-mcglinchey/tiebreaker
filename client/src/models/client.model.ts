@@ -1,6 +1,7 @@
 import { IActivityLog, IAddress, IContactInfo, IName, ISession } from ".";
 
 export interface IClient {
+  _id: string,
   clientName: IName,
   address: IAddress,
   birthdate: Date,
@@ -12,6 +13,5 @@ export interface IClient {
   updatedBy?: string,
   clientColour?: string,
   activityLog?: IActivityLog[],
-  fullName?: string,
-  _id?: string
+  fullName: string,
 }

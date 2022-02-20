@@ -1,7 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
+import { ISelectorProps } from '../../models/props/selector-props.model';
 
-const Selector = ({ options, option, setValue }) => {
+const Selector = ({ options, option, setValue }: ISelectorProps) => {
   return (
     <Menu as="div" className="flex relative my-2">
       <Menu.Button className="font-semibold tracking-wide">

@@ -1,8 +1,12 @@
 import { BanIcon, CheckIcon } from "@heroicons/react/solid";
+import { useContext } from "react";
 import { SpinnerIcon } from ".."
+import { IChildrenProps } from "../../models";
+import { ApplicationContext } from "../../utilities";
 
-const StatusHeader = ({ status = { isLoading: false, isFetchLoading: false, success: '', error: ''}, children }) => {
+const StatusHeader = ({children }: IChildrenProps) => {
   
+  const { status } = useContext(ApplicationContext);
   const { isLoading, isFetchLoading, success, error } = status;
 
   return (

@@ -117,8 +117,6 @@ exports.create = (req, res) => {
     clientColour
   } = req.body;
 
-  console.log(req.auth);
-
   // Create a new client
   const client = new Client({
     clientName: {
@@ -217,7 +215,7 @@ exports.updateColour = (req, res) => {
 exports.addSession = (req, res) => {
 
   const { clientId } = req.params;
-  const { title, description, tags, sessionDate, createdBy, updatedBy } = req.body;
+  const { title, description, tags, sessionDate } = req.body;
 
   const session = new Session({
     title: title,
