@@ -8,7 +8,7 @@ export const requestBuilder = (method: string = "GET", headers: HeadersInit = us
   }
 
   if (body) {
-    request.body = body;
+    request.body = JSON.stringify(body);
   }
 
   return request;

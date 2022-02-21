@@ -7,26 +7,24 @@ const useUserFetch = (url: string, options: RequestInit, uuid: string, deps: any
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-
     const _fetch = async () => {
-      fetch(url, options)
+
+      setIsLoading(true);
+
+      await fetch(url, options)
         .then(res => res.json())
-        .then(json => console.log('json:', json))
+        .then(json => {
+          setResponse(json);
+          updateUsersInStorage(uuid, json);
+        })
         .catch(err => setError(err))
+        
+      setIsLoading(false);
     }
-    console.log('response:', response)
+
     if (!response) {
       _fetch();
-      console.log('response after fetching:', response)
-      updateUsersInStorage(uuid, response);
     }
-
-    if (error) {
-      console.error(error);
-    }
-
-    setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 

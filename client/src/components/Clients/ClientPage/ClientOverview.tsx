@@ -30,7 +30,7 @@ const ClientOverview = ({ client }: IClientProps) => {
                   fetchOutput={useUserFetch(endpoints.user(updatedBy || ""), requestBuilder("GET", userfrontapi()), updatedBy || "")}
                   render={({ response }: IFetch) => (
                     <span> by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">
-                      {response && (<span>Hello</span>)}
+                      {response && response.username}
                     </span></span>
                   )}
                 />
