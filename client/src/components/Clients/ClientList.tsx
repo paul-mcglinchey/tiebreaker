@@ -7,6 +7,7 @@ import { useFetch } from '../../hooks';
 import { endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
 import { IFilter, IUserGroupProps } from '../../models';
+import { IFetch } from '../../models/fetch.model';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -51,7 +52,7 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
         requestBuilder(), 
         [pageSize, pageNumber, filters, sortField, sortDirection]
       )}
-      render={({ response, isLoading }: any) => (
+      render={({ response, isLoading }: IFetch) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {isLoading ? (
             <div className="flex justify-center py-10">

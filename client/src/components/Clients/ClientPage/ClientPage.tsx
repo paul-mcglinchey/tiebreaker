@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { 
+  Navigate,
   Route, 
   Routes, 
   useParams 
@@ -28,12 +29,12 @@ const ClientPage = () => {
           {response && response.client && (
             <div className="flex flex-col">
               <ClientHeader client={response.client} />
-              <ClientOverview client={response.client} />
               <Routes>
-                <Route index element={<ViewClient />} />
+                <Route path="overview" element={<ClientOverview client={response.client} />} />
                 <Route path="view" element={<ViewClient />} />
                 <Route path="edit" element={<EditClient />} />
                 <Route path="addsession" element={<AddSession client={response.client} />} />
+                <Route path="**" element={<Navigate to="overview" />} />
               </Routes>
             </div>
           )}

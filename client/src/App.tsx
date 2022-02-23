@@ -16,7 +16,7 @@ import {
   ClientPage,
   AddGroup,
   Dashboard,
-  Groups,
+  GroupDashboard,
   Login,
   NavMenu,
   PasswordReset,
@@ -28,7 +28,6 @@ export default function App() {
 
   const [status, setStatus] = useState<IStatus>({
     isLoading: false,
-    isFetchLoading: false,
     success: '',
     error: ''
   });
@@ -83,7 +82,7 @@ export default function App() {
             <Route path="groups"
               element={
                 <PrivateRoute>
-                  <Groups />
+                  <GroupDashboard />
                 </PrivateRoute>
               }
             />

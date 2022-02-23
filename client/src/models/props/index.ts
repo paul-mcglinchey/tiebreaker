@@ -6,6 +6,7 @@ export * from './inline-button-props.model';
 export * from './icon-button-props.model';
 export * from './client-table-props.model';
 export * from './children-props.model';
+export * from './group-props.model';
 export * from './usergroup-props.model';
 export * from './interactive-header-props.model';
 export * from './page-changer-props.model';

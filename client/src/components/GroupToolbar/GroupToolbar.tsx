@@ -9,7 +9,7 @@ import { ApplicationContext, endpoints } from "../../utilities";
 
 const GroupToolbar = () => {
 
-  const { userGroup, setUserGroup, status } = useContext(ApplicationContext); 
+  const { userGroup, setUserGroup } = useContext(ApplicationContext); 
 
   const updateUserGroup = (group: IUserGroup) => {
     sessionStorage.setItem(
@@ -24,7 +24,7 @@ const GroupToolbar = () => {
     <>
       <div className="text-white">
         <Fetch
-          fetchOutput={useFetch(endpoints.groups, requestBuilder(), [status])}
+          fetchOutput={useFetch(endpoints.groups, requestBuilder())}
           render={({ response }: IFetch) => (
             <>
               {response && response.groups && (

@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { CheckIcon, TrashIcon, XIcon, DotsVerticalIcon } from '@heroicons/react/solid';
 import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';
-import { endpoints } from '../../utilities';
+import { ApplicationContext, endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
-import { IGroupCardProps } from '../../models/props/group-card-props.model';
+import { IGroupProps } from '../../models';
 
-const GroupCard = ({ g, setStatus }: IGroupCardProps) => {
+const GroupCard = ({ g }: IGroupProps) => {
+
+  const { setStatus } = useContext(ApplicationContext);
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
