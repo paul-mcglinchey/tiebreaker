@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import { endpoints } from "../utilities";
 
-const useFetch = (url: string, options: RequestInit, deps: any[]) => {
+const useFetch = (url: string, options: RequestInit, deps: any[] = []) => {
   const [response, setResponse] = useState({});
   const [error, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -13,13 +14,17 @@ const useFetch = (url: string, options: RequestInit, deps: any[]) => {
         .then(res => res.json())
         .then(json => setResponse(json))
         .catch(err => setError(err))
-
-      setIsLoading(false);
+        .finally(() => {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, endpoints.origin.includes('localhost') ? 500 : 0);
+        })
     }
 
     _fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
+
 
   return { response, error, isLoading };
 }

@@ -24,7 +24,7 @@ const ColourPicker = ({ client }: IClientProps) => {
       error: ''
     });
 
-  await fetch((endpoints.colours(client && client._id)), requestBuilder('PUT', { clientColour: clientColour }))
+  await fetch((endpoints.colours(client && client._id)), requestBuilder('PUT', undefined, { clientColour: clientColour }))
     .then(res => {
       if (res.ok) {
         setStatus({ isLoading: false, success: `Updated client colour`, error: '' });

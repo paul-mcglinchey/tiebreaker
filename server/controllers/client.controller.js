@@ -85,18 +85,7 @@ exports.findById = async (req, res) => {
     .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
 
   const client = await aggregate
-    .then(client => {
-
-      const activityLog = new ActivityLog({
-        task: "viewed",
-        actor: req.auth.userUuid
-      });
-
-      Client.findByIdAndUpdate(client[0]._id, { $push: { activityLog: activityLog } })
-        .then(client => console.log(client));
-      
-      return client[0]
-    })
+    .then(client => client[0])
     .catch(err => {
       res.status(500).send({
         message: err.message || `A problem occurred fetching client with ID ${clientId}.`

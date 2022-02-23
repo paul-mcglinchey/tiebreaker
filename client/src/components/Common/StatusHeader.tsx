@@ -7,7 +7,7 @@ import { ApplicationContext } from "../../utilities";
 const StatusHeader = ({children }: IChildrenProps) => {
   
   const { status } = useContext(ApplicationContext);
-  const { isLoading, isFetchLoading, success, error } = status;
+  const { isLoading, success, error } = status;
 
   return (
     <div className="flex items-center space-x-2">
@@ -15,7 +15,7 @@ const StatusHeader = ({children }: IChildrenProps) => {
         {children}
       </div>
       <div>
-        {(isLoading || isFetchLoading) && <SpinnerIcon className="h-6 w-6 text-green-500" />}
+        {(isLoading) && <SpinnerIcon className="h-6 w-6 text-green-500" />}
         {(success || error) && (
           <div className={`hidden lg:flex ml-4 space-x-2 font-medium ${success && 'text-green-500'} ${error && 'text-red-500'} border border-current rounded px-2 py-1`}>
             <div>{success || error}</div>

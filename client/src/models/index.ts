@@ -16,5 +16,6 @@ export * from './tag-model';
 export * from './session.model';
 
 export * from './props';
+export * from './types';
 
 export { userfront, userfrontapi } from './request-header.model';

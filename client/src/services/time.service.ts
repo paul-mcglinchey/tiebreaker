@@ -6,9 +6,9 @@ export const parseTimeDifference = (target: Date) => {
   const hoursDiff = minutesDiff / 60;
   const daysDiff = hoursDiff / 60;
 
-  if (daysDiff >= 1) return `${Math.floor(daysDiff)}d ago`
-  else if (hoursDiff >= 1) return `${Math.floor(hoursDiff)}h ago`
-  else if (minutesDiff >= 1) return `${Math.floor(minutesDiff)}m ago`
-  else if (secondsDiff >= 30) return `${Math.floor(secondsDiff)}s ago`
+  if (daysDiff >= 1) return `${new Date(target).toLocaleDateString()}`
+  else if (hoursDiff >= 1) return `${Math.floor(hoursDiff)}h`
+  else if (minutesDiff >= 1) return `${Math.floor(minutesDiff)}m`
+  else if (secondsDiff >= 30) return `${Math.floor(secondsDiff)}s`
   else return "Just now";
 }

@@ -16,8 +16,8 @@ export const getUsersInStorage = () => {
 
 export const getUserInStorage = (uuid: string) => {
   try {
-    const users = JSON.parse(sessionStorage.getItem("users") || "");
-    return users.includes(uuid) ? users[uuid] : null;
+    const users = JSON.parse(sessionStorage.getItem("users") || "{}");
+    return Object.keys(users).includes(uuid) ? users[uuid] : null;
   } catch {
     return null;
   }

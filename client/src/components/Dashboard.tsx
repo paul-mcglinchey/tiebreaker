@@ -8,17 +8,16 @@ import { ApplicationContext } from '../utilities/contexts';
 
 const Dashboard = () => {
 
-  const { userGroup, status } = useContext(ApplicationContext);
+  const { userGroup } = useContext(ApplicationContext);
 
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groupcount, requestBuilder(), [])}
-      render={({ response, isLoading }: any) => (
+      render={({ response }: any) => (
         <Fragment>
           {Number.isInteger(response.count) && (
             response.count > 0 ? (
               <>
-                {status.isFetchLoading = isLoading}
                 <Toolbar>Dashboard</Toolbar>
                 <ClientList
                   userGroup={userGroup}
