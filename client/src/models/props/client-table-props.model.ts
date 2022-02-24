@@ -6,5 +6,6 @@ export interface IClientTableProps extends ISortable {
   userGroup: IUserGroup,
   headers: Array<{
     name: string, value: string, interactive: boolean
-  }>
+  }>,
+  isLoading: boolean
 }

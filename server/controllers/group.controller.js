@@ -9,10 +9,6 @@ exports.getGroups = async (req, res) => {
   // the mongoose query to fetch the groups for the current user
   let groupQuery = { users: req.auth.userUuid };
 
-  res.status(500).send({
-    message: `Something went wrong...`
-  });
-
   const groupCount = await Group
     .countDocuments(groupQuery)
     .then(groupCount => groupCount)
