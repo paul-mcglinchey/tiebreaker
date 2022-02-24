@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
+import { IFetch } from "../models/fetch.model";
 import { endpoints } from "../utilities";
 
-const useFetch = (url: string, options: RequestInit, deps: any[] = []) => {
+const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch => {
   const [response, setResponse] = useState({});
-  const [error, setError] = useState({});
+  const [error, setError] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,6 @@ const useFetch = (url: string, options: RequestInit, deps: any[] = []) => {
     _fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-
 
   return { response, error, isLoading };
 }

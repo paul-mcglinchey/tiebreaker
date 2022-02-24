@@ -1,12 +1,12 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { Fetch, SearchBar, SpinnerIcon } from '..';
 import { Paginator } from '..';
 import { ClientTable } from './ClientTable';
 import { ClientPrompter } from '.';
 import { useFetch } from '../../hooks';
-import { endpoints } from '../../utilities';
+import { ApplicationContext, endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
-import { IFilter, IUserGroupProps } from '../../models';
+import { IFilter } from '../../models';
 import { IFetch } from '../../models/fetch.model';
 
 const headers = [
@@ -16,7 +16,9 @@ const headers = [
   { name: "Options", value: "", interactive: false },
 ]
 
-const ClientList = ({ userGroup }: IUserGroupProps) => {
+const ClientList = () => {
+
+  const { userGroup } = useContext(ApplicationContext);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);

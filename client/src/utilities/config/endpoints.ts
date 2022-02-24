@@ -7,7 +7,6 @@ export const endpoints = {
     "colours": (clientId: string) => BASE_URL + `clients/${clientId}/colours`,
     "sessions": (clientId: string) => BASE_URL + `clients/${clientId}/sessions`,
     "groups": BASE_URL + "groups",
-    "groupcount": BASE_URL + "groups/count",
     "groupdefault": BASE_URL + "groups/default",
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
 }

@@ -1,10 +1,10 @@
-import { useResolvedPath, useMatch, Link } from 'react-router-dom';
+import { useResolvedPath, useMatch, Link, PathMatch } from 'react-router-dom';
 import { ISmartLinkProps } from '../../../models';
 
 const SmartLink = ({ className, children, to, ...props }: ISmartLinkProps) => {
 
   let resolved = useResolvedPath(to);
-  let match = useMatch({ path: resolved.pathname, end: true });
+  let match: PathMatch<string> | null = useMatch({ path: resolved.pathname, end: true });
 
   return (
     <Link

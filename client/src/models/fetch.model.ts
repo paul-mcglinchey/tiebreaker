@@ -1,5 +1,5 @@
 export interface IFetch {
   response: any,
-  error: Object,
+  error: Object | undefined,
   isLoading: boolean
 }

@@ -7,9 +7,6 @@ module.exports = app => {
   // Get all groups that the user belongs to
   router.get('/', group.getGroups);
   
-  // Get a count of the number of groups the user belongs to
-  router.get('/count', group.getCount);
-  
   // CUD Operations, need a request body
   router.use(middleware.validation.validateRequest);
 

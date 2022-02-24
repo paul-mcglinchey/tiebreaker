@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, PathMatch } from 'react-router-dom';
 import Userfront from '@userfront/core';
 
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
-import { ThumbIcon, WideIcon } from '.';
+import { SmartLink, ThumbIcon, WideIcon } from '.';
 import { links } from '../utilities';
 import { combineClassNames } from '../services';
 
@@ -47,17 +47,20 @@ const NavMenu = () => {
                   <div className="hidden sm:block sm:ml-6">
                     <div className="flex space-x-4">
                       {links.map((item) => (
-                        <Link
+                        <SmartLink
                           key={item.name}
                           to={item.href}
-                          className={combineClassNames(
-                            item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                            'px-3 py-2 rounded-md text-sm font-medium'
+                          className={( match: PathMatch<string> | null): string => (
+                            combineClassNames(match 
+                              ? 'bg-gray-900 text-white' 
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium'
+                              )
                           )}
                           aria-current={item.current ? 'page' : undefined}
                         >
                           {item.name}
-                        </Link>
+                        </SmartLink>
                       ))}
                     </div>
                   </div>

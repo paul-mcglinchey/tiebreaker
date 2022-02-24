@@ -1,11 +1,7 @@
-import { useContext } from "react";
-import { GroupToolbar, StatusBar, StatusHeader } from "..";
+import { GroupToolbar, StatusHeader } from "..";
 import { IChildrenProps } from "../../models";
-import { ApplicationContext } from "../../utilities";
 
 const Toolbar = ({ children }: IChildrenProps) => {
-
-  const { status } = useContext(ApplicationContext);
 
   return (
     <div className="flex-col xl:flex">
@@ -13,7 +9,6 @@ const Toolbar = ({ children }: IChildrenProps) => {
         <StatusHeader>{children}</StatusHeader>
         <GroupToolbar />
       </div>
-      <StatusBar status={status} />
     </div>
   )
 }
