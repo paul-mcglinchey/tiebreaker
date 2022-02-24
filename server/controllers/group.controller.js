@@ -4,38 +4,34 @@ const Group = db.group;
 const Client = db.client;
 
 // Read Operations
-exports.getCount = (req, res) => {
-  Group.countDocuments({ users: req.auth.userUuid })
-    .then(count => {
-      return res.status(200).send({count: count})
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || `An error occurred counting the number of groups that user ${req.auth.userUuid} belongs to.`
-      })
-    })
-}
+exports.getGroups = async (req, res) => {
 
-exports.getGroups = (req, res) => {
-  Group.find({ users: req.auth.userUuid })
-    .then((groups) => {
-      if (req.query.id) {
-        let previous = groups.filter(g => g._id == req.query.id)
-        return previous.length > 0 
-          ? res.status(200).send({groups: previous}) 
-          : res.status(200).send({groups: groups.filter(g => g.default)})
-      } else {
-        return res.status(200).send({groups: groups})
-      }
-    })
+  // the mongoose query to fetch the groups for the current user
+  let groupQuery = { users: req.auth.userUuid };
+
+  const groupCount = await Group
+    .countDocuments(groupQuery)
+    .then(groupCount => groupCount)
+    .catch(err => res.status(500)
+      .send({
+        message: err.message || `A problem occurred fetching the number of groups for user with ID ${req.auth.userUuid}.`
+      }));
+
+  const groups = await Group
+    .find(groupQuery)
+    .then(groups => groups)
     .catch(err => {
       res.status(401).send({
         message:
-          err.message || 'An error occurred while getting groups for user with ID: ' + req.auth.userUuid
+          err.message || `An error occurred while getting groups for user with ID: ${req.auth.userUuid}.`
       });
     });
-}
+
+  res.status(200).send({
+    totalGroups: groupCount,
+    groups: groups
+  });
+};
 
 // CUD Operations
 exports.createGroup = async (req, res) => {

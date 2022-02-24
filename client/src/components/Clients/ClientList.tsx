@@ -1,12 +1,12 @@
-import { Fragment, useState } from 'react';
-import { Fetch, SearchBar, SpinnerIcon } from '..';
+import { Fragment, useContext, useState } from 'react';
+import { Fetch, SearchBar } from '..';
 import { Paginator } from '..';
 import { ClientTable } from './ClientTable';
 import { ClientPrompter } from '.';
 import { useFetch } from '../../hooks';
-import { endpoints } from '../../utilities';
+import { ApplicationContext, endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
-import { IFilter, IUserGroupProps } from '../../models';
+import { IFilter } from '../../models';
 import { IFetch } from '../../models/fetch.model';
 
 const headers = [
@@ -16,7 +16,9 @@ const headers = [
   { name: "Options", value: "", interactive: false },
 ]
 
-const ClientList = ({ userGroup }: IUserGroupProps) => {
+const ClientList = () => {
+
+  const { userGroup } = useContext(ApplicationContext);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -50,16 +52,11 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
       fetchOutput={useFetch(
         `${endpoints.clients}?${buildQueryString()}`, 
         requestBuilder(), 
-        [pageSize, pageNumber, filters, sortField, sortDirection]
+        [pageSize, pageNumber, filters, sortField, sortDirection, userGroup]
       )}
       render={({ response, isLoading }: IFetch) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-          {isLoading ? (
-            <div className="flex justify-center py-10">
-              <SpinnerIcon className="text-white h-12 w-12" />
-            </div>
-          ) : (
-            response && response.totalClients > 0 ? (
+            {response && response.totalClients > 0 ? (
               <Fragment>
                 <div className="flex flex-col flex-grow space-y-4">
                   <SearchBar
@@ -76,14 +73,14 @@ const ClientList = ({ userGroup }: IUserGroupProps) => {
                     sortDirection={sortDirection}
                     setSortDirection={setSortDirection}
                     headers={headers}
+                    isLoading={isLoading}
                   />
                 </div>
                 <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.totalClients} />
               </Fragment>
             ) : (
               <ClientPrompter />
-            )
-          )}
+            )}
         </div>
       )
       }
