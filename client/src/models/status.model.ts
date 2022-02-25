@@ -1,5 +1,7 @@
+import { Status } from "./types/status.type";
+
 export interface IStatus { 
   isLoading: boolean,
-  success: string, 
-  error: string
+  message: string,
+  type: Status
 };

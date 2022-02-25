@@ -1,33 +1,36 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../../utilities/schema';
 import { SubmitButton } from '../../Common';
 import { endpoints } from '../../../utilities/config';
 import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '../..';
 import { requestBuilder } from '../../../services';
-import { IClientProps, IStatusProps, ITag } from '../../../models';
+import { IClientProps, ITag } from '../../../models';
 import { IAddSession } from '../../../models/add-session.model';
+import { Status } from '../../../models/types/status.type';
+import { ApplicationContext } from '../../../utilities';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
-const AddSessionForm = ({ client, status, setStatus }: IClientProps & IStatusProps) => {
+const AddSessionForm = ({ client }: IClientProps) => {
 
+  const { status, setStatus } = useContext(ApplicationContext);
   const [tags, setTags] = useState<ITag[]>([]);
 
   const handleSubmit = async (values: IAddSession) => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    })
+      message: '',
+      type: Status.None
+    }])
 
     if (!client) {
-      setStatus({
+      setStatus([...status, {
         isLoading: false,
-        success: '',
-        error: 'No client found'
-      })
+        message: 'No client found',
+        type: Status.Error
+      }])
       return;
     }
 
@@ -41,14 +44,13 @@ const AddSessionForm = ({ client, status, setStatus }: IClientProps & IStatusPro
     await fetch((endpoints.sessions(client._id)), requestBuilder('PUT', undefined, values))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Added session successfully`, error: '' });
+          setStatus([...status, { isLoading: false, message: `Added session messagefully`, type: Status.Success }]);
         } else {
-          setStatus({ isLoading: false, success: '', error: `A problem occurred adding the session` });
+          setStatus([...status, { isLoading: false, message: `A problem occurred adding the session`, type: Status.Error }]);
         }
       })
-      .catch((err) => {
-        console.log(err);
-        setStatus({ isLoading: false, success: '', error: '' });
+      .catch(() => {
+        setStatus([...status, { isLoading: false, message: `A problem occurred adding the session`, type: Status.Error }]);
       })
   }
 

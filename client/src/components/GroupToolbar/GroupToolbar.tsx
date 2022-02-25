@@ -24,7 +24,7 @@ const GroupToolbar = () => {
     <>
       <div className="text-white">
         <Fetch
-          fetchOutput={useFetch(endpoints.groups, requestBuilder())}
+          fetchOutput={useFetch(endpoints.groups, requestBuilder(), [userGroup])}
           render={({ response }: IFetch) => (
             <>
               {response && response.groups && (

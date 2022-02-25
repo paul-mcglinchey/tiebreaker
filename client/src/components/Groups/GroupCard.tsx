@@ -5,10 +5,11 @@ import { SquareIconButton } from '..';
 import { ApplicationContext, endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
 import { IGroupProps } from '../../models';
+import { Status } from '../../models/types/status.type';
 
 const GroupCard = ({ g }: IGroupProps) => {
 
-  const { setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(ApplicationContext);
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
@@ -36,18 +37,18 @@ const GroupCard = ({ g }: IGroupProps) => {
   }
 
   const deleteGroup = () => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    })
+      message: '',
+      type: Status.None
+    }])
 
     if (g.default) {
-      setStatus({
+      setStatus([...status, {
         isLoading: false,
-        success: '',
-        error: 'Cannot delete the default group'
-      })
+        message: 'Cannot delete the default group',
+        type: Status.Error
+      }])
 
       return;
     }
@@ -55,44 +56,43 @@ const GroupCard = ({ g }: IGroupProps) => {
     fetch(endpoints.groups, requestBuilder("DELETE", undefined, { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully deleted ${g.groupName}`, error: '' })
+          setStatus([...status, { isLoading: false, message: `Successfully deleted ${g.groupName}`, type: Status.Success }])
         } else {
-          setStatus({ isLoading: false, success: `A problem occurred deleting ${g.groupName}`, error: '' })
+          setStatus([...status, { isLoading: false, message: `A problem occurred deleting ${g.groupName}`, type: Status.Error }])
         }
       })
-      .catch(err => {
-        console.log(`Error: ${err}`);
-        setStatus({ isLoading: false, success: '', error: '' })
+      .catch(() => {
+        setStatus([...status, { isLoading: false, message: '', type: Status.None }])
       })
   }
 
   const setDefaultGroup = () => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    })
+      message: '',
+      type: Status.None
+    }])
 
     fetch(endpoints.groupdefault, requestBuilder("PUT", undefined, { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully set default group`, error: '' })
+          setStatus([...status, { isLoading: false, message: `Successfully set default group`, type: Status.Success }])
         } else {
-          setStatus({ isLoading: false, success: `A problem occurred setting default group`, error: '' })
+          setStatus([...status, { isLoading: false, message: `A problem occurred setting default group`, type: Status.Error }])
         }
       })
       .catch(err => {
         console.log(`Error: ${err}`);
-        setStatus({ isLoading: false, success: '', error: '' })
+        setStatus([...status, { isLoading: false, message: '', type: Status.None }])
       })
   }
 
   return (
-    <div className={`flex flex-auto flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${g.default && 'order-first basis-full'}`}>
+    <div className={`flex flex-auto min-w-120 flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${g.default && 'order-first'}`}>
       <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
-        <div className="flex flex-grow justify-between items-start space-x-4">
-          <h1 className="text-3xl font-extrabold tracking-wide">{g.groupName}</h1>
-          <div>
+        <div className="flex flex-grow justify-between items-center space-x-4">
+          <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.groupName}</h1>
+          <div className="flex">
             <SquareIconButton Icon={HeartIcon} action={() => !g.default && setDefaultGroup()} additionalClasses={`${g.default ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
             <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
           </div>

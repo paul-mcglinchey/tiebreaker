@@ -21,16 +21,14 @@ import {
   NavMenu,
   PasswordReset,
   PasswordResetRequest,
-  Signup
+  Signup,
+  NotificationContainer,
+  Notification
 } from './components';
 
 export default function App() {
 
-  const [status, setStatus] = useState<IStatus>({
-    isLoading: false,
-    success: '',
-    error: ''
-  });
+  const [status, setStatus] = useState<IStatus[]>([]);
 
   const [userGroup, setUserGroup] = useState<IUserGroup>(getUserGroupInStorage());
 
@@ -50,6 +48,11 @@ export default function App() {
   return (
     <ApplicationContext.Provider value={AppContext}>
       <div className="min-h-screen">
+        <NotificationContainer>
+          {status.map((s: IStatus, i: number) => (
+            <Notification key={i} status={s} />
+          ))}
+        </NotificationContainer>
         {getAccess() && (
           <NavMenu />
         )}
