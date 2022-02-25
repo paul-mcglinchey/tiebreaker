@@ -9,6 +9,7 @@ const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch =
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
     setIsLoading(true);
 
     const _fetch = async () => {
@@ -74,7 +75,9 @@ const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch =
         })
     }
 
-    _fetch();
+    isMounted && _fetch();
+
+    return () => { isMounted = false };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 

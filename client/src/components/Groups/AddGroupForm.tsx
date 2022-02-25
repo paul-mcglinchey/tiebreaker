@@ -1,34 +1,36 @@
 import { Formik, Form } from 'formik';
+import { useContext } from 'react';
 
 import { StyledField } from '..';
-import { IAddGroup, IStatusProps } from '../../models';
+import { IAddGroup } from '../../models';
+import { Status } from '../../models/types/status.type';
 import { requestBuilder } from '../../services';
-import { endpoints, groupValidationSchema } from '../../utilities';
+import { ApplicationContext, endpoints, groupValidationSchema } from '../../utilities';
 import SubmitButton from '../Common/SubmitButton';
 
-const AddGroupForm = ({ status, setStatus }: IStatusProps) => {
+const AddGroupForm = () => {
+
+  const { status, setStatus } = useContext(ApplicationContext);
 
   const addGroup = (values: IAddGroup) => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    })
+      message: '',
+      type: Status.None
+    }])
 
     fetch(endpoints.groups, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully created ${values.groupName}`, error: '' })
+          setStatus([...status, { isLoading: false, message: `Successfully created ${values.groupName}`, type: Status.Success }])
         } else if (res.status === 400) {
-          setStatus({ isLoading: false, success: '', error: 'Group already exists'})
+          setStatus([...status, { isLoading: false, message: 'Group already exists', type: Status.Error }])
         } else {
-          setStatus({ isLoading: false, success: '', error: `A problem occurred creating ${values.groupName}` })
+          setStatus([...status, { isLoading: false, message: `A problem occurred creating ${values.groupName}`, type: Status.Success }])
         }
-      })
-
-      .catch((err) => {
-        console.log(err)
-        setStatus({ isLoading: false, success: '', error: '' })
+    })
+      .catch(() => {
+        setStatus([...status, { isLoading: false, message: `A problem occurred creating the group`, type: Status.None }])
       })
   }
 

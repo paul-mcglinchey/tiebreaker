@@ -3,6 +3,7 @@ import { InlineButton } from "../ClientTable";
 import { endpoints } from '../../../utilities';
 import { requestBuilder } from "../../../services";
 import { IClientProps, IDeleteClientProps } from "../../../models";
+import { Status } from "../../../models/types/status.type";
 
 const DeleteClient = ({ client, groupName, isDeleteClientOpen, toggleDeleteClientOpen, setStatus }: IClientProps & IDeleteClientProps) => {
 
@@ -11,21 +12,21 @@ const DeleteClient = ({ client, groupName, isDeleteClientOpen, toggleDeleteClien
 
     setStatus({
       isLoading: true,
-      success: '',
-      error: ''
+      message: '',
+      type: Status.None
     });
 
     fetch(endpoints.clients, requestBuilder("DELETE", undefined, body))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Successfully deleted client`, error: '' })
+          setStatus({ isLoading: false, message: `Successfully deleted client`, type: Status.Success })
         } else {
-          setStatus({ isLoading: false, success: `A problem occurred deleting client`, error: '' })
+          setStatus({ isLoading: false, message: `A problem occurred deleting client`, type: Status.Error })
         }
       })
       .catch(err => {
         console.log(`Error: ${err}`);
-        setStatus({ isLoading: false, success: '', error: '' })
+        setStatus({ isLoading: false, message: '', type: Status.None })
       })
 
     toggleDeleteClientOpen();

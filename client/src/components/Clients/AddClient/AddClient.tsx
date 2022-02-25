@@ -2,7 +2,7 @@ import { AddClientForm } from ".";
 import { Toolbar } from "../..";
 
 
-const AddNewClient = () => {
+const AddClient = () => {
   return (
     <div>
       <Toolbar>
@@ -13,4 +13,4 @@ const AddNewClient = () => {
   )
 }
 
-export default AddNewClient;
+export default AddClient;

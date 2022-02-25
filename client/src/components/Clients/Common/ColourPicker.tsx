@@ -2,12 +2,13 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { Fragment, useContext } from "react";
 import { IClientProps } from "../../../models";
+import { Status } from "../../../models/types/status.type";
 import { generateColour, requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints, profileColours } from "../../../utilities";
 
 const ColourPicker = ({ client }: IClientProps) => {
 
-  const { setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(ApplicationContext);
 
   const setProfileColour = () => {
     const clientColour = generateColour() || "";
@@ -18,22 +19,22 @@ const ColourPicker = ({ client }: IClientProps) => {
   }
 
   const updateProfileColour = async (clientColour: string) => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    });
+      message: '',
+      type: Status.None
+    }]);
 
   await fetch((endpoints.colours(client && client._id)), requestBuilder('PUT', undefined, { clientColour: clientColour }))
     .then(res => {
       if (res.ok) {
-        setStatus({ isLoading: false, success: `Updated client colour`, error: '' });
+        setStatus([...status, { isLoading: false, message: `Updated client colour`, type: Status.Success }]);
       } else {
-        setStatus({ isLoading: false, success: '', error: `A problem occurred updating the client colour` });
+        setStatus([...status, { isLoading: false, message: `A problem occurred updating the client colour`, type: Status.Error }]);
       }
     })
     .catch((err) => {
-      setStatus({ isLoading: false, success: '', error: err.message || `A problem occurred updating the client colour` });
+      setStatus([...status, { isLoading: false, message: err.message || `A problem occurred updating the client colour`, type: Status.Error }]);
     })
   }
 

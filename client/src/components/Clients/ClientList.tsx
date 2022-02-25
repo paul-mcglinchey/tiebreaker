@@ -56,7 +56,7 @@ const ClientList = () => {
       )}
       render={({ response, isLoading }: IFetch) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-            {response && response.totalClients > 0 ? (
+            {response && response.totalClients && response.totalClients > 0 ? (
               <Fragment>
                 <div className="flex flex-col flex-grow space-y-4">
                   <SearchBar

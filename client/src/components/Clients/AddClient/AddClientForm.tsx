@@ -6,8 +6,9 @@ import { requestBuilder } from "../../../services";
 import { CustomCheckbox, CustomDate, StyledDatePicker, StyledField, SubmitButton } from "../..";
 import { ApplicationContext, clientValidationSchema, endpoints, profileColours } from "../../../utilities";
 import { IAddClient } from "../../../models";
+import { Status } from "../../../models/types/status.type";
 
-const AddNewClientForm = () => {
+const AddClientForm = () => {
 
   const { userGroup, status, setStatus } = useContext(ApplicationContext);
 
@@ -18,18 +19,18 @@ const AddNewClientForm = () => {
   const toggleAddressActive = () => setAddressActive(!addressActive);
 
   const handleSubmit = async (values: IAddClient) => {
-    setStatus({
+    setStatus([...status, {
       isLoading: true,
-      success: '',
-      error: ''
-    })
+      message: '',
+      type: Status.None
+    }])
 
     if (!userGroup) {
-      setStatus({
+      setStatus([...status, {
         isLoading: false,
-        success: '',
-        error: 'Group must be set'
-      })
+        message: 'Group must be set',
+        type: Status.Error
+      }])
 
       return;
     }
@@ -42,14 +43,14 @@ const AddNewClientForm = () => {
     await fetch(endpoints.clients, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          setStatus({ isLoading: false, success: `Added client successfully`, error: '' });
+          setStatus([...status, { isLoading: false, message: `Added client successfully`, type: Status.Success}]);
         } else {
-          setStatus({ isLoading: false, success: '', error: `A problem occurred adding the client` });
+          setStatus([...status, { isLoading: false, message: `A problem occurred adding the client`, type: Status.Error }]);
         }
       })
       .catch((err) => {
         console.log(err);
-        setStatus({ isLoading: false, success: '', error: '' });
+        setStatus([...status, { isLoading: false, message: `A problem occurred adding the client`, type: Status.None }]);
       })
   }
 
@@ -137,7 +138,7 @@ const AddNewClientForm = () => {
             </Transition>
           </div>
           <div className="flex justify-end my-10">
-            <SubmitButton status={status} content='Add client' />
+            <SubmitButton status={status[status.length - 1] || []} content='Add client' />
           </div>
         </Form>
       )}
@@ -145,4 +146,4 @@ const AddNewClientForm = () => {
   )
 }
 
-export default AddNewClientForm;
+export default AddClientForm;
