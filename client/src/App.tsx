@@ -70,32 +70,26 @@ export default function App() {
               <PrivateRoute>
                 <ClientPage />
               </PrivateRoute>
-            }/>
+            } />
 
             {/* Navbar routes */}
-            <Route path="addclients"
-              element={
-                <PrivateRoute>
-                  <ApplicationContext.Provider value={AppContext}>
-                    <AddClient />
-                  </ApplicationContext.Provider>
-                </PrivateRoute>
-              }
-            />
-            <Route path="groups"
-              element={
-                <PrivateRoute>
-                  <GroupDashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route path="creategroup"
-              element={
-                <PrivateRoute>
-                  <AddGroup />
-                </PrivateRoute>
-              }
-            />
+            <Route path="addclients" element={
+              <PrivateRoute>
+                <ApplicationContext.Provider value={AppContext}>
+                  <AddClient />
+                </ApplicationContext.Provider>
+              </PrivateRoute>
+            } />
+            <Route path="groups" element={
+              <PrivateRoute>
+                <GroupDashboard />
+              </PrivateRoute>
+            } />
+            <Route path="creategroup" element={
+              <PrivateRoute>
+                <AddGroup />
+              </PrivateRoute>
+            } />
 
             {/* Unprotected routes */}
             <Route path="login" element={<Login />} />
@@ -105,7 +99,7 @@ export default function App() {
 
           </Routes>
         </div>
-      </div >
+      </div>
     </ApplicationContext.Provider>
   );
 }

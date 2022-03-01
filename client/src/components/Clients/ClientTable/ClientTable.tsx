@@ -17,7 +17,7 @@ const ClientTable = ({
 }: IClientTableProps) => {
 
   return (
-    <div className="relative shadow overflow-x-scroll md:overflow-x-auto rounded-md">
+    <div className="relative shadow overflow-x-scroll md:overflow-x-auto min-h-96 rounded-md">
       <table className="min-w-full">
         <thead className="bg-gray-800">
           <tr>

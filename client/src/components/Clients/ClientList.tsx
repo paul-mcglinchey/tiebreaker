@@ -82,8 +82,7 @@ const ClientList = () => {
               <ClientPrompter />
             )}
         </div>
-      )
-      }
+      )}
     />
   )
 }

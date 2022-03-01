@@ -49,7 +49,7 @@ const Dashboard = () => {
             )
           ) : (
             <ProgressBar setLoaded={setGroupsLoaded} progress={progress} />
-          )})
+          )}
         </Fragment>
       )}
     />
