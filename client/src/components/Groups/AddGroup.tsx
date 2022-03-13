@@ -2,12 +2,13 @@ import { UserGroupIcon } from '@heroicons/react/solid';
 
 import { AddGroupForm } from '.';
 import { Toolbar } from '..';
+import { ToolbarType } from '../../models';
 
 const AddGroup = () => {
 
   return (
     <>
-      <Toolbar>Create Group</Toolbar>
+      <Toolbar toolbarType={ToolbarType.Groups}>Create Group</Toolbar>
       <div className="flex justify-center lg:space-x-4">
         <AddGroupForm />
         <div className="hidden lg:flex text-white bg-blue-600 font-extrabold lg:text-5xl px-4 max-w-1/2 shadow-sm text-center md:text-right rounded pt-4">

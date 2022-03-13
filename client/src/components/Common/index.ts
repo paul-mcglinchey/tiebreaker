@@ -6,3 +6,4 @@ export { default as Selector } from './Selector';
 export { default as SubmitButton } from './SubmitButton';
 export { default as NotificationContainer } from './NotificationContainer';
 export { default as Notification } from './Notification';
+export { default as FormSection } from './FormSection';

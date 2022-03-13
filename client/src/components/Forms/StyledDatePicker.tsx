@@ -1,21 +1,18 @@
 import { Field } from 'formik';
 
-import { StyledConfirmationMessage, StyledErrorMessage } from '.';
+import { StyledErrorMessage } from '.';
 import { IFieldProps } from '../../models';
 
 const StyledDatePicker = ({ name, label, errors, touched, component }: IFieldProps) => {
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between">
-        <label className="block font-bold text-gray-500 mb-1 uppercase">
+      <div className="flex justify-between space-x-2 items-middle">
+        <label className="font-bold text-gray-500 mb-1 uppercase">
           {label}
         </label>
-        <div className="flex justify-end">
+        <div className="flex">
           {errors && touched ? (
             <StyledErrorMessage>{errors}</StyledErrorMessage>
-          ) : null}
-          {!errors && touched ? (
-            <StyledConfirmationMessage />
           ) : null}
         </div>
       </div>

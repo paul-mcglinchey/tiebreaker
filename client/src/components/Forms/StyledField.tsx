@@ -1,6 +1,6 @@
 import { Field } from "formik";
 
-import { StyledConfirmationMessage, StyledErrorMessage } from ".";
+import { StyledErrorMessage } from ".";
 import { IFieldProps } from "../../models";
 
 const StyledField = ({ name, label, errors, touched, autoComplete, component, type, as }: IFieldProps) => {
@@ -13,9 +13,6 @@ const StyledField = ({ name, label, errors, touched, autoComplete, component, ty
         <div className="flex justify-end">
           {errors && touched ? (
             <StyledErrorMessage>{errors}</StyledErrorMessage>
-          ) : null}
-          {!errors && touched ? (
-            <StyledConfirmationMessage />
           ) : null}
         </div>
       </div>

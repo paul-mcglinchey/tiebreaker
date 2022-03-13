@@ -6,7 +6,7 @@ export const parseDateString = (originalValue: string)  => {
   if (typeof originalValue === "string") {
     return parse(originalValue, "yyyy-MM-dd", new Date());
   } else {
-    return new Date();
+    return parse(new Date().toString(), "yyyy-MM-dd", new Date());
   }
 }
 

@@ -1,11 +1,12 @@
 import { Fragment } from "react";
 import { GroupList, Toolbar } from "..";
+import { ToolbarType } from "../../models";
 
 
 const GroupDashboard = () => {
   return (
     <Fragment>
-      <Toolbar>Group Management</Toolbar>
+      <Toolbar toolbarType={ToolbarType.Groups}>Group Management</Toolbar>
       <GroupList />
     </Fragment>
   )

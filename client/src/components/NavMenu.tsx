@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
 import Userfront from '@userfront/core';
 
@@ -6,14 +6,30 @@ import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import { SmartLink, ThumbIcon, WideIcon } from '.';
-import { links } from '../utilities';
+import { ApplicationContext, clientLinks, rotaLinks } from '../utilities';
 import { combineClassNames } from '../services';
+import { Application } from '../models';
 
 const handleLogout = () => {
   Userfront.logout({ redirect: '/login' });
 }
 
 const NavMenu = () => {
+
+  const { currentApplication } = useContext(ApplicationContext);
+
+  let links: { name: string, href: string }[] = [];
+
+  switch (currentApplication) {
+    case Application.ClientManager:
+      links = clientLinks;
+      break;
+    case Application.RotaManager:
+      links = rotaLinks;
+      break;
+    default:
+      break;
+  }
 
   return (
     <div className="flex flex-col mb-4 space-y-4">
@@ -34,7 +50,7 @@ const NavMenu = () => {
                   </Disclosure.Button>
                 </div>
                 <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                  <div className="flex-shrink-0 flex items-center">
+                  <Link to="/" className="flex-shrink-0 flex items-center">
                     <ThumbIcon
                       className="lg:hidden h-10 w-10 text-white"
                       alt="tiebreaker"
@@ -43,21 +59,21 @@ const NavMenu = () => {
                       className="hidden text-white lg:block w-48"
                       alt="tiebreaker"
                     />
-                  </div>
+                  </Link>
                   <div className="hidden sm:block sm:ml-6">
                     <div className="flex space-x-4">
                       {links.map((item) => (
                         <SmartLink
                           key={item.name}
                           to={item.href}
-                          className={( match: PathMatch<string> | null): string => (
-                            combineClassNames(match 
-                              ? 'bg-gray-900 text-white' 
+                          className={(match: PathMatch<string> | null): string => (
+                            combineClassNames(match
+                              ? 'bg-gray-900 text-white'
                               : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                               'px-3 py-2 rounded-md text-sm font-medium'
-                              )
+                            )
                           )}
-                          aria-current={item.current ? 'page' : undefined}
+                          aria-current={(match: PathMatch<string> | null): string | undefined => match ? 'page' : undefined}
                         >
                           {item.name}
                         </SmartLink>
@@ -129,17 +145,20 @@ const NavMenu = () => {
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {links.map((item) => (
-                  <Link
+                  <SmartLink
                     key={item.name}
                     to={item.href}
-                    className={combineClassNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-base font-medium'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
+                    className={(match: PathMatch<string> | null): string =>
+                      combineClassNames(
+                        match
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium'
+                      )}
+                    aria-current={(match: PathMatch<string> | null): string | undefined => match ? 'page' : undefined}
                   >
                     {item.name}
-                  </Link>
+                  </SmartLink>
                 ))}
               </div>
             </Disclosure.Panel>

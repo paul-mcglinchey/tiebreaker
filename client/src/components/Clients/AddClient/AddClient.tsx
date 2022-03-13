@@ -1,11 +1,12 @@
 import { AddClientForm } from ".";
 import { Toolbar } from "../..";
+import { ToolbarType } from "../../../models";
 
 
 const AddClient = () => {
   return (
     <div>
-      <Toolbar>
+      <Toolbar toolbarType={ToolbarType.Groups}>
         Add new clients
       </Toolbar>
       <AddClientForm />

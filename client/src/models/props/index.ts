@@ -20,3 +20,7 @@ export * from './fetch-props.model';
 export * from './prompter-props.model';
 export * from './paginator-props.model';
 export * from './delete-client-props.model';
+export * from './toolbar-props.model';
+export * from './rota-table-props.model';
+export * from './rota-props.model';
+export * from './form-section-props.model';

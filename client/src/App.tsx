@@ -10,12 +10,12 @@ import {
 
 import { ApplicationContext } from './utilities/contexts';
 import { getUserGroupInStorage } from './services';
-import { IApplicationContext, IStatus, IUserGroup } from './models';
+import { Application, IApplicationContext, IStatus, IUserGroup } from './models';
 import {
   AddClient,
   ClientPage,
   AddGroup,
-  Dashboard,
+  ClientsDashboard,
   GroupDashboard,
   Login,
   NavMenu,
@@ -23,16 +23,19 @@ import {
   PasswordResetRequest,
   Signup,
   NotificationContainer,
-  Notification
+  Notification,
+  Dashboard,
+  RotasDashboard,
+  AddRota
 } from './components';
+import { AddEmployee } from './components/Employees';
 
 export default function App() {
 
   const [status, setStatus] = useState<IStatus[]>([]);
-
   const [userGroup, setUserGroup] = useState<IUserGroup>(getUserGroupInStorage());
-
   const location = useLocation();
+  const [currentApplication, setCurrentApplication] = useState<Application>();
 
   // @ts-ignore
   const getAccess = () => Userfront.accessToken();
@@ -42,7 +45,7 @@ export default function App() {
   }
 
   const AppContext: IApplicationContext = {
-    userGroup: userGroup, setUserGroup: setUserGroup, status: status, setStatus: setStatus
+    userGroup: userGroup, setUserGroup: setUserGroup, status: status, setStatus: setStatus, currentApplication: currentApplication
   }
 
   return (
@@ -58,27 +61,49 @@ export default function App() {
         )}
         <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
           <Routes>
-
             {/* Dashboard Routes */}
             <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="dashboard" element={
-              <Dashboard />
+            <Route path="/dashboard" element={
+              <PrivateRoute>
+                <Dashboard setCurrentApplication={setCurrentApplication} />
+              </PrivateRoute>
             } />
 
-            {/* Client specific routes */}
+            {/* Client manager specific routes */}
+            <Route path="clients" element={
+              <PrivateRoute>
+                <ClientsDashboard setCurrentApplication={setCurrentApplication} />
+              </PrivateRoute>
+            } />
+
             <Route path="clients/:clientId/*" element={
               <PrivateRoute>
                 <ClientPage />
               </PrivateRoute>
-            }/>
+            } />
 
-            {/* Navbar routes */}
+            {/* Rota manager specific routes */}
+            <Route path="rotas" element={
+              <PrivateRoute>
+                <RotasDashboard setCurrentApplication={setCurrentApplication} />
+              </PrivateRoute>
+            } />
+            <Route path="addrota" element={
+              <PrivateRoute>
+                <AddRota />
+              </PrivateRoute>
+            } />
+            <Route path="addemployee" element={
+              <PrivateRoute>
+                <AddEmployee />
+              </PrivateRoute>
+            } />
+
+            {/* Client Manager Navbar routes */}
             <Route path="addclients"
               element={
                 <PrivateRoute>
-                  <ApplicationContext.Provider value={AppContext}>
-                    <AddClient />
-                  </ApplicationContext.Provider>
+                  <AddClient />
                 </PrivateRoute>
               }
             />

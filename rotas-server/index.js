@@ -3,19 +3,19 @@ const cors = require('cors');
 const middleware = require('./middlewares');
 
 const app = express();
-const apiPort = process.env.PORT || 3001;
+const apiPort = process.env.PORT || 3002;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the tiebreaker API')
+  res.send('Welcome to the tiebreaker rotas API')
 })
 
 app.use('/health', (req, res) => {
   res.status(200).json({
-    appName: 'tiebreaker-api',
+    appName: 'tiebreaker-rotas-api',
     version: process.env.npm_package_version,
     status: 'OK',
   });
@@ -25,14 +25,14 @@ const dbConfig = require('./config/db.config');
 const db = require('./models');
 
 db.mongoose
-  .connect((dbConfig.url) + '/' + (process.env.DB_NAME || 'clientbase'), {
+  .connect((dbConfig.url) + '/' + (process.env.DB_NAME || 'tiebreaker'), {
     useNewUrlParser: true
   })
   .then(() => {
-    console.log('Connected to the database!');
+    console.log('Connected to the tiebreaker database!');
   })
   .catch(err => {
-    console.log('Cannot connect to the database!', err);
+    console.log('Cannot connect to the tiebreaker database!', err);
     process.exit();
   });
 
@@ -40,8 +40,8 @@ db.mongoose
 app.use(middleware.authJwt.verifyToken);
 
 // routes
-require('./routes/client.routes')(app);
-require('./routes/group.routes')(app);
+require('./routes/rota.routes')(app);
+require('./routes/employee.routes')(app);
 
 // get the current time to display on restarts of the server
 var currentDateTime = new Date();

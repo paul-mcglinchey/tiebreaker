@@ -1,5 +1,6 @@
 export interface ISelectorProps {
   options: any[],
   option: any,
-  setValue: (value: string) => void 
+  setValue: (value: any) => void,
+  label: string
 }
