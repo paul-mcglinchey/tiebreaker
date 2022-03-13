@@ -13,6 +13,7 @@ import {
 } from "..";
 import { ClientOverview, Fetch } from "../..";
 import { useFetch } from "../../../hooks";
+import { IClient } from "../../../models";
 import { IFetch } from "../../../models/fetch.model";
 import { requestBuilder } from "../../../services";
 import { endpoints } from "../../../utilities";
@@ -24,16 +25,16 @@ const ClientPage = () => {
   return (
     <Fetch
       fetchOutput={useFetch(`${endpoints.clients}/${clientId}`, requestBuilder(), [])}
-      render={({ response }: IFetch) => (
+      render={({ response }: IFetch<IClient>) => (
         <Fragment>
-          {response && response.client && (
+          {response && (
             <div className="flex flex-col">
-              <ClientHeader client={response.client} />
+              <ClientHeader client={response} />
               <Routes>
-                <Route path="overview" element={<ClientOverview client={response.client} />} />
+                <Route path="overview" element={<ClientOverview client={response} />} />
                 <Route path="view" element={<ViewClient />} />
                 <Route path="edit" element={<EditClient />} />
-                <Route path="addsession" element={<AddSession client={response.client} />} />
+                <Route path="addsession" element={<AddSession client={response} />} />
                 <Route path="**" element={<Navigate to="overview" />} />
               </Routes>
             </div>

@@ -1,9 +1,8 @@
-import { IClient, ISortable, IUserGroup } from "..";
+import { IClient, ISortable } from "..";
 
 export interface IClientTableProps extends ISortable {
   clients: IClient[],
   totalClients: number,
-  userGroup: IUserGroup,
   headers: Array<{
     name: string, value: string, interactive: boolean
   }>,

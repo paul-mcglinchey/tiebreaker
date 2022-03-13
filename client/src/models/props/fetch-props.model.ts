@@ -1,6 +1,6 @@
 import { IFetch } from "../fetch.model";
 
-export interface IFetchProps {
-  render: (fetchOutput: IFetch) => JSX.Element,
-  fetchOutput: IFetch
+export interface IFetchProps<T> {
+  render: (fetchOutput: IFetch<T>) => JSX.Element,
+  fetchOutput: IFetch<T>
 }

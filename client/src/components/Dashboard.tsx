@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 
 import { ClientList, Fetch, Toolbar, GroupPrompter, ProgressBar, SpinnerIcon } from '.';
 import { useFetch } from '../hooks';
+import { IGroup, IListResponse } from '../models';
 import { IFetch } from '../models/fetch.model';
 import { requestBuilder } from '../services';
 import { endpoints } from '../utilities';
@@ -15,10 +16,10 @@ const Dashboard = () => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groups, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch) => (
+      render={({ response, error, isLoading, progress }: IFetch<IListResponse<IGroup>>) => (
         <Fragment>
           {groupsLoaded ? (
-            response.totalGroups > 0 && !error ? (
+            response && response.count > 0 && !error ? (
               <>
                 <Toolbar>Dashboard</Toolbar>
                 <ClientList />

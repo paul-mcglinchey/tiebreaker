@@ -30,7 +30,7 @@ export default function App() {
 
   const [status, setStatus] = useState<IStatus[]>([]);
 
-  const [userGroup, setUserGroup] = useState<IUserGroup>(getUserGroupInStorage());
+  const [userGroup, setUserGroup] = useState<IUserGroup | undefined>(getUserGroupInStorage());
 
   const location = useLocation();
 

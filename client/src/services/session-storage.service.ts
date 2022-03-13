@@ -1,28 +1,21 @@
-export const getUserGroupInStorage = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem("userGroup") || "");
-  } catch {
-    return null;
-  }
+import { IUserResponse, IUser, IUserGroup } from "../models";
+
+export const getUserGroupInStorage = (): IUserGroup | undefined => {
+  const userGroup: string | null = sessionStorage.getItem("userGroup");
+  return userGroup ? JSON.parse(userGroup) : undefined;
 }
 
-export const getUsersInStorage = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem("users") || "");
-  } catch {
-    return null;
-  }
+export const getUsersInStorage = (): IUserResponse | undefined => {
+  const users: string | null = sessionStorage.getItem("users");
+  return users ? JSON.parse(users) : undefined;
 }
 
-export const getUserInStorage = (uuid: string) => {
-  try {
-    const users = JSON.parse(sessionStorage.getItem("users") || "{}");
-    return Object.keys(users).includes(uuid) ? users[uuid] : null;
-  } catch {
-    return null;
-  }
+export const getUserInStorage = (uuid: string): IUser | undefined => {
+  const users = getUsersInStorage() || {};
+
+  return Object.keys(users).includes(uuid) ? users[uuid] : undefined;
 }
 
-export const updateUsersInStorage = (uuid: string, user: any) => {
+export const updateUsersInStorage = (uuid: string, user: any): void => {
   sessionStorage.setItem("users", JSON.stringify({ ...getUsersInStorage(), [uuid]: user }));
 }

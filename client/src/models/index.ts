@@ -14,6 +14,11 @@ export * from './group-model';
 export * from './add-group.model';
 export * from './tag-model';
 export * from './session.model';
+export * from './authorization.model';
+export * from './list-response.model';
+export * from './tenant.model';
+export * from './user.model';
+export * from './user-response.model';
 
 export * from './props';
 export * from './types';

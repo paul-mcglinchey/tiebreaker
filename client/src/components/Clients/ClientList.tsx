@@ -6,8 +6,9 @@ import { ClientPrompter } from '.';
 import { useFetch } from '../../hooks';
 import { ApplicationContext, endpoints } from '../../utilities';
 import { requestBuilder } from '../../services';
-import { IFilter } from '../../models';
+import { IClient, IFilter } from '../../models';
 import { IFetch } from '../../models/fetch.model';
+import { IListResponse } from '../../models/list-response.model';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -54,9 +55,9 @@ const ClientList = () => {
         requestBuilder(), 
         [pageSize, pageNumber, filters, sortField, sortDirection, userGroup]
       )}
-      render={({ response, isLoading }: IFetch) => (
+      render={({ response, isLoading }: IFetch<IListResponse<IClient>>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-            {response && response.totalClients && response.totalClients > 0 ? (
+            {response && response.count && response.count > 0 ? (
               <Fragment>
                 <div className="flex flex-col flex-grow space-y-4">
                   <SearchBar
@@ -65,9 +66,8 @@ const ClientList = () => {
                     searchField='clientName'
                   />
                   <ClientTable
-                    clients={response.clients}
-                    totalClients={response.totalClients}
-                    userGroup={userGroup}
+                    clients={response.list}
+                    totalClients={response.count}
                     sortField={sortField}
                     setSortField={setSortField}
                     sortDirection={sortDirection}
@@ -76,7 +76,7 @@ const ClientList = () => {
                     isLoading={isLoading}
                   />
                 </div>
-                <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.totalClients} />
+                <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.count} />
               </Fragment>
             ) : (
               <ClientPrompter />

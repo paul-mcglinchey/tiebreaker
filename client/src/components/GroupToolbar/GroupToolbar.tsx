@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { GroupInfoDisplay, GroupCreateButton, GroupSelector } from ".";
 import { Fetch } from '..';
 import { useFetch } from "../../hooks";
-import { IUserGroup } from "../../models";
+import { IGroup, IListResponse, IUserGroup } from "../../models";
 import { IFetch } from "../../models/fetch.model";
 import { requestBuilder } from "../../services";
 import { ApplicationContext, endpoints } from "../../utilities";
@@ -25,17 +25,17 @@ const GroupToolbar = () => {
       <div className="text-white">
         <Fetch
           fetchOutput={useFetch(endpoints.groups, requestBuilder(), [userGroup])}
-          render={({ response }: IFetch) => (
+          render={({ response }: IFetch<IListResponse<IGroup>>) => (
             <>
-              {response && response.groups && (
+              {response && (
                 <div className="flex md:space-x-4 justify-end">
                   <div className="hidden md:flex space-x-4">
-                    <GroupInfoDisplay groupCount={response.groups.length} />
+                    <GroupInfoDisplay groupCount={response.count} />
                     <GroupCreateButton />
                   </div>
                   <GroupSelector
                     userGroup={userGroup}
-                    groups={response.groups}
+                    groups={response.list}
                     updateUserGroup={updateUserGroup}
                   />
                 </div>

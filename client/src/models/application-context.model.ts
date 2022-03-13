@@ -1,7 +1,7 @@
 import { IStatus, IUserGroup } from ".";
 
 export interface IApplicationContext {
-  userGroup: IUserGroup,
+  userGroup: IUserGroup | undefined,
   setUserGroup: ((userGroup: IUserGroup) => void),
   status: IStatus[],
   setStatus: ((status: IStatus[]) => void)
