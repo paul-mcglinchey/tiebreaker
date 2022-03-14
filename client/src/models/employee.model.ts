@@ -1,6 +1,7 @@
 import { DayOfWeek, EmployeeRole } from "./types";
 
 export interface IEmployee {
+  _id: string,
   role: EmployeeRole,
   reportsTo: String,
   name: {
@@ -31,5 +32,6 @@ export interface IEmployee {
     startDate: Date,
     endDate: Date,
     isPaid: boolean
-  }[]
+  }[],
+  employeeColour: string
 }

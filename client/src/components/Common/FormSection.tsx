@@ -3,7 +3,7 @@ import { CustomCheckbox } from "../Forms";
 
 const FormSection = ({ children, title, isActivatable, activator }: IFormSectionProps) => {
   return (
-    <div className="flex flex-col space-y-1">
+    <div className="flex flex-col space-y-2">
       <div className="mb-2">
         <div className="flex justify-between items-center">
           <h3 className="text-2xl font-semibold text-gray-400 tracking-wide">{title}</h3>

@@ -5,12 +5,14 @@ import { ISelectorProps } from '../../models/props/selector-props.model';
 
 const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
   return (
-    <div className="w-96 flex flex-col">
+    <div className="flex flex-grow flex-col">
       <div className="text-gray-500 uppercase font-bold">{label}</div>
       <Menu as="div" className="rounded p-2 relative my-1 bg-gray-800 flex text-gray-200">
         <Menu.Button className="flex justify-between items-center font-semibold tracking-wide w-full text-left">
-          {option ? option : label}
-          <ChevronDownIcon className="w-6 h-6" />
+          <div className="flex-grow">
+            {option && option.label ? option.label : label}
+          </div>
+          <ChevronDownIcon className="ml-1 w-6 h-6" />
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -26,14 +28,14 @@ const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
               <Menu.Item key={i}>
                 <button
                   type="button"
-                  className="flex p-2 text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold"
+                  className="flex-grow p-2 text-left text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold"
                   onClick={() => setValue(o)}
                 >
-                  {o}
+                  {o.label}
                 </button>
               </Menu.Item>
             )) : (
-              <div className="flex p-2 text-gray-400 tracking-wide rounded font-bold">
+              <div className="flex p-2 text-left text-gray-400 tracking-wide rounded font-bold">
                 No options found
               </div>
             )}
