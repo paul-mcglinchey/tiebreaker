@@ -1,4 +1,4 @@
-import { IProps } from "../../models";
+import { IProps } from "../../../models";
 
 const RotaInfoDisplay = ({ rotaCount }: IProps) => {
 

@@ -8,10 +8,10 @@ const Dashboard = ({ setCurrentApplication }: IProps) => {
 
   return (
     <div className="flex justify-center text-gray-200 mt-10 font-semibold tracking-wide space-x-4">
-      <Link className={applicationLink} to="/clients">
+      <Link className={applicationLink} to="/clients/dashboard">
         {Application.ClientManager}
       </Link>
-      <Link className={applicationLink} to="/rotas">
+      <Link className={applicationLink} to="/rotas/dashboard">
         {Application.RotaManager}
       </Link>
     </div>

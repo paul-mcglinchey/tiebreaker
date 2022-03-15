@@ -1,6 +1,6 @@
 import { GroupToolbar } from "..";
 import { IToolbarProps, ToolbarType } from "../../models";
-import { RotaToolbar } from "../RotaToolbar";
+import { RotaToolbar } from "../RotaManager/RotaToolbar";
 
 const Toolbar = ({ children, toolbarType }: IToolbarProps) => {
 

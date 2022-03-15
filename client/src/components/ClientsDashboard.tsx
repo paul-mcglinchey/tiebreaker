@@ -2,14 +2,12 @@ import { Fragment, useState } from 'react';
 
 import { ClientList, Fetch, Toolbar, GroupPrompter, ProgressBar, SpinnerIcon } from '.';
 import { useFetch } from '../hooks';
-import { Application, IProps, ToolbarType } from '../models';
+import { ToolbarType } from '../models';
 import { IFetch } from '../models/fetch.model';
 import { requestBuilder } from '../services';
 import { endpoints } from '../utilities';
 
-const ClientsDashboard = ({ setCurrentApplication }: IProps) => {
-
-  setCurrentApplication(Application.ClientManager);
+const ClientsDashboard = () => {
   const [refresh, setRefresh] = useState(false);
   const toggleRefresh = () => setRefresh(!refresh);
   const [groupsLoaded, setGroupsLoaded] = useState(false);

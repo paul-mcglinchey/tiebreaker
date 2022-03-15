@@ -35,11 +35,8 @@ const EmployeeSchema = new Schema({
     editors: [ String ],
     owners: [ String ],
   },
-  role: {
-    type: String,
-    enum: [ 'Manager', 'Supervisor', 'Staff' ],
-    default: 'Staff'
-  },
+  role: { type: String, required: true },
+  department: { type: String, required: true },
   reportsTo: { type: String, required: false },
   name: NameSchema,
   address: AddressSchema,

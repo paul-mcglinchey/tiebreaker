@@ -26,7 +26,9 @@ import {
   Notification,
   Dashboard,
   RotasDashboard,
-  AddRota
+  AddRota,
+  ClientManager,
+  RotaManager
 } from './components';
 import { AddEmployee } from './components/Employees';
 
@@ -70,57 +72,28 @@ export default function App() {
             } />
 
             {/* Client manager specific routes */}
-            <Route path="clients" element={
+            <Route path="clients/*" element={
               <PrivateRoute>
-                <ClientsDashboard setCurrentApplication={setCurrentApplication} />
+                <ClientManager setCurrentApplication={setCurrentApplication}/>
               </PrivateRoute>
-            } />
-
-            <Route path="clients/:clientId/*" element={
-              <PrivateRoute>
-                <ClientPage />
-              </PrivateRoute>
-            } />
+            }>
+              <Route path="dashboard" element={<ClientsDashboard />}/>
+              <Route path=":clientId/*" element={<ClientPage />}/>
+              <Route path="addclients" element={<AddClient />}/>
+              <Route path="groups" element={<GroupDashboard />}/>
+              <Route path="creategroup" element={<AddGroup />}/>
+            </Route>
 
             {/* Rota manager specific routes */}
-            <Route path="rotas" element={
+            <Route path="rotas/*" element={
               <PrivateRoute>
-                <RotasDashboard setCurrentApplication={setCurrentApplication} />
+                <RotaManager setCurrentApplication={setCurrentApplication}/>
               </PrivateRoute>
-            } />
-            <Route path="addrota" element={
-              <PrivateRoute>
-                <AddRota />
-              </PrivateRoute>
-            } />
-            <Route path="addemployee" element={
-              <PrivateRoute>
-                <AddEmployee />
-              </PrivateRoute>
-            } />
-
-            {/* Client Manager Navbar routes */}
-            <Route path="addclients"
-              element={
-                <PrivateRoute>
-                  <AddClient />
-                </PrivateRoute>
-              }
-            />
-            <Route path="groups"
-              element={
-                <PrivateRoute>
-                  <GroupDashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route path="creategroup"
-              element={
-                <PrivateRoute>
-                  <AddGroup />
-                </PrivateRoute>
-              }
-            />
+            }>
+              <Route path="dashboard" element={<RotasDashboard />}/>
+              <Route path="addrota" element={<AddRota />}/>
+              <Route path="addemployee" element={<AddEmployee />}/>
+            </Route>
 
             {/* Unprotected routes */}
             <Route path="login" element={<Login />} />

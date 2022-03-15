@@ -6,5 +6,7 @@ db.mongoose = mongoose;
 
 db.rota = require('./rota.model.js');
 db.employee = require('./employee.model').Employee;
+db.rotagroup = require('./rotagroup.model');
+db.grouplist = require('./grouplist.model');
 
 module.exports = db;

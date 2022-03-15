@@ -2,16 +2,15 @@ import { Fragment, useState } from 'react';
 
 import { Fetch, Toolbar, ProgressBar, SpinnerIcon } from '.';
 import { useFetch } from '../hooks';
-import { Application, IProps, ToolbarType } from '../models';
+import { ToolbarType } from '../models';
 import { IFetch } from '../models/fetch.model';
 import { requestBuilder } from '../services';
 import { endpoints } from '../utilities';
 import RotaList from './Rotas/RotaList';
 import RotaPrompter from './Rotas/RotaPrompter';
 
-const RotasDashboard = ({ setCurrentApplication }: IProps) => {
-
-  setCurrentApplication(Application.RotaManager);
+const RotasDashboard = () => {
+  
   const [refresh, setRefresh] = useState(false);
   const toggleRefresh = () => setRefresh(!refresh);
   const [rotasLoaded, setRotasLoaded] = useState(false);

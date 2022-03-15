@@ -11,6 +11,7 @@ export const endpoints = {
     "groupdefault": BASE_CLIENTS_URL + "groups/default",
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
 
+    "rotagroups": BASE_ROTAS_URL + "rotagroups",
     "rotas": BASE_ROTAS_URL + "rotas",
     "employees": BASE_ROTAS_URL + "employees",
 }

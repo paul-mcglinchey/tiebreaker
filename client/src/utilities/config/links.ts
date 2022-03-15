@@ -1,12 +1,12 @@
 export const clientLinks = [
-  { name: 'Dashboard', href: 'clients' },
-  { name: 'Add Clients', href: 'addclients' },
-  { name: 'Groups', href: 'groups' },
-  { name: 'Create Group', href: 'creategroup' }
+  { name: 'Dashboard', href: 'clients/dashboard' },
+  { name: 'Add Clients', href: 'clients/addclients' },
+  { name: 'Groups', href: 'clients/groups' },
+  { name: 'Create Group', href: 'clients/creategroup' }
 ];
 
 export const rotaLinks = [
-  { name: 'Dashboard', href: 'rotas' },
-  { name: 'Add Rotas', href: 'addrota' },
-  { name: 'Add Employees', href: 'addemployee' },
+  { name: 'Dashboard', href: 'rotas/dashboard' },
+  { name: 'Add Rota', href: 'rotas/addrota' },
+  { name: 'Add Employees', href: 'rotas/addemployee' },
 ]
