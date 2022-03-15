@@ -20,6 +20,12 @@ export * from './add-employee.model';
 export * from './fetch.model';
 export * from './rota.model';
 export * from './schedule.model';
+export * from './rota-group.model';
+export * from './rota-groups-response.model';
+export * from './groups-response.model';
+export * from './clients-response.model';
+export * from './client-response.model';
+export * from './user-response.model';
 
 export * from './props';
 export * from './types';

@@ -25,3 +25,4 @@ export * from './rota-table-props.model';
 export * from './rota-props.model';
 export * from './form-section-props.model';
 export * from './field-config-props.model';
+export * from './app-card-props.model';

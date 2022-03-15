@@ -6,7 +6,7 @@ import { IAddGroup } from '../../models';
 import { Status } from '../../models/types/status.type';
 import { requestBuilder } from '../../services';
 import { ApplicationContext, endpoints, groupValidationSchema } from '../../utilities';
-import SubmitButton from '../Common/SubmitButton';
+import { SubmitButton } from '../Common';
 
 const AddGroupForm = () => {
 

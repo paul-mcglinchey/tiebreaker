@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import { IFetch } from "../models/fetch.model";
 import { endpoints } from "../utilities";
 
-const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch => {
-  const [response, setResponse] = useState({});
+const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetch<T> => {
+  const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -65,7 +65,7 @@ const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch =
 
         })
         .then(json => {
-          setResponse(json);
+          setResponse(json as unknown as T);
         })
         .catch(err => setError(err))
         .finally(() => {

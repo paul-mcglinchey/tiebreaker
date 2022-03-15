@@ -1,17 +1,8 @@
-export * from './Auth';
-export * from './Clients';
-export * from './Forms';
+export * from './Common/Auth';
 export * from './Groups';
-export * from './Fetch';
-export * from './GroupToolbar';
-export * from './icons';
+export * from './Groups/GroupToolbar';
+export * from './Common/icons';
 export * from './Common';
-export * from './Rotas';
-export * from './RotaManager/RotaToolbar';
-
-export { default as Dashboard } from './Dashboard';
-export { default as ClientsDashboard } from './ClientsDashboard';
-export { default as RotasDashboard } from './RotasDashboard';
-export { default as NavMenu } from './NavMenu'; 
-export { default as ClientManager } from './ClientManager';
-export { default as RotaManager } from './RotaManager';
+export * from './RotaManager';
+export * from './ClientManager';
+export * from './Dashboard';

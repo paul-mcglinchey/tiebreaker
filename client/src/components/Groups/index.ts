@@ -1,3 +1,5 @@
+export * from './GroupToolbar';
+
 export { default as GroupList } from './GroupList';
 export { default as GroupDashboard } from './GroupDashboard';
 export { default as GroupCard } from './GroupCard';

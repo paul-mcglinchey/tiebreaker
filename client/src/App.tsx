@@ -11,26 +11,7 @@ import {
 import { ApplicationContext } from './utilities/contexts';
 import { getUserGroupInStorage } from './services';
 import { Application, IApplicationContext, IStatus, IUserGroup } from './models';
-import {
-  AddClient,
-  ClientPage,
-  AddGroup,
-  ClientsDashboard,
-  GroupDashboard,
-  Login,
-  NavMenu,
-  PasswordReset,
-  PasswordResetRequest,
-  Signup,
-  NotificationContainer,
-  Notification,
-  Dashboard,
-  RotasDashboard,
-  AddRota,
-  ClientManager,
-  RotaManager
-} from './components';
-import { AddEmployee } from './components/Employees';
+import { AddClient, AddEmployee, AddGroup, AddRota, ClientDashboard, ClientManager, ClientPage, Dashboard, GroupDashboard, Login, NavMenu, Notification, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaManager, Signup } from './components';
 
 export default function App() {
 
@@ -77,7 +58,7 @@ export default function App() {
                 <ClientManager setCurrentApplication={setCurrentApplication}/>
               </PrivateRoute>
             }>
-              <Route path="dashboard" element={<ClientsDashboard />}/>
+              <Route path="dashboard" element={<ClientDashboard />}/>
               <Route path=":clientId/*" element={<ClientPage />}/>
               <Route path="addclients" element={<AddClient />}/>
               <Route path="groups" element={<GroupDashboard />}/>
@@ -90,7 +71,7 @@ export default function App() {
                 <RotaManager setCurrentApplication={setCurrentApplication}/>
               </PrivateRoute>
             }>
-              <Route path="dashboard" element={<RotasDashboard />}/>
+              <Route path="dashboard" element={<RotaDashboard />}/>
               <Route path="addrota" element={<AddRota />}/>
               <Route path="addemployee" element={<AddEmployee />}/>
             </Route>

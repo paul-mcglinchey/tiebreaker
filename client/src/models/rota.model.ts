@@ -4,9 +4,7 @@ import { RotaType } from "./types";
 export interface IRota {
   _id: string,
   accessControl: {
-    viewers: string[],
-    editors: string[],
-    owners: string[],
+    [key: string]: string[],
   },
   startDate: string,
   endDate: string,
