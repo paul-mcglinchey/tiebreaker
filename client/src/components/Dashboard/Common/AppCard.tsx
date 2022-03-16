@@ -17,7 +17,7 @@ const AppCard = ({ title, subtitle, href, datapoints }: IAppCardProps) => {
             {datapoints && datapoints.map((datapoint: { title: string, value: number }, i: number) => (
               <div key={i}>
                 <span className="text-2xl font-bold">{datapoint.value}</span>
-                <span> {datapoint.title}{datapoint.value > 1 && 's'}</span>
+                <span> {datapoint.title}{(datapoint.value > 1 || datapoint.value === 0) && 's'}</span>
               </div>
             ))}
           </div>

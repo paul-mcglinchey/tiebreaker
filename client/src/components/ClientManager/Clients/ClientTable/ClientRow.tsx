@@ -2,7 +2,7 @@ import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
 import InlineLink from '../Common/InlineLink';
 import { Fragment } from 'react';
-import { IClientProps, userfrontapi } from '../../../../models';
+import { IClientProps, IUserResponseModel, userfrontapi } from '../../../../models';
 import { Fetch } from '../../..';
 import { useUserFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
@@ -29,7 +29,7 @@ const ClientRow = ({ client }: IClientProps) => {
               </span>
                 <Fetch
                   fetchOutput={useUserFetch(endpoints.user(client.updatedBy || ""), requestBuilder("GET", userfrontapi()), client.updatedBy || "")}
-                  render={({ response }: IFetch) => (
+                  render={({ response }: IFetch<IUserResponseModel>) => (
                     <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}
                     </span>

@@ -4,6 +4,7 @@ import { Fetch, Toolbar, ProgressBar, SpinnerIcon } from '..';
 import { useFetch } from '../../hooks';
 import { ToolbarType } from '../../models';
 import { IFetch } from '../../models/fetch.model';
+import { IRotasResponse } from '../../models/rotas-response.model';
 import { requestBuilder } from '../../services';
 import { endpoints } from '../../utilities';
 import RotaList from './Rotas/RotaList';
@@ -18,10 +19,10 @@ const RotaDashboard = () => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.rotas, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch) => (
+      render={({ response, error, isLoading, progress }: IFetch<IRotasResponse>) => (
         <Fragment>
           {rotasLoaded ? (
-            response.count > 0 && !error ? (
+          response && response.count > 0 && !error ? (
               <>
                 <Toolbar toolbarType={ToolbarType.Rotas}>Rotas</Toolbar>
                 <RotaList />

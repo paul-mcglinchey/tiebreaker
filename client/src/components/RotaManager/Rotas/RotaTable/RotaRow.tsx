@@ -1,12 +1,11 @@
-import { RowItem } from '.';
 import { Fragment } from 'react';
-import { IRotaProps, userfrontapi } from '../../../../models';
-import { Fetch } from '../../..';
+import { IFetch, IRotaProps, IUserResponseModel, userfrontapi } from '../../../../models';
 import { useUserFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
-import { IFetch } from '../../../../models/fetch.model';
-import { InlineLink } from '../../../ClientManager/Clients';
+import RowItem from './RowItem';
+import { Fetch } from '../../../Common';
+import { InlineLink } from '../../../ClientManager';
 
 const RotaRow = ({ rota }: IRotaProps) => {
 
@@ -41,7 +40,7 @@ const RotaRow = ({ rota }: IRotaProps) => {
               </span>
                 <Fetch
                   fetchOutput={useUserFetch(endpoints.user(rota.createdBy || ""), requestBuilder("GET", userfrontapi()), rota.createdBy || "")}
-                  render={({ response }: IFetch) => (
+                  render={({ response }: IFetch<IUserResponseModel>) => (
                     <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}
                     </span>

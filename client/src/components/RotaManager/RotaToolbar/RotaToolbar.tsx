@@ -2,6 +2,7 @@ import { RotaCreateButton, RotaInfoDisplay } from ".";
 import { Fetch } from '../..';
 import { useFetch } from "../../../hooks";
 import { IFetch } from "../../../models/fetch.model";
+import { IRotasResponse } from "../../../models/rotas-response.model";
 import { requestBuilder } from "../../../services";
 import { endpoints } from "../../../utilities";
 
@@ -12,7 +13,7 @@ const RotaToolbar = () => {
       <div className="text-white">
         <Fetch
           fetchOutput={useFetch(endpoints.rotas, requestBuilder())}
-          render={({ response }: IFetch) => (
+          render={({ response }: IFetch<IRotasResponse>) => (
             <>
               {response && response.rotas && (
                 <div className="flex md:space-x-4 justify-end">

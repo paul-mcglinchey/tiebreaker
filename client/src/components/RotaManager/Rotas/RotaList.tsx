@@ -6,6 +6,7 @@ import { endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
 import { IFetch } from '../../../models/fetch.model';
 import RotaPrompter from './RotaPrompter';
+import { IRotasResponse } from '../../../models/rotas-response.model';
 
 const headers = [
   { name: "Start date", value: "startDate", interactive: true },
@@ -24,7 +25,7 @@ const RotaList = () => {
     <Fetch
       fetchOutput={useFetch(endpoints.rotas, requestBuilder(), [sortField, sortDirection]
       )}
-      render={({ response, isLoading }: IFetch) => (
+      render={({ response, isLoading }: IFetch<IRotasResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
               <Fragment>

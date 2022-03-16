@@ -6,7 +6,7 @@ const GroupList = db.grouplist;
 
 // Read Operations
 exports.getRotaGroups = async (req, res) => {
-
+  
   // the mongoose query to fetch the groups for the current user
   let groupQuery = { 'accessControl.viewers': req.auth.userUuid };
 

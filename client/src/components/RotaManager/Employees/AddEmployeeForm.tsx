@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints, profileColours } from "../../../utilities";
-import { EmployeeRole, IAddEmployee, IEmployee, IFetch, Status } from "../../../models";
+import { EmployeeRole, IAddEmployee, IEmployee, IEmployeeResponse, IFetch, Status } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { CustomDate, FormSection, Selector, StyledDatePicker, StyledField, SubmitButton } from "../../Common";
 import { useFetch } from "../../../hooks";
@@ -71,7 +71,7 @@ const AddEmployeeForm = () => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.employees, requestBuilder("GET"))}
-      render={({ response }: IFetch) => (
+      render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
             reportsTo: '',

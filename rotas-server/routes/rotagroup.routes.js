@@ -15,21 +15,21 @@ module.exports = app => {
     '/', 
     middleware.createGroup.checkIfGroupExists,
     middleware.createGroup.checkIfFirstGroup,
-    rotagroup.createGroup
+    rotagroup.createRotaGroup
   );
 
   // Delete a rotagroup
   router.delete('/', 
     middleware.createGroup.checkIfGroupExists,
     middleware.createGroup.checkUserAccessToGroup('owner'), 
-    rota.deleteGroup
+    rotagroup.deleteRotaGroup
   );
 
   // Update default rotagroup
   router.put('/default',
     rotagroup.setDefaultGroup,
     middleware.createGroup.checkUserAccessToGroup('editor'), 
-    rota.deleteGroup
+    rotagroup.deleteRotaGroup
   );
 
   app.use('/api/rotagroups', router);

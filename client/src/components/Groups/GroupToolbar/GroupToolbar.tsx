@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { GroupInfoDisplay, GroupCreateButton, GroupSelector } from ".";
 import { useFetch } from "../../../hooks";
-import { IUserGroup } from "../../../models";
-import { IFetch } from "../../../models/fetch.model";
+import { IFetch, IGroupsResponse, IUserGroup } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
-import { Fetch } from "../../Common/Fetch";
+import { Fetch } from "../../Common";
 
 const GroupToolbar = () => {
 
@@ -25,7 +24,7 @@ const GroupToolbar = () => {
       <div className="text-white">
         <Fetch
           fetchOutput={useFetch(endpoints.groups, requestBuilder(), [userGroup])}
-          render={({ response }: IFetch) => (
+          render={({ response }: IFetch<IGroupsResponse>) => (
             <>
               {response && response.groups && (
                 <div className="flex md:space-x-4 justify-end">

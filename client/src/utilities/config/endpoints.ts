@@ -14,4 +14,6 @@ export const endpoints = {
     "rotagroups": BASE_ROTAS_URL + "rotagroups",
     "rotas": BASE_ROTAS_URL + "rotas",
     "employees": BASE_ROTAS_URL + "employees",
+
+    "grouplists": BASE_ROTAS_URL + "grouplists"
 }

@@ -6,7 +6,7 @@ const RotaPrompter = () => {
     <Prompter 
       Icon={TableIcon}
       title="Add a rota to get started"
-      route="/addrota"
+      route="/rotas/addrota"
     />
   )
 }

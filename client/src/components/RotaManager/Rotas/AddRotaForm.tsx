@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useFetch } from '../../../hooks';
 
-import { IAddRota, IEmployee, IFetch } from '../../../models';
+import { IAddRota, IEmployee, IEmployeeResponse, IFetch } from '../../../models';
 import { Status } from '../../../models/types/status.type';
 import { requestBuilder } from '../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../utilities';
@@ -37,7 +37,7 @@ const AddRotaForm = () => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.employees, requestBuilder())}
-      render={({ response }: IFetch) => (
+      render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
             startDate: new Date().toISOString().split("T")[0] || "1970-01-01",

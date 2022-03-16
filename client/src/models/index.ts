@@ -26,6 +26,7 @@ export * from './groups-response.model';
 export * from './clients-response.model';
 export * from './client-response.model';
 export * from './user-response.model';
+export * from './employee-response.model';
 
 export * from './props';
 export * from './types';

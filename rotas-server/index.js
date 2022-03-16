@@ -42,6 +42,7 @@ app.use(middleware.authJwt.verifyToken);
 // routes
 require('./routes/rota.routes')(app);
 require('./routes/employee.routes')(app);
+require('./routes/rotagroup.routes')(app);
 
 // get the current time to display on restarts of the server
 var currentDateTime = new Date();
