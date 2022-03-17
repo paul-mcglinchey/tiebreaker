@@ -25,12 +25,5 @@ module.exports = app => {
     rotagroup.deleteRotaGroup
   );
 
-  // Update default rotagroup
-  router.put('/default',
-    rotagroup.setDefaultGroup,
-    middleware.createGroup.checkUserAccessToGroup('editor'), 
-    rotagroup.deleteRotaGroup
-  );
-
   app.use('/api/rotagroups', router);
 }

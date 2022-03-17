@@ -6,13 +6,13 @@ const GroupList = mongoose.model(
   new Schema({
     lists: [{
       name: { type: String, required: true },
-      default: { type: String, required: true },
       values: [{
         short: String, long: { type: String, required: true }
       }]
     }],
     createdBy: String,
-    updatedBy: String
+    updatedBy: String,
+    systemOwned: Boolean,
   }, { timestamps: true })
 );
 

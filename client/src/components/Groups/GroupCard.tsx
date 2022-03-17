@@ -13,7 +13,8 @@ const GroupCard = <TGroup extends IGroup>({ g }: IGroupProps<TGroup>) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
-  const currentUser = useFetch<IUserResponseModel>(endpoints.clientgroupdefault, requestBuilder("GET")).response;
+  
+  const currentUser = useFetch<IUserResponseModel>(endpoints.currentuser, requestBuilder("GET")).response;
   const isDefaultGroup: boolean = currentUser?.data.defaultClientGroup === g._id;
 
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);

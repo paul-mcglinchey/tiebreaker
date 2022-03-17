@@ -1,6 +1,5 @@
-const { ufApiKey } = require('../config/auth.config');
 const db = require('../models');
-const fetch = require('node-fetch');
+const { setDefaultGroup } = require('./user.controller');
 const ClientGroup = db.clientgroup;
 const Client = db.client;
 const GroupList = db.grouplist;
@@ -65,18 +64,7 @@ exports.createClientGroup = async (req, res) => {
     .then(data => {
       // if this group has been flagged as the default group then we need to update that for the user
       // update the default group field from userfront
-      fetch(`https://api.userfront.com/v0/users/${req.auth.userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${ufApiKey}`
-        },
-        body: JSON.stringify({
-          data: {
-            "defaultClientGroup": `${data._id}`
-          }
-        })
-      })
+      setDefaultGroup(req.auth.userId, "defaultClientGroup", data._id)
         .catch(err => {
           console.log(err.message || `Some error occurred while setting the default group.`)
         })
@@ -141,48 +129,5 @@ exports.deleteClientGroup = async (req, res) => {
             message: 'Could not delete group with id ' + req.body._id
           });
         });
-    })
-}
-
-exports.getDefaultClientGroup = async (req, res) => {
-  // Request current user data from Userfront and return the default client group
-  fetch(`https://api.userfront.com/v0/users/${req.auth.userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ufApiKey}`
-    }
-  })
-    .then(res => res.json())
-    .then(json => res.status(200).send(json))
-    .catch(err => {
-      res.status(500).send(err.message || `Some error occurred while getting the default group.`)
-    })
-}
-
-// Editors and owners can perform this action, not viewers
-exports.setDefaultClientGroup = async (req, res) => {
-  // Set the defaultClientGroup field of the current user
-  fetch(`https://api.userfront.com/v0/users/${req.auth.userId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ufApiKey}`
-    },
-    body: JSON.stringify({
-      data: {
-        defaultClientGroup: req.body._id
-      }
-    })
-  })
-    .then(response => {
-      if (response.status === 400) return res.status(400).send(`Bad request.`);
-      if (response.status !== 200) return res.status(500).send(`Server error.`);
-
-      return response.json();
-    })
-    .then(json => res.status(200).send(json))
-    .catch(err => {
-      res.status(500).send(err.message || `Some error occurred while getting the default group.`)
     })
 }
