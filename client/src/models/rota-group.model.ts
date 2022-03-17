@@ -1,11 +1,6 @@
-export interface IRotaGroup {
-  groupName: string,
-  default: boolean,
-  accessControl: {
-    [key: string]: string[]
-  },
+import { IGroup } from "./group.model"
+
+export interface IRotaGroup extends IGroup {
   employees: string[],
-  rotas: string[],
-  listDefinitions: string,
-  groupColour: string
+  rotas: string[]
 }

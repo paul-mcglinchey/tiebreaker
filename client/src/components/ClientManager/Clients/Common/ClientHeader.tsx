@@ -1,6 +1,6 @@
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { Link, useLocation } from "react-router-dom";
-import { ColourPicker } from ".";
+import { ClientColourPicker } from ".";
 import { SquareIconButton } from "../../..";
 import { IClientProps } from "../../../../models";
 
@@ -38,7 +38,9 @@ const ClientHeader = ({ client }: IClientProps) => {
         </span>
         <span>{getRouteName()}</span>
       </div>
-      <ColourPicker client={client} />
+      <div>
+        <ClientColourPicker client={client} />
+      </div>
     </div>
   )
 }

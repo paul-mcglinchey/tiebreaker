@@ -8,14 +8,14 @@ import { requestBuilder } from '../../../../services';
 import { IClientProps, ITag } from '../../../../models';
 import { IAddSession } from '../../../../models/add-session.model';
 import { Status } from '../../../../models/types/status.type';
-import { ApplicationContext } from '../../../../utilities';
+import { StatusContext } from '../../../../utilities';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
 const AddSessionForm = ({ client }: IClientProps) => {
 
-  const { status, setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
   const [tags, setTags] = useState<ITag[]>([]);
 
   const handleSubmit = async (values: IAddSession) => {

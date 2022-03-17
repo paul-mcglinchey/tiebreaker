@@ -1,13 +1,10 @@
 import { useFetch } from "../../hooks";
-import { Application, IGroup, IGroupsResponse, IProps, IRotaGroup, IRotaGroupsResponse } from "../../models";
+import { Application, IClientGroup, IGroupsResponse, IRotaGroup } from "../../models";
 import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { AppCard } from "./Common";
 
-const Dashboard = ({ setCurrentApplication }: IProps) => {
-
-  setCurrentApplication(undefined);
-
+const Dashboard = () => {
   const getTotalEmployees = (rotaGroups: IRotaGroup[]): number => {
     const distinctEmployees: string[] = [];
 
@@ -32,45 +29,49 @@ const Dashboard = ({ setCurrentApplication }: IProps) => {
     return distinctRotas.length;
   }
 
-  const getTotalClients = (clientGroups: IGroup[]): number => {
+  const getTotalClients = (clientGroups: IClientGroup[]): number => {
     let totalClients: number = 0;
 
-    clientGroups.forEach((clientGroup: IGroup) => {
+    clientGroups.forEach((clientGroup: IClientGroup) => {
       totalClients += clientGroup.clients.length;
     })
 
     return totalClients;
   }
 
-  const groupsResponse = useFetch<IGroupsResponse>(endpoints.groups, requestBuilder("GET")).response;
-  const rotaGroupsResponse = useFetch<IRotaGroupsResponse>(endpoints.rotagroups, requestBuilder("GET")).response;
+  const clientGroupsResponse = useFetch<IGroupsResponse<IClientGroup>>(endpoints.clientgroups, requestBuilder("GET")).response;
+  const rotaGroupsResponse = useFetch<IGroupsResponse<IRotaGroup>>(endpoints.rotagroups, requestBuilder("GET")).response;
 
   return (
-    <div className="flex justify-start text-gray-200 mt-10 font-semibold tracking-wide space-x-8">
-      {groupsResponse && groupsResponse.groups && (
-        <AppCard title={Application.ClientManager} href="/clients/dashboard" subtitle="Manage all of your clients here." 
+    <div className="flex flex-col md:flex-row justify-start text-gray-200 mt-10 font-semibold tracking-wide gap-8">
+      {clientGroupsResponse && clientGroupsResponse.groups && (
+        <AppCard title={Application.ClientManager} href="/clients/dashboard" subtitle="Manage all of your clients here."
           datapoints={[
             {
               title: 'group',
-              value: groupsResponse ? groupsResponse.totalGroups : 0
+              value: clientGroupsResponse ? clientGroupsResponse.count : 0
             },
             {
               title: 'client',
-              value: getTotalClients(groupsResponse.groups)
+              value: getTotalClients(clientGroupsResponse.groups)
             }
           ]}
         />
       )}
-      {rotaGroupsResponse && rotaGroupsResponse.rotaGroups && (
-        <AppCard title={Application.RotaManager} href="/rotas/dashboard" subtitle="Manage all of your rotas here." 
+      {rotaGroupsResponse && rotaGroupsResponse.groups && (
+        <AppCard title={Application.RotaManager} href="/rotas/dashboard" subtitle="Manage all of your rotas here."
           datapoints={[
             {
+              title: 'group',
+              value: rotaGroupsResponse ? rotaGroupsResponse.count : 0
+            },
+            {
               title: 'rota',
-              value: getTotalRotas(rotaGroupsResponse.rotaGroups)
+              value: getTotalRotas(rotaGroupsResponse.groups)
             },
             {
               title: 'employee',
-              value: getTotalEmployees(rotaGroupsResponse.rotaGroups)
+              value: getTotalEmployees(rotaGroupsResponse.groups)
             }
           ]}
         />

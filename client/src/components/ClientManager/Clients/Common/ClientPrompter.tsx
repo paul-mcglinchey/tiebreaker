@@ -6,7 +6,7 @@ const ClientPrompter = () => {
     <Prompter
       Icon={UserAddIcon}
       title="Add your first client"
-      route="/addclients"
+      route="/clients/addclients"
     />
   )
 }

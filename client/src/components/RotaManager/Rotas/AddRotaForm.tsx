@@ -6,13 +6,13 @@ import { useFetch } from '../../../hooks';
 import { IAddRota, IEmployee, IEmployeeResponse, IFetch } from '../../../models';
 import { Status } from '../../../models/types/status.type';
 import { requestBuilder } from '../../../services';
-import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../utilities';
+import { endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
 import { CustomDate, StyledDatePicker, SubmitButton } from '../../Common';
 import { Fetch } from '../../Common/Fetch';
 
 const AddRotaForm = () => {
 
-  const { status, setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
 
   const addRota = (values: IAddRota) => {
     setStatus([...status, {
@@ -65,7 +65,7 @@ const AddRotaForm = () => {
                       ))
                     ) : (
                       <div className="text-gray-200 text-sm flex-1 self-center">
-                        No employees found, add your employees <Link className="text-blue-300" to="/addemployee">here</Link>
+                        No employees found, add your employees <Link className="text-blue-300" to="/rotas/addemployee">here</Link>
                       </div>
                     )
                   )}

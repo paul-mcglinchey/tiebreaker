@@ -6,7 +6,7 @@ import { ToolbarType } from "../../../../models";
 const AddClient = () => {
   return (
     <div>
-      <Toolbar toolbarType={ToolbarType.Groups}>
+      <Toolbar toolbarTypes={[ToolbarType.ClientGroups]}>
         Add new clients
       </Toolbar>
       <AddClientForm />

@@ -9,6 +9,7 @@ export interface IUserResponseModel {
   image: string,
   locked: boolean,
   data: {
+    defaultClientGroup?: string,
     [key: string]: string
   },
   isConfirmed: boolean,

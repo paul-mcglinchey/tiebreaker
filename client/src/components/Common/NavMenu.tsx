@@ -1,4 +1,4 @@
-import { Fragment, useContext } from 'react';
+import { Fragment } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
 import Userfront from '@userfront/core';
 
@@ -6,17 +6,15 @@ import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import { SmartLink, ThumbIcon, WideIcon } from '..';
-import { ApplicationContext, clientLinks, rotaLinks } from '../../utilities';
+import { clientLinks, rotaLinks } from '../../utilities';
 import { combineClassNames } from '../../services';
-import { Application } from '../../models';
+import { Application, IProps } from '../../models';
 
 const handleLogout = () => {
   Userfront.logout({ redirect: '/login' });
 }
 
-const NavMenu = () => {
-
-  const { currentApplication } = useContext(ApplicationContext);
+const NavMenu = ({ currentApplication }: IProps) => {
 
   let links: { name: string, href: string }[] = [];
 

@@ -1,21 +1,24 @@
-import { useState } from 'react';
-import { CheckIcon } from '@heroicons/react/solid';
-import { IProps } from '../../../models';
+import { ICustomCheckBoxProps } from '../../../models';
+import { combineClassNames } from '../../../services';
 
-const CustomCheckbox = ({ action }: IProps) => {
-
-  const [checked, setChecked] = useState(false);
-  const toggleChecked = () => {
-    action();
-    setChecked(!checked);
-  }
+const CustomCheckbox = ({ state, setState, label }: ICustomCheckBoxProps) => {
+  const toggleChecked = () => setState(!state);
 
   return (
-    <div onClick={() => toggleChecked()} className="bg-gray-800 rounded h-10 w-10 hover:bg-gray-700 transition-all text-blue-800">
-      <div>
-        {checked &&
-          <CheckIcon />
-        }
+    <div className="flex flex-col h-full">
+      <div className="flex justify-center">
+        {label && (
+          <label className="font-bold text-gray-500 mb-1 uppercase">
+            {label}
+          </label>
+        )}
+      </div>
+      <div onClick={() => toggleChecked()} className="flex flex-grow items-center justify-center">
+        <div className="h-6 w-12 bg-gray-800 rounded-full hover:bg-gray-700 transition-all">
+          <button type="button" className={combineClassNames(
+            "w-1/2 h-full rounded-full transform transition-transform drop-shadow-lg", state ? "bg-green-500 translate-x-full" : "bg-gray-500"
+          )} />
+        </div>
       </div>
     </div>
   )

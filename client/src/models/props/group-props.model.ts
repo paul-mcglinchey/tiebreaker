@@ -1,5 +1,3 @@
-import { IGroup } from "..";
-
-export interface IGroupProps {
-  g: IGroup;
+export interface IGroupProps<TGroup> {
+  g: TGroup
 }

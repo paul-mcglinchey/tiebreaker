@@ -10,3 +10,4 @@ export { default as SquareIconButton } from './SquareIconButton';
 export { default as Paginator } from './Paginator';
 export { default as Selector } from './Selector';
 export { default as NavMenu } from './NavMenu';
+export { default as ColourPicker } from './ColourPicker';

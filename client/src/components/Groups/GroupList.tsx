@@ -1,37 +1,14 @@
-import { Fetch, GroupCard, GroupPrompter, SpinnerIcon } from '..';
-import { useFetch } from '../../hooks';
-import { IGroup, IGroupsResponse } from '../../models';
-import { IFetch } from '../../models/fetch.model';
-import { requestBuilder } from '../../services';
-import { endpoints } from '../../utilities';
+import { GroupCard } from '..';
+import { IGroup, IGroupsProps } from '../../models';
 
-const Groups = () => {
+const Groups = <TGroup extends IGroup>({ groups }: IGroupsProps<TGroup>) => {
 
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestBuilder())}
-      render={({ response, isLoading }: IFetch<IGroupsResponse>) => (
-        isLoading ? (
-          <div className="flex justify-center py-10">
-            <SpinnerIcon className="text-white h-12 w-12" />
-          </div>
-        ) : (
-          response && response.totalGroups > 0 ? (
-            <div className="flex flex-wrap -m-2 mb-2">
-              {response.groups.map((g: IGroup) => (
-                <GroupCard g={g} key={g._id} />
-              ))}
-            </div>
-          ) : (
-            setTimeout(() => {
-              return (
-                <GroupPrompter />
-              )
-            }, 500)
-          )
-        )
-      )}
-    />
+    <div className="flex flex-wrap -m-2 mb-2">
+      {groups.map((g: TGroup) => (
+        <GroupCard g={g} key={g._id} />
+      ))}
+    </div>
   )
 }
 

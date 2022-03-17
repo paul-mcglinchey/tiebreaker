@@ -1,22 +1,19 @@
 import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { ApplicationContext, employeeValidationSchema, endpoints, profileColours } from "../../../utilities";
+import { employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
 import { EmployeeRole, IAddEmployee, IEmployee, IEmployeeResponse, IFetch, Status } from "../../../models";
-import { requestBuilder } from "../../../services";
+import { generateColour, requestBuilder } from "../../../services";
 import { CustomDate, FormSection, Selector, StyledDatePicker, StyledField, SubmitButton } from "../../Common";
 import { useFetch } from "../../../hooks";
 import { Fetch } from "../../Common/Fetch";
 
 const AddEmployeeForm = () => {
 
-  const { status, setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
 
   const [addressActive, setAddressActive] = useState(false);
-  const toggleAddressActive = () => setAddressActive(!addressActive);
-
   const [requirementsActive, setRequirementsActive] = useState(false);
-  const toggleRequirementsActive = () => setRequirementsActive(!requirementsActive);
 
   const [employeeRole, setEmployeeRole] = useState<{ value: EmployeeRole, label: EmployeeRole }>({ value: EmployeeRole.Staff, label: EmployeeRole.Staff });
   const [reportsTo, setReportsTo] = useState<{ value: string, label: string } | undefined>();
@@ -52,7 +49,7 @@ const AddEmployeeForm = () => {
     }])
 
     // generates a new random colour to be used for profile display
-    values.employeeColour = profileColours[Math.floor(Math.random() * profileColours.length)];
+    values.employeeColour = generateColour();
 
     await fetch(endpoints.employees, requestBuilder('POST', undefined, values))
       .then(res => {
@@ -110,7 +107,7 @@ const AddEmployeeForm = () => {
           {({ errors, touched }) => (
             <Form>
               <div className="flex flex-grow flex-col space-y-6 content-end">
-                <FormSection title="Job description" isActivatable={false}>
+                <FormSection title="Job description">
                   <div className="flex space-x-4">
                     <Selector options={getEmployeeRoleOptions()} option={employeeRole} setValue={(e) => setEmployeeRole(e)} label="Employee role" />
                     {response && response.employees && (
@@ -118,7 +115,7 @@ const AddEmployeeForm = () => {
                     )}
                   </div>
                 </FormSection>
-                <FormSection title="Employee information" isActivatable={false}>
+                <FormSection title="Employee information">
                   <div className="flex flex-col md:flex-row md:space-x-4 space-x-0 space-y-1 md:space-y-0">
                     <StyledField name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
                     <StyledField name="name.middleNames" label="Middle Names" errors={errors.name?.middleNames} touched={touched.name?.middleNames} />
@@ -133,7 +130,7 @@ const AddEmployeeForm = () => {
                     <StyledDatePicker name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
                   </div>
                 </FormSection>
-                <FormSection title="Employee address" isActivatable={true} activator={toggleAddressActive}>
+                <FormSection title="Employee address" state={addressActive} setState={setAddressActive}>
                   <Transition
                     show={addressActive}
                     enter="transition ease-out duration-200"
@@ -160,7 +157,7 @@ const AddEmployeeForm = () => {
                     </div>
                   </Transition>
                 </FormSection>
-                <FormSection title="Scheduling requirements" isActivatable={true} activator={toggleRequirementsActive}>
+                <FormSection title="Scheduling requirements" state={requirementsActive} setState={setRequirementsActive}>
                   <Transition
                     show={requirementsActive}
                     enter="transition ease-out duration-200"

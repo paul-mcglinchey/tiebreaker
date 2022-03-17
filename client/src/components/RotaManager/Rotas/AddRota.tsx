@@ -6,7 +6,7 @@ const AddRota = () => {
 
   return (
     <>
-      <Toolbar toolbarType={ToolbarType.Rotas}>Add Rota</Toolbar>
+      <Toolbar toolbarTypes={[ToolbarType.Rotas]}>Add Rota</Toolbar>
       <div className="flex justify-center lg:space-x-4">
         <AddRotaForm />
       </div>

@@ -18,7 +18,7 @@ const headers = [
 
 const ClientList = () => {
 
-  const { userGroup } = useContext(ApplicationContext);
+  const { clientGroup } = useContext(ApplicationContext);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -35,7 +35,7 @@ const ClientList = () => {
     var queryString = "";
 
     queryString += `pageNumber=${pageNumber}&pageSize=${pageSize}&`;
-    queryString += `groupName=${userGroup && userGroup.groupName}&`;
+    queryString += `groupName=${clientGroup && clientGroup.groupName}&`;
     queryString += `sortField=${sortField}&sortDirection=${sortDirection}&`
 
     for (var key in filters) {
@@ -52,7 +52,7 @@ const ClientList = () => {
       fetchOutput={useFetch(
         `${endpoints.clients}?${buildQueryString()}`, 
         requestBuilder(), 
-        [pageSize, pageNumber, filters, sortField, sortDirection, userGroup]
+        [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup]
       )}
       render={({ response, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
@@ -67,7 +67,7 @@ const ClientList = () => {
                   <ClientTable
                     clients={response.clients}
                     totalClients={response.totalClients}
-                    userGroup={userGroup}
+                    clientGroup={clientGroup}
                     sortField={sortField}
                     setSortField={setSortField}
                     sortDirection={sortDirection}

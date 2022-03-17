@@ -1,14 +1,6 @@
-export const getUserGroupInStorage = () => {
+export const getItemInStorage = (itemName: string) => {
   try {
-    return JSON.parse(sessionStorage.getItem("userGroup") || "");
-  } catch {
-    return null;
-  }
-}
-
-export const getUsersInStorage = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem("users") || "");
+    return JSON.parse(sessionStorage.getItem(itemName) || "");
   } catch {
     return null;
   }
@@ -24,5 +16,5 @@ export const getUserInStorage = (uuid: string) => {
 }
 
 export const updateUsersInStorage = (uuid: string, user: any) => {
-  sessionStorage.setItem("users", JSON.stringify({ ...getUsersInStorage(), [uuid]: user }));
+  sessionStorage.setItem("users", JSON.stringify({ ...getItemInStorage("users"), [uuid]: user }));
 }

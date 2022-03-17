@@ -19,12 +19,12 @@ const Notification = ({ status }: IProps) => {
   }
 
   useEffect(() => {
-    setTimeout(() => close(), 20000);
+    setTimeout(() => close(), 5000);
   })
 
   return (
     <Transition
-      show={open}
+      show={open && !status.isLoading}
       enter="transition ease-in-out duration-150"
       enterFrom="transform translate-x-full"
       enterTo="transform translate-x-0"
@@ -40,7 +40,7 @@ const Notification = ({ status }: IProps) => {
       <div className="flex justify-between">
         <span className="font-bold">{status.message}</span>
         <button onClick={() => close()} className="flex items-center">
-          <XIcon className="w-5 h-5 text-red-500" />
+          <XIcon className="w-5 h-5 text-gray-500" />
         </button>
       </div>
     </Transition>

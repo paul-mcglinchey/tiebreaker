@@ -2,21 +2,22 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { requestBuilder } from "../../../../services";
-import { CustomCheckbox, CustomDate, StyledDatePicker, StyledField, SubmitButton } from "../../..";
-import { ApplicationContext, clientValidationSchema, endpoints, profileColours } from "../../../../utilities";
+import { generateColour, requestBuilder } from "../../../../services";
+import { CustomDate, StyledDatePicker, StyledField, SubmitButton } from "../../..";
+import { ApplicationContext, clientValidationSchema, endpoints, StatusContext } from "../../../../utilities";
 import { IAddClient } from "../../../../models";
 import { Status } from "../../../../models/types/status.type";
+import { FormSection } from "../../../Common";
 
 const AddClientForm = () => {
 
-  const { userGroup, status, setStatus } = useContext(ApplicationContext);
+  const { clientGroup } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
 
   const [addressActive, setAddressActive] = useState(false);
-  const toggleAddressActive = () => setAddressActive(!addressActive);
 
   const handleSubmit = async (values: IAddClient) => {
     setStatus([...status, {
@@ -25,7 +26,7 @@ const AddClientForm = () => {
       type: Status.None
     }])
 
-    if (!userGroup) {
+    if (!clientGroup) {
       setStatus([...status, {
         isLoading: false,
         message: 'Group must be set',
@@ -35,15 +36,15 @@ const AddClientForm = () => {
       return;
     }
 
-    values.groupName = userGroup && userGroup.groupName;
+    values.groupName = clientGroup && clientGroup.groupName;
 
     // generates a new random colour to be used for profile display
-    values.clientColour = profileColours[Math.floor(Math.random() * profileColours.length)];
+    values.clientColour = generateColour();
 
     await fetch(endpoints.clients, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          setStatus([...status, { isLoading: false, message: `Added client successfully`, type: Status.Success}]);
+          setStatus([...status, { isLoading: false, message: `Added client successfully`, type: Status.Success }]);
         } else {
           setStatus([...status, { isLoading: false, message: `A problem occurred adding the client`, type: Status.Error }]);
         }
@@ -98,44 +99,36 @@ const AddClientForm = () => {
             </div>
             <div className="flex justify-between">
               <StyledDatePicker name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
-              <div>
-                <div className="flex-col">
-                  <label className="block font-bold text-gray-500 mb-1 uppercase">
-                    Address
-                  </label>
-                  <div className="flex justify-end">
-                    <CustomCheckbox action={() => toggleAddressActive()} />
-                  </div>
-                </div>
-              </div>
             </div>
-            <Transition
-              show={addressActive}
-              enter="transition ease-out duration-200"
-              enterFrom="transform opacity-0 scale-y-0"
-              enterTo="transform opacity-100 scale-y-100"
-              leave="transition ease-in duration-200"
-              leaveFrom="transform opacity-100 scale-y-100"
-              leaveTo="transform opacity-0 scale-y-0"
-              className="origin-top"
-            >
-              <div className="flex flex-col space-y-2">
+            <FormSection title="Address" state={addressActive} setState={setAddressActive}>
+              <Transition
+                show={addressActive}
+                enter="transition ease-out duration-200"
+                enterFrom="transform opacity-0 scale-y-0"
+                enterTo="transform opacity-100 scale-y-100"
+                leave="transition ease-in duration-200"
+                leaveFrom="transform opacity-100 scale-y-100"
+                leaveTo="transform opacity-0 scale-y-0"
+                className="origin-top"
+              >
                 <div className="flex flex-col space-y-2">
-                  <StyledField name="addressLineOne" label="Address Line 1" errors={errors.addressLineOne} touched={touched.addressLineOne} />
-                  <StyledField name="addressLineTwo" label="Address Line 2" errors={errors.addressLineTwo} touched={touched.addressLineTwo} />
-                  <StyledField name="addressLineThree" label="Address Line 3" errors={errors.addressLineThree} touched={touched.addressLineThree} />
-                </div>
-                <div className="flex flex-1 md:flex-row flex-col md:space-x-2 space-x-0 space-y-2 md:space-y-0">
-                  <div className="md:max-w-1/5">
-                    <StyledField autoComplete="false" name="city" label="City" errors={errors.city} touched={touched.city} />
+                  <div className="flex flex-col space-y-2">
+                    <StyledField name="addressLineOne" label="Address Line 1" errors={errors.addressLineOne} touched={touched.addressLineOne} />
+                    <StyledField name="addressLineTwo" label="Address Line 2" errors={errors.addressLineTwo} touched={touched.addressLineTwo} />
+                    <StyledField name="addressLineThree" label="Address Line 3" errors={errors.addressLineThree} touched={touched.addressLineThree} />
                   </div>
-                  <div className="relative">
-                    <StyledField name="country" label="Country" errors={errors.country} touched={touched.country} />
+                  <div className="flex flex-1 md:flex-row flex-col md:space-x-2 space-x-0 space-y-2 md:space-y-0">
+                    <div className="md:max-w-1/5">
+                      <StyledField autoComplete="false" name="city" label="City" errors={errors.city} touched={touched.city} />
+                    </div>
+                    <div className="relative">
+                      <StyledField name="country" label="Country" errors={errors.country} touched={touched.country} />
+                    </div>
+                    <StyledField name="postCode" label="Post Code" errors={errors.postCode} touched={touched.postCode} />
                   </div>
-                  <StyledField name="postCode" label="Post Code" errors={errors.postCode} touched={touched.postCode} />
                 </div>
-              </div>
-            </Transition>
+              </Transition>
+            </FormSection>
           </div>
           <div className="flex justify-end my-10">
             <SubmitButton status={status[status.length - 1] || []} content='Add client' />

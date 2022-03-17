@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { useFetch } from '../../hooks';
-import { IFetch, IGroupsResponse, ToolbarType } from '../../models';
+import { IClientGroup, IFetch, IGroupsResponse, ToolbarType } from '../../models';
 import { requestBuilder } from '../../services';
 import { endpoints } from '../../utilities';
 import { Fetch, SpinnerIcon, Toolbar } from '../Common';
@@ -14,13 +14,13 @@ const ClientDashboard = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch<IGroupsResponse>) => (
+      fetchOutput={useFetch(endpoints.clientgroups, requestBuilder(), [refresh])}
+      render={({ response, error, isLoading, progress }: IFetch<IGroupsResponse<IClientGroup>>) => (
         <Fragment>
           {groupsLoaded ? (
-            response && response.totalGroups > 0 && !error ? (
+            response && response.count > 0 && !error ? (
               <>
-                <Toolbar toolbarType={ToolbarType.Groups}>Clients</Toolbar>
+                <Toolbar toolbarTypes={[ToolbarType.ClientGroups]}>Clients</Toolbar>
                 <ClientList />
               </>
             ) : (
@@ -44,7 +44,7 @@ const ClientDashboard = () => {
                   </div>
                 </div>
               ) : (
-                <GroupPrompter />
+                <GroupPrompter href="/clients/creategroup"/>
               )
             )
           ) : (

@@ -1,10 +1,9 @@
-import { IStatus, IUserGroup } from ".";
-import { Application } from "./types";
+import { IClientGroup } from "./client-group-model";
+import { IRotaGroup } from "./rota-group.model";
 
 export interface IApplicationContext {
-  userGroup: IUserGroup,
-  setUserGroup: ((userGroup: IUserGroup) => void),
-  status: IStatus[],
-  setStatus: ((status: IStatus[]) => void),
-  currentApplication: Application | undefined
+  rotaGroup: IRotaGroup,
+  setRotaGroup: (group: IRotaGroup) => void,
+  clientGroup: IClientGroup,
+  setClientGroup: (group: IClientGroup) => void
 }

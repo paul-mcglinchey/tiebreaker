@@ -1,14 +1,14 @@
 import { IFormSectionProps } from "../../../models";
 import { CustomCheckbox } from ".";
 
-const FormSection = ({ children, title, isActivatable, activator }: IFormSectionProps) => {
+const FormSection = ({ children, title, state, setState }: IFormSectionProps) => {
   return (
     <div className="flex flex-col space-y-2">
       <div className="mb-2">
         <div className="flex justify-between items-center">
           <h3 className="text-2xl font-semibold text-gray-400 tracking-wide">{title}</h3>
-          {isActivatable && typeof activator === "function" && (
-            <CustomCheckbox action={() => activator()} />
+          {typeof state === "boolean" && typeof setState === "function" && (
+            <CustomCheckbox state={state} setState={setState} />
           )}
         </div>
         <hr className="mt-2 border-gray-700" />

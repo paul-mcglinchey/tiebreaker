@@ -1,16 +1,19 @@
 import { Formik, Form } from 'formik';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { StyledField } from '..';
-import { IAddGroup } from '../../models';
+import { IAddGroup, IProps } from '../../models';
 import { Status } from '../../models/types/status.type';
-import { requestBuilder } from '../../services';
-import { ApplicationContext, endpoints, groupValidationSchema } from '../../utilities';
-import { SubmitButton } from '../Common';
+import { generateColour, requestBuilder } from '../../services';
+import { groupValidationSchema, StatusContext } from '../../utilities';
+import { ColourPicker, CustomCheckbox, SubmitButton } from '../Common';
 
-const AddGroupForm = () => {
+const AddGroupForm = ({ endpoint }: IProps) => {
 
-  const { status, setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
+
+  const [isDefault, setIsDefault] = useState(false);
+  const [groupColour, setGroupColour] = useState<string>(generateColour());
 
   const addGroup = (values: IAddGroup) => {
     setStatus([...status, {
@@ -19,7 +22,7 @@ const AddGroupForm = () => {
       type: Status.None
     }])
 
-    fetch(endpoints.groups, requestBuilder('POST', undefined, values))
+    fetch(endpoint, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Successfully created ${values.groupName}`, type: Status.Success }])
@@ -28,7 +31,7 @@ const AddGroupForm = () => {
         } else {
           setStatus([...status, { isLoading: false, message: `A problem occurred creating ${values.groupName}`, type: Status.Success }])
         }
-    })
+      })
       .catch(() => {
         setStatus([...status, { isLoading: false, message: `A problem occurred creating the group`, type: Status.None }])
       })
@@ -38,7 +41,8 @@ const AddGroupForm = () => {
     <Formik
       initialValues={{
         'groupName': '',
-        'default': false
+        'default': isDefault,
+        'groupColour': groupColour
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
@@ -47,8 +51,14 @@ const AddGroupForm = () => {
     >
       {({ errors, touched }) => (
         <Form className="flex flex-1 flex-col space-y-8">
-          <div className="flex">
-            <StyledField name="groupName" label="Groupname" errors={errors.groupName} touched={touched.groupName} />
+          <div className="flex flex-col space-y-4">
+            <div className="flex w-full">
+              <ColourPicker colour={groupColour} setColour={setGroupColour} hideIcon />
+            </div>
+            <div className="flex space-x-4">
+              <StyledField name="groupName" label="Groupname" errors={errors.groupName} touched={touched.groupName} />
+              <CustomCheckbox label="Default" state={isDefault} setState={setIsDefault} />
+            </div>
           </div>
           <div className="flex justify-end">
             <SubmitButton status={status} content='Create group' />

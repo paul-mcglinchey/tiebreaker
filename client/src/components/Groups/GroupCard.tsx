@@ -2,27 +2,38 @@ import { useContext, useState } from 'react';
 import { CheckIcon, TrashIcon, XIcon, DotsVerticalIcon } from '@heroicons/react/solid';
 import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';
-import { ApplicationContext, endpoints } from '../../utilities';
+import { endpoints, StatusContext } from '../../utilities';
 import { requestBuilder } from '../../services';
-import { IGroupProps } from '../../models';
-import { Status } from '../../models/types/status.type';
+import { IGroup, IGroupProps, IUserResponseModel, Status } from '../../models';
+import { useFetch } from '../../hooks';
 
-const GroupCard = ({ g }: IGroupProps) => {
+const GroupCard = <TGroup extends IGroup>({ g }: IGroupProps<TGroup>) => {
 
-  const { status, setStatus } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
+  const currentUser = useFetch<IUserResponseModel>(endpoints.clientgroupdefault, requestBuilder("GET")).response;
+  const isDefaultGroup: boolean = currentUser?.data.defaultClientGroup === g._id;
 
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
 
-  // eslint-disable-next-line no-extend-native
   const stringInsert = function (this: any, index: number, string: string): string {
     if (index > 0) {
       return this.substring(0, index) + string + this.substring(index);
     }
 
     return string + this;
+  }
+
+  const getTotalUsers = (accessControl: { [key: string]: string[] }): number => {
+    const distinctUsers: string[] = [];
+
+    Object.keys(accessControl).forEach((key: string) => {
+      accessControl[key]?.forEach((userId: string) => !distinctUsers.includes(userId) && distinctUsers.push(userId));
+    });
+
+    return distinctUsers.length;
   }
 
   const numberParser = (num: number) => {
@@ -43,7 +54,7 @@ const GroupCard = ({ g }: IGroupProps) => {
       type: Status.None
     }])
 
-    if (g.default) {
+    if (isDefaultGroup) {
       setStatus([...status, {
         isLoading: false,
         message: 'Cannot delete the default group',
@@ -53,7 +64,7 @@ const GroupCard = ({ g }: IGroupProps) => {
       return;
     }
 
-    fetch(endpoints.groups, requestBuilder("DELETE", undefined, { _id: g._id, groupName: g.groupName }))
+    fetch(endpoints.clientgroups, requestBuilder("DELETE", undefined, { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Successfully deleted ${g.groupName}`, type: Status.Success }])
@@ -73,7 +84,7 @@ const GroupCard = ({ g }: IGroupProps) => {
       type: Status.None
     }])
 
-    fetch(endpoints.groupdefault, requestBuilder("PUT", undefined, { _id: g._id, groupName: g.groupName }))
+    fetch(endpoints.clientgroupdefault, requestBuilder("PUT", undefined, { _id: g._id, groupName: g.groupName }))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Successfully set default group`, type: Status.Success }])
@@ -88,18 +99,18 @@ const GroupCard = ({ g }: IGroupProps) => {
   }
 
   return (
-    <div className={`flex flex-auto min-w-120 flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${g.default && 'order-first'}`}>
+    <div className={`flex flex-auto min-w-120 flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${isDefaultGroup && 'order-first'}`}>
       <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
         <div className="flex flex-grow justify-between items-center space-x-4">
           <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.groupName}</h1>
           <div className="flex">
-            <SquareIconButton Icon={HeartIcon} action={() => !g.default && setDefaultGroup()} additionalClasses={`${g.default ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
+            <SquareIconButton Icon={HeartIcon} action={() => !isDefaultGroup && setDefaultGroup()} additionalClasses={`${isDefaultGroup ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
             <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
           </div>
         </div>
         <div className="flex justify-between items-end my-4">
           <div>
-            <span className="text-8xl font-bold">{cardFlipped ? numberParser(g.users.length) : numberParser(g.clients.length)}</span>
+            <span className="text-8xl font-bold">{cardFlipped ? numberParser(getTotalUsers(g.accessControl)) : numberParser(g.listDefinitions.length)}</span>
             <span className="font-bold text-gray-400">{cardFlipped ? 'users' : 'clients'}</span>
           </div>
           {cardFlipped && (

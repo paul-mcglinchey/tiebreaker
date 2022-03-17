@@ -1,6 +1,4 @@
-import { IGroup } from "./group-model";
-
-export interface IGroupsResponse {
-  totalGroups: number,
-  groups: IGroup[]
+export interface IGroupsResponse<TGroup> {
+  count: number,
+  groups: TGroup[]
 }

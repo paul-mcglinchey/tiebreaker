@@ -2,13 +2,13 @@ import { Fragment, useState } from 'react';
 
 import { Fetch, Toolbar, ProgressBar, SpinnerIcon } from '..';
 import { useFetch } from '../../hooks';
-import { ToolbarType } from '../../models';
+import { IGroupsResponse, ToolbarType } from '../../models';
 import { IFetch } from '../../models/fetch.model';
 import { IRotasResponse } from '../../models/rotas-response.model';
 import { requestBuilder } from '../../services';
 import { endpoints } from '../../utilities';
+import { GroupPrompter } from '../Groups';
 import RotaList from './Rotas/RotaList';
-import RotaPrompter from './Rotas/RotaPrompter';
 
 const RotaDashboard = () => {
   
@@ -18,13 +18,13 @@ const RotaDashboard = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.rotas, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch<IRotasResponse>) => (
+      fetchOutput={useFetch(endpoints.rotagroups, requestBuilder(), [refresh])}
+      render={({ response, error, isLoading, progress }: IFetch<IGroupsResponse<IRotasResponse>>) => (
         <Fragment>
           {rotasLoaded ? (
           response && response.count > 0 && !error ? (
               <>
-                <Toolbar toolbarType={ToolbarType.Rotas}>Rotas</Toolbar>
+                <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>Rotas</Toolbar>
                 <RotaList />
               </>
             ) : (
@@ -48,7 +48,7 @@ const RotaDashboard = () => {
                   </div>
                 </div>
               ) : (
-                <RotaPrompter />
+                <GroupPrompter href="/rotas/creategroup"/>
               )
             )
           ) : (
