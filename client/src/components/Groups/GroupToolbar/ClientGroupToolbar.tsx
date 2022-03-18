@@ -14,7 +14,7 @@ const ClientGroupToolbar = () => {
     <>
       <div className="text-white">
         <Fetch
-          fetchOutput={useFetch(endpoints.clientgroups, requestBuilder(), [clientGroup])}
+          fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder(), [clientGroup])}
           render={({ response }: IFetch<IGroupsResponse<IClientGroup>>) => (
             <>
               {response && (

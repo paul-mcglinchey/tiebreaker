@@ -18,8 +18,8 @@ const RotaDashboard = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.rotagroups, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch<IGroupsResponse<IRotasResponse>>) => (
+      fetchOutput={useFetch(endpoints.groups("rota").groups, requestBuilder(), [refresh])}
+      render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotasResponse>>) => (
         <Fragment>
           {rotasLoaded ? (
           response && response.count > 0 && !error ? (
@@ -52,7 +52,7 @@ const RotaDashboard = () => {
               )
             )
           ) : (
-            <ProgressBar setLoaded={setRotasLoaded} progress={progress} />
+            <ProgressBar setLoaded={setRotasLoaded} />
           )})
         </Fragment>
       )}

@@ -14,8 +14,8 @@ const ClientDashboard = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.clientgroups, requestBuilder(), [refresh])}
-      render={({ response, error, isLoading, progress }: IFetch<IGroupsResponse<IClientGroup>>) => (
+      fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder(), [refresh])}
+      render={({ response, error, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
         <Fragment>
           {groupsLoaded ? (
             response && response.count > 0 && !error ? (
@@ -48,7 +48,7 @@ const ClientDashboard = () => {
               )
             )
           ) : (
-            <ProgressBar setLoaded={setGroupsLoaded} progress={progress} />
+            <ProgressBar setLoaded={setGroupsLoaded} />
           )})
         </Fragment>
       )}

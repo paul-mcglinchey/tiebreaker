@@ -14,7 +14,7 @@ const RotaGroupToolbar = () => {
     <>
       <div className="text-white">
         <Fetch
-          fetchOutput={useFetch(endpoints.rotagroups, requestBuilder(), [rotaGroup])}
+          fetchOutput={useFetch(endpoints.groups("rota").groups, requestBuilder(), [rotaGroup])}
           render={({ response }: IFetch<IGroupsResponse<IRotaGroup>>) => (
             <>
               {response && (

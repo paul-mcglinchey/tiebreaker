@@ -46,6 +46,10 @@ require('./routes/employee.routes')(app);
 require('./routes/rota.routes')(app);
 require('./routes/rotagroup.routes')(app);
 
+// Check if a default grouplist exists, if not we need to create one
+const grouplistController = require('./controllers/grouplist.controller');
+grouplistController.createDefaultLists();
+
 // get the current time to display on restarts of the server
 var currentDateTime = new Date();
 var currentTime = currentDateTime.getUTCHours() + ':' + currentDateTime.getUTCMinutes();

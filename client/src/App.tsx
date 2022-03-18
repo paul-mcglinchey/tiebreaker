@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import Userfront from "@userfront/core";
 
 import {
@@ -8,10 +8,10 @@ import {
   useLocation
 } from 'react-router-dom';
 
-import { IClientGroup, IRotaGroup, IStatus } from './models';
+import { IClientGroup, IRotaGroup, IStatus, IStatusContext } from './models';
 import { AddClient, AddEmployee, AddGroup, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, Notification, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
-import { ApplicationContext, endpoints, StatusContext } from './utilities';
-import { getItemInStorage } from './services';
+import { ApplicationContext, endpoints } from './utilities';
+import { getItemInStorage, StatusService } from './services';
 
 export default function App() {
 
@@ -31,6 +31,12 @@ export default function App() {
   function PrivateRoute({ children }: any) {
     return getAccess() ? children : <Navigate to="/login" state={{ from: location }} />;
   }
+
+  // create status context
+  const StatusContext = createContext<IStatusContext>({ status: status, setStatus: setStatus });
+
+  // status service
+  const statusService = new StatusService(useContext(StatusContext));
 
   return (
     <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
@@ -63,8 +69,8 @@ export default function App() {
                 <Route path="dashboard" element={<ClientDashboard />} />
                 <Route path=":clientId/*" element={<ClientPage />} />
                 <Route path="addclients" element={<AddClient />} />
-                <Route path="groups" element={<ClientGroupDashboard />} />
-                <Route path="creategroup" element={<AddGroup endpoint={endpoints.clientgroups} />} />
+                <Route path="groups" element={<ClientGroupDashboard statusService={statusService} />} />
+                <Route path="creategroup" element={<AddGroup endpoint={endpoints.groups("client").groups} />} />
               </Route>
 
               {/* Rota manager specific routes */}
@@ -76,8 +82,8 @@ export default function App() {
                 <Route path="dashboard" element={<RotaDashboard />} />
                 <Route path="addrota" element={<AddRota />} />
                 <Route path="addemployee" element={<AddEmployee />} />
-                <Route path="groups" element={<RotaGroupDashboard />} />
-                <Route path="creategroup" element={<AddGroup endpoint={endpoints.rotagroups} />} />
+                <Route path="groups" element={<RotaGroupDashboard statusService={statusService} />} />
+                <Route path="creategroup" element={<AddGroup endpoint={endpoints.groups("rota").groups} />} />
               </Route>
 
               {/* Unprotected routes */}

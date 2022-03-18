@@ -6,7 +6,6 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -23,7 +22,6 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
         })
         .then(async res => {
           const reader = res.body?.getReader();
-          const contentLength: number = Number(res.headers.get('Content-Length'));
           
           let streamFinished: boolean = false;
           let receivedLength = 0;
@@ -41,8 +39,6 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
                 if (value) {
                   chunks.push(value);
                   receivedLength += value.length;
-  
-                  setProgress(Math.floor((receivedLength / contentLength) * 100))
                 }
               })
               .then(() => {
@@ -81,7 +77,7 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
-  return { response, error, isLoading, progress };
+  return { response, error, isLoading };
 }
 
 export default useFetch;
