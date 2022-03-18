@@ -6,9 +6,6 @@ module.exports = app => {
 
   // Get all groups that the user belongs to
   router.get('/', clientGroup.getClientGroups);
-  
-  // Get current default group
-  router.get('/default', clientGroup.getDefaultClientGroup);
 
   // CUD Operations, need a request body
   router.use(middleware.validation.validateRequest);
@@ -23,9 +20,6 @@ module.exports = app => {
 
   // Delete a clientGroup
   router.delete('/', middleware.createGroup.checkIfClientGroupExists, clientGroup.deleteClientGroup);
-
-  // Update default clientGroup
-  router.put('/default', clientGroup.setDefaultClientGroup);
 
   app.use('/api/clientgroups', router);
 }

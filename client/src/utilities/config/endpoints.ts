@@ -19,5 +19,7 @@ export const endpoints = {
             groups: BASE_API_URL + groupType + "groups",
             default: BASE_API_URL + groupType + "groups/default"
         }
-    }
+    },
+    "currentuser": BASE_API_URL + "users/current",
+    "setdefaultgroup": (grouptype: string) => BASE_API_URL + `${grouptype}/default`
 }

@@ -29,11 +29,11 @@ const AddGroupForm = ({ endpoint }: IProps) => {
         } else if (res.status === 400) {
           setStatus([...status, { isLoading: false, message: 'Group already exists', type: Status.Error }])
         } else {
-          setStatus([...status, { isLoading: false, message: `A problem occurred creating ${values.groupName}`, type: Status.Success }])
+          setStatus([...status, { isLoading: false, message: `A problem occurred creating ${values.groupName}`, type: Status.Error }])
         }
       })
       .catch(() => {
-        setStatus([...status, { isLoading: false, message: `A problem occurred creating the group`, type: Status.None }])
+        setStatus([...status, { isLoading: false, message: `A problem occurred creating the group`, type: Status.Error }])
       })
   }
 

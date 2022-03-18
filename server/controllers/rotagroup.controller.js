@@ -1,5 +1,5 @@
-const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
+const { setDefaultGroup } = require('./user.controller');
 const RotaGroup = db.rotagroup;
 const Employee = db.employee;
 const GroupList = db.grouplist;
@@ -44,7 +44,7 @@ exports.createRotaGroup = async (req, res) => {
   // get the default list set to create the group with
   const defaultListsId = await GroupList.findById('622f88cb0b1ef9aeed041347')
     .then(defaultLists => defaultLists._id)
-    .catch(err => res.status(500).send({ message: err.message }));
+    .catch(err => res.status(500).send({ message: err.message || `A problem occurred fetching the default list definitions.` }));
 
   // Create a new group model instance with the request body
   const group = new RotaGroup({
@@ -63,6 +63,13 @@ exports.createRotaGroup = async (req, res) => {
   group
     .save(group)
     .then(data => {
+      // if this group has been flagged as the default group then we need to update that for the user
+      // update the default group field from userfront
+      setDefaultGroup(req.auth.userId, "defaultRotaGroup", data._id)
+        .catch(err => {
+          res.status(500).send(err.message || `Some error occurred while setting the default group.`)
+        })
+
       res.status(200).send({ data: data, success: `Group ${req.body.groupName} added.` })
     })
     .catch(err => {
@@ -115,24 +122,4 @@ exports.deleteRotaGroup = async (req, res) => {
           });
         });
     })
-}
-
-exports.setDefaultGroup = async (req, res) => {
-  Group.updateMany({ users: req.auth.userUuid }, { $set: { default: false }})
-    .then(() => {
-      Group.updateOne({ _id: req.body._id, groupName: req.body.groupName }, { $set: { default: true }})
-        .then(() => {
-          res.sendStatus(200);
-        })
-        .catch(err => {
-          res.status(500).send({
-            message: err.message || `Could not update default status for group ${req.body._id}.`
-          })
-        })
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || `Could not update default status for groups belonging to user ${req.auth.userUuid}.`
-      })
-    });
 }
