@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CheckIcon, TrashIcon, XIcon, DotsVerticalIcon } from '@heroicons/react/solid';
 import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';

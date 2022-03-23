@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { IFetch } from "../models/fetch.model";
 import { endpoints } from "../utilities";
 
-const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetch<T> => {
+const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], setProgress?: (progress: number) => void): IFetch<T> => {
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,47 +18,7 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
             throw res.statusText;
           }
 
-          return res;
-        })
-        .then(async res => {
-          const reader = res.body?.getReader();
-          
-          let streamFinished: boolean = false;
-          let receivedLength = 0;
-          let chunks: Uint8Array[] = [];
-          let result = "";
-
-          if (reader) {
-            while (!streamFinished) {
-              await reader.read()
-              .then(({done, value}) => {
-                if (done) {
-                  streamFinished = true;
-                  return;
-                }
-                if (value) {
-                  chunks.push(value);
-                  receivedLength += value.length;
-                }
-              })
-              .then(() => {
-                let chunksAll = new Uint8Array(receivedLength);
-                let position = 0;
-                for (let chunk of chunks) {
-                  chunksAll.set(chunk, position);
-                  position += chunk.length;
-                }
-                
-                result = JSON.parse(new TextDecoder("utf-8").decode(chunksAll));
-              })
-              .catch(err => {
-                console.error(err);
-              });
-            }
-          }
-
-          return result;
-
+          return res.json();
         })
         .then(json => {
           setResponse(json as unknown as T);
@@ -67,6 +27,7 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
         .finally(() => {
           setTimeout(() => {
             setIsLoading(false);
+            setProgress && setProgress(100);
           }, endpoints.origin.includes('localhost') ? 500 : 0);
         })
     }

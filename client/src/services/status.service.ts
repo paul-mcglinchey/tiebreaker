@@ -1,18 +1,26 @@
-import { IStatus, IStatusContext, Status } from "../models";
+import { IStatus, Status } from "../models";
 import { IStatusService } from "./interfaces/status.service.interface";
 
 export class StatusService implements IStatusService {
-  statusContext: IStatusContext;
   status: IStatus[];
-  setStatus: (status: IStatus[]) => void;
 
-  constructor(statusContext: IStatusContext) {
-    this.statusContext = statusContext;
-    this.status = this.statusContext.status;
-    this.setStatus = this.statusContext.setStatus;
+  constructor() {
+    this.status = []
   }
 
-  appendStatus = (isLoading: boolean, message: string, type: Status) => {
+  getStatusFeed = (): IStatus[] => {
+    return this.status;
+  }
+
+  setStatus = (status: IStatus[]) => {
+    this.status = status;
+  }
+
+  removeStatus = (statusItemToRemove: IStatus): void => {
+    this.status.filter((statusItem: IStatus) => statusItem !== statusItemToRemove);
+  }
+
+  appendStatus = (isLoading: boolean, message: string, type: Status): void => {
     this.setStatus([...this.status, {
       isLoading: isLoading,
       message: message,
@@ -20,8 +28,7 @@ export class StatusService implements IStatusService {
     }])
   }
 
-  setLoading = (loading: boolean = true) => {
-    console.log(this.statusContext);
+  setLoading = (loading: boolean = true): void => {
     this.setStatus([...this.status, {
       isLoading: loading,
       message: '',

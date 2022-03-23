@@ -1,4 +1,5 @@
-import { IGroup, IGroupsEndpoint, Status } from "../models";
+import { IAddGroup, IGroup, Status } from "../models";
+import { IGroupsEndpoint } from "../models/groups-endpoint.model";
 import { IGroupService, IStatusService, IUserService } from "./interfaces";
 import { requestBuilder } from "./request.service";
 import { UserService } from "./user.service";
@@ -14,6 +15,24 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
     this.defaultGroupKey = defaultGroupKey;
     this.statusService = statusService;
     this.userService = new UserService(statusService);
+  }
+
+  addGroup = (values: IAddGroup) => {
+    this.statusService.setLoading(true);
+
+    fetch(this.endpoint.groups, requestBuilder('POST', undefined, values))
+      .then(res => {
+        if (res.ok) {
+          this.statusService.appendStatus(false, `Successfully created ${values.groupName}`, Status.Success);
+        } else if (res.status === 400) {
+          this.statusService.appendStatus(false, 'Group already exists', Status.Error);
+        } else {
+          this.statusService.appendStatus(false, `A problem occurred creating ${values.groupName}`, Status.Error);
+        }
+      })
+      .catch(() => {
+        this.statusService.appendStatus(false, `A problem occurred creating the group`, Status.Error);
+      })
   }
 
   isDefaultGroup = (_id: string): boolean => {

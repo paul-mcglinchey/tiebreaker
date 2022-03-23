@@ -1,4 +1,3 @@
-import { Status } from "../models";
 import { endpoints } from "../utilities";
 import { IStatusService } from "./interfaces";
 import { IUserService } from "./interfaces/user.service.interface";

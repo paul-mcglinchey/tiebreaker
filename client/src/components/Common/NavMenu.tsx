@@ -1,12 +1,12 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
 import Userfront from '@userfront/core';
 
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
-import { SmartLink, ThumbIcon, WideIcon } from '..';
-import { clientLinks, rotaLinks } from '../../utilities';
+import { ProgressBar, SmartLink, ThumbIcon, WideIcon } from '..';
+import { clientLinks, rotaLinks, StatusContext } from '../../utilities';
 import { combineClassNames } from '../../services';
 import { Application, IProps } from '../../models';
 
@@ -29,8 +29,10 @@ const NavMenu = ({ currentApplication }: IProps) => {
       break;
   }
 
+  const { progress } = useContext(StatusContext);
+
   return (
-    <div className="flex flex-col mb-4 space-y-4">
+    <div className="flex flex-col mb-4">
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
           <>
@@ -164,6 +166,9 @@ const NavMenu = ({ currentApplication }: IProps) => {
         )
         }
       </Disclosure >
+      <div>
+        <ProgressBar loaded={progress}/>
+      </div>
     </div>
   )
 }

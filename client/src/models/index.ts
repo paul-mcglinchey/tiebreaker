@@ -1,4 +1,3 @@
-export * from './application-context.model'; 
 export * from './status.model';
 export * from './add-client.model';
 export * from './add-rota.model';
@@ -26,10 +25,10 @@ export * from './client-response.model';
 export * from './user-response.model';
 export * from './employee-response.model';
 export * from './group.model';
-export * from './status-context.model';
 export * from './groups-endpoint.model';
 
 export * from './props';
 export * from './types';
+export * from './contexts';
 
 export { userfront, userfrontapi } from './request-header.model';

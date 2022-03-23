@@ -49,4 +49,7 @@ exports.setDefaultGroup = (userId, grouptype, groupId) => {
       }
     })
   })
+    .catch(err => {
+      console.error(err.message || `Some error occurred while setting the default group.`)
+    })
 }

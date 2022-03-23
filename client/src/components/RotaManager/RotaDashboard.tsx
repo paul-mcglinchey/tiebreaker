@@ -53,7 +53,7 @@ const RotaDashboard = () => {
             )
           ) : (
             <ProgressBar setLoaded={setRotasLoaded} />
-          )})
+          )}
         </Fragment>
       )}
     />

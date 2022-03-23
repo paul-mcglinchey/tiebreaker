@@ -1,5 +1,5 @@
-import { IClientGroup } from "./client-group-model";
-import { IRotaGroup } from "./rota-group.model";
+import { IClientGroup } from "..";
+import { IRotaGroup } from "..";
 
 export interface IApplicationContext {
   rotaGroup: IRotaGroup,

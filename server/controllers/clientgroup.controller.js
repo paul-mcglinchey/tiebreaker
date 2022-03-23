@@ -42,7 +42,7 @@ exports.createClientGroup = async (req, res) => {
   }
 
   // get the ID of the default list set to create the group with
-  const defaultListsId = await GroupList.findById('622f88cb0b1ef9aeed041347')
+  const defaultListsId = await GroupList.find({ default: true })
     .then(defaultLists => defaultLists._id)
     .catch(err => res.status(500).send({ message: err.message }));
 
@@ -64,10 +64,9 @@ exports.createClientGroup = async (req, res) => {
     .then(data => {
       // if this group has been flagged as the default group then we need to update that for the user
       // update the default group field from userfront
-      setDefaultGroup(req.auth.userId, "defaultClientGroup", data._id)
-        .catch(err => {
-          console.log(err.message || `Some error occurred while setting the default group.`)
-        })
+      if (req.body.default) {
+        setDefaultGroup(req.auth.userId, "defaultClientGroup", data._id)
+      }
 
       res.status(200).send({ data: data, success: `Group ${req.body.groupName} added.` })
     })

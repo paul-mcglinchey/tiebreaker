@@ -1,4 +1,4 @@
-import { IGroupService } from "../../services";
+import { IGroupService } from "../../services/interfaces";
 
 export interface IGroupProps<TGroup> {
   g: TGroup,

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { useReducer, useState } from 'react';
 import Userfront from "@userfront/core";
 
 import {
@@ -8,12 +8,16 @@ import {
   useLocation
 } from 'react-router-dom';
 
-import { IClientGroup, IRotaGroup, IStatus, IStatusContext } from './models';
-import { AddClient, AddEmployee, AddGroup, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, Notification, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
-import { ApplicationContext, endpoints } from './utilities';
+import { IClientGroup, IRotaGroup, IStatus } from './models';
+import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
+import { ApplicationContext, StatusContext } from './utilities';
 import { getItemInStorage, StatusService } from './services';
 
 export default function App() {
+
+  const progressReducer = (progress: number, update: number): number => {
+    return progress + update;
+  }
 
   const [status, setStatus] = useState<IStatus[]>([]);
   const location = useLocation();
@@ -24,6 +28,7 @@ export default function App() {
 
   // provide state for the current application
   const [currentApplication, setCurrentApplication] = useState(undefined);
+  const [progress, setProgress] = useReducer(progressReducer, 0);
 
   // @ts-ignore
   const getAccess = () => Userfront.accessToken();
@@ -32,21 +37,14 @@ export default function App() {
     return getAccess() ? children : <Navigate to="/login" state={{ from: location }} />;
   }
 
-  // create status context
-  const StatusContext = createContext<IStatusContext>({ status: status, setStatus: setStatus });
-
   // status service
-  const statusService = new StatusService(useContext(StatusContext));
+  const statusService = new StatusService();
 
   return (
     <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
-      <StatusContext.Provider value={{ status: status, setStatus: setStatus }}>
+      <StatusContext.Provider value={{ status: status, setStatus: setStatus, progress: progress, setProgress: setProgress }}>
         <div className="min-h-screen">
-          <NotificationContainer>
-            {status.map((s: IStatus, i: number) => (
-              <Notification key={i} status={s} />
-            ))}
-          </NotificationContainer>
+          <NotificationContainer statusService={statusService} />
           {getAccess() && (
             <NavMenu currentApplication={currentApplication} />
           )}
@@ -70,7 +68,7 @@ export default function App() {
                 <Route path=":clientId/*" element={<ClientPage />} />
                 <Route path="addclients" element={<AddClient />} />
                 <Route path="groups" element={<ClientGroupDashboard statusService={statusService} />} />
-                <Route path="creategroup" element={<AddGroup endpoint={endpoints.groups("client").groups} />} />
+                <Route path="creategroup" element={<AddClientGroup statusService={statusService} />} />
               </Route>
 
               {/* Rota manager specific routes */}
@@ -83,7 +81,7 @@ export default function App() {
                 <Route path="addrota" element={<AddRota />} />
                 <Route path="addemployee" element={<AddEmployee />} />
                 <Route path="groups" element={<RotaGroupDashboard statusService={statusService} />} />
-                <Route path="creategroup" element={<AddGroup endpoint={endpoints.groups("rota").groups} />} />
+                <Route path="creategroup" element={<AddRotaGroup statusService={statusService} />} />
               </Route>
 
               {/* Unprotected routes */}

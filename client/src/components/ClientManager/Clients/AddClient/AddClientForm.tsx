@@ -131,7 +131,7 @@ const AddClientForm = () => {
             </FormSection>
           </div>
           <div className="flex justify-end my-10">
-            <SubmitButton status={status[status.length - 1] || []} content='Add client' />
+            <SubmitButton content='Add client' />
           </div>
         </Form>
       )}

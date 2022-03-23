@@ -35,7 +35,6 @@ const GroupSelector = <TGroup extends IGroup>({ group, setGroup, groups, storage
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
-            {!storageHasValidGroup && refreshGroup()}
             {group ? group.groupName : 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />

@@ -1,16 +1,11 @@
 import { XIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
-import { IStatus } from '../../../models';
+import { INotificationProps } from '../../../models';
 import { combineClassNames } from '../../../services';
 import { Status } from '../../../models/types/status.type';
 
-interface IProps {
-  status: IStatus,
-  key: number
-}
-
-const Notification = ({ status }: IProps) => {
+const Notification = ({ status, statusService }: INotificationProps) => {
 
   const [open, setOpen] = useState(true);
 
@@ -20,15 +15,17 @@ const Notification = ({ status }: IProps) => {
 
   useEffect(() => {
     setTimeout(() => close(), 5000);
+
+    return () => statusService.removeStatus(status);
   })
 
   return (
     <Transition
       show={open && !status.isLoading}
-      enter="transition ease-in-out duration-150"
+      enter="transition ease-in-out duration-1000"
       enterFrom="transform translate-x-full"
       enterTo="transform translate-x-0"
-      leave="transition ease-in-out duration-150"
+      leave="transition ease-in-out duration-1000"
       leaveFrom="transform translate-x-0"
       leaveTo="transform translate-x-full"
       className={combineClassNames(
