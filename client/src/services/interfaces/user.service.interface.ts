@@ -1,3 +1,3 @@
 export interface IUserService {
-  getDefaultGroup: (groupKey: string) => string
+  getDefaultGroup: (groupType: string) => Promise<string>
 } 

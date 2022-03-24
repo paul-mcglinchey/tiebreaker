@@ -1,3 +1,4 @@
+import { IUserResponse } from "../models";
 import { endpoints } from "../utilities";
 import { IStatusService } from "./interfaces";
 import { IUserService } from "./interfaces/user.service.interface";
@@ -10,22 +11,21 @@ export class UserService implements IUserService {
     this.statusService = statusService;
   }
 
-  getDefaultGroup = (groupKey: string): string => {
-    let defaultGroupId: string = "";
-
-    fetch(endpoints.defaultgroup(groupKey), requestBuilder("GET"))
+  getDefaultGroup = (groupType: string): Promise<string> => {
+    return fetch(endpoints.currentuser, requestBuilder("GET"))
       .then(res => {
         if (!res.ok) {
-          return;
+          return "";
         }
 
         return res.json();
       })
-      .then((id: string) => defaultGroupId = id)
+      .then((user: IUserResponse) => {
+        return user.data[groupType] || "";
+      })
       .catch(err => {
         console.error(err);
+        return "";
       })
-
-    return defaultGroupId;
   }
 }

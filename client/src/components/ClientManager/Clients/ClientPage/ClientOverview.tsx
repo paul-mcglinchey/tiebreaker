@@ -1,6 +1,6 @@
 import { Fetch } from "../../..";
 import { useUserFetch } from "../../../../hooks";
-import { IClientProps, IUserResponseModel, userfrontapi } from "../../../../models";
+import { IClientProps, IUserResponse, userfrontapi } from "../../../../models";
 import { IFetch } from "../../../../models/fetch.model";
 import { generateColour, getInitials, requestBuilder } from "../../../../services";
 import { endpoints } from "../../../../utilities";
@@ -28,7 +28,7 @@ const ClientOverview = ({ client }: IClientProps) => {
               Last updated: {new Date(updatedAt).toLocaleDateString()}
                 <Fetch
                   fetchOutput={useUserFetch(endpoints.user(updatedBy || ""), requestBuilder("GET", userfrontapi()), updatedBy || "")}
-                  render={({ response }: IFetch<IUserResponseModel>) => (
+                  render={({ response }: IFetch<IUserResponse>) => (
                     <span> by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}
                     </span></span>

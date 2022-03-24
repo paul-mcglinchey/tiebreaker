@@ -5,6 +5,6 @@ import { IStatusService } from "./interfaces";
 
 export class ClientGroupService extends GroupService<IClientGroup> {
   constructor(statusService: IStatusService) {
-    super(endpoints.groups("client"), "defaultClientGroup", statusService);
+    super(endpoints.groups("client"), "client", statusService);
   }
 }

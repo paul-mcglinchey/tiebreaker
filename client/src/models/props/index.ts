@@ -29,7 +29,6 @@ export * from './field-config-props.model';
 export * from './app-card-props.model';
 export * from './custom-checkbox-props.model';
 export * from './colour-picker-props.model';
-export * from './group-selector-props.model';
 export * from './group-dashboard-props.model';
 export * from './AddGroup';
 export * from './Notifications';

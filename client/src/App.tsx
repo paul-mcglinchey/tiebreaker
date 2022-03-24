@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { IClientGroup, IRotaGroup, IStatus } from './models';
-import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
+import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
 import { ApplicationContext, StatusContext } from './utilities';
 import { getItemInStorage, StatusService } from './services';
 
@@ -44,7 +44,6 @@ export default function App() {
     <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
       <StatusContext.Provider value={{ status: status, setStatus: setStatus, progress: progress, setProgress: setProgress }}>
         <div className="min-h-screen">
-          <NotificationContainer statusService={statusService} />
           {getAccess() && (
             <NavMenu currentApplication={currentApplication} />
           )}

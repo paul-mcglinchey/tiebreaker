@@ -5,6 +5,6 @@ import { IStatusService } from "./interfaces";
 
 export class RotaGroupService extends GroupService<IRotaGroup> {
   constructor(statusService: IStatusService) {
-    super(endpoints.groups("rota"), "defaultRotaGroup", statusService);
+    super(endpoints.groups("rota"), "rota", statusService);
   }
 }

@@ -1,13 +1,11 @@
-import { Fragment, useContext, useState } from 'react';
-import { Fetch, SearchBar } from '../..';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import { SearchBar } from '../..';
 import { Paginator } from '../..';
 import { ClientTable } from './ClientTable';
 import { ClientPrompter } from '.';
-import { useFetch } from '../../../hooks';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
-import { IClientsResponse, IFilter } from '../../../models';
-import { IFetch } from '../../../models/fetch.model';
+import { IClient, IClientsResponse, IFilter } from '../../../models';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -17,8 +15,17 @@ const headers = [
 ]
 
 const ClientList = () => {
+  
+  const abortController = new AbortController();
+  const signal = abortController.signal;
 
+  const componentIsMounted = useRef(true);
   const { clientGroup } = useContext(ApplicationContext);
+
+  const [clients, setClients] = useState<IClient[]>([]);
+  const [count, setCount] = useState<number>(0);
+  const [error, setError] = useState<Object | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -47,16 +54,36 @@ const ClientList = () => {
     return queryString;
   }
 
+  useEffect(() => {
+    const _fetch = async () => {
+
+      if (componentIsMounted) setIsLoading(true);
+
+      await fetch(`${endpoints.clients}?${buildQueryString()}`, { ...requestBuilder("GET"), signal: signal })
+        .then(res => res.json())
+        .then((json: IClientsResponse) => {
+          if (componentIsMounted) setCount(json.totalClients);
+          if (componentIsMounted) setClients(json.clients);
+        })
+        .catch(err => {
+          if (componentIsMounted) setError(err);
+        })
+        .finally(() => {
+          if (componentIsMounted) setIsLoading(false);
+        })
+    }
+
+    componentIsMounted && _fetch();
+
+    return () => {
+      abortController.abort();
+      componentIsMounted.current = false;
+    }
+  }, [pageSize, pageNumber, filters, sortField, sortDirection])
+
   return (
-    <Fetch
-      fetchOutput={useFetch(
-        `${endpoints.clients}?${buildQueryString()}`, 
-        requestBuilder(), 
-        [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup]
-      )}
-      render={({ response, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-            {response && response.totalClients > 0 ? (
+            {count > 0 && !error ? (
               <Fragment>
                 <div className="flex flex-col flex-grow space-y-4">
                   <SearchBar
@@ -65,9 +92,8 @@ const ClientList = () => {
                     searchField='clientName'
                   />
                   <ClientTable
-                    clients={response.clients}
-                    totalClients={response.totalClients}
-                    clientGroup={clientGroup}
+                    clients={clients}
+                    totalClients={count}
                     sortField={sortField}
                     setSortField={setSortField}
                     sortDirection={sortDirection}
@@ -76,15 +102,12 @@ const ClientList = () => {
                     isLoading={isLoading}
                   />
                 </div>
-                <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.totalClients} />
+                <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={count} />
               </Fragment>
             ) : (
               <ClientPrompter />
             )}
         </div>
-      )
-      }
-    />
   )
 }
 

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { IFetch, IRotaProps, IUserResponseModel, userfrontapi } from '../../../../models';
+import { IFetch, IRotaProps, IUserResponse, userfrontapi } from '../../../../models';
 import { useUserFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
@@ -40,7 +40,7 @@ const RotaRow = ({ rota }: IRotaProps) => {
               </span>
                 <Fetch
                   fetchOutput={useUserFetch(endpoints.user(rota.createdBy || ""), requestBuilder("GET", userfrontapi()), rota.createdBy || "")}
-                  render={({ response }: IFetch<IUserResponseModel>) => (
+                  render={({ response }: IFetch<IUserResponse>) => (
                     <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}
                     </span>

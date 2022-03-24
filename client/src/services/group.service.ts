@@ -6,13 +6,13 @@ import { UserService } from "./user.service";
 
 export abstract class GroupService<TGroup extends IGroup> implements IGroupService<TGroup> {
   endpoint: IGroupsEndpoint;
-  defaultGroupKey: string;
+  groupType: string;
   statusService: IStatusService;
   userService: IUserService;
 
-  constructor(endpoint: IGroupsEndpoint, defaultGroupKey: string, statusService: IStatusService) {
+  constructor(endpoint: IGroupsEndpoint, groupType: string, statusService: IStatusService) {
     this.endpoint = endpoint;
-    this.defaultGroupKey = defaultGroupKey;
+    this.groupType = groupType;
     this.statusService = statusService;
     this.userService = new UserService(statusService);
   }
@@ -35,14 +35,18 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
-  isDefaultGroup = (_id: string): boolean => {
-    return this.userService.getDefaultGroup(this.defaultGroupKey) === _id;
+  isDefaultGroup = async (_id: string): Promise<boolean> => {
+    return await this.getDefaultGroup() === _id;
+  }
+  
+  getDefaultGroup = async (): Promise<string> => {
+    return await this.userService.getDefaultGroup(this.groupType);
   }
 
-  deleteGroup = (g: TGroup) => {
+  deleteGroup = async (g: TGroup) => {
     this.statusService.setLoading(true);
     
-    if (this.isDefaultGroup(g._id)) {
+    if (await this.isDefaultGroup(g._id)) {
       this.statusService.appendStatus(false, 'Cannot delete the default group', Status.Error);
 
       return;

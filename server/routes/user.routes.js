@@ -7,7 +7,7 @@ module.exports = app => {
   router.get('/current', user.getCurrentUser);
 
   // update the default group
-  router.put('/:grouptype/default', user.updateDefaultGroup)
+  router.put('/defaultgroup/:groupType', user.updateUserDefaultGroup);
 
   app.use('/api/users', router);
 }

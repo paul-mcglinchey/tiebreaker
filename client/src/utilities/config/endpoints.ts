@@ -12,14 +12,11 @@ export const endpoints = {
 
     "grouplists": BASE_API_URL + "grouplists",
 
-    "defaultgroup": (groupKey: string) => BASE_API_URL + `users/${groupKey}`,
-
     groups: (groupType: string) => {
         return {
             groups: BASE_API_URL + groupType + "groups",
-            default: BASE_API_URL + groupType + "groups/default"
+            default: BASE_API_URL + `users/defaultgroup/${groupType}`
         }
     },
-    "currentuser": BASE_API_URL + "users/current",
-    "setdefaultgroup": (grouptype: string) => BASE_API_URL + `${grouptype}/default`
+    "currentuser": BASE_API_URL + "users/current"
 }

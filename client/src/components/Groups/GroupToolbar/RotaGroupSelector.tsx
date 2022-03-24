@@ -1,33 +1,49 @@
-import { useEffect } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
-import { IGroup, IGroupSelectorProps } from '../../../../models';
-import { combineClassNames, getItemInStorage } from '../../../../services';
+import { IGroup, IGroupsResponse, IRotaGroup } from '../../../models';
+import { combineClassNames, getItemInStorage, requestBuilder } from '../../../services';
+import { ApplicationContext, endpoints } from '../../../utilities';
 
-const GroupSelector = <TGroup extends IGroup>({ group, setGroup, groups, storageKey }: IGroupSelectorProps<TGroup>) => {
+const RotaGroupSelector = () => {
 
-  const storageHasValidGroup = groups && getItemInStorage(storageKey) && groups.filter((g: IGroup) => g.groupName === getItemInStorage(storageKey).groupName).length > 0;
+  const { rotaGroup, setRotaGroup } = useContext(ApplicationContext);
+  const componentIsMounted = useRef(true);
+  const [groups, setGroups] = useState<IRotaGroup[]>([]);
+  const storageKey = "rotaGroup";
 
-  const updateGroup = (group: TGroup) => {
-    sessionStorage.setItem(storageKey, JSON.stringify(group))
-
-    setGroup(group);
+  const storageHasValidGroup = (groups: IRotaGroup[]): boolean => {
+    return groups && getItemInStorage(storageKey) && groups.filter((g: IGroup) => g.groupName === getItemInStorage(storageKey).groupName).length > 0;
   }
 
-  const refreshGroup = () => {
-    let validGroup = () => {
-      if (storageHasValidGroup) {
-        return getItemInStorage(storageKey);
-      } else {
-        return groups[0];
-      }
-    }
-    updateGroup(validGroup());
+  const updateGroup = (rotaGroup: IRotaGroup) => {
+    // Update the group held in storage
+    sessionStorage.setItem(storageKey, JSON.stringify(rotaGroup))
+
+    // Update the group held in state
+    setRotaGroup(rotaGroup);
   }
 
   useEffect(() => {
-    !storageHasValidGroup && refreshGroup()
+    const _fetch = async () => {
+      fetch(endpoints.groups("rota").groups, requestBuilder("GET"))
+        .then(res => res.json())
+        .then((json: IGroupsResponse<IRotaGroup>) => {
+          if (componentIsMounted) setGroups(json.groups);
+        })
+    }
+
+    componentIsMounted 
+      && _fetch();
+
+    componentIsMounted 
+      && !storageHasValidGroup(groups) 
+      && updateGroup(storageHasValidGroup(groups) ? getItemInStorage(storageKey) : groups[0])
+
+    return () => {
+      componentIsMounted.current = false;
+    }
   }, []);
 
   return (
@@ -35,7 +51,7 @@ const GroupSelector = <TGroup extends IGroup>({ group, setGroup, groups, storage
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
-            {group ? group.groupName : 'Groups'}
+            {rotaGroup ? rotaGroup.groupName : 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -58,7 +74,7 @@ const GroupSelector = <TGroup extends IGroup>({ group, setGroup, groups, storage
                   <PlusIcon className="h-6 w-6 hover:text-gray-400" />
                 </Link>
               </div>
-              {groups.map((g: TGroup) => (
+              {groups.map((g: IRotaGroup) => (
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button
@@ -83,4 +99,4 @@ const GroupSelector = <TGroup extends IGroup>({ group, setGroup, groups, storage
   )
 }
 
-export default GroupSelector;
+export default RotaGroupSelector;

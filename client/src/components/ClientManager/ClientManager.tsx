@@ -1,9 +1,12 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router"
 import { Application, IProps } from "../../models";
 
 const ClientManager = ({ setCurrentApplication }: IProps) => {
 
-  setCurrentApplication(Application.ClientManager);
+  useEffect(() => {
+    setCurrentApplication(Application.ClientManager);
+  }, [])
 
   return (
     <Outlet />

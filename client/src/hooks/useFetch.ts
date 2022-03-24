@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { IFetch } from "../models/fetch.model";
-import { endpoints } from "../utilities";
 
-const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], setProgress?: (progress: number) => void): IFetch<T> => {
+const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetch<T> => {
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const componentIsMounted = useRef(true);
+  const myController = new AbortController();
+  const mySignal = myController.signal;
 
   useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-
     const _fetch = async () => {
+
+      if (componentIsMounted) setIsLoading(true);
+      
+      options['signal'] = mySignal;
+
       fetch(url, options)
         .then(res => {
           if (!res.ok) {
@@ -21,20 +25,22 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], setPro
           return res.json();
         })
         .then(json => {
-          setResponse(json as unknown as T);
+          if (componentIsMounted) setResponse(json as unknown as T);
         })
-        .catch(err => setError(err))
+        .catch(err => {
+          if (componentIsMounted) setError(err)
+        })
         .finally(() => {
-          setTimeout(() => {
-            setIsLoading(false);
-            setProgress && setProgress(100);
-          }, endpoints.origin.includes('localhost') ? 500 : 0);
+          if (componentIsMounted) setIsLoading(false);
         })
     }
 
-    isMounted && _fetch();
+    componentIsMounted && _fetch();
 
-    return () => { isMounted = false };
+    return () => {
+      componentIsMounted.current = false;
+      myController.abort();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 

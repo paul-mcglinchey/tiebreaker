@@ -1,4 +1,4 @@
-export interface IUserResponseModel {
+export interface IUserResponse {
   mode: string,
   userId: number,
   tenantId: string,

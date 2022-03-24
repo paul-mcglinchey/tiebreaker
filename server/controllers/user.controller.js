@@ -2,7 +2,7 @@ const { ufApiKey } = require('../config/auth.config');
 const fetch = require('node-fetch');
 
 exports.getCurrentUser = async (req, res) => {
-  // Request current user data from Userfront and return the default client group
+  // Request current user data from Userfront
   fetch(`https://api.userfront.com/v0/users/${req.auth.userId}`, {
     method: 'GET',
     headers: {
@@ -17,12 +17,12 @@ exports.getCurrentUser = async (req, res) => {
     })
 }
 
-exports.updateDefaultGroup = async (req, res) => {
+exports.updateUserDefaultGroup = async (req, res) => {
   // get the group type from the query params
-  const { grouptype } = req.params;
+  const { groupType } = req.params;
 
   // Set the defaultGroup field of the current user
-  setDefaultGroup(req.auth.userId, grouptype, req.body._id)
+  this.setUserDefaultGroup(req.auth.userId, groupType, req.body._id)
     .then(response => {
       if (response.status === 400) return res.status(400).send(`Bad request.`);
       if (response.status !== 200) return res.status(500).send(`Server error.`);
@@ -31,13 +31,12 @@ exports.updateDefaultGroup = async (req, res) => {
     })
     .then(json => res.status(200).send(json))
     .catch(err => {
-      res.status(500).send(err.message || `Some error occurred while getting the default group.`)
+      res.status(500).send(err.message || `Some error occurred while setting the default group.`)
     })
 }
 
-// user fetch methods
-exports.setDefaultGroup = (userId, grouptype, groupId) => {
-  fetch(`https://api.userfront.com/v0/users/${userId}`, {
+exports.setUserDefaultGroup = (userId, groupType, groupId) => {
+  return fetch(`https://api.userfront.com/v0/users/${userId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -45,11 +44,8 @@ exports.setDefaultGroup = (userId, grouptype, groupId) => {
     },
     body: JSON.stringify({
       data: {
-        [grouptype]: groupId
+        [groupType]: groupId
       }
     })
   })
-    .catch(err => {
-      console.error(err.message || `Some error occurred while setting the default group.`)
-    })
 }

@@ -22,14 +22,10 @@ const RotaGroupDashboard = ({ statusService }: IGroupDashboardProps) => {
             response && response.count > 0 ? (
               <GroupList groups={response.groups} groupService={new RotaGroupService(statusService)} />
             ) : (
-              setTimeout(() => {
-                return (
-                  <GroupPrompter />
-                )
-              }, 500)
+              <GroupPrompter href='/rota/creategroup' />
             )
           )
-        )} 
+        )}
       />
     </Fragment>
   )

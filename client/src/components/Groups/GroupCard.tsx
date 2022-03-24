@@ -4,11 +4,10 @@ import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';
 import { IGroup, IGroupProps } from '../../models';
 
-const GroupCard = <TGroup extends IGroup>({ g, groupService }: IGroupProps<TGroup>) => {
+const GroupCard = <TGroup extends IGroup>({ g, groupService, isDefaultGroup }: IGroupProps<TGroup>) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
-  const isDefaultGroup = useState(groupService.isDefaultGroup(g._id));
 
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
 

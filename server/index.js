@@ -45,6 +45,7 @@ require('./routes/clientgroup.routes')(app);
 require('./routes/employee.routes')(app);
 require('./routes/rota.routes')(app);
 require('./routes/rotagroup.routes')(app);
+require('./routes/user.routes')(app);
 
 // Check if a default grouplist exists, if not we need to create one
 const grouplistController = require('./controllers/grouplist.controller');
