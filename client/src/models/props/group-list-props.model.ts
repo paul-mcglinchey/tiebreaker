@@ -1,6 +1,6 @@
 import { IGroupService } from "../../services";
 
-export interface IGroupsProps<TGroup> {
+export interface IGroupListProps<TGroup> {
   groups: TGroup[],
   groupService: IGroupService<TGroup>
 }

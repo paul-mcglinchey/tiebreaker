@@ -1,11 +1,7 @@
-import { useState } from "react";
-import { IProps } from "../../models";
+import { IFetchErrorProps } from "../../models";
 import { SpinnerIcon } from "./icons";
 
-const FetchError = ({ error, isLoading }: IProps) => {
-
-  const [refresh, setRefresh] = useState(false);
-  const toggleRefresh = () => setRefresh(!refresh);
+const FetchError = ({ error, isLoading, toggleRefresh }: IFetchErrorProps) => {
 
   return (
     <>
@@ -13,7 +9,7 @@ const FetchError = ({ error, isLoading }: IProps) => {
         <div className="flex-col">
           <div className="flex justify-between text-left text-base font-normal text-gray-500">
             <span>
-              {error}
+              {error?.message}
             </span>
             {isLoading && (
               <SpinnerIcon className="w-6 h-6" />

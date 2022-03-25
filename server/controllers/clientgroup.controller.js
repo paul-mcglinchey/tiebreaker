@@ -1,5 +1,4 @@
 const db = require('../models');
-const { setDefaultGroup } = require('./user.controller');
 const ClientGroup = db.clientgroup;
 const Client = db.client;
 const GroupList = db.grouplist;
@@ -46,29 +45,26 @@ exports.createClientGroup = async (req, res) => {
     .then(defaultLists => defaultLists._id)
     .catch(err => res.status(500).send({ message: err.message }));
 
+  console.log('here');
+
   // Create a new group model instance with the request body
   const group = new ClientGroup({
-    groupName: req.body.groupName,
+    name: req.body.name,
+    description: req.body.description,
     accessControl: {
       viewers: [req.auth.userUuid],
       editors: [req.auth.userUuid],
       owners: [req.auth.userUuid]
     },
     listDefinitions: [defaultListsId],
-    groupColour: req.body.groupColour
+    colour: req.body.colour
   });
 
   // Save the group to the database
   group
     .save(group)
     .then(data => {
-      // if this group has been flagged as the default group then we need to update that for the user
-      // update the default group field from userfront
-      if (req.body.default) {
-        setDefaultGroup(req.auth.userId, "defaultClientGroup", data._id)
-      }
-
-      res.status(200).send({ data: data, success: `Group ${req.body.groupName} added.` })
+      res.status(200).send({ data: data, success: `Group ${req.body.name} added.` })
     })
     .catch(err => {
       res.status(500).send({
@@ -80,39 +76,45 @@ exports.createClientGroup = async (req, res) => {
 
 // Only owners can perform this action
 exports.deleteClientGroup = async (req, res) => {
+
+  const { _id } = req.body;
+
+  // check that the _id has been passed correctly or return a 400
+  if (!_id) res.status(400).send({ message: 'An ID must be provided in order to delete a group.'})
+
   if (!req.groupexists) {
     res.status(500).send({ message: "Group doesn't exist" });
     return;
   }
 
-  ClientGroup.findOne({ _id: req.body._id, 'accessControl.owners': req.auth.userUuid })
+  ClientGroup.findOne({ _id: _id, 'accessControl.owners': req.auth.userUuid })
     .then(group => {
       // nothing returned so user isn't an owner of the group
-      if (!group) res.status(403).send({ message: `Current user does not have authorization to delete group with name ${req.body.groupName}.` })
+      if (!group) res.status(403).send({ message: `Current user does not have authorization to delete group with ID ${_id}.` })
 
       // removing all the clients that belong to that group
       var clientIds = group.clients;
       Client.deleteMany({ _id: clientIds })
         .then(() => {
-          ClientGroup.updateOne({ groupName: req.body.groupName }, { clients: [] })
+          ClientGroup.updateOne({ _id: _id, 'accessControl.owners': req.auth.userUuid }, { clients: [] })
             .catch(err => {
               res.status(500).send({
-                message: err.message || `Could not update the group with name \"${req.body.groupName}.\"`
+                message: err.message || `Could not update the group with ID ${_id}.`
               });
             })
         })
         .catch(err => {
           res.status(500).send({
-            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupName}.`
+            message: err.message || `Could not delete clients from ${req.body.groupName}.`
           })
         });
     })
     .then(() => {
       // finally delete the group from the database
-      ClientGroup.findByIdAndDelete({ _id: req.body._id, 'accessControl.owners': req.auth.userUuid })
+      ClientGroup.findOneAndDelete({ _id: _id, 'accessControl.owners': req.auth.userUuid })
         .then(group => {
           // nothing returned so user isn't an owner of the group - this should never happen hypothetically
-          if (!group) res.status(403).send({ message: `Current user does not have authorization to delete group with name ${req.body.groupName}.` })
+          if (!group) res.status(403).send({ message: `Current user does not have authorization to delete group with ID ${_id}.` })
 
           res.status(200).send({
             success: `Group ${group.groupName} successfully deleted.`
@@ -121,11 +123,11 @@ exports.deleteClientGroup = async (req, res) => {
         .catch(err => {
           if (err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-              message: 'Group not found with id ' + req.body._id
+              message: 'Group not found with id ' + _id
             });
           };
           return res.status(500).send({
-            message: 'Could not delete group with id ' + req.body._id
+            message: 'Could not delete group with id ' + _id
           });
         });
     })

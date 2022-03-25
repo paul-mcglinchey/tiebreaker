@@ -11,6 +11,6 @@ export interface IAddClient {
   city: string,
   country: string,
   postCode: string,
-  groupName?: string,
+  groupId?: string,
   clientColour?: string | undefined
 }

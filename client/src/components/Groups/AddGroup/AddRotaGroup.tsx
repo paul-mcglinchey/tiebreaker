@@ -1,9 +1,12 @@
-import { IAddGroupProps } from "../../../models";
+import { useStatus } from "../../../hooks";
 import { RotaGroupService } from "../../../services";
 import { Toolbar } from "../../Common";
 import { AddGroupForm } from "./Common";
 
-const AddRotaGroup = ({ statusService }: IAddGroupProps) => {
+const AddRotaGroup = () => {
+
+  const { statusService } = useStatus();
+
   return (
     <>
       <Toolbar>Create Rota Group</Toolbar>

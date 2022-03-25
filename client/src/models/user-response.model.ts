@@ -9,8 +9,6 @@ export interface IUserResponse {
   image: string,
   locked: boolean,
   data: {
-    defaultClientGroup?: string,
-    defaultRotaGroup?: string,
     [key: string]: string
   },
   isConfirmed: boolean,

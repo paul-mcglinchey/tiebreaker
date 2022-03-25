@@ -5,18 +5,17 @@ import { StyledField } from '../../..';
 import { IAddGroupFormProps, IGroup } from '../../../../models';
 import { generateColour } from '../../../../services';
 import { groupValidationSchema } from '../../../../utilities';
-import { ColourPicker, CustomCheckbox, SubmitButton } from '../../../Common';
+import { ColourPicker, SubmitButton } from '../../../Common';
 
 const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProps<TGroup>) => {
-  const [isDefault, setIsDefault] = useState(false);
   const [groupColour, setGroupColour] = useState<string>(generateColour());
 
   return (
     <Formik
       initialValues={{
-        'groupName': '',
-        'default': isDefault,
-        'groupColour': groupColour
+        'name': '',
+        'description': '',
+        'colour': groupColour
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
@@ -30,8 +29,8 @@ const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProp
               <ColourPicker colour={groupColour} setColour={setGroupColour} hideIcon />
             </div>
             <div className="flex space-x-4">
-              <StyledField name="groupName" label="Groupname" errors={errors.groupName} touched={touched.groupName} />
-              <CustomCheckbox label="Default" state={isDefault} setState={setIsDefault} />
+              <StyledField name="name" label="Groupname" errors={errors.name} touched={touched.name} />
+              <StyledField name="description" label="Description" errors={errors.description} touched={touched.description} />
             </div>
           </div>
           <div className="flex justify-end">

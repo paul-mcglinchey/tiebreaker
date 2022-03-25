@@ -1,5 +1,5 @@
 export interface IAddGroup {
-  groupName: string,
-  default: boolean,
-  groupColour: string
+  name: string,
+  description: string,
+  colour: string
 }

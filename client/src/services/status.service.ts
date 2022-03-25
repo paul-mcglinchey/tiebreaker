@@ -3,17 +3,15 @@ import { IStatusService } from "./interfaces/status.service.interface";
 
 export class StatusService implements IStatusService {
   status: IStatus[];
+  setStatus: (status: IStatus[]) => void;
 
-  constructor() {
-    this.status = []
+  constructor(status: IStatus[], setStatus: (status: IStatus[]) => void) {
+    this.status = status;
+    this.setStatus = setStatus;
   }
 
   getStatusFeed = (): IStatus[] => {
     return this.status;
-  }
-
-  setStatus = (status: IStatus[]) => {
-    this.status = status;
   }
 
   removeStatus = (statusItemToRemove: IStatus): void => {

@@ -1,25 +1,22 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { IFetch } from "../models/fetch.model";
 
 const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetch<T> => {
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const componentIsMounted = useRef(true);
-  const myController = new AbortController();
-  const mySignal = myController.signal;
 
   useEffect(() => {
+    let componentIsMounted = true;
+    
     const _fetch = async () => {
-
-      if (componentIsMounted) setIsLoading(true);
       
-      options['signal'] = mySignal;
+      if (componentIsMounted) setIsLoading(true);
 
       fetch(url, options)
         .then(res => {
           if (!res.ok) {
-            throw res.statusText;
+            if (componentIsMounted) throw res.statusText;
           }
 
           return res.json();
@@ -38,8 +35,7 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = []): IFetc
     componentIsMounted && _fetch();
 
     return () => {
-      componentIsMounted.current = false;
-      myController.abort();
+      componentIsMounted = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);

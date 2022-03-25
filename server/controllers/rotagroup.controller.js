@@ -1,7 +1,7 @@
 const db = require('../models');
-const { setDefaultGroup } = require('./user.controller');
+const { setUserDefaultGroup } = require('./user.controller');
 const RotaGroup = db.rotagroup;
-const Employee = db.employee;
+const Employee= db.employee.Employee;
 const GroupList = db.grouplist;
 
 // Read Operations
@@ -48,7 +48,8 @@ exports.createRotaGroup = async (req, res) => {
 
   // Create a new group model instance with the request body
   const group = new RotaGroup({
-    groupName: req.body.groupName,
+    name: req.body.name,
+    description: req.body.description,
     default: req.body.default,
     accessControl: {
       viewers: [req.auth.userUuid],
@@ -56,20 +57,13 @@ exports.createRotaGroup = async (req, res) => {
       owners: [req.auth.userUuid]
     },
     listDefinitions: defaultListsId,
-    groupColour: req.body.groupColour
+    colour: req.body.colour
   });
 
   // Save the group to the database
   group
     .save(group)
     .then(data => {
-      // if this group has been flagged as the default group then we need to update that for the user
-      // update the default group field from userfront
-      setDefaultGroup(req.auth.userId, "defaultRotaGroup", data._id)
-        .catch(err => {
-          res.status(500).send(err.message || `Some error occurred while setting the default group.`)
-        })
-
       res.status(200).send({ data: data, success: `Group ${req.body.groupName} added.` })
     })
     .catch(err => {
@@ -81,31 +75,37 @@ exports.createRotaGroup = async (req, res) => {
 }
 
 exports.deleteRotaGroup = async (req, res) => {
+  
+  const { _id } = req.body;
+
+  // check that the _id has been passed correctly or return a 400
+  if (!_id) res.status(400).send({ message: 'A valid ID must be provided in order to delete a group.'})
+
   if (!req.groupexists) {
     res.status(400).send({ message: "Group doesn't exist" });
     return;
   }
 
-  RotaGroup.findOne({ groupName: req.body.groupName, 'accessControl.owners': req.auth.userUuid })
+  RotaGroup.findOne({ _id: _id, 'accessControl.owners': req.auth.userUuid })
     .then(group => {
       var employeeIds = group.employees;
       Employee.deleteMany({ _id: employeeIds })
         .then(() => {
-          RotaGroup.updateOne({ groupName: req.body.groupName }, { employees: [] })
+          RotaGroup.updateOne({ _id: _id, 'accessControl.owners': req.auth.userUuid }, { employees: [] })
             .catch(err => {
               res.status(500).send({
-                message: err.message || `Could not update the group with name \"${req.body.groupName}\"`
+                message: err.message || `Could not update the group with id ${_id}.`
               });
             })
         })
         .catch(err => {
           res.status(500).send({
-            message: err.message || `Could not delete clients ${clientIds} from ${req.body.groupName}.`
+            message: err.message || `Could not delete clients from ${_id}.`
           })
         });
     })
     .then(() => {
-      Group.findByIdAndDelete({ _id: req.body._id })
+      RotaGroup.findOneAndDelete({ _id: _id, 'accessControl.owners': req.auth.userUuid })
         .then(group => {
           res.status(200).send({
             success: `Group ${group.groupName} successfully deleted.`
@@ -114,11 +114,11 @@ exports.deleteRotaGroup = async (req, res) => {
         .catch(err => {
           if (err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-              message: 'Group not found with id ' + req.body._id
+              message: 'Group not found with id ' + _id
             });
           };
           return res.status(500).send({
-            message: 'Could not delete group with id ' + req.body._id
+            message: 'Could not delete group with id ' + _id
           });
         });
     })

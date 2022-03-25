@@ -1,57 +1,44 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, PlusIcon } from '@heroicons/react/solid';
-import { IGroup, IGroupsResponse, IRotaGroup } from '../../../models';
-import { combineClassNames, getItemInStorage, requestBuilder } from '../../../services';
-import { ApplicationContext, endpoints } from '../../../utilities';
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/solid";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { IGroup, IGroupSelectorProps } from "../../../../models";
+import { combineClassNames, getItemInStorage } from "../../../../services";
 
-const RotaGroupSelector = () => {
+const GroupSelector = <TGroup extends IGroup>({ groupType, group, setGroup, groups }: IGroupSelectorProps<TGroup>) => {
 
-  const { rotaGroup, setRotaGroup } = useContext(ApplicationContext);
-  const componentIsMounted = useRef(true);
-  const [groups, setGroups] = useState<IRotaGroup[]>([]);
-  const storageKey = "rotaGroup";
+  const storageKey = `${groupType}Group`;
 
-  const storageHasValidGroup = (groups: IRotaGroup[]): boolean => {
-    return groups && getItemInStorage(storageKey) && groups.filter((g: IGroup) => g.groupName === getItemInStorage(storageKey).groupName).length > 0;
+  const storageHasValidGroup = (groups: TGroup[]): boolean => {
+    return groups && getItemInStorage(storageKey) && groups.filter((g: TGroup) => g.name === getItemInStorage(storageKey).name).length > 0;
   }
 
-  const updateGroup = (rotaGroup: IRotaGroup) => {
+  const updateGroup = (group: TGroup) => {
     // Update the group held in storage
-    sessionStorage.setItem(storageKey, JSON.stringify(rotaGroup))
+    sessionStorage.setItem(storageKey, JSON.stringify(group))
 
     // Update the group held in state
-    setRotaGroup(rotaGroup);
+    setGroup(group);
   }
 
   useEffect(() => {
-    const _fetch = async () => {
-      fetch(endpoints.groups("rota").groups, requestBuilder("GET"))
-        .then(res => res.json())
-        .then((json: IGroupsResponse<IRotaGroup>) => {
-          if (componentIsMounted) setGroups(json.groups);
-        })
-    }
-
-    componentIsMounted 
-      && _fetch();
+    let componentIsMounted = true;
 
     componentIsMounted 
       && !storageHasValidGroup(groups) 
       && updateGroup(storageHasValidGroup(groups) ? getItemInStorage(storageKey) : groups[0])
 
     return () => {
-      componentIsMounted.current = false;
+      componentIsMounted = false;
     }
   }, []);
 
-  return (
+  return (  
     <div className="flex flex-grow items-center justify-end">
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
-            {rotaGroup ? rotaGroup.groupName : 'Groups'}
+            {group ? group.name : 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -70,11 +57,11 @@ const RotaGroupSelector = () => {
                 <span>
                   Groups
                 </span>
-                <Link to={{ pathname: "/creategroup" }}>
+                <Link to={{ pathname: `/${groupType}s/creategroup` }}>
                   <PlusIcon className="h-6 w-6 hover:text-gray-400" />
                 </Link>
               </div>
-              {groups.map((g: IRotaGroup) => (
+              {groups.map((g: TGroup) => (
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button
@@ -84,7 +71,7 @@ const RotaGroupSelector = () => {
                         'block px-4 py-2 text-sm font-medium'
                       )}
                     >
-                      {g.groupName}
+                      {g.name}
                     </button>
                   )}
                 </Menu.Item>
@@ -92,11 +79,9 @@ const RotaGroupSelector = () => {
             </div>
           </Menu.Items>
         </Transition>
-
       </Menu >
     </div>
-
   )
 }
 
-export default RotaGroupSelector;
+export default GroupSelector;

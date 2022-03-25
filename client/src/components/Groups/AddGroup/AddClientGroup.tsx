@@ -1,9 +1,11 @@
 import { AddGroupForm } from '.';
-import { IAddGroupProps } from '../../../models';
+import { useStatus } from '../../../hooks';
 import { ClientGroupService } from '../../../services';
 import { Toolbar } from '../../Common';
 
-const AddClientGroup = ({ statusService }: IAddGroupProps) => {
+const AddClientGroup = () => {
+
+  const { statusService } = useStatus();
 
   return (
     <>

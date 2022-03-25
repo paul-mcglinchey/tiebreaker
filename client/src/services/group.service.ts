@@ -9,12 +9,14 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
   groupType: string;
   statusService: IStatusService;
   userService: IUserService;
+  refresh: () => void;
 
-  constructor(endpoint: IGroupsEndpoint, groupType: string, statusService: IStatusService) {
+  constructor(endpoint: IGroupsEndpoint, groupType: string, statusService: IStatusService, refresh: () => void) {
     this.endpoint = endpoint;
     this.groupType = groupType;
     this.statusService = statusService;
     this.userService = new UserService(statusService);
+    this.refresh = refresh;
   }
 
   addGroup = (values: IAddGroup) => {
@@ -23,11 +25,11 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
     fetch(this.endpoint.groups, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          this.statusService.appendStatus(false, `Successfully created ${values.groupName}`, Status.Success);
+          this.statusService.appendStatus(false, `Successfully created ${values.name}`, Status.Success);
         } else if (res.status === 400) {
           this.statusService.appendStatus(false, 'Group already exists', Status.Error);
         } else {
-          this.statusService.appendStatus(false, `A problem occurred creating ${values.groupName}`, Status.Error);
+          this.statusService.appendStatus(false, `A problem occurred creating ${values.name}`, Status.Error);
         }
       })
       .catch(() => {
@@ -35,51 +37,19 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
-  isDefaultGroup = async (_id: string): Promise<boolean> => {
-    return await this.getDefaultGroup() === _id;
-  }
-  
-  getDefaultGroup = async (): Promise<string> => {
-    return await this.userService.getDefaultGroup(this.groupType);
-  }
-
   deleteGroup = async (g: TGroup) => {
     this.statusService.setLoading(true);
-    
-    if (await this.isDefaultGroup(g._id)) {
-      this.statusService.appendStatus(false, 'Cannot delete the default group', Status.Error);
 
-      return;
-    }
-
-    fetch(this.endpoint.groups, requestBuilder("DELETE", undefined, { _id: g._id, groupName: g.groupName }))
+    fetch(this.endpoint.groups, requestBuilder("DELETE", undefined, { _id: g._id }))
       .then(res => {
         if (res.ok) {
-          this.statusService.appendStatus(false, `Successfully deleted ${g.groupName}`, Status.Success);
+          this.statusService.appendStatus(false, `Successfully deleted ${g.name}`, Status.Success);
         } else {
-          this.statusService.appendStatus(false, `A problem ocurred deleting ${g.groupName}`, Status.Error);
+          this.statusService.appendStatus(false, `A problem ocurred deleting ${g.name}`, Status.Error);
         }
       })
       .catch(() => {
         this.statusService.appendStatus(false, '', Status.None);
       })
   }
-
-  setDefaultGroup = (g: TGroup) => {
-    this.statusService.setLoading(true);
-
-    fetch(this.endpoint.default, requestBuilder("PUT", undefined, { _id: g._id, groupName: g.groupName }))
-      .then(res => {
-        if (res.ok) {
-          this.statusService.appendStatus(false, 'Successfully set default group', Status.Success);
-        } else {
-          this.statusService.appendStatus(false, 'A problem occurred setting the default group', Status.Error);
-        }
-      })
-      .catch(err => {
-        console.log(`Error: ${err}`);
-        this.statusService.setLoading(false);
-      })
-  }
-
 } 

@@ -14,12 +14,19 @@ module.exports = app => {
   router.post(
     '/', 
     middleware.createGroup.checkIfClientGroupExists,
-    middleware.createGroup.checkIfFirstGroup, 
     clientGroup.createClientGroup
   );
 
+  // DELETE and PUT endpoints will require an ID
+  router.use(middleware.createGroup.checkRequestHasId);
+
   // Delete a clientGroup
-  router.delete('/', middleware.createGroup.checkIfClientGroupExists, clientGroup.deleteClientGroup);
+  router.delete(
+    '/', 
+    middleware.createGroup.checkIfClientGroupExists,
+    middleware.createGroup.checkUserAccessToClientGroup('owners'),
+    clientGroup.deleteClientGroup
+  );
 
   app.use('/api/clientgroups', router);
 }

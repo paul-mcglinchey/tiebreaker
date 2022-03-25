@@ -4,7 +4,8 @@ const Schema = require('mongoose');
 const ClientGroup = mongoose.model(
   "ClientGroup",
   new mongoose.Schema({
-    groupName: { type: String, required: true },
+    name: { type: String, required: true },
+    description: { type: String, required: false },
     accessControl: {
       viewers: [String],
       editors: [String],
@@ -15,7 +16,7 @@ const ClientGroup = mongoose.model(
       ref: 'Client'
     }],
     listDefinitions: [String],
-    groupColour: { type: String, required: false }
+    colour: { type: String, required: false }
   })
 )
 

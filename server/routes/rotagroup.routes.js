@@ -14,14 +14,16 @@ module.exports = app => {
   router.post(
     '/', 
     middleware.createGroup.checkIfRotaGroupExists,
-    middleware.createGroup.checkIfFirstGroup,
     rotagroup.createRotaGroup
   );
+
+  // DELETE and PUT endpoints will require an ID
+  router.use(middleware.createGroup.checkRequestHasId);
 
   // Delete a rotagroup
   router.delete('/', 
     middleware.createGroup.checkIfRotaGroupExists,
-    middleware.createGroup.checkUserAccessToGroup('owner'), 
+    middleware.createGroup.checkUserAccessToRotaGroup('owners'),
     rotagroup.deleteRotaGroup
   );
 

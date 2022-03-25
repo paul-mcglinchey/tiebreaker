@@ -9,9 +9,9 @@ import {
 } from 'react-router-dom';
 
 import { IClientGroup, IRotaGroup, IStatus } from './models';
-import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
+import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
 import { ApplicationContext, StatusContext } from './utilities';
-import { getItemInStorage, StatusService } from './services';
+import { getItemInStorage } from './services';
 
 export default function App() {
 
@@ -37,9 +37,6 @@ export default function App() {
     return getAccess() ? children : <Navigate to="/login" state={{ from: location }} />;
   }
 
-  // status service
-  const statusService = new StatusService();
-
   return (
     <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
       <StatusContext.Provider value={{ status: status, setStatus: setStatus, progress: progress, setProgress: setProgress }}>
@@ -47,6 +44,7 @@ export default function App() {
           {getAccess() && (
             <NavMenu currentApplication={currentApplication} />
           )}
+          <NotificationContainer />
           <div className="font-sans subpixel-antialiased px-2 sm:px-6 lg:px-8">
             <Routes>
               {/* Dashboard Routes */}
@@ -66,8 +64,8 @@ export default function App() {
                 <Route path="dashboard" element={<ClientDashboard />} />
                 <Route path=":clientId/*" element={<ClientPage />} />
                 <Route path="addclients" element={<AddClient />} />
-                <Route path="groups" element={<ClientGroupDashboard statusService={statusService} />} />
-                <Route path="creategroup" element={<AddClientGroup statusService={statusService} />} />
+                <Route path="groups" element={<ClientGroupDashboard />} />
+                <Route path="creategroup" element={<AddClientGroup />} />
               </Route>
 
               {/* Rota manager specific routes */}
@@ -79,8 +77,8 @@ export default function App() {
                 <Route path="dashboard" element={<RotaDashboard />} />
                 <Route path="addrota" element={<AddRota />} />
                 <Route path="addemployee" element={<AddEmployee />} />
-                <Route path="groups" element={<RotaGroupDashboard statusService={statusService} />} />
-                <Route path="creategroup" element={<AddRotaGroup statusService={statusService} />} />
+                <Route path="groups" element={<RotaGroupDashboard />} />
+                <Route path="creategroup" element={<AddRotaGroup />} />
               </Route>
 
               {/* Unprotected routes */}

@@ -36,7 +36,7 @@ const AddClientForm = () => {
       return;
     }
 
-    values.groupName = clientGroup && clientGroup.groupName;
+    values.groupId = clientGroup && clientGroup._id;
 
     // generates a new random colour to be used for profile display
     values.clientColour = generateColour();

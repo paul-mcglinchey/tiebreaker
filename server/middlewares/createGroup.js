@@ -2,31 +2,20 @@ const db = require('../models');
 const RotaGroup = db.rotagroup;
 const ClientGroup = db.clientgroup;
 
-// This middleware intercepts any request to create a new group and checks if it's
-// the first group to be created or if a default group already exists
-const checkIfFirstGroup = (req, res, next) => {
-  ClientGroup.find({ users: req.auth.userUuid })
-    .then(groups => {
-      if (groups.length > 0) {
-        req.body.default = groups.filter(g => g.default).length > 0 ? false : true;
-      } else {
-        req.body.default = true;
-      }
+const checkRequestHasId = (req, res, next) => {
+  const { _id } = req.body;
+  if (!_id) res.status(400).send({ message: 'An ID must be provided.' });
 
-      next();
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || `Some error occurred trying to find groups for user ${req.auth.userUuid}.`
-      })
-    })
+  next();
 }
 
 // This middleware intercepts any request to create a new group and checks that
 // the group doesn't already exist
 const checkIfClientGroupExists = (req, res, next) => {
-  ClientGroup.find({ groupName: req.body.groupName })
+
+  const { _id, name } = req.body;
+
+  ClientGroup.find({ $or: [{ _id: _id }, { name: name }]})
     .then((data) => {
       if (data.length !== 0) {
         req.groupexists = true
@@ -42,7 +31,10 @@ const checkIfClientGroupExists = (req, res, next) => {
     })
 }
 const checkIfRotaGroupExists = (req, res, next) => {
-  RotaGroup.find({ groupName: req.body.groupName })
+
+  const { _id, name } = req.body;
+
+  RotaGroup.find({ $or: [{ _id: _id }, { name: name }]})
     .then((data) => {
       if (data.length !== 0) {
         req.groupexists = true
@@ -58,20 +50,43 @@ const checkIfRotaGroupExists = (req, res, next) => {
     })
 }
 
-// This middleware intercepts group related requests and checks the current users access
-const checkUserAccessToGroup = (accessRequired) => {
+// This middleware intercepts clientgroup related requests and checks the current users access
+const checkUserAccessToClientGroup = (accessRequired) => {
   return async (req, res, next) => {
-    // check if the group exists before checking access
-    checkIfGroupExists();
 
-    RotaGroup.find({ groupName: req.body.groupName })
+    const { _id } = req.body;
+
+    ClientGroup.findById(_id)
       .then((data) => {
         if (data.accessControl) {
           if (data.accessControl[accessRequired].contains(req.auth.userUuid)) {
             next();
           } else {
             res.status(403).send({
-              message: `User with ID ${req.auth.userUuid} not properly authorized with group ${req.body.groupName}`
+              message: `User with ID ${req.auth.userUuid} not properly authorized to perform that action on group with ID ${_id}.`
+            });
+          }
+        }
+      })
+
+    next();
+  }
+}
+
+// This middleware intercepts rotagroup related requests and checks the current users access
+const checkUserAccessToRotaGroup = (accessRequired) => {
+  return async (req, res, next) => {
+
+    const { _id } = req.body;
+
+    RotaGroup.findById(_id)
+      .then((data) => {
+        if (data.accessControl) {
+          if (data.accessControl[accessRequired].contains(req.auth.userUuid)) {
+            next();
+          } else {
+            res.status(403).send({
+              message: `User with ID ${req.auth.userUuid} not properly authorized to perform that action on group with ID ${_id}.`
             });
           }
         }
@@ -82,10 +97,11 @@ const checkUserAccessToGroup = (accessRequired) => {
 }
 
 const createGroup = {
-  checkIfFirstGroup,
+  checkRequestHasId,
   checkIfClientGroupExists,
   checkIfRotaGroupExists,
-  checkUserAccessToGroup
+  checkUserAccessToClientGroup,
+  checkUserAccessToRotaGroup
 };
 
 module.exports = createGroup;

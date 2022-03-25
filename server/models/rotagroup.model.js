@@ -4,8 +4,8 @@ const { Schema } = require('mongoose');
 const RotaGroup = mongoose.model(
   "RotaGroup",
   new Schema({
-    groupName: { type: String, required: true },
-    default: { type: Boolean, required: true },
+    name: { type: String, required: true },
+    description: { type: String, required: false },
     accessControl: {
       viewers: [String],
       editors: [String],
@@ -14,7 +14,7 @@ const RotaGroup = mongoose.model(
     employees: [String],
     rotas: [String],
     listDefinitions: [String],
-    groupColour: { type: String, required: false }
+    colour: { type: String, required: false }
   })
 )
 

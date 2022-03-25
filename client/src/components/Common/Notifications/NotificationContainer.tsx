@@ -1,9 +1,13 @@
 import { Notification } from "..";
-import { INotificationContainerProps, IStatus } from "../../../models";
+import { useStatus } from "../../../hooks";
+import { IStatus } from "../../../models";
 
-const NotificationContainer = ({ statusService }: INotificationContainerProps) => {
+const NotificationContainer = () => {
+
+  const { statusService } = useStatus();
+
   return (
-    <div className="absolute z-50 p-2 sm:p-6 w-screen sm:w-auto top-0 right-0 space-y-4 overflow-hidden">
+    <div className="absolute z-50 sm:p-6 w-screen sm:w-auto top-0 right-0 space-y-4 overflow-hidden">
       {statusService.getStatusFeed().map((statusItem: IStatus, key: number) => (
         <Notification key={key} status={statusItem} statusService={statusService} />
       ))}

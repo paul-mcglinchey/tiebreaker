@@ -22,10 +22,10 @@ const Notification = ({ status, statusService }: INotificationProps) => {
   return (
     <Transition
       show={open && !status.isLoading}
-      enter="transition ease-in-out duration-1000"
+      enter="transition ease-in-out duration-300"
       enterFrom="transform translate-x-full"
       enterTo="transform translate-x-0"
-      leave="transition ease-in-out duration-1000"
+      leave="transition ease-in-out duration-300"
       leaveFrom="transform translate-x-0"
       leaveTo="transform translate-x-full"
       className={combineClassNames(

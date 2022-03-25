@@ -1,18 +1,22 @@
 import { Fragment } from "react";
 import { GroupList } from ".";
-import { useFetch } from "../../hooks";
-import { IFetch, IGroupDashboardProps, IGroupsResponse, IRotaGroup, ToolbarType } from "../../models";
+import { useFetch, useRefresh, useStatus } from "../../hooks";
+import { IFetch, IGroupsResponse, IRotaGroup } from "../../models";
 import { requestBuilder, RotaGroupService } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon, Toolbar } from "../Common";
 import GroupPrompter from "./GroupPrompter";
 
-const RotaGroupDashboard = ({ statusService }: IGroupDashboardProps) => {
+const RotaGroupDashboard = () => {
+
+  const { dependency, refresh } = useRefresh();
+  const { statusService } = useStatus();
+
   return (
     <Fragment>
-      <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>Group Management</Toolbar>
+      <Toolbar>Group Management</Toolbar>
       <Fetch
-        fetchOutput={useFetch(endpoints.groups("rota").groups, requestBuilder("GET"))}
+        fetchOutput={useFetch(endpoints.groups("rota").groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">
@@ -20,9 +24,9 @@ const RotaGroupDashboard = ({ statusService }: IGroupDashboardProps) => {
             </div>
           ) : (
             response && response.count > 0 ? (
-              <GroupList groups={response.groups} groupService={new RotaGroupService(statusService)} />
+              <GroupList groups={response.groups} groupService={new RotaGroupService(statusService, refresh)} />
             ) : (
-              <GroupPrompter href='/rota/creategroup' />
+              <GroupPrompter href='/rotas/creategroup' />
             )
           )
         )}

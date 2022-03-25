@@ -37,7 +37,6 @@ exports.createDefaultLists = async () => {
 exports.getDefaultLists = async (req, res) => {
   GroupList.find({ default: true }, { _id: 1 })
     .then(defaultLists => {
-      console.log(defaultLists);
       res.status(200).send({ defaultList: defaultLists })
     })
     .catch(err => {

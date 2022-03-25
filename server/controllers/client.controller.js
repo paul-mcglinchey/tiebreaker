@@ -10,12 +10,17 @@ const ActivityLog = db.activitylog;
 // Retrieve all clients from the database
 exports.findAll = async (req, res) => {
 
-  let { pageSize, pageNumber, groupName, sortField, sortDirection, clientName } = await req.query;
+  let { pageSize, pageNumber, groupId, sortField, sortDirection, clientName } = await req.query;
+
+  // check that groupname is set, else return a 400
+  if (!groupId) {
+    res.status(400).send({ message: 'Group ID must be set in order to retrieve clients'})
+  }
 
   pageSize = parseInt(pageSize);
   pageNumber = parseInt(pageNumber);
 
-  ClientGroup.findOne({ groupName: groupName, 'accessControl.viewers': req.auth.userUuid })
+  ClientGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userUuid })
     .then(async (group) => {
 
       // all the clients that belong to the requested group
@@ -29,7 +34,7 @@ exports.findAll = async (req, res) => {
         .then(clientCount => clientCount)
         .catch(err => res.status(500)
           .send({
-            message: err.message || `A problem occurred fetching the number of clients for group ${groupName}.`
+            message: err.message || `A problem occurred fetching the number of clients for group with ID ${groupId}.`
           }));
       
       // create the aggregate object (functions like an IQueryable)
@@ -54,18 +59,18 @@ exports.findAll = async (req, res) => {
         .then(clients => clients)
         .catch(err => res.status(500)
           .send({
-            message: err.message || `A problem occurred fetching the list of clients for group ${groupName}.`
+            message: err.message || `A problem occurred fetching the list of clients for group with ID ${groupId}.`
           }))
 
       res.status(200).send({
-        totalClients: clientCount,
+        count: clientCount,
         clients: clients
       });
     })
     .catch(err => {
       res.status(401).send({
         message:
-          err.message || `A problem occurred finding group "${req.query.userGroup}".`
+          err.message || `A problem occurred finding group with ID ${groupId}.`
       });
     });
 };
@@ -144,20 +149,20 @@ exports.create = (req, res) => {
     .then(data => {
       // Add the client to the group which was selected
       ClientGroup.updateOne({ 
-        groupName: req.body.groupName,
+        _id: req.body.groupId,
         $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }] 
       }, { 
         $push: { clients: new ObjectId(data._id) } 
       })
         .then(() => {
           res.status(200).send({
-            success: `Client created successfully in ${req.body.groupName}.`
+            success: `Client created successfully in group with ID ${req.body.groupId}.`
           })
         })
         .catch(err => {
           res.status(401).send({
             message:
-              err.message || `Could not add client ${data._id} to group ${req.body.userGroup}.`
+              err.message || `Could not add client to group with ID ${req.body.groupId}.`
           })
         })
     })

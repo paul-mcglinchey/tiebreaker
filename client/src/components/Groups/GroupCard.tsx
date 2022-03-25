@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { CheckIcon, TrashIcon, XIcon, DotsVerticalIcon } from '@heroicons/react/solid';
-import { HeartIcon } from '@heroicons/react/outline';
 import { SquareIconButton } from '..';
 import { IGroup, IGroupProps } from '../../models';
 
-const GroupCard = <TGroup extends IGroup>({ g, groupService, isDefaultGroup }: IGroupProps<TGroup>) => {
+const GroupCard = <TGroup extends IGroup>({ g, groupService }: IGroupProps<TGroup>) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [confirmingDeletion, setConfirmingDeletion] = useState(false);
@@ -41,12 +40,11 @@ const GroupCard = <TGroup extends IGroup>({ g, groupService, isDefaultGroup }: I
   }
 
   return (
-    <div className={`flex flex-auto min-w-120 flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all ${isDefaultGroup && 'order-first'}`}>
+    <div className={`flex flex-auto min-w-120 flex-col relative h-48 mx-2 my-4 transform hover:scale-102 transition-all`}>
       <div className={`p-4 rounded-lg transform transition-all ${cardFlipped ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
         <div className="flex flex-grow justify-between items-center space-x-4">
-          <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.groupName}</h1>
+          <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.name}</h1>
           <div className="flex">
-            <SquareIconButton Icon={HeartIcon} action={() => !isDefaultGroup && groupService.setDefaultGroup(g)} additionalClasses={`${isDefaultGroup ? 'fill-current' : 'fill-transparent'} hover:fill-current`} />
             <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
           </div>
         </div>

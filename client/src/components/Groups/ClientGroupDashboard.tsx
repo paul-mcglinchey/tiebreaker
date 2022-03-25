@@ -1,19 +1,22 @@
 import { Fragment } from "react";
 import { GroupList, Toolbar } from "..";
-import { useFetch } from "../../hooks";
-import { IClientGroup, IFetch, IGroupDashboardProps, IGroupsResponse, ToolbarType } from "../../models";
+import { useFetch, useRefresh, useStatus } from "../../hooks";
+import { IClientGroup, IFetch, IGroupsResponse } from "../../models";
 import { ClientGroupService, requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
 import GroupPrompter from "./GroupPrompter";
 
+const ClientGroupDashboard = () => {
 
-const ClientGroupDashboard = ({ statusService }: IGroupDashboardProps) => {
+  const { dependency, refresh } = useRefresh();
+  const { statusService } = useStatus();
+
   return (
     <Fragment>
-      <Toolbar toolbarTypes={[ToolbarType.ClientGroups]}>Group Management</Toolbar>
+      <Toolbar>Group Management</Toolbar>
       <Fetch
-        fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder("GET"))}
+        fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">
@@ -21,13 +24,9 @@ const ClientGroupDashboard = ({ statusService }: IGroupDashboardProps) => {
             </div>
           ) : (
             response && response.count > 0 ? (
-              <GroupList groups={response.groups} groupService={new ClientGroupService(statusService)} />
+              <GroupList groups={response.groups} groupService={new ClientGroupService(statusService, refresh)} />
             ) : (
-              setTimeout(() => {
-                return (
-                  <GroupPrompter />
-                )
-              }, 500)
+              <GroupPrompter href='/clients/creategroup' />
             )
           )
         )} 

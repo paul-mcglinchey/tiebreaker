@@ -1,42 +1,35 @@
-import { UsersIcon } from "@heroicons/react/solid";
+import { useContext } from "react";
 import { GroupCreateButton } from ".";
 import { useFetch } from "../../../hooks";
 import { IClientGroup, IFetch, IGroupsResponse } from "../../../models";
 import { requestBuilder } from "../../../services";
-import { endpoints } from "../../../utilities";
+import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
-import ClientGroupSelector from "./ClientGroupSelector";
+import { GroupInfoDisplay, GroupSelector } from "./Common";
 
 const ClientGroupToolbar = () => {
 
+  const { clientGroup, setClientGroup } = useContext(ApplicationContext);
+
   return (
-    <>
-      <div className="text-white">
-        <Fetch
-          fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder())}
-          render={({ response }: IFetch<IGroupsResponse<IClientGroup>>) => (
-            <>
-              {response && (
-                <div className="flex md:space-x-4 justify-end">
-                  <div className="hidden md:flex space-x-4">
-                    <div className="hidden md:flex items-center text-gray-400 space-x-1">
-                      <UsersIcon className="h-4 w-4" />
-                      <div>
-                        <span className="font-light align-baseline">
-                          <span className="font-medium">{response.count}</span> group{response.count > 1 ? 's' : ''}
-                        </span>
-                      </div>
-                    </div>
-                    <GroupCreateButton href="/clients/creategroup" />
-                  </div>
-                  <ClientGroupSelector />
+    <div className="text-white">
+      <Fetch
+        fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder("GET"))}
+        render={({ response, error }: IFetch<IGroupsResponse<IClientGroup>>) => (
+          <>
+            {response && !error && (
+              <div className="flex md:space-x-4 justify-end">
+                <div className="hidden md:flex space-x-4">
+                  <GroupInfoDisplay groupCount={response.count} />
+                  <GroupCreateButton href="/clients/creategroup" />
                 </div>
-              )}
-            </>
-          )}
-        />
-      </div>
-    </>
+                <GroupSelector groupType="client" group={clientGroup} setGroup={setClientGroup} groups={response.groups} />
+              </div>
+            )}
+          </>
+        )}
+      />
+    </div>
   )
 }
 
