@@ -11,6 +11,7 @@ export * from './sortable.model';
 export * from './filter.model';
 export * from './client-group-model';
 export * from './add-group.model';
+export * from './update-group.model';
 export * from './tag-model';
 export * from './session.model';
 export * from './employee.model';

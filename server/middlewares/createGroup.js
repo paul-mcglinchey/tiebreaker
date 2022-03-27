@@ -15,7 +15,7 @@ const checkIfClientGroupExists = (req, res, next) => {
 
   const { _id, name } = req.body;
 
-  ClientGroup.find({ $or: [{ _id: _id }, { name: name }]})
+  ClientGroup.find({ $or: [{ _id: _id }, { name: name }] })
     .then((data) => {
       if (data.length !== 0) {
         req.groupexists = true
@@ -34,7 +34,7 @@ const checkIfRotaGroupExists = (req, res, next) => {
 
   const { _id, name } = req.body;
 
-  RotaGroup.find({ $or: [{ _id: _id }, { name: name }]})
+  RotaGroup.find({ $or: [{ _id: _id }, { name: name }] })
     .then((data) => {
       if (data.length !== 0) {
         req.groupexists = true
@@ -58,18 +58,17 @@ const checkUserAccessToClientGroup = (accessRequired) => {
 
     ClientGroup.findById(_id)
       .then((data) => {
-        if (data.accessControl) {
-          if (data.accessControl[accessRequired].contains(req.auth.userUuid)) {
-            next();
-          } else {
-            res.status(403).send({
-              message: `User with ID ${req.auth.userUuid} not properly authorized to perform that action on group with ID ${_id}.`
-            });
-          }
+        if (data.accessControl[accessRequired] && data.accessControl[accessRequired].includes(req.auth.userUuid)) {
+          next();
+        } else {
+          res.status(403).send({
+            message: `User with ID ${req.auth.userUuid} not properly authorized to perform that action on group with ID ${_id}.`
+          });
         }
       })
-
-    next();
+      .catch(err => {
+        res.status(500).send({ message: err | `An unexpected error occurred while checking user access.`});
+      })
   }
 }
 
@@ -82,7 +81,7 @@ const checkUserAccessToRotaGroup = (accessRequired) => {
     RotaGroup.findById(_id)
       .then((data) => {
         if (data.accessControl) {
-          if (data.accessControl[accessRequired].contains(req.auth.userUuid)) {
+          if (data.accessControl[accessRequired].includes(req.auth.userUuid)) {
             next();
           } else {
             res.status(403).send({
@@ -91,8 +90,9 @@ const checkUserAccessToRotaGroup = (accessRequired) => {
           }
         }
       })
-
-    next();
+      .catch(err => {
+        res.status(500).send({ message: err | `An unexpected error occurred while checking user access.`});
+      })
   }
 }
 

@@ -24,10 +24,10 @@ const ClientHeader = ({ client }: IClientProps) => {
   return (
     <div className="flex justify-between">
       <div className="inline-flex items-center space-x-2 text-white text-2xl font-semibold tracking-wider">
-        <Link to="/dashboard">
+        <Link to="/clients/dashboard">
           <SquareIconButton Icon={ArrowLeftIcon} additionalClasses="h-5 w-5 transform hover:scale-105 transition-all" />
         </Link>
-        <Link to="/dashboard">
+        <Link to="/clients/dashboard">
           <span className="rounded-lg bg-gray-800 px-2 py-1">Clients</span>
         </Link>
         <span> / </span>

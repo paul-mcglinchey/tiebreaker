@@ -20,6 +20,14 @@ module.exports = app => {
   // DELETE and PUT endpoints will require an ID
   router.use(middleware.createGroup.checkRequestHasId);
 
+  // Update a group
+  router.put(
+    '/',
+    middleware.createGroup.checkIfClientGroupExists,
+    middleware.createGroup.checkUserAccessToClientGroup('editors'),
+    clientGroup.updateClientGroup
+  )
+
   // Delete a clientGroup
   router.delete(
     '/', 

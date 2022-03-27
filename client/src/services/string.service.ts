@@ -6,3 +6,11 @@ export const getInitials = (phrase: string) => {
 
   return initials;
 }
+
+export const stringInsert = function (this: any, index: number, string: string): string {
+  if (index > 0) {
+    return this.substring(0, index) + string + this.substring(index);
+  }
+
+  return string + this;
+}

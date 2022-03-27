@@ -41,10 +41,10 @@ exports.createRotaGroup = async (req, res) => {
     return;
   }
 
-  // get the default list set to create the group with
-  const defaultListsId = await GroupList.findById('622f88cb0b1ef9aeed041347')
+  // get the ID of the default list set to create the group with
+  const defaultListsId = await GroupList.find({ default: true })
     .then(defaultLists => defaultLists._id)
-    .catch(err => res.status(500).send({ message: err.message || `A problem occurred fetching the default list definitions.` }));
+    .catch(err => res.status(500).send({ message: err.message }));
 
   // Create a new group model instance with the request body
   const group = new RotaGroup({

@@ -19,7 +19,7 @@ const Prompter = ({ Icon, title, route }: IPrompterProps) => {
     >
       <Link to={route} className="flex justify-center mt-32">
         <div className="flex bg-gray-800 text-3xl sm:text-5xl text-white font-extrabold p-4 rounded-lg transform hover:scale-105 transition-all text-center">
-          <div className="flex inline-block tracking-wide">
+          <div className="flex tracking-wide">
             <div>
               {title}
             </div>

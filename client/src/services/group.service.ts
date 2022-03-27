@@ -1,4 +1,4 @@
-import { IAddGroup, IGroup, Status } from "../models";
+import { IAddGroup, IGroup, IUpdateGroup, Status } from "../models";
 import { IGroupsEndpoint } from "../models/groups-endpoint.model";
 import { IGroupService, IStatusService, IUserService } from "./interfaces";
 import { requestBuilder } from "./request.service";
@@ -37,6 +37,24 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
+  updateGroup = (values: IUpdateGroup, _id: string) => {
+    this.statusService.setLoading(true);
+
+    if (!_id) return this.statusService.appendStatus(false, `Group ID must be set before updating`, Status.Error);
+    
+    values._id = _id;
+
+    fetch(this.endpoint.groups, requestBuilder('PUT', undefined, values))
+      .then(res => {
+        if (res.ok) this.statusService.appendStatus(false, `Successfully updated group`, Status.Success);
+        if (res.status === 400) this.statusService.appendStatus(false, `Bad request`, Status.Error);
+        if (!res.ok && res.status !== 400) this.statusService.appendStatus(false, `A problem occurred updating the group`, Status.Error);
+      })
+      .catch(() => {
+        this.statusService.appendStatus(false, `A problem occurred updating the group`, Status.Error);
+      })
+  }
+
   deleteGroup = async (g: TGroup) => {
     this.statusService.setLoading(true);
 
@@ -51,5 +69,15 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       .catch(() => {
         this.statusService.appendStatus(false, '', Status.None);
       })
+  }
+
+  getTotalUsers = (accessControl: { [key: string]: string[] }): number => {
+    const distinctUsers: string[] = [];
+
+    Object.keys(accessControl).forEach((key: string) => {
+      accessControl[key]?.forEach((userId: string) => !distinctUsers.includes(userId) && distinctUsers.push(userId));
+    });
+
+    return distinctUsers.length;
   }
 } 

@@ -12,7 +12,7 @@ exports.findAll = async (req, res) => {
 
   let { pageSize, pageNumber, groupId, sortField, sortDirection, clientName } = await req.query;
 
-  // check that groupname is set, else return a 400
+  // check that groupId is set, else return a 400
   if (!groupId) {
     res.status(400).send({ message: 'Group ID must be set in order to retrieve clients'})
   }

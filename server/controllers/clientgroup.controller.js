@@ -45,8 +45,6 @@ exports.createClientGroup = async (req, res) => {
     .then(defaultLists => defaultLists._id)
     .catch(err => res.status(500).send({ message: err.message }));
 
-  console.log('here');
-
   // Create a new group model instance with the request body
   const group = new ClientGroup({
     name: req.body.name,
@@ -74,8 +72,28 @@ exports.createClientGroup = async (req, res) => {
     });
 }
 
+// Only editors can update a group
+exports.updateClientGroup = (req, res) => {
+  
+  const { _id } = req.body;
+
+  // check that the _id has been passed correctly or return a 400
+  if (!_id) res.status(400).send({ message: 'An ID must be provided in order to delete a group.'})
+
+  if (!req.groupexists) {
+    res.status(400).send({ message: "Group doesn't exist" });
+  }
+
+  ClientGroup.findByIdAndUpdate(_id, req.body)
+    .then(() => res.status(200).send({ message: `Successfully updated group with ID ${_id}.`}))
+    .catch(err => {
+      console.error(err);
+      res.status(500).send({ message: `A problem occurred while updating group with ID ${_id}.`})
+    })
+}
+
 // Only owners can perform this action
-exports.deleteClientGroup = async (req, res) => {
+exports.deleteClientGroup = (req, res) => {
 
   const { _id } = req.body;
 
@@ -83,7 +101,7 @@ exports.deleteClientGroup = async (req, res) => {
   if (!_id) res.status(400).send({ message: 'An ID must be provided in order to delete a group.'})
 
   if (!req.groupexists) {
-    res.status(500).send({ message: "Group doesn't exist" });
+    res.status(400).send({ message: "Group doesn't exist" });
     return;
   }
 
@@ -105,7 +123,7 @@ exports.deleteClientGroup = async (req, res) => {
         })
         .catch(err => {
           res.status(500).send({
-            message: err.message || `Could not delete clients from ${req.body.groupName}.`
+            message: err.message || `Could not delete clients from group with ID ${_id}.`
           })
         });
     })
