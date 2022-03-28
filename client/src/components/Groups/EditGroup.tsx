@@ -5,7 +5,7 @@ import { StyledField, SubmitButton } from "../Common";
 
 const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
   return (
-    <div className="relative bg-gray-900 px-8 py-5 rounded w-3/4 left-1/2 transform -translate-x-1/2">
+    <div className="relative bg-gray-900 px-8 py-5 rounded w-3/4 top-32 left-1/2 transform -translate-x-1/2">
       <div className="flex justify-between items-center border-b-2 border-gray-400/20 pb-2 mb-4">
         <h1 className="text-2xl font-bold text-white">Edit group</h1>
         <button onClick={() => toggleEditGroupOpen()} type="button" className="text-red-500 font-semibold tracking-wide hover:text-red-600">cancel</button>
@@ -13,7 +13,8 @@ const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
       <Formik
         initialValues={g}
         validationSchema={groupValidationSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, { props }) => {
+          console.log(values, props);
           groupService.updateGroup(values, g._id);
         }}
       >

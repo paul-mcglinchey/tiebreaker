@@ -9,6 +9,47 @@ const checkRequestHasId = (req, res, next) => {
   next();
 }
 
+// This middleware can be used to check if the name of a clientgroup has been used already or not
+const checkIfClientGroupNameExists = (req, res, next) => {
+
+  const { name } = req.body;
+
+  ClientGroup.find({ name: name })
+    .then(data => {
+      if (data.length !== 0) {
+        req.groupnameexists = true;
+      }
+
+      next();
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while trying to find existing groups.'
+      })
+    })
+}
+
+const checkIfRotaGroupNameExists = (req, res, next) => {
+
+  const { name } = req.body;
+
+  RotaGroup.find({ name: name })
+    .then(data => {
+      if (data.length !== 0) {
+        req.groupnameexists = true;
+      }
+
+      next();
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while trying to find existing groups.'
+      })
+    })
+}
+
 // This middleware intercepts any request to create a new group and checks that
 // the group doesn't already exist
 const checkIfClientGroupExists = (req, res, next) => {
@@ -16,9 +57,9 @@ const checkIfClientGroupExists = (req, res, next) => {
   const { _id, name } = req.body;
 
   ClientGroup.find({ $or: [{ _id: _id }, { name: name }] })
-    .then((data) => {
+    .then(data => {
       if (data.length !== 0) {
-        req.groupexists = true
+        req.groupexists = true;
       }
 
       next();
@@ -98,6 +139,8 @@ const checkUserAccessToRotaGroup = (accessRequired) => {
 
 const createGroup = {
   checkRequestHasId,
+  checkIfClientGroupNameExists,
+  checkIfRotaGroupNameExists,
   checkIfClientGroupExists,
   checkIfRotaGroupExists,
   checkUserAccessToClientGroup,

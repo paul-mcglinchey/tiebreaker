@@ -52,7 +52,7 @@ const GroupCard = <TGroup extends IGroup>({ g, groupService, render }: IGroupPro
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100"
         leaveTo="transform opacity-0"
-        className="absolute w-full h-full backdrop-blur-sm rounded z-10"
+        className="absolute inset-0 w-full h-full bg-gray-900/50 z-10"
       >
         <EditGroup toggleEditGroupOpen={toggleEditGroupOpen} groupService={groupService} g={g} />
       </Transition>
