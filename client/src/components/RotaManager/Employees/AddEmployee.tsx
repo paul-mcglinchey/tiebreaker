@@ -6,7 +6,7 @@ import { Toolbar } from "../../Common";
 const AddEmployee = () => {
   return (
     <div>
-      <Toolbar toolbarTypes={[ToolbarType.Rotas]}>
+      <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>
         Add new employees
       </Toolbar>
       <AddEmployeeForm />

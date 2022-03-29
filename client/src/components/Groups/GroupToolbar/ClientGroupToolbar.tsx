@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { GroupCreateButton } from ".";
 import { useFetch } from "../../../hooks";
-import { IClientGroup, IFetch, IGroupsResponse } from "../../../models";
+import { IClientGroup, IFetch, IGroupsResponse, IGroupToolbarProps } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { GroupInfoDisplay, GroupSelector } from "./Common";
 
-const ClientGroupToolbar = () => {
+const ClientGroupToolbar = ({ showSelector }: IGroupToolbarProps) => {
 
   const { clientGroup, setClientGroup } = useContext(ApplicationContext);
 
@@ -23,7 +23,9 @@ const ClientGroupToolbar = () => {
                   <GroupInfoDisplay groupCount={response.count} />
                   <GroupCreateButton href="/clients/creategroup" />
                 </div>
-                <GroupSelector groupType="client" group={clientGroup} setGroup={setClientGroup} groups={response.groups} />
+                {showSelector && (
+                  <GroupSelector groupType="client" group={clientGroup} setGroup={setClientGroup} groups={response.groups} />
+                )}
               </div>
             )}
           </>

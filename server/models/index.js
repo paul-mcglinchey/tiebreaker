@@ -6,12 +6,12 @@ db.mongoose = mongoose;
 
 db.client = require('./client.model.js');
 db.clientgroup = require('./clientgroup.model.js');
+db.rotagroup = require('./rotagroup.model');
 db.session = require('./session.model.js').Session;
 db.activitylog = require('./activitylog.model.js').ActivityLog;
 db.grouplist = require('./grouplist.model');
 db.employee = require('./employee.model');
 db.rota = require('./rota.model');
-db.rotagroup = require('./rotagroup.model');
 db.grouplist = require('./grouplist.model');
 
 module.exports = db;

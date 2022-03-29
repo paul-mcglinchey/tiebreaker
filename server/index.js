@@ -9,11 +9,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get('/', (req, res) => {
+app.get('/', (res) => {
   res.send('Welcome to the tiebreaker clients API')
 })
 
-app.use('/health', (req, res) => {
+app.use('/health', (res) => {
   res.status(200).json({
     appName: 'tiebreaker-clients-api',
     version: process.env.npm_package_version,
@@ -37,7 +37,7 @@ db.mongoose
   });
 
 // Auth
-app.use(middleware.authJwt.verifyToken);
+app.use(middleware.authMiddleware.verifyToken);
 
 // routes
 require('./routes/client.routes')(app);
@@ -46,6 +46,7 @@ require('./routes/employee.routes')(app);
 require('./routes/rota.routes')(app);
 require('./routes/rotagroup.routes')(app);
 require('./routes/user.routes')(app);
+require('./routes/grouplist.routes')(app);
 
 // Check if a default grouplist exists, if not we need to create one
 const grouplistController = require('./controllers/grouplist.controller');

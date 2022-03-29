@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { Toolbar } from "..";
 import { useFetch, useRefresh, useStatus } from "../../hooks";
-import { IClientGroup, IFetch, IGroupsResponse } from "../../models";
+import { IClientGroup, IFetch, IGroupsResponse, ToolbarType } from "../../models";
 import { ClientGroupService, numberParser, requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
-import GroupCard from "./GroupCard";
+import { DataPoint, GroupCard } from "./GroupCard";
 import GroupPrompter from "./GroupPrompter";
 
 const ClientGroupDashboard = () => {
@@ -16,7 +16,7 @@ const ClientGroupDashboard = () => {
 
   return (
     <Fragment>
-      <Toolbar>Group Management</Toolbar>
+      <Toolbar toolbarTypes={[ToolbarType.ClientGroups]} showSelector={false}>Group Management</Toolbar>
       <Fetch
         fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
@@ -33,10 +33,13 @@ const ClientGroupDashboard = () => {
                     groupService={groupService}
                     key={g._id}
                     render={isCardFlipped => (
-                      <>
-                        <span className="text-8xl font-bold">{isCardFlipped ? numberParser(groupService.getTotalUsers(g.accessControl)) : numberParser(g.clients.length)}</span>
-                        <span className="font-bold text-gray-400">{isCardFlipped ? 'users' : 'clients'}</span>
-                      </>
+                      <div className="flex space-x-4">
+                        {isCardFlipped ? (
+                          <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl))} label="users" />
+                        ) : (
+                          <DataPoint value={numberParser(g.clients.length)} label="clients" />
+                        )}
+                      </div>
                     )}
                   />
                 ))}

@@ -11,10 +11,13 @@ const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
         <button onClick={() => toggleEditGroupOpen()} type="button" className="text-red-500 font-semibold tracking-wide hover:text-red-600">cancel</button>
       </div>
       <Formik
-        initialValues={g}
+        initialValues={{
+          name: g.name,
+          description: g.description
+        }}
         validationSchema={groupValidationSchema}
-        onSubmit={(values, { props }) => {
-          console.log(values, props);
+        onSubmit={(values) => {
+          console.log(values);
           groupService.updateGroup(values, g._id);
         }}
       >
@@ -22,8 +25,8 @@ const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
           <Form className="flex flex-1 flex-col space-y-8">
             <div className="flex flex-col space-y-4">
               <div className="flex flex-col space-y-4">
-                <StyledField name="name" label="Groupname" errors={errors["name"]} touched={touched["name"]} />
-                <StyledField name="description" label="Description" errors={errors["description"]} touched={touched["description"]} />
+                <StyledField name="name" label="Groupname" errors={errors.name} touched={touched.name} />
+                <StyledField name="description" label="Description" errors={errors.description} touched={touched.description} />
               </div>
             </div>
             <div className="flex justify-end">

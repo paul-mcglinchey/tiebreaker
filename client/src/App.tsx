@@ -12,6 +12,7 @@ import { IClientGroup, IRotaGroup, IStatus } from './models';
 import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, Signup } from './components';
 import { ApplicationContext, StatusContext } from './utilities';
 import { getItemInStorage } from './services';
+import { AdminPanel } from './components/AdminPanel';
 
 export default function App() {
 
@@ -33,8 +34,12 @@ export default function App() {
   // @ts-ignore
   const getAccess = () => Userfront.accessToken();
 
-  function PrivateRoute({ children }: any) {
+  const PrivateRoute = ({ children }: any) => {
     return getAccess() ? children : <Navigate to="/login" state={{ from: location }} />;
+  }
+
+  const AdminRoute = ({ children }: any) => {
+    return (Userfront.user.hasRole && Userfront.user.hasRole("admin")) ? children : <Navigate to="/login" state={{ from: location }} />
   }
 
   return (
@@ -87,6 +92,12 @@ export default function App() {
               <Route path="passwordresetrequest" element={<PasswordResetRequest />} />
               <Route path="passwordreset" element={<PasswordReset />} />
 
+              {/* Admin Routes */}
+              <Route path="adminpanel" element={
+                <AdminRoute>
+                  <AdminPanel />
+                </AdminRoute>
+              } />
             </Routes>
           </div>
         </div >

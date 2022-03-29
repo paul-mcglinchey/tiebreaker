@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { GroupInfoDisplay, GroupCreateButton } from ".";
 import { useFetch } from "../../../hooks";
-import { IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
+import { IFetch, IGroupsResponse, IGroupToolbarProps, IRotaGroup } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { GroupSelector } from "./Common";
 
-const RotaGroupToolbar = () => {
+const RotaGroupToolbar = ({ showSelector }: IGroupToolbarProps) => {
 
   const { rotaGroup, setRotaGroup } = useContext(ApplicationContext);
 
@@ -23,7 +23,9 @@ const RotaGroupToolbar = () => {
                   <GroupInfoDisplay groupCount={response.count} />
                   <GroupCreateButton href="/rotas/creategroup" />
                 </div>
-                <GroupSelector groupType="rota" group={rotaGroup} setGroup={setRotaGroup} groups={response.groups} />
+                {showSelector && (
+                  <GroupSelector groupType="rota" group={rotaGroup} setGroup={setRotaGroup} groups={response.groups} />
+                )}
               </div>
             )}
           </>

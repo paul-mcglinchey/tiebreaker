@@ -29,7 +29,7 @@ const Notification = ({ status, statusService }: INotificationProps) => {
       leaveFrom="transform translate-x-0"
       leaveTo="transform translate-x-full"
       className={combineClassNames(
-        "relative w-full sm:w-96 p-4 bg-gray-900 border rounded-md drop-shadow-md flex flex-col",
+        "relative w-full sm:w-96 p-4 m-4 bg-gray-900 border rounded-md drop-shadow-md flex flex-col",
         status.type === Status.Success ? "text-green-500" : status.type === Status.Error ? "text-red-500" : "text-gray-200",
         status.type === Status.Success ? "border-green-500" : status.type === Status.Error ? "border-red-500" : "border-gray-200"
       )}

@@ -41,7 +41,7 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
     this.statusService.setLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Group ID must be set before updating`, Status.Error);
-    
+
     values._id = _id;
 
     fetch(this.endpoint.groups, requestBuilder('PUT', undefined, values))

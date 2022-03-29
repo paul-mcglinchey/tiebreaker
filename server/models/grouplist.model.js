@@ -6,6 +6,7 @@ const GroupList = mongoose.model(
   new Schema({
     lists: [{
       name: { type: String, required: true },
+      description: { type: String, required: true },
       values: [{
         short: String, 
         long: { type: String, required: true }, 

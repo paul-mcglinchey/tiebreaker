@@ -11,10 +11,10 @@ module.exports = app => {
   router.get('/:clientId', clients.findById);
 
   // CUD Operations - Requests should have a body
-  router.use(middleware.validation.validateRequest);
+  router.use(middleware.validationMiddleware.checkRequestHasBody);
 
   // Create a new client
-  router.post('/', middleware.createClient.isGroupSet, clients.create);
+  router.post('/', middleware.clientMiddleware.isGroupSet, clients.create);
 
   // Update a client
   router.put('/:clientId', clients.updateClient);

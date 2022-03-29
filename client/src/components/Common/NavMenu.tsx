@@ -16,6 +16,8 @@ const handleLogout = () => {
 
 const NavMenu = ({ currentApplication }: IProps) => {
 
+  const isUserAdmin: boolean = Userfront.user.hasRole ? Userfront.user.hasRole("admin") : false;
+
   let links: { name: string, href: string }[] = [];
 
   switch (currentApplication) {
@@ -105,6 +107,19 @@ const NavMenu = ({ currentApplication }: IProps) => {
                         <div className="px-4 py-2 font-semibold tracking-wide block md:hidden">
                           {Userfront.user.username}
                         </div>
+                        {isUserAdmin && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="adminpanel"
+                                className={combineClassNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-purple-700')}
+                              >
+                                Admin Panel
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+
                         <Menu.Item>
                           {({ active }) => (
                             <button

@@ -10,13 +10,14 @@ export const endpoints = {
     "rotas": BASE_API_URL + "rotas",
     "employees": BASE_API_URL + "employees",
 
-    "grouplists": BASE_API_URL + "grouplists",
-
     groups: (groupType: string) => {
         return {
             groups: BASE_API_URL + groupType + "groups",
             default: BASE_API_URL + `users/defaultgroup/${groupType}`
         }
     },
-    "currentuser": BASE_API_URL + "users/current"
+    "currentuser": BASE_API_URL + "users/current",
+    
+    "grouplists": (listId: string) => BASE_API_URL + `grouplists/${listId}`,
+    "defaultgrouplists": BASE_API_URL + "grouplists/default"
 }

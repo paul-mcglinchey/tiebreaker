@@ -14,7 +14,7 @@ exports.findAll = async (req, res) => {
 
   // check that groupId is set, else return a 400
   if (!groupId) {
-    res.status(400).send({ message: 'Group ID must be set in order to retrieve clients'})
+    return res.status(400).send({ message: 'Group ID must be set in order to retrieve clients'})
   }
 
   pageSize = parseInt(pageSize);
@@ -32,10 +32,11 @@ exports.findAll = async (req, res) => {
       const clientCount = await Client
         .countDocuments(clientQuery)
         .then(clientCount => clientCount)
-        .catch(err => res.status(500)
-          .send({
+        .catch(err => {
+          return res.status(500).send({
             message: err.message || `A problem occurred fetching the number of clients for group with ID ${groupId}.`
-          }));
+          })
+        });
       
       // create the aggregate object (functions like an IQueryable)
       const aggregate = Client.aggregate();
@@ -57,18 +58,19 @@ exports.findAll = async (req, res) => {
         .skip(((pageNumber || 1) - 1) * pageSize)
         .limit(parseInt(pageSize))
         .then(clients => clients)
-        .catch(err => res.status(500)
-          .send({
+        .catch(err => {
+          return res.status(500).send({
             message: err.message || `A problem occurred fetching the list of clients for group with ID ${groupId}.`
-          }))
+          })
+        });
 
-      res.status(200).send({
+      return res.status(200).send({
         count: clientCount,
         clients: clients
       });
     })
     .catch(err => {
-      res.status(401).send({
+      return res.status(401).send({
         message:
           err.message || `A problem occurred finding group with ID ${groupId}.`
       });
@@ -92,12 +94,12 @@ exports.findById = async (req, res) => {
   const client = await aggregate
     .then(client => client[0])
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message || `A problem occurred fetching client with ID ${clientId}.`
       })
     });
 
-  res.status(200).send({ client });
+  return res.status(200).send({ client });
 }
 
 // CUD Operations
@@ -155,19 +157,19 @@ exports.create = (req, res) => {
         $push: { clients: new ObjectId(data._id) } 
       })
         .then(() => {
-          res.status(200).send({
+          return res.status(200).send({
             success: `Client created successfully in group with ID ${req.body.groupId}.`
           })
         })
         .catch(err => {
-          res.status(401).send({
+          return res.status(401).send({
             message:
               err.message || `Could not add client to group with ID ${req.body.groupId}.`
           })
         })
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || `Some error occurred while creating client.`
       });
@@ -186,10 +188,10 @@ exports.updateClient = (req, res) => {
 
   Client.findByIdAndUpdate(clientId, updateBody)
     .then(client => {
-      res.status(200).send(client);
+      return res.status(200).send(client);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message || `Could not update the client with ID ${clientId}.`
       })
     });
@@ -204,7 +206,7 @@ exports.updateColour = (req, res) => {
   Client.findByIdAndUpdate(clientId, { clientColour: clientColour })
     .then(client => res.status(200).send({ client }))
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: err.message || `A problem occurred updating client ${clientId} with colour ${profileColour}.`
       })
     });
@@ -284,7 +286,7 @@ exports.delete = (req, res) => {
   // Delete the client from the clients db
   Client.findOneAndDelete({ _id: req.body.clientId })
     .then(() => {
-      res.status(200).send({
+      return res.status(200).send({
         success: `Successfully deleted client ${req.body.clientId}`
       })
     })

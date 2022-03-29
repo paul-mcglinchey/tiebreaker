@@ -1,11 +1,11 @@
-const authJwt = require('./authJwt');
-const createGroup = require('./createGroup');
-const createClient = require('./createClient');
-const validation = require('./validation');
+const authMiddleware = require('./auth.middleware');
+const groupMiddleware = require('./group.middleware');
+const clientMiddleware = require('./client.middleware');
+const validationMiddleware = require('./validation.middleware');
 
 module.exports = {
-  authJwt,
-  createGroup,
-  createClient,
-  validation
+  authMiddleware,
+  groupMiddleware,
+  clientMiddleware,
+  validationMiddleware
 };

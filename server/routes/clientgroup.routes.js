@@ -1,6 +1,8 @@
 module.exports = app => {
   const clientGroup = require('../controllers/clientgroup.controller.js');
   const middleware = require('../middlewares');
+  const db = require('../models');
+  const ClientGroup = db.clientgroup;
 
   var router = require('express').Router();
 
@@ -8,31 +10,33 @@ module.exports = app => {
   router.get('/', clientGroup.getClientGroups);
 
   // CUD Operations, need a request body
-  router.use(middleware.validation.validateRequest);
+  router.use(middleware.validationMiddleware.checkRequestHasBody);
 
   // Create a new clientGroup
   router.post(
     '/', 
-    middleware.createGroup.checkIfClientGroupExists,
+    middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
     clientGroup.createClientGroup
   );
 
-  // DELETE and PUT endpoints will require an ID
-  router.use(middleware.createGroup.checkRequestHasId);
+  // PUT endpoints will require editor access
+  router.use(middleware.groupMiddleware.checkUserAccessToGroup(ClientGroup, 'editors'));
 
   // Update a group
   router.put(
     '/',
-    middleware.createGroup.checkIfClientGroupExists,
-    middleware.createGroup.checkUserAccessToClientGroup('editors'),
+    middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
+    middleware.groupMiddleware.checkIfGroupNameExists(ClientGroup),
     clientGroup.updateClientGroup
   )
+
+  // DELETE endpoints will require owner access
+  router.use(middleware.groupMiddleware.checkUserAccessToGroup(ClientGroup, 'owners'));
 
   // Delete a clientGroup
   router.delete(
     '/', 
-    middleware.createGroup.checkIfClientGroupExists,
-    middleware.createGroup.checkUserAccessToClientGroup('owners'),
+    middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
     clientGroup.deleteClientGroup
   );
 
