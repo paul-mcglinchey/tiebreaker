@@ -25,7 +25,12 @@ const ListItem = ({ value, list, defaultGrouplists, setDefaultGrouplists }: IGro
 
   return (
     <div className="flex justify-between items-center px-2 border-b border-gray-600 pb-1">
-      <input name="long" onChange={(e) => updateListItem(e.target.value, e.target.name)} value={listValue.long} />
+      <input 
+        name="long" 
+        onChange={(e) => updateListItem(e.target.value, e.target.name)} 
+        value={listValue.long}
+        className="bg-gray-800 px-2 py-1 rounded text-gray-500" 
+      />
       <div>
         <ColourPicker square={true} colour={value.colour} setColour={(pc) => updateListItem(pc, "colour")} />
       </div>

@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
 import Userfront from "@userfront/core";
 
 import {
@@ -15,11 +15,6 @@ import { getItemInStorage } from './services';
 import { AdminPanel } from './components/AdminPanel';
 
 export default function App() {
-
-  const progressReducer = (progress: number, update: number): number => {
-    return progress + update;
-  }
-
   const [status, setStatus] = useState<IStatus[]>([]);
   const location = useLocation();
 
@@ -29,7 +24,6 @@ export default function App() {
 
   // provide state for the current application
   const [currentApplication, setCurrentApplication] = useState(undefined);
-  const [progress, setProgress] = useReducer(progressReducer, 0);
 
   // @ts-ignore
   const getAccess = () => Userfront.accessToken();
@@ -39,13 +33,13 @@ export default function App() {
   }
 
   const AdminRoute = ({ children }: any) => {
-    return (Userfront.user.hasRole && Userfront.user.hasRole("admin")) ? children : <Navigate to="/login" state={{ from: location }} />
+    return (Userfront.user.hasRole && Userfront.user.hasRole("admin")) ? children : <Navigate to="/" state={{ from: location }} />
   }
 
   return (
     <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
-      <StatusContext.Provider value={{ status: status, setStatus: setStatus, progress: progress, setProgress: setProgress }}>
-        <div className="min-h-screen">
+      <StatusContext.Provider value={{ status: status, setStatus: setStatus }}>
+        <div className="">
           {getAccess() && (
             <NavMenu currentApplication={currentApplication} />
           )}

@@ -8,10 +8,10 @@ import { ListItem } from "./Common";
 const AdminPanel = () => {
 
   const [defaultGrouplists, setDefaultGrouplists] = useState<IGrouplistResponse | undefined>(undefined);
-  let componentIsMounted = true;
-
+  
   useEffect(() => {
-
+    let componentIsMounted = true;
+    
     const _fetch = () => {
       fetch(endpoints.defaultgrouplists, requestBuilder("GET"))
         .then(res => res.json())
@@ -53,9 +53,9 @@ const AdminPanel = () => {
               defaultGrouplists.lists && defaultGrouplists.lists.length > 0 ? (
                 <>
                   {defaultGrouplists.lists.map((list: IGroupList, key: number) => (
-                    <div key={key} className="border-2 border-blue-600 bg-blue-900 rounded p-2">
+                    <div key={key} className="border-2 border-blue-600 bg-gray-900 rounded p-2">
                       <div className="flex justify-between border-b-2 border-blue-600 pb-2 mb-2 items-center">
-                        <h5 className="font-bold tracking-wide text-lg">{list.description}</h5>
+                        <h5 className="font-bold tracking-wide text-lg px-2">{list.description}</h5>
                         <div className="tracking-wide">
                           Internal list name: {list.name}
                         </div>
