@@ -3,15 +3,15 @@ import { IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListVa
 import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Toolbar } from "../Common";
-import { ListItem } from "./Common";
+import { AddListItem, ListItem } from "./Common";
 
 const AdminPanel = () => {
 
   const [defaultGrouplists, setDefaultGrouplists] = useState<IGrouplistResponse | undefined>(undefined);
-  
+
   useEffect(() => {
     let componentIsMounted = true;
-    
+
     const _fetch = () => {
       fetch(endpoints.defaultgrouplists, requestBuilder("GET"))
         .then(res => res.json())
@@ -64,6 +64,7 @@ const AdminPanel = () => {
                         {list.values.map((value: IGroupListValue, key: number) => (
                           <ListItem value={value} list={list} key={key} defaultGrouplists={defaultGrouplists} setDefaultGrouplists={setDefaultGrouplists} />
                         ))}
+                        <AddListItem />
                       </div>
                       <div>
                         <div></div>

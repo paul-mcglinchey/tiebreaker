@@ -32,3 +32,4 @@ export * from './GroupToolbar';
 export * from './AddGroup';
 export * from './Fetch';
 export * from './grouplist-item-props.model';
+export * from './list-item-input-props.model';
