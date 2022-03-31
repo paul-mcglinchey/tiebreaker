@@ -1,5 +1,4 @@
 export { default as FormSection } from './FormSection';
-export { default as Button } from './Button';
 export { default as CustomDate } from './CustomDate';
 export { default as StyledConfirmationMessage } from './StyledConfirmationMessage';
 export { default as StyledErrorMessage } from './StyledErrorMessage';

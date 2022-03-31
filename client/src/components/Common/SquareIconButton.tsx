@@ -1,10 +1,26 @@
-import { IIconButtonProps } from "../../models";
+import { IconButtonSize } from "../../models"
 
-const SquareIconButton = ({ Icon, action, textColor = "text-current", additionalClasses = "" }: IIconButtonProps) => {
+interface IIconButtonProps {
+  Icon: any,
+  action?: () => void,
+  colour?: string,
+  additionalClasses?: string | boolean
+  buttonSize?: IconButtonSize
+}
+
+const SquareIconButton = ({ Icon, action, colour = "text-current", additionalClasses = "", buttonSize = IconButtonSize.Medium }: IIconButtonProps) => {
+
+  const getButtonSize = (): string => {
+    return `h-${buttonSize} w-${buttonSize}`
+  }
+
+  const getColour = (): string => {
+    return `text-${colour}`
+  }
 
   return (
     <button onClick={action} className="p-2">
-      <Icon className={`h-8 w-8 ${textColor} ${additionalClasses}`} />
+      <Icon className={`${getButtonSize()} ${getColour()} ${additionalClasses} transform hover:scale-110 transition-transform`} />
     </button>
   )
 }

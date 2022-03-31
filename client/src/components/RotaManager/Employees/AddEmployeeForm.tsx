@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
+import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
 import { EmployeeRole, IAddEmployee, IEmployee, IEmployeeResponse, IFetch, Status } from "../../../models";
 import { generateColour, requestBuilder } from "../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button } from "../../Common";
@@ -11,6 +11,7 @@ import { Fetch } from "../../Common/Fetch";
 const AddEmployeeForm = () => {
 
   const { status, setStatus } = useContext(StatusContext);
+  const { rotaGroup } = useContext(ApplicationContext);
 
   const [addressActive, setAddressActive] = useState(false);
   const [requirementsActive, setRequirementsActive] = useState(false);
@@ -51,7 +52,7 @@ const AddEmployeeForm = () => {
     // generates a new random colour to be used for profile display
     values.employeeColour = generateColour();
 
-    await fetch(endpoints.employees, requestBuilder('POST', undefined, values))
+    await fetch(endpoints.employees(rotaGroup._id), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Added employee successfully`, type: Status.Success }]);
@@ -67,7 +68,7 @@ const AddEmployeeForm = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees, requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id), requestBuilder("GET"))}
       render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
@@ -99,9 +100,8 @@ const AddEmployeeForm = () => {
             employeeColour: ''
           }}
           validationSchema={employeeValidationSchema}
-          onSubmit={(values, { resetForm }) => {
+          onSubmit={(values) => {
             handleSubmit(values);
-            resetForm();
           }}
         >
           {({ errors, touched }) => (

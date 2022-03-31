@@ -12,7 +12,7 @@ const RotaToolbar = () => {
     <>
       <div className="text-white">
         <Fetch
-          fetchOutput={useFetch(endpoints.rotas, requestBuilder())}
+          fetchOutput={useFetch(endpoints.rotas(), requestBuilder())}
           render={({ response }: IFetch<IRotasResponse>) => (
             <>
               {response && response.rotas && (

@@ -1,7 +1,7 @@
 import { ActivityLogEntry } from ".";
-import { IClientProps } from "../../../../models/props";
+import { IClient } from "../../../../models";
 
-const ActivityLog = ({ client }: IClientProps) => {
+const ActivityLog = ({ client }: { client: IClient }) => {
 
   const { activityLog } = client;
 

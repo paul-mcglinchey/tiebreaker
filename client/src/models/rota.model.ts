@@ -1,18 +1,21 @@
+import { IEmployee } from "./employee.model";
 import { ISchedule } from "./schedule.model";
-import { RotaType } from "./types";
-
+import { DayOfWeek } from "./types";
 export interface IRota {
-  _id: string,
-  accessControl: {
+  _id?: string,
+  name?: string,
+  description?: string,
+  accessControl?: {
     [key: string]: string[],
   },
-  startDate: string,
-  endDate: string,
-  schedule: ISchedule[],
-  rotaType: RotaType
-  locked: boolean,
-  createdBy: string,
-  updatedBy: string,
-  createdAt: string,
-  updatedAt: string
+  startDay?: DayOfWeek,
+  schedule?: ISchedule[],
+  employeeIds?: string[],
+  employees?: IEmployee[],
+  locked?: boolean,
+  createdBy?: string,
+  updatedBy?: string,
+  createdAt?: string,
+  updatedAt?: string,
+  colour?: string
 }

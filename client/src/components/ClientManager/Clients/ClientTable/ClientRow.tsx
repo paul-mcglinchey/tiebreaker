@@ -2,14 +2,14 @@ import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
 import InlineLink from '../Common/InlineLink';
 import { Fragment } from 'react';
-import { IClientProps, IUserResponse, userfrontapi } from '../../../../models';
+import { IClient, IUserResponse, userfrontapi } from '../../../../models';
 import { Fetch } from '../../..';
 import { useUserFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
 import { IFetch } from '../../../../models/fetch.model';
 
-const ClientRow = ({ client }: IClientProps) => {
+const ClientRow = ({ client }: { client: IClient }) => {
 
   return (
     <Fragment>

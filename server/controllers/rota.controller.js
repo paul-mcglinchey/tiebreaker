@@ -1,5 +1,6 @@
 const db = require('../models');
 const Rota = db.rota;
+const Employee = db.employee.Employee;
 
 // Read operations
 
@@ -12,11 +13,11 @@ exports.getRotas = async (req, res) => {
   const rotaCount = await Rota
     .countDocuments(rotaQuery)
     .then(rotaCount => rotaCount)
-    .catch(err => res.status(500)
-      .send({
+    .catch(err => {
+      return res.status(500).send({
         message: err.message || `A problem occurred fetching the number of rotas user with ID ${req.auth.userUuid} has view access to.`
       })
-    );
+    });
 
   // create the aggregate object
   const aggregate = Rota.aggregate();
@@ -28,43 +29,65 @@ exports.getRotas = async (req, res) => {
   // buid the query and return the queried aggregate
   const rotas = await aggregate
     .then(rotas => rotas)
-    .catch(err => res.status(500)
-      .send({
+    .catch(err => {
+      return res.status(500).send({
         message: err.message || `A problem occurred fetching the rotas user with ID ${req.auth.userUuid} has view access to.`
       })
-    );
+    });
 
-  res.status(200).send({
+  return res.status(200).send({
     count: rotaCount,
     rotas: rotas
   });
 }
 
+exports.getRotaById = (req, res) => {
+
+  const { rotaId } = req.params;
+
+  Rota.findById(rotaId)
+    .then(rota => {
+      // extract the employee IDs
+      const employeeIds = rota.employeeIds;
+
+      Employee.find({ _id: employeeIds })
+        .then(employees => {
+          // Attach the returned employees to the current rota
+          rota['employees'] = employees;
+
+          return res.status(200).send({ rota });
+        })
+        .catch(err => {
+          return res.status(500).send({
+            message: err.message || `A problem occurred fetching employees for rota with ID ${rotaId}.`
+          })
+        });
+
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: err.message || `A problem occurred fetching rota with ID ${rotaId}.`
+      })
+    });
+}
+
 exports.addRota = async (req, res) => {
   const {
-    startDate, endDate, employees
+    name, description, startDay, employees
   } = req.body;
-
-  // populate the schedule object
-  const schedule = [];
-
-  employees.forEach(e => {
-    schedule.push({
-      employee: e,
-      shifts: []
-    });
-  });
 
   // create a new rota instance
   const rota = new Rota({
+    name: name,
+    description: description,
     accessControl: {
       viewers: req.auth.userUuid,
       editors: req.auth.userUuid,
       owners: req.auth.userUuid,
     },
-    startDate: startDate,
-    endDate: endDate,
-    schedule: schedule,
+    startDay: startDay,
+    schedule: [],
+    employees: employees,
     createdBy: req.auth.userUuid,
     updatedBy: req.auth.userUuid
   });
@@ -73,14 +96,29 @@ exports.addRota = async (req, res) => {
   rota
     .save(rota)
     .then(() => {
-      res.status(200).send({
+      return res.status(200).send({
         success: `Rota added successfully.`
       });
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || `Some error occurred while adding new rota.`
       });
+    })
+}
+
+exports.updateRota = (req, res) => {
+  
+  const { rotaId } = req.params;
+
+  Rota.findByIdAndUpdate(rotaId, req.body)
+    .then(() => {
+      return res.status(200).send({ message: `Rota with ID ${rotaId} successfully updated.`})
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: err || `A problem occurred updating rota with ID ${rotaId}.`
+      })
     })
 }

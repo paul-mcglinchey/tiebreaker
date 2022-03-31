@@ -7,8 +7,8 @@ export const endpoints = {
     "clientcolours": (clientId: string) => BASE_API_URL + `clients/${clientId}/colours`,
     "sessions": (clientId: string) => BASE_API_URL + `clients/${clientId}/sessions`,
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
-    "rotas": BASE_API_URL + "rotas",
-    "employees": BASE_API_URL + "employees",
+    "rotas": (rotaId: string | undefined = "") => BASE_API_URL + `rotas${rotaId && '/' + rotaId}`,
+    "employees": (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
 
     groups: (groupType: string) => {
         return {

@@ -10,7 +10,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, group, setGroup, grou
   const storageKey = `${groupType}Group`;
 
   const storageHasValidGroup = (groups: TGroup[]): boolean => {
-    return groups && getItemInStorage(storageKey) && groups.filter((g: TGroup) => g.name === getItemInStorage(storageKey).name).length > 0;
+    return groups && getItemInStorage(storageKey) && groups.filter((g: TGroup) => g._id === getItemInStorage(storageKey)._id).length > 0;
   }
 
   const updateGroup = (group: TGroup) => {
@@ -24,8 +24,8 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, group, setGroup, grou
   useEffect(() => {
     let componentIsMounted = true;
 
-    componentIsMounted 
-      && !storageHasValidGroup(groups) 
+    componentIsMounted
+      && !storageHasValidGroup(groups)
       && updateGroup(storageHasValidGroup(groups) ? getItemInStorage(storageKey) : groups[0])
 
     return () => {

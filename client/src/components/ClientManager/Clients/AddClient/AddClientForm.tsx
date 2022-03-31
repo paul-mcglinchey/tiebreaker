@@ -72,9 +72,8 @@ const AddClientForm = () => {
         postCode: '',
       }}
       validationSchema={clientValidationSchema}
-      onSubmit={(values, { resetForm }) => {
+      onSubmit={(values) => {
         handleSubmit(values);
-        resetForm();
       }}
     >
       {({ errors, touched }) => (

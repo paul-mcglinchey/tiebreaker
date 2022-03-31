@@ -1,12 +1,12 @@
 import { Fetch } from "../../..";
 import { useUserFetch } from "../../../../hooks";
-import { IClientProps, IUserResponse, userfrontapi } from "../../../../models";
+import { IClient, IUserResponse, userfrontapi } from "../../../../models";
 import { IFetch } from "../../../../models/fetch.model";
 import { generateColour, getInitials, requestBuilder } from "../../../../services";
 import { endpoints } from "../../../../utilities";
 import InfoTabs from "./InfoTabs";
 
-const ClientOverview = ({ client }: IClientProps) => {
+const ClientOverview = ({ client }: { client: IClient }) => {
 
   const { clientColour, fullName, createdAt, updatedAt, updatedBy } = client;
 

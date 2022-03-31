@@ -1,10 +1,10 @@
-const isGroupNameSet = (req, res, next) => {
-    if (!req.body.groupName) return res.status(500).send({ message: 'Group must be set.' });
+const checkRotaIdExists = (req, res, next) => {
+    if (!req.params.rotaId) return res.status(400).send({ message: 'RotaID must be set.' });
     next();
 }
 
-const createClient = {
-    isGroupNameSet
+const rotaMiddleware = {
+    checkRotaIdExists
 };
 
-module.exports = createClient;
+module.exports = rotaMiddleware;

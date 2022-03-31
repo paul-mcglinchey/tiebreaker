@@ -5,16 +5,20 @@ module.exports = app => {
   var router = require('express').Router();
 
   // Get all clients
-  router.get('/', clients.findAll);
+  router.get(
+    '/',
+    middleware.groupMiddleware.checkQueryHasGroupId, 
+    clients.getClients
+  );
 
   // Get a client by id
-  router.get('/:clientId', clients.findById);
+  router.get('/:clientId', clients.getClientById);
 
   // CUD Operations - Requests should have a body
   router.use(middleware.validationMiddleware.checkRequestHasBody);
 
   // Create a new client
-  router.post('/', middleware.clientMiddleware.isGroupSet, clients.create);
+  router.post('/', middleware.groupMiddleware.checkBodyHasGroupId, clients.create);
 
   // Update a client
   router.put('/:clientId', clients.updateClient);

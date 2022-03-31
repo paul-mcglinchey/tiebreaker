@@ -8,14 +8,9 @@ const ActivityLog = db.activitylog;
 // Read operations
 
 // Retrieve all clients from the database
-exports.findAll = async (req, res) => {
+exports.getClients = async (req, res) => {
 
   let { pageSize, pageNumber, groupId, sortField, sortDirection, clientName } = await req.query;
-
-  // check that groupId is set, else return a 400
-  if (!groupId) {
-    return res.status(400).send({ message: 'Group ID must be set in order to retrieve clients'})
-  }
 
   pageSize = parseInt(pageSize);
   pageNumber = parseInt(pageNumber);
@@ -56,7 +51,7 @@ exports.findAll = async (req, res) => {
       const clients = await aggregate
         .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
         .skip(((pageNumber || 1) - 1) * pageSize)
-        .limit(parseInt(pageSize))
+        .limit(pageSize)
         .then(clients => clients)
         .catch(err => {
           return res.status(500).send({
@@ -70,7 +65,7 @@ exports.findAll = async (req, res) => {
       });
     })
     .catch(err => {
-      return res.status(401).send({
+      return res.status(500).send({
         message:
           err.message || `A problem occurred finding group with ID ${groupId}.`
       });
@@ -78,7 +73,7 @@ exports.findAll = async (req, res) => {
 };
 
 // Retrieve a specific client by Id
-exports.findById = async (req, res) => {
+exports.getClientById = async (req, res) => {
 
   // convert the clientId from a string to an ObjectId for the aggregation pipeline
   const clientId = new ObjectId(req.params.clientId);
@@ -162,7 +157,7 @@ exports.create = (req, res) => {
           })
         })
         .catch(err => {
-          return res.status(401).send({
+          return res.status(500).send({
             message:
               err.message || `Could not add client to group with ID ${req.body.groupId}.`
           })

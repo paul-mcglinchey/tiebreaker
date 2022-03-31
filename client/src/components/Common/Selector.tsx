@@ -5,7 +5,7 @@ import { ISelectorProps } from '../../models/props/selector-props.model';
 
 const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
   return (
-    <div className="flex flex-grow flex-col">
+    <div className="flex flex-col flex-1">
       <div className="text-gray-500 uppercase font-bold">{label}</div>
       <Menu as="div" className="rounded p-2 relative my-1 bg-gray-800 flex text-gray-200">
         <Menu.Button className="flex justify-between items-center font-semibold tracking-wide w-full text-left">

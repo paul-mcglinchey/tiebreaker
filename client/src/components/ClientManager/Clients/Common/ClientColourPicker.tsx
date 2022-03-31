@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { IClientProps, Status } from "../../../../models"
+import { IClient, Status } from "../../../../models"
 import { generateColour, requestBuilder } from "../../../../services";
 import { endpoints, StatusContext } from "../../../../utilities";
 import { ColourPicker } from "../../../Common"
 
-const ClientColourPicker = ({ client }: IClientProps) => {
+const ClientColourPicker = ({ client }: { client: IClient }) => {
 
   const profileColour = client.clientColour || generateColour();
   const { status, setStatus } = useContext(StatusContext);

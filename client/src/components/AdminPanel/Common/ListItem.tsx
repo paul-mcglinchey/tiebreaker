@@ -1,6 +1,6 @@
-import { TrashIcon } from "@heroicons/react/solid";
+import { XIcon } from "@heroicons/react/solid";
 import React, { useRef } from "react";
-import { IChanges, IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
+import { IChanges, IconButtonSize, IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
 import { ColourPicker, SquareIconButton } from "../../Common";
 import ListItemInput from "./ListItemInput";
 
@@ -60,8 +60,8 @@ const ListItem = ({ value, listId, setDefaultGrouplists, setChanges }: IGrouplis
         <ListItemInput onChange={(value) => updateListItem(value, "short")} value={value.short || ''} name="short" />
       </div>
       <div className="flex items-center space-x-2">
-        <SquareIconButton textColor="text-red-500" Icon={TrashIcon} action={removeListItem} />
         <ColourPicker square={true} colour={value.colour} setColour={(pc) => updateListItem(pc, "colour")} />
+        <SquareIconButton buttonSize={IconButtonSize.XS} colour="red-500" Icon={XIcon} action={removeListItem} />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { IClientProps } from '../../../../models/props';
+import { IClient } from '../../../../models';
 import ActivityLog from './ActivityLog';
 
 const infoTabs = [
@@ -7,7 +7,7 @@ const infoTabs = [
   { title: "Contributors" },
 ]
 
-const InfoTabs = ({ client }: IClientProps) => {
+const InfoTabs = ({ client }: { client: IClient }) => {
 
   return (
     <div className="flex flex-grow flex-col space-y-4 max-w-md px-2 py-5">

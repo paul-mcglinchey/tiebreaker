@@ -1,8 +1,8 @@
 import { AddSessionForm } from ".";
-import { IClientProps } from "../../../../models";
+import { IClient } from "../../../../models";
 
 
-const AddSession = ({ client }: IClientProps) => {
+const AddSession = ({ client }: { client: IClient }) => {
 
   return (
     <div>

@@ -1,4 +1,6 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
+const RotaGroup = db.rotagroup;
 const { Employee } = db.employee;
 
 // Read operations
@@ -6,38 +8,55 @@ const { Employee } = db.employee;
 // Retrieve all employees that the currently logged in user has view access to
 exports.getEmployees = async (req, res) => {
 
-  // the mongoose query to fetch the employees
-  let employeeQuery = { 'accessControl.viewers': req.auth.userUuid };
+  // Get the groupId from the query
+  let { groupId } = await req.query;
 
-  const employeeCount = await Employee
-    .countDocuments(employeeQuery)
-    .then(employeeCount => employeeCount)
-    .catch(err => res.status(500)
-      .send({
-        message: err.message || `A problem occurred fetching the number of employees which user with ID ${req.auth.userUuid} has view access to.`
+  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userUuid })
+    .then(async (group) => {
+
+      // all the employees that belong to the requested group
+      let employeeIds = group.employees;
+
+      // the mongoose query to fetch the employees
+      let employeeQuery = { _id: { $in: employeeIds } };
+
+      const employeeCount = await Employee
+        .countDocuments(employeeQuery)
+        .then(employeeCount => employeeCount)
+        .catch(err => { 
+          return res.status(500).send({
+            message: err.message || `A problem occurred fetching the number of employees which user with ID ${req.auth.userUuid} has view access to.`
+          })
+        });
+
+      // create the aggregate object
+      const aggregate = Employee.aggregate();
+    
+      // apply a match operator to the aggregate
+      // await aggregate.match(employeeQuery)
+    
+      // build the query and execute the aggregator
+      const employees = await aggregate
+        .match(employeeQuery)
+        .then(employees => employees)
+        .catch(err => {
+          return res.status(500).send({
+            message: err.message || `A problem occurred fetching the employees which user with ID ${req.auth.userUuid} has view access to.`
+          })
+        });
+      
+
+      return res.status(200).send({
+        count: employeeCount,
+        employees: employees
       })
-    );
-
-  // create the aggregate object
-  const aggregate = Employee.aggregate();
-
-  // apply a match operator to the aggregate
-  await aggregate
-    .match(employeeQuery)
-
-  // build the query and execute the aggregator
-  const employees = await aggregate
-    .then(employees => employees)
-    .catch(err => res.status(500)
-      .send({
-        message: err.message || `A problem occurred fetching the employees which user with ID ${req.auth.userUuid} has view access to.`
-      })
-    );
-
-  res.status(200).send({
-    count: employeeCount,
-    employees: employees
-  })
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message:
+          err.message || `A problem occurred finding group with ID ${groupId}.`
+      });
+    });
 }
 
 exports.addEmployee = async (req, res) => {
@@ -88,13 +107,28 @@ exports.addEmployee = async (req, res) => {
   // Save employee in the database
   employee
     .save(employee)
-    .then(() => {
-      res.status(200).send({
-        success: `Employee added successfully.`
-      });
+    .then(data => {
+      // Add the employee to the group which was selected
+      RotaGroup.updateOne({
+        _id: req.query.groupId,
+        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+      }, {
+        $push: { employees: new ObjectId(data._id) }
+      })
+        .then(() => {
+          return res.status(200).send({
+            success: `Employee added successfully in group with ID ${req.query.groupId}.`
+          });
+        })
+        .catch(err => {
+          return res.status(500).send({
+            message:
+              err.message || `Could not add employee to group with ID ${req.query.groupId}.`
+          });
+        });
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message: 
           err.message || `Some error occurred while adding new employee.`
       });

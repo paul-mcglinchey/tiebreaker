@@ -16,7 +16,7 @@ const checkUserAccessToGroup = (Model, accessRequired) => {
         }
       })
       .catch(err => {
-        return res.status(500).send({ message: err | `An unexpected error occurred while checking user access.`});
+        return res.status(500).send({ message: err | `An unexpected error occurred while checking user access.` });
       })
   }
 }
@@ -54,7 +54,7 @@ const checkIfGroupNameExists = (Model) => {
     Model.find({ name: name, _id: { $ne: _id } })
       .then(data => {
         if (data.length !== 0) {
-          return res.status(400).send({ message: `The group name "${name}" already exists. Use something else.`})
+          return res.status(400).send({ message: `The group name "${name}" already exists. Use something else.` })
         }
 
         next();
@@ -68,10 +68,24 @@ const checkIfGroupNameExists = (Model) => {
   }
 }
 
+const checkBodyHasGroupId = () => {
+  return (req, res, next) => {
+    if (!req.body.groupId) return res.status(400).send({ message: 'Group must be set.' });
+    next();
+  }
+}
+
+const checkQueryHasGroupId = (req, res, next) => {
+  if (!req.query.groupId) return res.status(400).send({ message: 'Group must be set.' });
+  next();
+}
+
 const groupMiddleware = {
   checkIfGroupExists,
   checkUserAccessToGroup,
-  checkIfGroupNameExists
+  checkIfGroupNameExists,
+  checkBodyHasGroupId,
+  checkQueryHasGroupId
 };
 
 module.exports = groupMiddleware;

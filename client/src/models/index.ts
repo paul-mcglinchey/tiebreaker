@@ -22,7 +22,7 @@ export * from './schedule.model';
 export * from './rota-group.model';
 export * from './groups-response.model';
 export * from './clients-response.model';
-export * from './client-response.model';
+export * from './rotas-response.model';
 export * from './user-response.model';
 export * from './employee-response.model';
 export * from './group.model';

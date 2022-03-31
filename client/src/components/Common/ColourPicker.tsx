@@ -1,9 +1,16 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { Fragment } from "react";
-import { IColourPickerProps } from "../../models";
 import { combineClassNames } from "../../services";
 import { colours } from "../../utilities";
+
+interface IColourPickerProps {
+  colour: string,
+  setColour: (colour: string) => void,
+  menuSide?: "LEFT" | "RIGHT",
+  hideIcon?: boolean,
+  square?: boolean
+}
 
 const ColourPicker = ({ colour, setColour, menuSide, hideIcon, square }: IColourPickerProps) => {
 

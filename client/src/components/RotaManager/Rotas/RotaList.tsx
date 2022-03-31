@@ -9,10 +9,10 @@ import RotaPrompter from './RotaPrompter';
 import { IRotasResponse } from '../../../models/rotas-response.model';
 
 const headers = [
-  { name: "Start date", value: "startDate", interactive: true },
-  { name: "End date", value: "endDate", interactive: true },
-  { name: "Rota type", value: "rotaType", interactive: true },
+  { name: "Rota name", value: "name", interactive: true },
   { name: "Created by", value: "createdBy", interactive: true },
+  { name: "Employees", value: "employees", interactive: true },
+  { name: "Status", value: "locked", interactive: true },
   { name: "Options", value: "", interactive: false },
 ]
 
@@ -23,7 +23,7 @@ const RotaList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.rotas, requestBuilder(), [sortField, sortDirection]
+      fetchOutput={useFetch(endpoints.rotas(), requestBuilder(), [sortField, sortDirection]
       )}
       render={({ response, isLoading }: IFetch<IRotasResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">

@@ -35,8 +35,8 @@ const GroupCard = <TGroup extends IGroup>({ g, groupService, render }: IGroupPro
                   <SquareIconButton Icon={TrashIcon} action={() => setConfirmingDeletion(true)} />
                 ) : (
                   <>
-                    <SquareIconButton Icon={XIcon} action={() => setConfirmingDeletion(false)} textColor="text-red-500" />
-                    <SquareIconButton Icon={CheckIcon} action={() => groupService.deleteGroup(g)} textColor="text-green-500" />
+                    <SquareIconButton Icon={XIcon} action={() => setConfirmingDeletion(false)} colour="text-red-500" />
+                    <SquareIconButton Icon={CheckIcon} action={() => groupService.deleteGroup(g)} colour="text-green-500" />
                   </>
                 )}
               </div>

@@ -1,6 +1,6 @@
-import { SpinnerIcon } from '..';
-import { combineClassNames } from '../../../services';
-import { ButtonType, IStatus } from '../../../models';
+import { SpinnerIcon } from '.';
+import { combineClassNames } from '../../services';
+import { ButtonType, IStatus } from '../../models';
 
 export interface IButtonProps {
   status?: IStatus[],
@@ -18,6 +18,8 @@ const getButtonClasses = (buttonType: ButtonType): string => {
       return "text-blue-500 bg-transparent border-blue-500 hover:text-gray-300 hover:bg-blue-500 focus:text-gray-300 focus:bg-blue-500"
     case ButtonType.Tertiary:
       return "border-0 text-blue-500 bg-transparent hover:text-blue-600 focus:text-blue-600"
+    case ButtonType.Cancel:
+      return "border-red-500 text-red-500 bg-transparent hover:text-red-600 hover:border-red-600"
     default:
       return "text-gray-300 border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
   }

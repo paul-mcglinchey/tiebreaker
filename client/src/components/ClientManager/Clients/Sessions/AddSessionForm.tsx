@@ -5,7 +5,7 @@ import { Button } from '../../../Common';
 import { endpoints } from '../../../../utilities/config';
 import { CustomDate, StyledField, StyledTagField } from '../../..';
 import { requestBuilder } from '../../../../services';
-import { IClientProps, ITag } from '../../../../models';
+import { IClient, ITag } from '../../../../models';
 import { IAddSession } from '../../../../models/add-session.model';
 import { Status } from '../../../../models/types/status.type';
 import { StatusContext } from '../../../../utilities';
@@ -13,7 +13,7 @@ import { StatusContext } from '../../../../utilities';
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
-const AddSessionForm = ({ client }: IClientProps) => {
+const AddSessionForm = ({ client }: { client: IClient }) => {
 
   const { status, setStatus } = useContext(StatusContext);
   const [tags, setTags] = useState<ITag[]>([]);

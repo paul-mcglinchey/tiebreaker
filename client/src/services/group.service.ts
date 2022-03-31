@@ -2,6 +2,7 @@ import { IAddGroup, IGroup, IUpdateGroup, Status } from "../models";
 import { IGroupsEndpoint } from "../models/groups-endpoint.model";
 import { IGroupService, IStatusService, IUserService } from "./interfaces";
 import { requestBuilder } from "./request.service";
+import { getItemInStorage } from "./session-storage.service";
 import { UserService } from "./user.service";
 
 export abstract class GroupService<TGroup extends IGroup> implements IGroupService<TGroup> {
@@ -62,6 +63,9 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, `Successfully deleted ${g.name}`, Status.Success);
+
+          // Check if the group is in session storage and remove it if so
+          getItemInStorage(this.groupType + "Group")._id === g._id && sessionStorage.setItem(this.groupType + "Group", "");
         } else {
           this.statusService.appendStatus(false, `A problem ocurred deleting ${g.name}`, Status.Error);
         }

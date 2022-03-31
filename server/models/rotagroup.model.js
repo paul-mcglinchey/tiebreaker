@@ -11,7 +11,10 @@ const RotaGroup = mongoose.model(
       editors: [String],
       owners: [String]
     },
-    employees: [String],
+    employees: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Employee'
+    }],
     rotas: [String],
     listDefinitions: [String],
     colour: { type: String, required: false }

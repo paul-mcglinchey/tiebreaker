@@ -19,7 +19,7 @@ const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProp
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
-        groupService.addGroup(values);
+        groupService.addGroup({ ...values, colour: groupColour });
       }}
     >
       {({ errors, touched }) => (

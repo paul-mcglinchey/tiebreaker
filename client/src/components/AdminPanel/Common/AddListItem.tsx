@@ -1,7 +1,8 @@
+import { XIcon } from "@heroicons/react/solid";
 import { useState } from "react";
-import { IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
+import { IconButtonSize, IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
 import { generateColour } from "../../../services";
-import { Button, ColourPicker } from "../../Common";
+import { Button, ColourPicker, SquareIconButton } from "../../Common";
 import ListItemInput from "./ListItemInput";
 
 interface IAddListItemProps {
@@ -33,6 +34,10 @@ const AddListItem = ({ setDefaultGrouplists, updateDefaultLists, listId }: IAddL
     setValues({ short: '', long: '', colour: generateColour() });
   }
 
+  const clearValues = (): void => {
+    setValues({ short: '', long: '', colour: generateColour() });
+  }
+
   return (
     <div className="flex flex-col px-2 space-y-4">
       <div className="flex justify-between">
@@ -40,8 +45,9 @@ const AddListItem = ({ setDefaultGrouplists, updateDefaultLists, listId }: IAddL
           <ListItemInput value={values.long} name="long" placeholder="List item label" onChange={(value) => setValues(values => ({ ...values, long: value }))} />
           <ListItemInput value={values.short || ''} name="short" placeholder="List item short name" onChange={(value) => setValues(values => ({ ...values, short: value }))} />
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-2">
           <ColourPicker square colour={values.colour} setColour={(pc) => setValues(values => ({ ...values, colour: pc }))} />
+          <SquareIconButton buttonSize={IconButtonSize.XS} colour="red-500" Icon={XIcon} action={() => clearValues()} />
         </div>
       </div>
       <div className="flex justify-end">

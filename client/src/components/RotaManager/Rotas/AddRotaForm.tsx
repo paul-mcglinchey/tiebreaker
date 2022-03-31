@@ -1,27 +1,30 @@
 import { Formik, Form } from 'formik';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFetch } from '../../../hooks';
 
-import { IAddRota, IEmployee, IEmployeeResponse, IFetch } from '../../../models';
+import { DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
 import { Status } from '../../../models/types/status.type';
 import { requestBuilder } from '../../../services';
-import { endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
-import { CustomDate, Button, StyledField } from '../../Common';
+import { ApplicationContext, endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
+import { Button, StyledField, SpinnerIcon, Selector } from '../../Common';
 import { Fetch } from '../../Common/Fetch';
 
 const AddRotaForm = () => {
 
   const { status, setStatus } = useContext(StatusContext);
+  const { rotaGroup } = useContext(ApplicationContext);
 
-  const addRota = (values: IAddRota) => {
+  const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
+
+  const addRota = (values: IRota) => {
     setStatus([...status, {
       isLoading: true,
       message: '',
       type: Status.None
     }])
 
-    fetch(endpoints.rotas, requestBuilder('POST', undefined, values))
+    fetch(endpoints.rotas(), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Successfully added rota`, type: Status.Success }])
@@ -34,14 +37,24 @@ const AddRotaForm = () => {
       })
   }
 
+  const getDaysOfWeekOptions = () => {
+    return Object.keys(DayOfWeek).filter((day: any) => isNaN(day)).map((day: string) => {
+      return {
+        value: DayOfWeek[day as keyof typeof DayOfWeek],
+        label: day
+      }
+    })
+  }
+
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees, requestBuilder())}
-      render={({ response }: IFetch<IEmployeeResponse>) => (
+      fetchOutput={useFetch(endpoints.employees(rotaGroup._id), requestBuilder())}
+      render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
-            startDate: new Date().toISOString().split("T")[0] || "1970-01-01",
-            endDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7).toISOString().split("T")[0] || "1970-01-08",
+            name: '',
+            description: '',
+            startDay: startDay.value,
             employees: [],
           }}
           validationSchema={rotaValidationSchema}
@@ -50,15 +63,18 @@ const AddRotaForm = () => {
           }}
         >
           {({ errors, touched }) => (
-            <Form className="flex flex-1 flex-col space-y-8">
-              <div className="flex flex-col md:flex-row space-x-4">
-                <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
-                <StyledField type="date" name="endDate" label="End Date" component={CustomDate} errors={errors.endDate} touched={touched.endDate} />
+            <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
+              <div className="flex flex-col space-y-4">
+                <div className="flex space-x-4">
+                  <StyledField name="name" label="Name" errors={errors.name} touched={touched.name} />
+                  <Selector options={getDaysOfWeekOptions()} option={startDay} setValue={(e) => setStartDay(e)} label="Start Day" />
+                </div>
+                <StyledField name="description" label="Description" errors={errors.description} touched={touched.description} />
               </div>
               <div className="flex flex-col space-y-4">
                 <div className="text-gray-200 text-lg font-semibold tracking-wider">Employees</div>
                 <div className="bg-gray-800 flex flex-grow p-2 py-4 rounded">
-                  {response && (
+                  {response ? (
                     response.count > 0 ? (
                       response.employees.map((e: IEmployee, i: number) => (
                         <div key={i}>{e.name.firstName} {e.name.lastName}</div>
@@ -66,6 +82,12 @@ const AddRotaForm = () => {
                     ) : (
                       <div className="text-gray-200 text-sm flex-1 self-center">
                         No employees found, add your employees <Link className="text-blue-300" to="/rotas/addemployee">here</Link>
+                      </div>
+                    )
+                  ) : (
+                    isLoading && (
+                      <div>
+                        <SpinnerIcon className="w-6 h-6" />
                       </div>
                     )
                   )}

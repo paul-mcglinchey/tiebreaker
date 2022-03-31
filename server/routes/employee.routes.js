@@ -1,13 +1,22 @@
 module.exports = app => {
   const employees = require('../controllers/employee.controller.js');
-  
+  const middleware = require('../middlewares');
+
   var router = require('express').Router();
 
-  // Get all rotas which the current user has view access to
-  router.get('/', employees.getEmployees);
+  // Get all employees which the current user has view access to for a specific rotagroup
+  router.get(
+    '/',
+    middleware.groupMiddleware.checkQueryHasGroupId,
+    employees.getEmployees
+  );
 
   // Add a new employee
-  router.post('/', employees.addEmployee);
+  router.post(
+    '/',
+    middleware.groupMiddleware.checkQueryHasGroupId, 
+    employees.addEmployee
+  );
 
   app.use('/api/employees', router);
 }

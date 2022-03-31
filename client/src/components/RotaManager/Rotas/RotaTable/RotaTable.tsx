@@ -40,9 +40,9 @@ const RotaTable = ({
         <Fragment>
           {rotas && count > 0 ? (
             <tbody className="divide-y divide-gray-700">
-                {rotas.map((r) => (
-                  <RotaRow rota={r} key={r._id} />
-                ))}
+              {rotas.map((r) => (
+                <RotaRow rota={r} key={r._id} />
+              ))}
             </tbody>
           ) : (
             <RotaPrompter />
@@ -50,7 +50,7 @@ const RotaTable = ({
         </Fragment>
       </table>
       {isLoading && (
-        <div className="absolute left-0 top-0 rounded-md w-full h-full bg-gray-800 flex flex-grow justify-center pt-24 bg-opacity-20">
+        <div className="absolute left-0 top-0 rounded-md w-full h-full bg-gray-800 flex flex-grow justify-center pt-16 bg-opacity-20">
           <SpinnerIcon className="text-white h-12 w-12" />
         </div>
       )}

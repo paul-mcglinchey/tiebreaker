@@ -5,13 +5,17 @@ const { EmployeeSchema } = require('./employee.model');
 const Rota = mongoose.model(
   "Rota",
   new Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: false },
     accessControl: {
       viewers: [ String ],
       editors: [ String ],
       owners: [ String ],
     },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    startDay: { 
+      type: String,
+      required: true 
+    },
     schedule: [
       {
         employee: { type: String, required: true },
@@ -24,14 +28,12 @@ const Rota = mongoose.model(
         ]
       }
     ],
-    rotaType: {
-      type: String,
-      enum: ['FOH', 'BOH'],
-      default: 'FOH'
-    },
+    employeeIds: [String],
+    employees: { type: [EmployeeSchema], required: false, default: [] },
     locked: { type: Boolean, required: false, default: false },
     createdBy: String,
-    updatedBy: String
+    updatedBy: String,
+    colour: { type: String, required: false }
   }, { timestamps: true })
 );
 
