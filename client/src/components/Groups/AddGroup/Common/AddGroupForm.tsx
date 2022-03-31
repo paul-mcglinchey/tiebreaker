@@ -5,7 +5,7 @@ import { StyledField } from '../../..';
 import { IAddGroupFormProps, IGroup } from '../../../../models';
 import { generateColour } from '../../../../services';
 import { groupValidationSchema } from '../../../../utilities';
-import { ColourPicker, SubmitButton } from '../../../Common';
+import { ColourPicker, Button } from '../../../Common';
 
 const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProps<TGroup>) => {
   const [groupColour, setGroupColour] = useState<string>(generateColour());
@@ -34,7 +34,7 @@ const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProp
             </div>
           </div>
           <div className="flex justify-end">
-            <SubmitButton content='Create group' />
+            <Button content='Create group' />
           </div>
         </Form>
       )}

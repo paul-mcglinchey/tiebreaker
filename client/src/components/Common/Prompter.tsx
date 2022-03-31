@@ -1,7 +1,17 @@
 import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
 import { useDelayedRendering } from '../../hooks';
-import { IPrompterProps } from '../../models';
+
+interface IconProps {
+  childComp?: React.ReactNode
+  className: any
+}
+
+interface IPrompterProps {
+  title: string,
+  route: string,
+  Icon: React.FC<IconProps>
+}
 
 const Prompter = ({ Icon, title, route }: IPrompterProps) => {
 

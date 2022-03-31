@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../../../utilities/schema';
-import { SubmitButton } from '../../../Common';
+import { Button } from '../../../Common';
 import { endpoints } from '../../../../utilities/config';
-import { CustomDate, StyledDatePicker, StyledField, StyledTagField } from '../../..';
+import { CustomDate, StyledField, StyledTagField } from '../../..';
 import { requestBuilder } from '../../../../services';
 import { IClientProps, ITag } from '../../../../models';
 import { IAddSession } from '../../../../models/add-session.model';
@@ -76,12 +76,12 @@ const AddSessionForm = ({ client }: IClientProps) => {
               <StyledField name="title" label="Title" errors={errors.title} touched={touched.title} />
               <StyledField as="textarea" name="description" label="Description" errors={errors.description} touched={touched.description} />
               <div className="flex flex-col sm:flex-row item-center space-x-0 space-y-2 sm:space-x-4 sm:space-y-0">
-                <StyledDatePicker name="sessionDate" label="Session Date" errors={errors.sessionDate} touched={touched.sessionDate} component={CustomDate} />
+                <StyledField type="date" name="sessionDate" label="Session Date" errors={errors.sessionDate} touched={touched.sessionDate} component={CustomDate} />
                 <StyledTagField name="tags" label="Tags" tags={tags} setTags={setTags} errors={undefined} touched={undefined} />
               </div>
             </div>
             <div className="flex justify-end mt-10">
-              <SubmitButton status={status} content="Add session" />
+              <Button status={status} content="Add session" />
             </div>
           </Form>
         )}

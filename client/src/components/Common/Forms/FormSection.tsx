@@ -1,5 +1,11 @@
-import { IFormSectionProps } from "../../../models";
+import { IChildrenProps } from "../../../models";
 import { CustomCheckbox } from ".";
+
+interface IFormSectionProps extends IChildrenProps {
+  title: string,
+  state?: boolean,
+  setState?: (state: boolean) => void
+}
 
 const FormSection = ({ children, title, state, setState }: IFormSectionProps) => {
   return (

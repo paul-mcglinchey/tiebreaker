@@ -3,7 +3,7 @@ import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 import Userfront from "@userfront/core";
 import { IconWrapper } from '.';
-import { StyledField, SubmitButton } from '../..';
+import { StyledField, Button } from '../..';
 
 Userfront.init("wn9p69b5");
 
@@ -48,7 +48,7 @@ const PasswordReset = () => {
                   <StyledField name="password2" type="password" label="password2" errors={errors.password2} touched={touched.password2} />
                 </div>
                 <div className="flex justify-between">
-                  <SubmitButton content="Reset password" />
+                  <Button content="Reset password" />
                 </div>
               </div>
             </Form>

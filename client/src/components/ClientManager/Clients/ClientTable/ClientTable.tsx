@@ -1,9 +1,18 @@
 import { Fragment } from "react";
 import { ClientRow, Header } from ".";
 import { SpinnerIcon } from "../../..";
-import { IClientTableProps } from "../../../../models";
+import { IClient, ISortable } from "../../../../models";
 import { ClientPrompter } from "../Common";
 import InteractiveHeader from "./InteractiveHeader";
+
+interface IClientTableProps extends ISortable {
+  clients: IClient[],
+  totalClients: number,
+  headers: Array<{
+    name: string, value: string, interactive: boolean
+  }>,
+  isLoading: boolean
+}
 
 const ClientTable = ({
   clients,

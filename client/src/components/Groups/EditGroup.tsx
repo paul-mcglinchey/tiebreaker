@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik";
 import { IProps } from "../../models";
 import { groupValidationSchema } from "../../utilities";
-import { StyledField, SubmitButton } from "../Common";
+import { StyledField, Button } from "../Common";
 
 const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
   return (
@@ -30,7 +30,7 @@ const EditGroup = ({ toggleEditGroupOpen, groupService, g }: IProps) => {
               </div>
             </div>
             <div className="flex justify-end">
-              <SubmitButton content='Update group' />
+              <Button content='Update group' />
             </div>
           </Form>
         )}

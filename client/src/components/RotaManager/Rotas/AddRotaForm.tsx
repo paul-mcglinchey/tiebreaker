@@ -7,7 +7,7 @@ import { IAddRota, IEmployee, IEmployeeResponse, IFetch } from '../../../models'
 import { Status } from '../../../models/types/status.type';
 import { requestBuilder } from '../../../services';
 import { endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
-import { CustomDate, StyledDatePicker, SubmitButton } from '../../Common';
+import { CustomDate, Button, StyledField } from '../../Common';
 import { Fetch } from '../../Common/Fetch';
 
 const AddRotaForm = () => {
@@ -52,8 +52,8 @@ const AddRotaForm = () => {
           {({ errors, touched }) => (
             <Form className="flex flex-1 flex-col space-y-8">
               <div className="flex flex-col md:flex-row space-x-4">
-                <StyledDatePicker name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
-                <StyledDatePicker name="endDate" label="End Date" component={CustomDate} errors={errors.endDate} touched={touched.endDate} />
+                <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
+                <StyledField type="date" name="endDate" label="End Date" component={CustomDate} errors={errors.endDate} touched={touched.endDate} />
               </div>
               <div className="flex flex-col space-y-4">
                 <div className="text-gray-200 text-lg font-semibold tracking-wider">Employees</div>
@@ -72,7 +72,7 @@ const AddRotaForm = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <SubmitButton status={status} content='Add rota' />
+                <Button status={status} content='Add rota' />
               </div>
             </Form>
           )}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import Userfront from "@userfront/core";
 import { IconWrapper } from '.';
-import { StyledField, SubmitButton } from '../..';
+import { StyledField, Button } from '../..';
 
 Userfront.init("wn9p69b5");
 
@@ -52,7 +52,7 @@ const PasswordResetRequest = () => {
                       Cancel
                     </button>
                   </Link>
-                  <SubmitButton content="Request password reset" />
+                  <Button content="Request password reset" />
                 </div>
               </div>
             </Form>

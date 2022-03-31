@@ -1,5 +1,5 @@
 export interface IGroupListValue {
-  _id: string, 
+  _id?: string, 
   short?: string,
   long: string,
   colour: string

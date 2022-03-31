@@ -1,12 +1,18 @@
-import { IListItemInputProps } from "../../../models";
+interface IListItemInputProps {
+  onChange: (value: string, name: string) => void,
+  name: string,
+  placeholder?: string,
+  value: string
+}
 
-const ListItemInput = ({ updateListItem, name, value }: IListItemInputProps) => {
+const ListItemInput = ({ onChange, name, placeholder, value }: IListItemInputProps) => {
   return (
     <input
       name={name}
-      onChange={(e) => updateListItem(e.target.value, e.target.name)}
+      placeholder={placeholder}
+      onChange={(e) => onChange(e.target.value, e.target.name)}
       value={value}
-      className="bg-gray-800 px-2 py-1 rounded text-gray-300"
+      className="bg-gray-800 px-2 py-1 rounded text-gray-300 placeholder-gray-500/60"
     />
   )
 }

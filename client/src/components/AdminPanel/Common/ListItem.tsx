@@ -1,32 +1,66 @@
-import { useState } from "react";
-import { IGroup, IGroupList, IGrouplistItemProps, IGrouplistResponse, IGroupListValue } from "../../../models";
-import { ColourPicker } from "../../Common";
+import { TrashIcon } from "@heroicons/react/solid";
+import React, { useRef } from "react";
+import { IChanges, IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
+import { ColourPicker, SquareIconButton } from "../../Common";
 import ListItemInput from "./ListItemInput";
 
-const ListItem = ({ value, list, defaultGrouplists, setDefaultGrouplists }: IGrouplistItemProps) => {
+interface IGrouplistItemProps {
+  value: IGroupListValue,
+  listId: string,
+  setDefaultGrouplists: (state: React.SetStateAction<IGrouplistResponse>, cb?: (state: IGrouplistResponse) => void) => void,
+  setChanges: React.Dispatch<React.SetStateAction<IChanges>>
+}
 
-  const updateListItem = (listValue: string) => {
+const ListItem = ({ value, listId, setDefaultGrouplists, setChanges }: IGrouplistItemProps) => {
+  
+  const firstTrigger = useRef(true);
+
+  const updateListItem = (listValueValue: string, listValueName: string) => {
+    
     setDefaultGrouplists(defaultGrouplists => ({
       ...defaultGrouplists, 
       lists: defaultGrouplists.lists.map((tList: IGroupList) => {
-        return tList._id === list._id 
+        return tList._id === listId
           ? { 
             ...tList, 
             values: tList.values.map((tListValue: IGroupListValue) => {
               return tListValue._id === value._id 
-                ? { ...value, }
+                ? { ...value, [listValueName]: listValueValue }
                 : tListValue
             })
           } 
           : tList
       }) 
     }));
+
+    if (firstTrigger.current) {
+      setChanges(changes => ({ ...changes, edits: changes.edits + 1 }))
+      firstTrigger.current = false;
+    }
+  }
+
+  const removeListItem = () => {
+    setDefaultGrouplists(defaultGrouplists => ({
+      ...defaultGrouplists,
+      lists: defaultGrouplists.lists.map((tList: IGroupList) => {
+        return tList._id === listId
+          ? {
+            ...tList,
+            values: tList.values.filter((tValue: IGroupListValue) => tValue._id !== value._id)
+          }
+          : tList
+      })
+    }), () => setChanges(changes => ({ ...changes, deletions: changes.deletions + 1 })))
   }
 
   return (
-    <div className="flex justify-between items-center px-2 border-b border-gray-600 pb-1">
-      <ListItemInput updateListItem={(value, name) => updateListItem(value, name)} value={listValue.long} name="long" />
-      <div>
+    <div className="flex justify-between items-center px-2 border-b border-gray-600 pb-2">
+      <div className="flex space-x-4">
+        <ListItemInput onChange={(value) => updateListItem(value, "long")} value={value.long} name="long" />
+        <ListItemInput onChange={(value) => updateListItem(value, "short")} value={value.short || ''} name="short" />
+      </div>
+      <div className="flex items-center space-x-2">
+        <SquareIconButton textColor="text-red-500" Icon={TrashIcon} action={removeListItem} />
         <ColourPicker square={true} colour={value.colour} setColour={(pc) => updateListItem(pc, "colour")} />
       </div>
     </div>

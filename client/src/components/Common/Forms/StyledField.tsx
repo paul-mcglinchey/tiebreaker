@@ -1,7 +1,16 @@
 import { Field } from "formik";
-
 import { StyledErrorMessage } from ".";
-import { IFieldProps } from "../../../models";
+
+interface IFieldProps {
+  name: string,
+  label: string,
+  errors: any,
+  touched: any,
+  autoComplete?: string,
+  component?: React.ReactNode,
+  type?: string,
+  as?: string
+}
 
 const StyledField = ({ name, label, errors, touched, autoComplete, component, type, as }: IFieldProps) => {
   return (

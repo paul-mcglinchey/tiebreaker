@@ -1,6 +1,13 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { SquareIconButton } from ".";
-import { IPaginatorProps } from "../../models";
+
+interface IPaginatorProps {
+  pageSize: number,
+  pageNumber: number,
+  setPageNumber: (page: number) => void,
+  setPageSize: (size: number) => void,
+  totalClients: number
+}
 
 const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClients }: IPaginatorProps) => {
 

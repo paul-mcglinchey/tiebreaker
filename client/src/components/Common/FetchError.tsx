@@ -1,5 +1,10 @@
-import { IFetchErrorProps } from "../../models";
 import { SpinnerIcon } from "./icons";
+
+interface IFetchErrorProps {
+  error: { message?: string } | undefined,
+  isLoading: boolean,
+  toggleRefresh: () => void
+}
 
 const FetchError = ({ error, isLoading, toggleRefresh }: IFetchErrorProps) => {
 

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
+import { useRefresh, useStateCallback } from "../../hooks";
+import { ButtonType, IChanges, IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
 import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
-import { Toolbar } from "../Common";
+import { Button, Toolbar } from "../Common";
 import { AddListItem, ListItem } from "./Common";
 
 const AdminPanel = () => {
 
-  const [defaultGrouplists, setDefaultGrouplists] = useState<IGrouplistResponse | undefined>(undefined);
+  const [defaultGrouplists, setDefaultGrouplists] = useStateCallback<IGrouplistResponse>({} as IGrouplistResponse);
+  const { dependency, refresh } = useRefresh();
+  const [changes, setChanges] = useState<IChanges>({ deletions: 0, edits: 0, additions: 0 })
 
   useEffect(() => {
     let componentIsMounted = true;
@@ -26,13 +29,17 @@ const AdminPanel = () => {
     return () => {
       componentIsMounted = false;
     }
-  }, [])
+  }, [dependency])
 
-  const updateDefaultLists = () => {
-    fetch(endpoints.defaultgrouplists, requestBuilder("PUT", undefined, defaultGrouplists))
+  const updateDefaultLists = (lists: IGrouplistResponse) => {
+    fetch(endpoints.defaultgrouplists, requestBuilder("PUT", undefined, lists))
       .then(res => res.json())
       .then(json => console.log(json))
       .catch(err => console.error(err));
+
+
+    setChanges({ deletions: 0, edits: 0, additions: 0 });
+    refresh();
   }
 
   return (
@@ -40,13 +47,17 @@ const AdminPanel = () => {
       <Toolbar>Admin Panel</Toolbar>
       <div>
         <div className="flex flex-col space-y-2 text-gray-200">
-          <div className="flex justify-between items-baseline">
+          <div className="flex justify-between items-center">
             <div>
               <h3 className="text-2xl font-semibold tracking-wide text-blue-400">Default Lists</h3>
             </div>
-            <button onClick={() => updateDefaultLists()} className="uppercase text-sm font-semibold tracking-wide border border-white px-2 py-1/2 rounded hover:text-green-500 hover:border-green-500 transition-all">
-              Save Changes
-            </button>
+            <div className="flex space-x-4 items-center">
+              <div>
+                {changes.deletions > 0 && <span className="text-red-500 text-sm font-semibold tracking-wide">{changes.deletions} deletions</span>}
+                {changes.edits > 0 && <span className="text-orange-500 text-sm font-semibold tracking-wide">{changes.edits} edits</span>}
+              </div>
+              <Button content="Save changes" buttonType={ButtonType.Secondary} type="button" action={() => updateDefaultLists(defaultGrouplists)} />
+            </div>
           </div>
           <div className="text-gray-200">
             {defaultGrouplists && (
@@ -60,11 +71,11 @@ const AdminPanel = () => {
                           Internal list name: {list.name}
                         </div>
                       </div>
-                      <div className="flex flex-col space-y-2">
+                      <div className="flex flex-col space-y-4">
                         {list.values.map((value: IGroupListValue, key: number) => (
-                          <ListItem value={value} list={list} key={key} defaultGrouplists={defaultGrouplists} setDefaultGrouplists={setDefaultGrouplists} />
+                          <ListItem value={value} listId={list._id} key={key} setDefaultGrouplists={setDefaultGrouplists} setChanges={setChanges} />
                         ))}
-                        <AddListItem />
+                        <AddListItem setDefaultGrouplists={setDefaultGrouplists} updateDefaultLists={updateDefaultLists} listId={list._id} />
                       </div>
                       <div>
                         <div></div>

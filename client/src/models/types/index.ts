@@ -6,3 +6,4 @@ export * from './employee-role.type';
 export * from './dayofweek.type';
 export * from './rota.type';
 export * from './group.type';
+export * from './button.type';

@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 
 import { IconWrapper } from '.';
 import { loginValidationSchema } from '../../../utilities';
-import { StyledField, SubmitButton } from '../..';
+import { StyledField, Button } from '../..';
 
 Userfront.init("wn9p69b5");
 
@@ -53,7 +53,7 @@ const Login = () => {
                       Sign Up
                     </button>
                   </Link>
-                  <SubmitButton content="Login"/>
+                  <Button content="Login"/>
                 </div>
                 <div className="flex justify-center">
                   <Link to='/passwordresetrequest'>

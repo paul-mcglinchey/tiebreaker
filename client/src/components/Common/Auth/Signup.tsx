@@ -6,7 +6,7 @@ import Userfront from "@userfront/core";
 import { Transition } from "@headlessui/react";
 
 import { IconWrapper } from '.';
-import { StyledField, SubmitButton } from '../..';
+import { StyledField, Button } from '../..';
 import { signupValidationSchema } from '../../../utilities';
 
 
@@ -54,7 +54,7 @@ const Signup = () => {
                   <StyledField name="password" type="password" label="Password" errors={errors.password} touched={touched.password} />
                 </div>
                 <div className="flex flex-grow justify-end">
-                  <SubmitButton content="Sign up" />
+                  <Button content="Sign up" />
                 </div>
                 <div className="flex justify-center">
                   <Link to='/login'>

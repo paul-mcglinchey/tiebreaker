@@ -4,7 +4,7 @@ import { Transition } from "@headlessui/react";
 import { employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
 import { EmployeeRole, IAddEmployee, IEmployee, IEmployeeResponse, IFetch, Status } from "../../../models";
 import { generateColour, requestBuilder } from "../../../services";
-import { CustomDate, FormSection, Selector, StyledDatePicker, StyledField, SubmitButton } from "../../Common";
+import { CustomDate, FormSection, Selector, StyledField, Button } from "../../Common";
 import { useFetch } from "../../../hooks";
 import { Fetch } from "../../Common/Fetch";
 
@@ -126,8 +126,8 @@ const AddEmployeeForm = () => {
                     <StyledField name="contactInfo.primaryPhone" label="Phone number" errors={errors.contactInfo?.primaryPhoneNumber} touched={touched.contactInfo?.primaryPhoneNumber} />
                   </div>
                   <div className="flex space-x-4">
-                    <StyledDatePicker name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
-                    <StyledDatePicker name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
+                    <StyledField type="date" name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
+                    <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
                   </div>
                 </FormSection>
                 <FormSection title="Employee address" state={addressActive} setState={setAddressActive}>
@@ -176,7 +176,7 @@ const AddEmployeeForm = () => {
                 </FormSection>
               </div>
               <div className="flex justify-end my-10">
-                <SubmitButton status={status[status.length - 1] || []} content='Add Employee' />
+                <Button status={status} content='Add Employee' />
               </div>
             </Form>
           )}

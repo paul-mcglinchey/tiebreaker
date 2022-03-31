@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
 import { generateColour, requestBuilder } from "../../../../services";
-import { CustomDate, StyledDatePicker, StyledField, SubmitButton } from "../../..";
+import { CustomDate, StyledField, Button } from "../../..";
 import { ApplicationContext, clientValidationSchema, endpoints, StatusContext } from "../../../../utilities";
 import { IAddClient } from "../../../../models";
 import { Status } from "../../../../models/types/status.type";
@@ -98,7 +98,7 @@ const AddClientForm = () => {
               <StyledField name="phoneNumber" label="Phone number" errors={errors.phoneNumber} touched={touched.phoneNumber} />
             </div>
             <div className="flex justify-between">
-              <StyledDatePicker name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
+              <StyledField type="date" name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
             </div>
             <FormSection title="Address" state={addressActive} setState={setAddressActive}>
               <Transition
@@ -131,7 +131,7 @@ const AddClientForm = () => {
             </FormSection>
           </div>
           <div className="flex justify-end my-10">
-            <SubmitButton content='Add client' />
+            <Button content='Add client' />
           </div>
         </Form>
       )}
