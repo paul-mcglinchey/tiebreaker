@@ -12,3 +12,4 @@ export * from './clientgroup.service';
 export * from './user.service';
 export * from './status.service';
 export * from './number.service';
+export * from './rota.service';

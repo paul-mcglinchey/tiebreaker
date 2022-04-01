@@ -1,5 +1,14 @@
 import { Link } from "react-router-dom";
-import { IAppCardProps } from "../../../models";
+
+interface IAppCardProps {
+  title: string,
+  subtitle: string,
+  href: string,
+  datapoints: {
+    title: string,
+    value: number
+  }[]
+}
 
 const AppCard = ({ title, subtitle, href, datapoints }: IAppCardProps) => {
   return (

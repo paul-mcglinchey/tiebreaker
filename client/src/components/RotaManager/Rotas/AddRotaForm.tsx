@@ -3,12 +3,11 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFetch } from '../../../hooks';
 
-import { DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
-import { Status } from '../../../models/types/status.type';
-import { requestBuilder } from '../../../services';
+import { DayOfWeek, IEmployeeResponse, IFetch } from '../../../models';
+import { requestBuilder, RotaService, StatusService } from '../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
-import { Button, StyledField, SpinnerIcon, Selector } from '../../Common';
-import { Fetch } from '../../Common/Fetch';
+import { Button, StyledField, SpinnerIcon, Selector, Fetch } from '../../Common';
+import { StaffSelector } from './Forms';
 
 const AddRotaForm = () => {
 
@@ -16,26 +15,7 @@ const AddRotaForm = () => {
   const { rotaGroup } = useContext(ApplicationContext);
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
-
-  const addRota = (values: IRota) => {
-    setStatus([...status, {
-      isLoading: true,
-      message: '',
-      type: Status.None
-    }])
-
-    fetch(endpoints.rotas(), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          setStatus([...status, { isLoading: false, message: `Successfully added rota`, type: Status.Success }])
-        } else {
-          setStatus([...status, { isLoading: false, message: `A problem occurred adding rota`, type: Status.Error }])
-        }
-      })
-      .catch(() => {
-        setStatus([...status, { isLoading: false, message: `A problem occurred adding the rota`, type: Status.Error }])
-      })
-  }
+  const rotaService = new RotaService(new StatusService(status, setStatus));
 
   const getDaysOfWeekOptions = () => {
     return Object.keys(DayOfWeek).filter((day: any) => isNaN(day)).map((day: string) => {
@@ -46,6 +26,8 @@ const AddRotaForm = () => {
     })
   }
 
+  const [employeeIds, setEmployeeIds] = useState<string[]>([]);
+
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.employees(rotaGroup._id), requestBuilder())}
@@ -55,11 +37,11 @@ const AddRotaForm = () => {
             name: '',
             description: '',
             startDay: startDay.value,
-            employees: [],
+            employeeIds: [],
           }}
           validationSchema={rotaValidationSchema}
           onSubmit={(values) => {
-            addRota(values);
+            rotaService.addRota({ ...values, employeeIds: employeeIds}, rotaGroup);
           }}
         >
           {({ errors, touched }) => (
@@ -73,12 +55,10 @@ const AddRotaForm = () => {
               </div>
               <div className="flex flex-col space-y-4">
                 <div className="text-gray-200 text-lg font-semibold tracking-wider">Employees</div>
-                <div className="bg-gray-800 flex flex-grow p-2 py-4 rounded">
+                <div className="bg-gray-800 flex flex-grow p-2 rounded">
                   {response ? (
                     response.count > 0 ? (
-                      response.employees.map((e: IEmployee, i: number) => (
-                        <div key={i}>{e.name.firstName} {e.name.lastName}</div>
-                      ))
+                      <StaffSelector employees={response.employees} setEmployeeIds={setEmployeeIds} />
                     ) : (
                       <div className="text-gray-200 text-sm flex-1 self-center">
                         No employees found, add your employees <Link className="text-blue-300" to="/rotas/addemployee">here</Link>

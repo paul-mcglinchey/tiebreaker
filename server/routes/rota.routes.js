@@ -5,7 +5,11 @@ module.exports = app => {
   var router = require('express').Router();
 
   // Get all rotas which the current user has view access to
-  router.get('/', rotas.getRotas);
+  router.get(
+    '/', 
+    middleware.groupMiddleware.checkQueryHasGroupId, 
+    rotas.getRotas
+  );
 
   // Get rota by ID
   router.get(
@@ -14,18 +18,29 @@ module.exports = app => {
     rotas.getRotaById
   );
 
-  // CUD Operations - Requests should have a body
-  router.use(middleware.validationMiddleware.checkRequestHasBody);
-
   // Add a new rota
-  router.post('/', middleware.groupMiddleware.checkBodyHasGroupId, rotas.addRota);
+  router.post(
+    '/', 
+    middleware.groupMiddleware.checkQueryHasGroupId,
+    middleware.validationMiddleware.checkRequestHasBody, 
+    rotas.addRota
+  );
 
   // Update a rota
   router.put(
     '/:rotaId',
-    middleware.rotaMiddleware.checkRotaIdExists, 
+    middleware.rotaMiddleware.checkRotaIdExists,
+    middleware.validationMiddleware.checkRequestHasBody,
     rotas.updateRota
   );
+
+  // Delete a rota
+  router.delete(
+    '/:rotaId',
+    middleware.rotaMiddleware.checkRotaIdExists,
+    middleware.rotaMiddleware.checkUserAccessToRota('owners'),
+    rotas.deleteRota
+  )
 
   app.use('/api/rotas', router);
 }

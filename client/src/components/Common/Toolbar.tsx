@@ -1,5 +1,10 @@
-import { IToolbarProps, ToolbarType } from "../../models";
+import { IChildrenProps, ToolbarType } from "../../models";
 import { ClientGroupToolbar, RotaGroupToolbar } from "../Groups";
+
+interface IToolbarProps extends IChildrenProps {
+  toolbarTypes?: ToolbarType[],
+  showSelector?: boolean
+}
 
 const Toolbar = ({ children, toolbarTypes, showSelector = true }: IToolbarProps) => {
 

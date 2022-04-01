@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { StyledConfirmationMessage, StyledErrorMessage } from ".";
-import { ITagFieldProps } from "../../../models";
+import { ITag } from "../../../models";
+
+interface ITagFieldProps {
+  name: string,
+  tags: ITag[],
+  setTags: (tags: ITag[]) => void,
+  label: string,
+  errors: any,
+  touched: any
+}
 
 const StyledTagField = ({ name, tags, setTags, label, errors, touched }: ITagFieldProps) => {
 

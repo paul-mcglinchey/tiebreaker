@@ -30,7 +30,7 @@ const Button = ({ status = [], content = 'Submit', type = "submit", buttonType =
     <button className={
       combineClassNames(
         getButtonClasses(buttonType),
-        "px-3 py-1 border transition-all font-bold rounded flex space-x-2 items-center tracking-wider"
+        "px-3 py-1 transition-all font-bold rounded flex space-x-2 items-center tracking-wider"
       )}
       onClick={action}
       type={type}>

@@ -33,11 +33,10 @@ exports.getEmployees = async (req, res) => {
       const aggregate = Employee.aggregate();
     
       // apply a match operator to the aggregate
-      // await aggregate.match(employeeQuery)
+      await aggregate.match(employeeQuery)
     
       // build the query and execute the aggregator
       const employees = await aggregate
-        .match(employeeQuery)
         .then(employees => employees)
         .catch(err => {
           return res.status(500).send({
@@ -60,6 +59,9 @@ exports.getEmployees = async (req, res) => {
 }
 
 exports.addEmployee = async (req, res) => {
+
+  const { groupId } = req.query;
+
   const {
     role, reportsTo,
     name, address, contactInfo, birthdate,
@@ -89,8 +91,8 @@ exports.addEmployee = async (req, res) => {
     },
     birthdate: birthdate,
     contactInfo: {
-      primaryEmail: contactInfo.email,
-      primaryPhoneNumber: contactInfo.phoneNumber,
+      primaryEmail: contactInfo.primaryEmail,
+      primaryPhoneNumber: contactInfo.primaryPhoneNumber,
       emails: contactInfo.emails,
       phoneNumbers: contactInfo.phoneNumbers
     },
@@ -107,23 +109,23 @@ exports.addEmployee = async (req, res) => {
   // Save employee in the database
   employee
     .save(employee)
-    .then(data => {
+    .then(employee => {
       // Add the employee to the group which was selected
       RotaGroup.updateOne({
-        _id: req.query.groupId,
+        _id: groupId,
         $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
       }, {
-        $push: { employees: new ObjectId(data._id) }
+        $push: { employees: new ObjectId(employee._id) }
       })
         .then(() => {
           return res.status(200).send({
-            success: `Employee added successfully in group with ID ${req.query.groupId}.`
+            success: `Employee added successfully in group with ID ${groupId}.`
           });
         })
         .catch(err => {
           return res.status(500).send({
             message:
-              err.message || `Could not add employee to group with ID ${req.query.groupId}.`
+              err.message || `Could not add employee to group with ID ${groupId}.`
           });
         });
     })

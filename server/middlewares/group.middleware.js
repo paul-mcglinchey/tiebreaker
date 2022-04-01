@@ -76,7 +76,7 @@ const checkBodyHasGroupId = () => {
 }
 
 const checkQueryHasGroupId = (req, res, next) => {
-  if (!req.query.groupId) return res.status(400).send({ message: 'Group must be set.' });
+  if (!(req.query.groupId || req.params.groupId)) return res.status(400).send({ message: 'Group must be set.' });
   next();
 }
 

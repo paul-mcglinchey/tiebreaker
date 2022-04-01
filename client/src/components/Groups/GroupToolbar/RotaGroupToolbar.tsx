@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { GroupInfoDisplay, GroupCreateButton } from ".";
 import { useFetch } from "../../../hooks";
-import { IFetch, IGroupsResponse, IGroupToolbarProps, IRotaGroup } from "../../../models";
+import { IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { GroupSelector } from "./Common";
 
-const RotaGroupToolbar = ({ showSelector }: IGroupToolbarProps) => {
+const RotaGroupToolbar = ({ showSelector }: { showSelector?: boolean }) => {
 
   const { rotaGroup, setRotaGroup } = useContext(ApplicationContext);
 

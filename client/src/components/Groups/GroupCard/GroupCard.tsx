@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { CheckIcon, TrashIcon, XIcon, DotsVerticalIcon, PencilIcon } from '@heroicons/react/solid';
 import { SquareIconButton } from '../..';
-import { IGroup, IGroupProps } from '../../../models';
+import { IGroup } from '../../../models';
 import EditGroup from '../EditGroup';
 import { Transition } from '@headlessui/react';
+import { IGroupService } from '../../../services';
+
+interface IGroupProps<TGroup> {
+  g: TGroup,
+  groupService: IGroupService<TGroup>,
+  render: (isCardFlipped: boolean) => JSX.Element
+}
 
 const GroupCard = <TGroup extends IGroup>({ g, groupService, render }: IGroupProps<TGroup>) => {
 

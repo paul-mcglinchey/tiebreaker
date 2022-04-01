@@ -1,8 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { Fetch } from '../..';
 import { RotaTable } from './RotaTable';
 import { useFetch } from '../../../hooks';
-import { endpoints } from '../../../utilities';
+import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
 import { IFetch } from '../../../models/fetch.model';
 import RotaPrompter from './RotaPrompter';
@@ -18,12 +18,14 @@ const headers = [
 
 const RotaList = () => {
 
+  const { rotaGroup } = useContext(ApplicationContext);
+
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.rotas(), requestBuilder(), [sortField, sortDirection]
+      fetchOutput={useFetch(endpoints.rotas(rotaGroup._id), requestBuilder(), [sortField, sortDirection]
       )}
       render={({ response, isLoading }: IFetch<IRotasResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">

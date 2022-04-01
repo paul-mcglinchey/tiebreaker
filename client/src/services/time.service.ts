@@ -1,4 +1,4 @@
-export const parseTimeDifference = (target: Date) => {
+export const parseTimeDifference = (target: string) => {
   const currentDate: Date = new Date();
   const milliDiff: number = currentDate.getTime() - new Date(target).getTime();
   const secondsDiff = milliDiff / 1000;

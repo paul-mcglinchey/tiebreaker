@@ -2,12 +2,12 @@ import { CalendarIcon, CheckCircleIcon } from "@heroicons/react/outline";
 import { Fragment, useState } from "react";
 import { Fetch } from "../../..";
 import { useInterval, useUserFetch } from "../../../../hooks";
-import { IActivityLogProps } from "../../../../models/props";
+import { IActivityLog } from "../../../../models";
 import { userfrontapi } from "../../../../models/request-header.model";
 import { parseTimeDifference, requestBuilder } from "../../../../services";
 import { endpoints } from "../../../../utilities";
 
-const ActivityLogEntry = ({ al }: IActivityLogProps) => {
+const ActivityLogEntry = ({ al }: { al: IActivityLog }) => {
 
   const [timeDifference, setTimeDifference] = useState<number | string>('');
 

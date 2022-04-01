@@ -1,9 +1,14 @@
 import { XIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
-import { INotificationProps } from '../../../models';
-import { combineClassNames } from '../../../services';
+import { combineClassNames, IStatusService } from '../../../services';
 import { Status } from '../../../models/types/status.type';
+import { IStatus } from '../../../models';
+
+interface INotificationProps {
+  status: IStatus,
+  statusService: IStatusService
+}
 
 const Notification = ({ status, statusService }: INotificationProps) => {
 

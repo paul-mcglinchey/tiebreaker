@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { GroupCreateButton } from ".";
 import { useFetch } from "../../../hooks";
-import { IClientGroup, IFetch, IGroupsResponse, IGroupToolbarProps } from "../../../models";
+import { IClientGroup, IFetch, IGroupsResponse } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { GroupInfoDisplay, GroupSelector } from "./Common";
 
-const ClientGroupToolbar = ({ showSelector }: IGroupToolbarProps) => {
+const ClientGroupToolbar = ({ showSelector }: { showSelector?: boolean }) => {
 
   const { clientGroup, setClientGroup } = useContext(ApplicationContext);
 

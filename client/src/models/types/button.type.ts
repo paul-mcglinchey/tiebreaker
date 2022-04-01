@@ -3,5 +3,6 @@ export enum ButtonType {
   Secondary,
   Tertiary,
   Submission,
-  Cancel
+  Cancel,
+  Confirm
 }

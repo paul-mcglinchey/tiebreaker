@@ -1,5 +1,10 @@
-import { ICustomCheckBoxProps } from '../../../models';
 import { combineClassNames } from '../../../services';
+
+interface ICustomCheckBoxProps {
+  label?: string,
+  state: boolean,
+  setState: (state: boolean) => void
+}
 
 const CustomCheckbox = ({ state, setState, label }: ICustomCheckBoxProps) => {
   const toggleChecked = () => setState(!state);

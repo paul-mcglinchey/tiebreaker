@@ -2,8 +2,15 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/solid";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { IGroup, IGroupSelectorProps } from "../../../../models";
+import { IGroup } from "../../../../models";
 import { combineClassNames, getItemInStorage } from "../../../../services";
+
+interface IGroupSelectorProps<TGroup> {
+  groupType: string,
+  group: TGroup,
+  setGroup: (group: TGroup) => void,
+  groups: TGroup[] 
+}
 
 const GroupSelector = <TGroup extends IGroup>({ groupType, group, setGroup, groups }: IGroupSelectorProps<TGroup>) => {
 

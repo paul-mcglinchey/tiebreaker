@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { combineClassNames } from "../../../../services";
-import { IInlineLinkProps } from "../../../../models";
+
+interface IInlineLinkProps {
+  children: any,
+  color?: string,
+  to: string,
+  isActive?: boolean
+}
 
 const InlineLink = ({ children, color, to, isActive }: IInlineLinkProps) => {
   return (

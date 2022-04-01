@@ -1,5 +1,11 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { IPageChangerProps } from '../../../../models';
+import { MouseEventHandler } from 'react';
+
+interface IPageChangerProps {
+  pageNumber: number,
+  decreasePageNumber: () => MouseEventHandler,
+  increasePageNumber: () => MouseEventHandler
+}
 
 const PageChanger = ({ pageNumber, decreasePageNumber, increasePageNumber }: IPageChangerProps) => {
 

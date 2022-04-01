@@ -1,4 +1,8 @@
-import { IInlineButtonProps } from "../../../../models";
+interface IInlineButtonProps {
+  children: any,
+  color?: string,
+  action: () => void
+}
 
 const InlineButton = ({ children, action, color }: IInlineButtonProps) => {
   return (

@@ -16,7 +16,7 @@ const RotaColourPicker = ({ rota }: { rota: IRota }) => {
       type: Status.None
     }]);
 
-    await fetch((endpoints.rotas(rota && rota._id)), requestBuilder('PUT', undefined, { colour: rotaColour }))
+    await fetch((endpoints.rota(rota._id || "")), requestBuilder('PUT', undefined, { colour: rotaColour }))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Updated rota colour`, type: Status.Success }]);

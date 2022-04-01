@@ -1,7 +1,13 @@
+import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { Fragment } from 'react';
-import { ISelectorProps } from '../../models/props/selector-props.model';
+
+interface ISelectorProps {
+  options: { value: any, label: any }[],
+  option: any | undefined,
+  setValue: (value: any) => void,
+  label: string
+}
 
 const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
   return (

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { IFetch, IRotaProps, IUserResponse, userfrontapi } from '../../../../models';
+import { IFetch, IRota, IUserResponse, userfrontapi } from '../../../../models';
 import { useUserFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
@@ -8,7 +8,7 @@ import { Fetch } from '../../../Common';
 import { InlineLink } from '../../../ClientManager';
 import { UserAddIcon } from '@heroicons/react/solid';
 
-const RotaRow = ({ rota }: IRotaProps) => {
+const RotaListRow = ({ rota }: { rota: IRota }) => {
 
   return (
     <Fragment>
@@ -36,7 +36,12 @@ const RotaRow = ({ rota }: IRotaProps) => {
           <div className="flex items-center">
             <div>
               <div className="text-sm font-medium text-white">
-                {rota.employees?.length || (
+                {(rota.employeeIds?.length || 0) > 0 ? (
+                  <InlineLink to={`/rotas/addemployee`} color="text-amber-400">
+                    <span className="self-center pt-0.5">Employees</span>
+                    <span className="text-lg">{rota.employeeIds?.length}</span>
+                  </InlineLink>
+                ) : (
                   <InlineLink to={`/rotas/addemployee`} color="text-blue-500">
                     <div className="whitespace-nowrap">Add employee</div>
                     <UserAddIcon className="w-6 h-6" />
@@ -65,4 +70,4 @@ const RotaRow = ({ rota }: IRotaProps) => {
   )
 }
 
-export default RotaRow;
+export default RotaListRow;

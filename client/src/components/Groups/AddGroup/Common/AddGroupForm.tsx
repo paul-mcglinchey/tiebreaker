@@ -2,12 +2,12 @@ import { Formik, Form } from 'formik';
 import { useState } from 'react';
 
 import { StyledField } from '../../..';
-import { IAddGroupFormProps, IGroup } from '../../../../models';
-import { generateColour } from '../../../../services';
+import { IGroup } from '../../../../models';
+import { generateColour, IGroupService } from '../../../../services';
 import { groupValidationSchema } from '../../../../utilities';
 import { ColourPicker, Button } from '../../../Common';
 
-const AddGroupForm = <TGroup extends IGroup>({ groupService }: IAddGroupFormProps<TGroup>) => {
+const AddGroupForm = <TGroup extends IGroup>({ groupService }: { groupService: IGroupService<TGroup> }) => {
   const [groupColour, setGroupColour] = useState<string>(generateColour());
 
   return (
