@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useIsMounted } from "../../../../hooks";
 import { IEmployeeSchedule, ISchedule, IScheduleShift } from "../../../../models"
 import { ScheduleShiftInput } from "./Common";
@@ -6,11 +6,10 @@ import { ScheduleShiftInput } from "./Common";
 interface IEmployeeCellProps {
   employeeSchedule: IEmployeeSchedule,
   schedule: ISchedule,
-  setSchedule: React.Dispatch<React.SetStateAction<ISchedule>>
   day: number,
 }
 
-const EmployeeCell = ({ employeeSchedule, schedule, setSchedule, day }: IEmployeeCellProps) => {
+const EmployeeCell = ({ employeeSchedule, schedule, day }: IEmployeeCellProps) => {
 
   const currentDate = new Date(schedule.startDate);
   currentDate.setDate(new Date(schedule.startDate).getDate() + day);
@@ -23,42 +22,39 @@ const EmployeeCell = ({ employeeSchedule, schedule, setSchedule, day }: IEmploye
     return shift;
   }
 
-  const employeeShift = useRef<IScheduleShift>(getEmployeeShift() || { date: currentDate, startHour: '', endHour: '', notes: ''});
+  const [employeeShift, setEmployeeShift] = useState<IScheduleShift>(getEmployeeShift() || { date: currentDate, startHour: '', endHour: '', notes: '' });
   const isMounted = useIsMounted();
 
   const updateShift = () => {
-    let shift: IScheduleShift = { date: employeeShift.current.date, startHour: employeeShift.current.startHour, endHour: employeeShift.current.endHour, notes: employeeShift.current.notes };
-    let shouldUpdateShift = shift && shift.startHour.length > 0 && shift.endHour.length > 0;
+    let shouldUpdateShift = employeeShift.startHour.length > 0 && employeeShift.endHour.length > 0;
 
-    shouldUpdateShift && shift && setSchedule(pSchedule => {
-      return {
-        ...pSchedule,
-        employeeSchedules: pSchedule.employeeSchedules.map((e: IEmployeeSchedule) => {
-          return e.employee._id === employeeSchedule.employee._id ? (
-            e.shifts.filter((s: IScheduleShift) => s.date === currentDate).length > 0 ? {
-              ...e,
-              shifts: e.shifts.map((s: IScheduleShift) => s.date === currentDate 
-                ? shift
-                : s
-              )
-            } : {
-              ...e,
-              shifts: [...e.shifts, shift]
-            }
-          ) : e
-        })
-      }
-    })
+    if (shouldUpdateShift) schedule = {
+      ...schedule,
+      employeeSchedules: schedule.employeeSchedules.map((e: IEmployeeSchedule) => {
+        return e.employee._id === employeeSchedule.employee._id ? (
+          e.shifts.filter((s: IScheduleShift) => s.date === currentDate).length > 0 ? {
+            ...e,
+            shifts: e.shifts.map((s: IScheduleShift) => s.date === currentDate
+              ? employeeShift
+              : s
+            )
+          } : {
+            ...e,
+            shifts: [...e.shifts, employeeShift]
+          }
+        ) : e
+      })
+    }
   }
 
   const getShiftLength = () => {
-    let start = Number(employeeShift?.current.startHour);
+    let start = Number(employeeShift.startHour);
     let end: number = 0;
 
-    if (employeeShift?.current.endHour.toLowerCase().includes('f') || employeeShift?.current.endHour.toLowerCase().includes('c')) {
+    if (employeeShift.endHour.toLowerCase().includes('f') || employeeShift.endHour.toLowerCase().includes('c')) {
       end = 10;
     } else {
-      end = Number(employeeShift?.current.endHour);
+      end = Number(employeeShift.endHour);
     }
 
     return (end < 12 ? end + 12 : end) - (start < 8 ? start + 12 : start);
@@ -73,10 +69,10 @@ const EmployeeCell = ({ employeeSchedule, schedule, setSchedule, day }: IEmploye
       <div className="flex items-center space-x-2">
         {employeeShift && (
           <>
-            {console.log(employeeShift.current.startHour.length > 0)}
-            <ScheduleShiftInput name="startHour" value={employeeShift.current.startHour.length > 0 ? employeeShift.current.startHour : ''} onChange={(e) => employeeShift.current.startHour = e.target.value} />
+            {console.log(employeeShift.startHour.length > 0)}
+            <ScheduleShiftInput name="startHour" value={employeeShift.startHour.length > 0 ? employeeShift.startHour : ''} onChange={(e) => setEmployeeShift({ ...employeeShift, startHour: e.target.value })} />
             <div className="font-extrabold"> - </div>
-            <ScheduleShiftInput name="endHour" value={employeeShift.current.endHour} onChange={(e) => employeeShift.current.endHour = e.target.value} />
+            <ScheduleShiftInput name="endHour" value={employeeShift.endHour} onChange={(e) => setEmployeeShift({ ...employeeShift, endHour: e.target.value })} />
           </>
         )}
       </div>

@@ -4,11 +4,10 @@ import EmployeeCell from "./EmployeeCell";
 interface IEmployeeRowProps {
   employeeSchedule: IEmployeeSchedule,
   schedule: ISchedule,
-  setSchedule: React.Dispatch<React.SetStateAction<ISchedule>>,
   dayCycle: number[]
 }
 
-const EmployeeRow = ({ employeeSchedule, schedule, setSchedule, dayCycle }: IEmployeeRowProps) => {
+const EmployeeRow = ({ employeeSchedule, schedule, dayCycle }: IEmployeeRowProps) => {
 
   const { name, contactInfo } = employeeSchedule.employee;
 
@@ -25,7 +24,7 @@ const EmployeeRow = ({ employeeSchedule, schedule, setSchedule, dayCycle }: IEmp
       {dayCycle.map((day: number) => (
         <td key={day} className="px-6 py-4 text-sm whitespace-nowrap text-gray-400">
           <div>
-            <EmployeeCell employeeSchedule={employeeSchedule} schedule={schedule} setSchedule={setSchedule} day={day} />
+            <EmployeeCell employeeSchedule={employeeSchedule} schedule={schedule} day={day} />
           </div>
         </td>
       ))}
