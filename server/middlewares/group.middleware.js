@@ -68,11 +68,9 @@ const checkIfGroupNameExists = (Model) => {
   }
 }
 
-const checkBodyHasGroupId = () => {
-  return (req, res, next) => {
-    if (!req.body.groupId) return res.status(400).send({ message: 'Group must be set.' });
-    next();
-  }
+const checkBodyHasGroupId = (req, res, next) => {
+  if (!req.body.groupId) return res.status(400).send({ message: 'Group must be set.' });
+  next();
 }
 
 const checkQueryHasGroupId = (req, res, next) => {

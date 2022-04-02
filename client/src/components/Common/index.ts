@@ -3,6 +3,7 @@ export * from './icons';
 export * from './Notifications';
 export * from './Fetch';
 export * from './Auth';
+export * from './Dropdown';
 
 export { default as Prompter } from './Prompter';
 export { default as Toolbar } from './Toolbar';

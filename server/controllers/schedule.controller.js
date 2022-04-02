@@ -22,7 +22,7 @@ exports.getScheduleByDate = (req, res) => {
               .then(employees => employees)
               .catch(err => res.status(500).send({ message: err || 'A problem occurred while creating a new schedule.' }))
 
-            const scheduleEmployees = employees.map(e => {
+            const employeeSchedules = employees.map(e => {
               return {
                 employee: e,
                 shifts: []
@@ -31,8 +31,8 @@ exports.getScheduleByDate = (req, res) => {
 
             // Create a new schedule
             const schedule = new Schedule({
-              startDate: startDate,
-              employees: scheduleEmployees,
+              startDate: new Date(startDate),
+              employeeSchedules: employeeSchedules,
               createdBy: req.auth.userUuid,
               updatedBy: req.auth.userUuid
             });
@@ -74,22 +74,46 @@ exports.getScheduleByDate = (req, res) => {
     })
     .catch(err => {
       return res.status(500).send({
-        message:
-          err.message || `A problem occurred finding rota with ID ${rotaId}.`
+        message: err.message || `A problem occurred finding rota with ID ${rotaId}.`
       });
     });
 };
+
+// Update a schedule
+exports.updateSchedule = (req, res) => {
+  const { rotaId, startDate } = req.params;
+
+  Rota.findOne({ _id: rotaId, 'accessControl.editors': req.auth.userUuid })
+  .then(rota => {
+
+      const scheduleIds = rota.schedules;
+      Schedule.updateOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) }, req.body)
+        .then(update => {
+          return res.status(200).send({ message: `Matched ${update.matchedCount} schedules, updated ${update.modifiedCount} schedules for rota with ID ${rotaId}.`})
+        })
+        .catch(err => {
+          return res.status(500).send({ 
+            message: err.message || `A problem occurred updating schedule for rota with ID ${rotaId}.`
+          })
+        })
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: err.message || `A problem occurred finding rota with ID ${rotaId}.`
+      })
+    })
+}
 
 // Create and save a new schedule
 exports.addSchedule = (req, res) => {
 
   const { rotaId } = req.params;
-  const { startDate, employees } = req.body;
+  const { startDate, employeeSchedules } = req.body;
 
   // Create a new schedule
   const schedule = new Schedule({
     startDate: startDate,
-    employees: employees,
+    employeeSchedules: employeeSchedules,
     createdBy: req.auth.userUuid,
     updatedBy: req.auth.userUuid
   });

@@ -1,13 +1,11 @@
 const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
+const { EmployeeSchema } = require('./employee.model');
 
 const ScheduleSchema = new Schema({
   startDate: { type: Date, required: true },
-  employees: [{
-    employee: { 
-      type: Schema.Types.ObjectId,
-      ref: 'Employee'
-    },
+  employeeSchedules: [{
+    employee: EmployeeSchema,
     shifts: [{
       date: { type: Date, required: true },
       startHour: { type: Number, required: true },

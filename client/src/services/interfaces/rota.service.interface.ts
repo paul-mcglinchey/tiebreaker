@@ -1,8 +1,8 @@
-import { IRota, IRotaGroup } from "../../models";
+import { IRota, IRotaGroup, ISchedule } from "../../models";
 
 export interface IRotaService {
   addRota: (values: IRota, rotaGroup: IRotaGroup) => void,
   deleteRota: (r: IRota) => void,
   getWeek: (weekModifier: number) => { firstDay: Date, lastDay: Date },
-  addSchedule: (r: IRota, startDate: Date) => void
+  updateSchedule: (r: IRota, s: ISchedule) => void,
 }

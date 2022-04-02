@@ -6,14 +6,14 @@ export interface IScheduleShift {
   endHour: string,
   notes: string
 }
-export interface IScheduleEmployees {
+export interface IEmployeeSchedule {
   employee: IEmployee,
   shifts: IScheduleShift[]
 }
 
 export interface ISchedule {
-  startDate: string,
-  employees: IScheduleEmployees[]
+  startDate: Date,
+  employeeSchedules: IEmployeeSchedule[]
 }
 
 export interface IScheduleResponse {

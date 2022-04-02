@@ -4,7 +4,13 @@ import { ScheduleTable } from "../../..";
 import { IRota } from "../../../../models";
 import { IRotaService } from "../../../../services";
 import { SquareIconButton } from "../../../Common";
-const ViewRota = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaService }) => {
+
+interface IScheduleProps {
+  rota: IRota, 
+  rotaService: IRotaService
+}
+
+const Schedule = ({ rota, rotaService }: IScheduleProps) => {
 
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
   const currentWeek = rotaService.getWeek(currentWeekModifier);
@@ -46,4 +52,4 @@ const ViewRota = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaServic
   )
 }
 
-export default ViewRota;
+export default Schedule;

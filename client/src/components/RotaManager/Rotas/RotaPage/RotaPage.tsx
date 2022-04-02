@@ -1,18 +1,13 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState } from "react";
 import {
-  Route,
-  Routes, 
   useParams 
 } from "react-router";
-import { 
-  RotaHeader
-} from "..";
 import { Fetch } from "../../..";
 import { useFetch, useRefresh } from "../../../../hooks";
 import { IFetch, IRotaResponse } from "../../../../models";
 import { requestBuilder, RotaService, StatusService } from "../../../../services";
 import { endpoints, StatusContext } from "../../../../utilities";
-import { ViewRota } from "..";
+import { RotaHeader, Schedule } from "..";
 
 const RotaPage = () => {
 
@@ -21,6 +16,8 @@ const RotaPage = () => {
   const { rotaId } = useParams();
   const { dependency, refresh } = useRefresh();
   const rotaService = new RotaService(new StatusService(status, setStatus), refresh);
+  
+  const [editing, setEditing] = useState<boolean>(false);
 
   return (
     <Fetch
@@ -29,10 +26,8 @@ const RotaPage = () => {
         <Fragment>
           {response && response.rota && (
             <div className="flex flex-col">
-              <RotaHeader rota={response.rota} rotaService={rotaService} />
-              <Routes>
-                <Route path="view" element={<ViewRota rota={response.rota} rotaService={rotaService} />} />
-              </Routes>
+              <RotaHeader rota={response.rota} rotaService={rotaService} editing={editing} setEditing={setEditing} />
+              <Schedule rota={response.rota} rotaService={rotaService} />
             </div>
           )}
         </Fragment>

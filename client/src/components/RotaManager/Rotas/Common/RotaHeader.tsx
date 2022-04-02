@@ -1,31 +1,23 @@
-import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/solid";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { SquareIconButton } from "../../..";
+import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import { Link, useNavigate } from "react-router-dom";
 import { IRota } from "../../../../models";
-import { RotaColourPicker } from ".";
-import { useState } from "react";
-import { DeleteModal } from "../../../Common";
+import React, { useState } from "react";
+import { DeleteModal, Dropdown } from "../../../Common";
 import { IRotaService } from "../../../../services";
 
-const RotaHeader = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaService }) => {
+interface IRotaHeaderProps {
+  rota: IRota,
+  rotaService: IRotaService,
+  editing: boolean,
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-  const { pathname } = useLocation();
+const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
 
   const navigate = useNavigate();
-
-  const getRouteName = () => {
-    switch (pathname.split('/').pop()) {
-      case "edit":
-        return " / Edit";
-      case "view":
-        return " / View";
-      default:
-        return "";
-    }
-  }
 
   const deleteRota = () => {
     rotaService.deleteRota(rota);
@@ -34,12 +26,9 @@ const RotaHeader = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaServ
 
   return (
     <div className="flex justify-between items-center">
-      <div className="inline-flex items-center space-x-2 text-white text-2xl font-semibold tracking-wider">
+      <div className="flex items-center space-x-3 text-white text-2xl font-semibold tracking-wider">
         <Link to="/rotas/dashboard">
-          <SquareIconButton Icon={ArrowLeftIcon} additionalClasses="h-5 w-5 transform hover:scale-105 transition-all" />
-        </Link>
-        <Link to="/rotas/dashboard">
-          <span className="rounded-lg bg-gray-800 px-2 py-1">Rotas</span>
+          <span className="rounded-lg bg-gray-800 px-2 pb-1">Rotas</span>
         </Link>
         <span> / </span>
         <span className="text-green-500">
@@ -47,11 +36,15 @@ const RotaHeader = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaServ
             <span>{rota.name}</span>
           )}
         </span>
-        <span>{getRouteName()}</span>
+        <span> / {editing ? 'Editing' : 'Viewing'}</span>
       </div>
       <div className="flex space-x-4 items-center">
-        <SquareIconButton Icon={TrashIcon} colour="red-500" action={() => toggleDeletionOpen()} />
-        <RotaColourPicker rota={rota} />
+        <Dropdown options={[ 
+          editing 
+          ? { label: 'View', action: () => setEditing(false), Icon: EyeIcon }
+          : { label: 'Edit', action: () => setEditing(true), Icon: PencilIcon },
+          { label: 'Delete', action: () => toggleDeletionOpen(), Icon: TrashIcon },
+        ]}/>
       </div>
       <DeleteModal modalOpen={deletionOpen} toggleModalOpen={toggleDeletionOpen} deleteFunction={() => deleteRota()} />
     </div>

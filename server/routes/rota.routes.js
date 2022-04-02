@@ -51,6 +51,15 @@ module.exports = app => {
     rotas.updateRota
   );
 
+  // Update a schedule belonging to a rota
+  router.put(
+    '/:rotaId/schedules/:startDate',
+    middleware.rotaMiddleware.checkRotaIdExists,
+    middleware.scheduleMiddleware.checkQueryHasDate,
+    middleware.rotaMiddleware.checkUserAccessToRota('editors'),
+    schedules.updateSchedule
+  )
+
   // Delete a rota
   router.delete(
     '/:rotaId',

@@ -9,7 +9,10 @@ export const endpoints = {
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
     "rota": (rotaId: string = "") => BASE_API_URL + `rotas/` + rotaId,
     "rotas": (groupId: string) => BASE_API_URL + `rotas?groupId=${groupId}`,
-    "schedules": (rotaId: string, startDate: Date | undefined) => BASE_API_URL + `rotas/${rotaId}/schedules${startDate ? '/' + startDate?.toISOString().split("T")[0] : ''}`,
+    "schedules": {
+        "get": (rotaId: string, startDate: string) => BASE_API_URL +  `rotas/${rotaId}/schedules/${startDate}`,
+        "put": (rotaId: string, startDate: string) => BASE_API_URL +  `rotas/${rotaId}/schedules/${startDate}`,
+    },
     "employees": (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
 
     groups: (groupType: string) => {
