@@ -2,8 +2,8 @@ import { IEmployee } from "./employee.model";
 
 export interface IScheduleShift {
   date: Date,
-  startHour: number,
-  endHour: number,
+  startHour: string,
+  endHour: string,
   notes: string
 }
 export interface IScheduleEmployees {

@@ -1,30 +1,19 @@
-import { useEffect, useRef, useState } from "react";
 import { IEmployee } from "../../../../models";
 import { CustomCheckbox } from "../../../Common";
 
 interface IStaffSelectorProps {
   employees: IEmployee[],
+  employeeIds: string[]
   setEmployeeIds: (employeeIds: string[]) => void
 }
 
-const StaffSelector = ({ employees, setEmployeeIds }: IStaffSelectorProps) => {
-
-  const [selection, setSelection] = useState<string[]>([]);
-  const componentIsMounted = useRef(true);
+const StaffSelector = ({ employees, employeeIds, setEmployeeIds }: IStaffSelectorProps) => {
 
   const toggleInclusion = (_id: string) => {
-    selection.includes(_id)
-      ? setSelection(selection.filter((s: string) => s !== _id))
-      : setSelection([...selection, _id])
+    employeeIds.includes(_id)
+      ? setEmployeeIds(employeeIds.filter((s: string) => s !== _id))
+      : setEmployeeIds([...employeeIds, _id])
   }
-
-  useEffect(() => {
-    componentIsMounted && setEmployeeIds(selection);
-
-    return () => {
-      componentIsMounted.current = false;
-    }
-  }, [selection])
 
   return (
     <div className="flex flex-1 flex-col space-y-2">
@@ -39,7 +28,7 @@ const StaffSelector = ({ employees, setEmployeeIds }: IStaffSelectorProps) => {
             </div>
           </div>
           <div>
-            <CustomCheckbox state={selection.includes(e._id)} setState={() => toggleInclusion(e._id)} />
+            <CustomCheckbox state={employeeIds.includes(e._id)} setState={() => toggleInclusion(e._id)} />
           </div>
         </div>
       ))}

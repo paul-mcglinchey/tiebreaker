@@ -93,7 +93,7 @@ exports.addRota = async (req, res) => {
   const { groupId } = req.query;
 
   const {
-    name, description, startDay, employeeIds
+    name, description, startDay, employeeIds, closingHour
   } = req.body;
 
   // create a new rota instance
@@ -106,6 +106,7 @@ exports.addRota = async (req, res) => {
       owners: req.auth.userUuid,
     },
     startDay: startDay,
+    closingHour: closingHour,
     schedule: [],
     employeeIds: employeeIds,
     createdBy: req.auth.userUuid,
