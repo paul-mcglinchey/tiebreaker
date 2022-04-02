@@ -1,35 +1,18 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
-import { DayOfWeek, IEmployee, IRota } from "../../../../models";
-import { SquareIconButton } from "../../../Common";
-import { Header } from "../RotaTable";
-import RotaRow from "./RotaRow";
+import { useState } from "react";
+import { EmployeeRow } from "../../..";
+import { useFetch } from "../../../../hooks";
+import { ButtonType, DayOfWeek, IEmployee, IFetch, IRota, IScheduleResponse } from "../../../../models";
+import { IRotaService, requestBuilder } from "../../../../services";
+import { endpoints } from "../../../../utilities";
+import { Button, Fetch, SquareIconButton } from "../../../Common";
+const ViewRota = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaService }) => {
 
-const ViewRota = ({ rota }: { rota: IRota }) => {
-
-  const getDayCycle = (): number[] => {
-    let dayCycle: number[] = [];
-    let startDay: number = Number.parseInt(rota.startDay?.toString() || "0");
-
-    for (let i = 0; i <= 6; i++) {
-      let current: number = startDay + i;
-      (current) <= 6 ? dayCycle.push(current) : dayCycle.push(current - 7);
-    }
-
-    return dayCycle;
-  }
-
-  const dayCycle: number[] = getDayCycle();
-
-  const getCurrentDate = () => {
-    let current = new Date;
-    let first = current.getDate() - current.getDay();
-    let last = first + 6;
-
-    var firstDay = new Date(current.setDate(first)).toLocaleDateString();
-    var lastDay = new Date(current.setDate(last)).toLocaleDateString();
-
-    return { firstDay, lastDay };
-  }
+  const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
+  const currentWeek = rotaService.getWeek(currentWeekModifier);
+  const dayCycle: number[] = [1, 2, 3, 4, 5, 6, 0];
+  const cycleBack = () => setCurrentWeekModifier(currentWeekModifier - 1);
+  const cycleForwards = () => setCurrentWeekModifier(currentWeekModifier + 1);
 
   return (
     <div className="flex flex-col space-y-4 text-gray-200">
@@ -37,32 +20,52 @@ const ViewRota = ({ rota }: { rota: IRota }) => {
         <h1 className="pt-4 text-4xl font-semibold tracking-wider">View rota</h1>
       </div>
       <div className="flex flex-col flex-grow space-y-4">
-        <div className="flex justify-between">
-          <div>
-            <SquareIconButton Icon={ArrowLeftIcon} />
-            {getCurrentDate().firstDay}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <SquareIconButton Icon={ArrowLeftIcon} action={() => cycleBack()} />
+            {currentWeek.firstDay.toLocaleDateString()}
           </div>
           <div>
-            {getCurrentDate().lastDay}
-            <SquareIconButton Icon={ArrowRightIcon} />
+            {currentWeekModifier === 0 ? 'Current week' : (
+              currentWeekModifier > 0
+                ? currentWeekModifier === 1 ? 'Next week' : currentWeekModifier + ' weeks away'
+                : currentWeekModifier === -1 ? 'Last week' : Math.abs(currentWeekModifier) + ' weeks ago'
+            )}
+          </div>
+          <div className="flex items-center">
+            {currentWeek.lastDay.toLocaleDateString()}
+            <SquareIconButton Icon={ArrowRightIcon} action={() => cycleForwards()} />
           </div>
         </div>
-        <div className="relative shadow overflow-x-scroll md:overflow-x-auto rounded-md">
-          <table className="min-w-full">
-            <thead className="bg-gray-800">
-              <tr>
-                {dayCycle.map((day: number) => (
-                  <Header key={day}>{DayOfWeek[day]}</Header>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {rota.employees && rota.employees.map((e: IEmployee, key: number) => (
-                <RotaRow rota={rota} employee={e} key={key} />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Fetch
+          fetchOutput={useFetch(endpoints.schedules(rota._id || "", currentWeek.firstDay), requestBuilder("GET"), [currentWeekModifier])}
+          render={({ response }: IFetch<IScheduleResponse>) => (
+            response && response.schedule ? (
+              <div className="relative shadow overflow-x-scroll md:overflow-x-auto rounded-md">
+                {console.log(response)}
+                <table className="min-w-full border border-blue-500">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      {dayCycle.map((day: number) => (
+                        <th key={day}>{DayOfWeek[day]}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rota.employees?.map((employee: IEmployee, key: number) => (
+                      <EmployeeRow key={key} employee={employee} schedule={response.schedule} dayCycle={dayCycle} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <Button buttonType={ButtonType.Primary} content="Press this button to create a new schedule for this week" action={() => rotaService.addSchedule(rota, currentWeek.firstDay)} />
+              </div>
+            )
+          )}
+        />
       </div>
     </div>
   )

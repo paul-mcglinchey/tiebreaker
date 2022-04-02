@@ -13,7 +13,7 @@ export interface IButtonProps {
 const getButtonClasses = (buttonType: ButtonType): string => {
   switch (buttonType) {
     case ButtonType.Primary:
-      return "border-0 text-gray-200 bg-blue-500 hover:text-gray-300 hover:bg-blue-600 focus:text-gray-300 focus:bg-blue-500"
+      return "border-2 border-blue-600 text-blue-600 bg-transparent hover:text-gray-900 hover:bg-blue-600 hover:border-transparent focus:text-gray-900 focus:bg-blue-600"
     case ButtonType.Secondary:
       return "text-blue-500 bg-transparent border-blue-500 hover:text-gray-300 hover:bg-blue-500 focus:text-gray-300 focus:bg-blue-500"
     case ButtonType.Tertiary:

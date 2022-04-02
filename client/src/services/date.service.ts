@@ -19,3 +19,9 @@ export const makeUSDate = (isoDate: Date, delimiter: string) => {
   var date = new Date(isoDate);
   return `${date.getFullYear()}${delimiter}${date.getUTCMonth() + 1}${delimiter}${date.getUTCDate()}`
 }
+
+export const compareDates = (dateOne: Date, dateTwo: Date) => {
+  return {
+    sameDay: (): boolean => dateOne.getUTCDate() === dateTwo.getUTCDate() && dateOne.getUTCFullYear() === dateTwo.getUTCFullYear() && dateOne.getUTCMonth() === dateTwo.getUTCMonth()
+  }
+}

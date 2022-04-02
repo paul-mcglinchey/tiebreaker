@@ -10,7 +10,7 @@ export interface IRota {
     [key: string]: string[],
   },
   startDay?: DayOfWeek,
-  schedule?: ISchedule[],
+  schedules?: ISchedule[],
   employeeIds?: string[],
   employees?: IEmployee[],
   locked?: boolean,

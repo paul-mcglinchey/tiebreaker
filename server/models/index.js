@@ -13,5 +13,6 @@ db.grouplist = require('./grouplist.model');
 db.employee = require('./employee.model');
 db.rota = require('./rota.model');
 db.grouplist = require('./grouplist.model');
+db.schedule = require('./schedule.model');
 
 module.exports = db;

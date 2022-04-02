@@ -1,10 +1,21 @@
 import { IEmployee } from "./employee.model";
 
-export interface ISchedule {
+export interface IScheduleShift {
+  date: Date,
+  startHour: number,
+  endHour: number,
+  notes: string
+}
+export interface IScheduleEmployees {
   employee: IEmployee,
-  shifts: {
-    date: String,
-    startTime: number,
-    endTime: number
-  }[]
+  shifts: IScheduleShift[]
+}
+
+export interface ISchedule {
+  startDate: string,
+  employees: IScheduleEmployees[]
+}
+
+export interface IScheduleResponse {
+  schedule: ISchedule
 }

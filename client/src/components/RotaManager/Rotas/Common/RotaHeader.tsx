@@ -3,20 +3,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SquareIconButton } from "../../..";
 import { IRota } from "../../../../models";
 import { RotaColourPicker } from ".";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { DeleteModal } from "../../../Common";
-import { RotaService, StatusService } from "../../../../services";
-import { StatusContext } from "../../../../utilities";
+import { IRotaService } from "../../../../services";
 
-const RotaHeader = ({ rota }: { rota: IRota }) => {
+const RotaHeader = ({ rota, rotaService }: { rota: IRota, rotaService: IRotaService }) => {
 
   const { pathname } = useLocation();
-  const { status, setStatus } = useContext(StatusContext);
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
 
-  const rotaService = new RotaService(new StatusService(status, setStatus));
   const navigate = useNavigate();
 
   const getRouteName = () => {

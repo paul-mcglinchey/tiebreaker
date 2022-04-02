@@ -1,13 +1,15 @@
-import { IRota, IRotaGroup, Status } from "../models";
+import { IEmployee, IRota, IRotaGroup, ISchedule, Status } from "../models";
 import { endpoints } from "../utilities";
 import { IRotaService, IStatusService } from "./interfaces";
 import { requestBuilder } from "./request.service";
 
 export class RotaService implements IRotaService {
   statusService: IStatusService;
+  refresh: () => void = () => {};
 
-  constructor(statusService: IStatusService) {
-    this.statusService = statusService
+  constructor(statusService: IStatusService, refresh: () => void = () => {}) {
+    this.statusService = statusService;
+    this.refresh = refresh;
   }
 
   addRota = (values: IRota, rotaGroup: IRotaGroup) => {
@@ -43,6 +45,41 @@ export class RotaService implements IRotaService {
       })
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred deleting ${r.name}`, Status.Error);
+      })
+  }
+
+  getWeek = (weekModifier: number): { firstDay: Date, lastDay: Date } => {
+    let current = new Date();
+    let today = new Date(Date.UTC(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate()))
+    today.setDate(today.getDate() + (weekModifier * 7));
+
+    let first = today.getDate() - today.getDay();
+    let last = first + 6;
+
+    var firstDay = new Date(today.setDate(first));
+    var lastDay = new Date(today.setDate(last));
+
+    return { firstDay, lastDay };
+  }
+
+  addSchedule = (r: IRota, startDate: Date) => {
+    var scheduleToAdd: ISchedule = {
+      startDate: startDate.toISOString().split("T")[0] || "",
+      employees: r.employees?.map((e: IEmployee) => {
+        return { employee: e, shifts: [] }
+      }) || []
+    };
+
+    this.statusService.setLoading(true);
+
+    fetch(endpoints.schedules(r._id || "", undefined), requestBuilder("POST", undefined, scheduleToAdd))
+      .then(res => {
+        if (res.ok) return this.statusService.appendStatus(false, 'Created new blank schedule', Status.Success);
+        if (res.status === 400) return this.statusService.appendStatus(false, 'Bad request...', Status.Error);
+      })
+      .catch(err => {
+        console.error(err);
+        this.statusService.appendStatus(false, 'There was a problem creating a new schedule', Status.Error);
       })
   }
 }

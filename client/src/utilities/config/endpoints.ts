@@ -8,7 +8,8 @@ export const endpoints = {
     "sessions": (clientId: string) => BASE_API_URL + `clients/${clientId}/sessions`,
     "user": (userUuid: string) => USERS_URL + `v0/users/${userUuid}`,
     "rota": (rotaId: string = "") => BASE_API_URL + `rotas/` + rotaId,
-    "rotas": (groupId: string) => BASE_API_URL + `rotas?groupId=` + groupId,
+    "rotas": (groupId: string) => BASE_API_URL + `rotas?groupId=${groupId}`,
+    "schedules": (rotaId: string, startDate: Date | undefined) => BASE_API_URL + `rotas/${rotaId}/schedules${startDate ? '/' + startDate?.toISOString().split("T")[0] : ''}`,
     "employees": (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
 
     groups: (groupType: string) => {

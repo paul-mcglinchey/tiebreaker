@@ -16,18 +16,14 @@ const Rota = mongoose.model(
       type: String,
       required: true 
     },
-    schedule: [
-      {
-        employee: { type: String, required: true },
-        shifts: [
-          {
-            date: { type: Date, required: true },
-            startTime: { type: Number, required: true },
-            endTime: { type: Number, required: true }
-          }
-        ]
-      }
-    ],
+    closingHour: {
+      type: Number,
+      required: true
+    },
+    schedules: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Schedule'
+    }],
     employeeIds: [String],
     employees: { type: [EmployeeSchema], required: false, default: [] },
     locked: { type: Boolean, required: false, default: false },

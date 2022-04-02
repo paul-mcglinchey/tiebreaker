@@ -1,5 +1,6 @@
 module.exports = app => {
   const rotas = require('../controllers/rota.controller.js');
+  const schedules = require('../controllers/schedule.controller.js');
   const middleware = require('../middlewares');
 
   var router = require('express').Router();
@@ -18,6 +19,14 @@ module.exports = app => {
     rotas.getRotaById
   );
 
+  // Gets all schedules for a rota
+  router.get(
+    '/:rotaId/schedules/:startDate',
+    middleware.rotaMiddleware.checkRotaIdExists,
+    middleware.scheduleMiddleware.checkQueryHasDate,
+    schedules.getScheduleByDate
+  );
+
   // Add a new rota
   router.post(
     '/', 
@@ -25,6 +34,14 @@ module.exports = app => {
     middleware.validationMiddleware.checkRequestHasBody, 
     rotas.addRota
   );
+
+  // Add a new schedule
+  router.post(
+    '/:rotaId/schedules',
+    middleware.rotaMiddleware.checkRotaIdExists,
+    middleware.validationMiddleware.checkRequestHasBody,
+    schedules.addSchedule
+  )
 
   // Update a rota
   router.put(
