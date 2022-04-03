@@ -1,9 +1,10 @@
-import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import { EyeIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { IRota } from "../../../../models";
+import { ButtonType, IRota } from "../../../../models";
 import React, { useState } from "react";
-import { DeleteModal, Dropdown } from "../../../Common";
+import { Button, DeleteModal, Dropdown } from "../../../Common";
 import { IRotaService } from "../../../../services";
+import { EditRotaModal } from "../RotaPage";
 
 interface IRotaHeaderProps {
   rota: IRota,
@@ -16,6 +17,9 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
+
+  const [editRotaOpen, setEditRotaOpen] = useState<boolean>(false);
+  const toggleEditRotaOpen = () => setEditRotaOpen(!editRotaOpen);
 
   const navigate = useNavigate();
 
@@ -39,14 +43,15 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
         <span> / {editing ? 'Editing' : 'Viewing'}</span>
       </div>
       <div className="flex space-x-4 items-center">
-        <Dropdown options={[ 
-          editing 
-          ? { label: 'View', action: () => setEditing(false), Icon: EyeIcon }
-          : { label: 'Edit', action: () => setEditing(true), Icon: PencilIcon },
+        <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => setEditing(!editing)} />
+        <Dropdown options={[
+          { label: 'Edit Rota Details', action: () => toggleEditRotaOpen(), Icon: PencilIcon },
+          { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
           { label: 'Delete', action: () => toggleDeletionOpen(), Icon: TrashIcon },
-        ]}/>
+        ]} />
       </div>
-      <DeleteModal modalOpen={deletionOpen} toggleModalOpen={toggleDeletionOpen} deleteFunction={() => deleteRota()} />
+      <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
+      <DeleteModal modalOpen={deletionOpen} toggleModalOpen={toggleDeletionOpen} deleteFunction={() => deleteRota()} description="rota" />
     </div>
   )
 }

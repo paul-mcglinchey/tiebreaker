@@ -17,8 +17,8 @@ const StaffSelector = ({ employees, employeeIds, setEmployeeIds }: IStaffSelecto
 
   return (
     <div className="flex flex-1 flex-col space-y-2 bg-gray-900 p-4 rounded">
-      {employees.map((e: IEmployee) => (
-        <div className="flex flex-grow justify-between pb-4 border-b border-gray-600 last:border-0 last:pb-0">
+      {employees.map((e: IEmployee, index: number) => (
+        <div key={index} className="flex flex-grow justify-between pb-4 border-b border-gray-600 last:border-0 last:pb-0">
           <div className="flex flex-col space-y-1">
             <div className="uppercase tracking-wider font-semibold text-lg">
               {e.name.firstName} {e.name.lastName}

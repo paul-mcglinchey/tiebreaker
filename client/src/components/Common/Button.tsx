@@ -7,7 +7,10 @@ export interface IButtonProps {
   content?: string,
   buttonType?: ButtonType,
   type?: "button" | "submit" | "reset",
-  action?: () => void
+  action?: () => void,
+  hideText?: boolean,
+  Icon?: any,
+  iconSide?: "left" | "right"
 }
 
 const getButtonClasses = (buttonType: ButtonType): string => {
@@ -19,13 +22,22 @@ const getButtonClasses = (buttonType: ButtonType): string => {
     case ButtonType.Tertiary:
       return "border-0 text-blue-500 bg-transparent hover:text-blue-600 focus:text-blue-600"
     case ButtonType.Cancel:
-      return "border-red-500 text-red-500 bg-transparent hover:text-red-600 hover:border-red-600"
+      return "border border-transparent text-red-500 bg-transparent hover:text-red-700 hover:border-red-700"
     default:
       return "text-gray-300 border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
   }
 }
 
-const Button = ({ status = [], content = 'Submit', type = "submit", buttonType = ButtonType.Submission, action = () => {} }: IButtonProps) => {
+const Button = ({
+  status = [],
+  content = 'Submit',
+  type = "submit",
+  buttonType = ButtonType.Submission,
+  action = () => { },
+  hideText,
+  Icon,
+  iconSide = "right"
+}: IButtonProps) => {
   return (
     <button className={
       combineClassNames(
@@ -33,13 +45,21 @@ const Button = ({ status = [], content = 'Submit', type = "submit", buttonType =
         "px-3 py-1 transition-all font-bold rounded flex space-x-2 items-center tracking-wider"
       )}
       onClick={action}
-      type={type}>
+      type={type}
+    >
       {status && status[status.length - 1]?.isLoading && (
         <SpinnerIcon className="w-5 h-5 text-white" />
       )}
-      <div>
-        {content}
-      </div>
+      {Icon && (
+        <div className={`self-center ${iconSide === "left" ? "order-first mr-2" : "order-last ml-2"}`}>
+          <Icon className="w-5 h-5" />
+        </div>
+      )}
+      {!hideText && (
+        <div>
+          {content}
+        </div>
+      )}
     </button>
   )
 }

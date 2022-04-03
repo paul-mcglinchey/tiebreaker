@@ -53,7 +53,10 @@ export class RotaService implements IRotaService {
     let today = new Date(Date.UTC(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate()))
     today.setDate(today.getDate() + (weekModifier * 7));
 
-    let first = today.getDate() - today.getDay() + 1;
+    // Using custom index here to ensure that the current week is not calculated off of Sunday being the first day
+    let mondayAsFirstDayIndex = [6, 0, 1, 2, 3, 4, 5];
+
+    let first = today.getDate() - (mondayAsFirstDayIndex[today.getDay()] || 0);
     let last = first + 6;
 
     var firstDay = new Date(new Date(today.setDate(first)).toISOString());

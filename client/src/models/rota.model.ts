@@ -9,6 +9,7 @@ export interface IRota {
   accessControl?: {
     [key: string]: string[],
   },
+  closingHour?: number,
   startDay?: DayOfWeek,
   schedules?: ISchedule[],
   employeeIds?: string[],

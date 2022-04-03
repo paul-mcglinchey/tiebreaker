@@ -1,4 +1,5 @@
 import { FieldArray } from "formik";
+import { Fragment } from "react";
 import { IEmployeeSchedule, ISchedule, IScheduleShift } from "../../../../models";
 import EmployeeCell from "./EmployeeCell";
 
@@ -65,7 +66,7 @@ const EmployeeRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editin
         render={() => (
           <>
             {dayCycle.map((day: number, index: number) => (
-              <>
+              <Fragment key={index}>
                 <td key={index} className="px-1 py-4 text-sm whitespace-nowrap text-gray-400">
                   <EmployeeCell employeeIndex={employeeIndex} index={index} employeeSchedule={employeeSchedule} values={values} day={day} editing={editing} />
                 </td>
@@ -74,7 +75,7 @@ const EmployeeRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editin
                     {getHours(values.employeeSchedules[employeeIndex]?.shifts[index]?.startHour || "", values.employeeSchedules[employeeIndex]?.shifts[index]?.endHour || "")}
                   </div>
                 </td>
-              </>
+              </Fragment>
             ))}
           </>
         )}

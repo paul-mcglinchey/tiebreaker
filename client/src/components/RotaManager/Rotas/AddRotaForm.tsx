@@ -2,14 +2,14 @@ import { Formik, Form } from 'formik';
 import { useContext, useState } from 'react';
 import { useFetch } from '../../../hooks';
 
-import { ButtonType, DayOfWeek, IEmployee, IEmployeeResponse, IFetch } from '../../../models';
+import { ButtonType, DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
 import { requestBuilder, RotaService, StatusService } from '../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
 import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../Common';
 import { AddEmployeeModal } from '../Employees';
 import { StaffSelector } from './Forms';
 
-const AddRotaForm = () => {
+const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
 
   const { status, setStatus } = useContext(StatusContext);
   const { rotaGroup } = useContext(ApplicationContext);
@@ -42,7 +42,7 @@ const AddRotaForm = () => {
         fetchOutput={useFetch(endpoints.employees(rotaGroup._id), requestBuilder())}
         render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
           <Formik
-            initialValues={{
+            initialValues={ rota || {
               name: '',
               description: '',
               startDay: startDay.value,
@@ -68,14 +68,12 @@ const AddRotaForm = () => {
                   {response ? (
                     <FormSection title="Employees" state={employeeIds.length === response.count} setState={() => toggleAllEmployees(response.count, response.employees.map((e: IEmployee) => e._id || ""))}>
                       <div className="flex flex-col space-y-4 flex-grow rounded">
+                        {response.count > 0 && (
+                          <StaffSelector employees={response.employees} employeeIds={employeeIds} setEmployeeIds={setEmployeeIds} />
+                        )}
                         <div className='flex justify-end'>
                           <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
                         </div>
-                        {response.count > 0 ? (
-                          <StaffSelector employees={response.employees} employeeIds={employeeIds} setEmployeeIds={setEmployeeIds} />
-                        ) : (
-                          <div></div>
-                        )}
                       </div>
                     </FormSection>
                   ) : (

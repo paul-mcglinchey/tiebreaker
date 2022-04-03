@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { Fragment } from "react";
 import { useFetch } from "../../../../hooks";
 import { ButtonType, DayOfWeek, IEmployeeSchedule, IFetch, IRota, IScheduleResponse } from "../../../../models";
 import { IRotaService, requestBuilder } from "../../../../services";
@@ -43,8 +44,8 @@ const ScheduleTable = ({ rota, currentWeek, currentWeekModifier, rotaService, ed
                           <th className="px-6">
                             <Button buttonType={ButtonType.Secondary} content='Save' type="submit" />
                           </th>
-                          {dayCycle.map((day: number) => (
-                            <>
+                          {dayCycle.map((day: number, index: number) => (
+                            <Fragment key={index}>
                               <th
                                 scope="col"
                                 className="py-3 px-6 text-xs font-medium tracking-wider text-gray-400 uppercase"
@@ -60,7 +61,7 @@ const ScheduleTable = ({ rota, currentWeek, currentWeekModifier, rotaService, ed
                                 </div>
                               </th>
                               <th></th>
-                            </>
+                            </Fragment>
                           ))}
                           <th
                             scope="col"
@@ -72,7 +73,7 @@ const ScheduleTable = ({ rota, currentWeek, currentWeekModifier, rotaService, ed
                       </thead>
                       <tbody className="divide-y divide-gray-700">
                         {values.employeeSchedules.map((employeeSchedule: IEmployeeSchedule, index: number) => (
-                          <EmployeeRow employeeIndex={index} employeeSchedule={employeeSchedule} values={values} dayCycle={dayCycle} editing={editing} />
+                          <EmployeeRow key={index} employeeIndex={index} employeeSchedule={employeeSchedule} values={values} dayCycle={dayCycle} editing={editing} />
                         ))}
                       </tbody>
                     </table>
