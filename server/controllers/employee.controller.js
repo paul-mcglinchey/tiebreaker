@@ -74,20 +74,20 @@ exports.addEmployee = async (req, res) => {
     accessControl: {
       viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
     },
-    role: role,
-    reportsTo: reportsTo,
+    role: role || '',
+    reportsTo: reportsTo || '',
     name: {
       firstName: name.firstName,
       lastName: name.lastName,
-      middleNames: name.middleNames
+      middleNames: name.middleNames || []
     },
     address: {
-      firstLine: address.addressLineOne,
-      secondLine: address.addressLineTwo,
-      thirdLine: address.addressLineThree,
-      city: address.city,
-      country: address.country,
-      postCode: address.postCode
+      firstLine: address?.addressLineOne,
+      secondLine: address?.addressLineTwo,
+      thirdLine: address?.addressLineThree,
+      city: address?.city,
+      country: address?.country,
+      postCode: address?.postCode
     },
     birthdate: birthdate,
     contactInfo: {
@@ -99,8 +99,8 @@ exports.addEmployee = async (req, res) => {
     startDate: startDate,
     minHours: minHours,
     maxHours: maxHours,
-    unavailableDays: unavailableDays || [],
-    holidays: holidays || [],
+    unavailableDays: unavailableDays,
+    holidays: holidays,
     createdBy: req.auth.userUuid,
     updatedBy: req.auth.userUuid,
     employeeColour: employeeColour

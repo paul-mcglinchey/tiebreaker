@@ -15,16 +15,12 @@ exports.getScheduleByDate = (req, res) => {
       const scheduleIds = rota.schedules;
 
       Schedule.findOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) })
-        .then(async schedule => {
+        .then(schedule => {
           if (!schedule) {
-            // Automatically create a new schedule for this date if it doesn't exist
-            const employees = await Employee.find({ _id: { $in: rota.employeeIds } })
-              .then(employees => employees)
-              .catch(err => res.status(500).send({ message: err || 'A problem occurred while creating a new schedule.' }))
-
-            const employeeSchedules = employees.map(e => {
+            // Automatically create a new schedule for this week if it doesn't exist
+            const employeeSchedules = rota.employeeIds.map(e => {
               return {
-                employee: e,
+                employeeId: e,
                 shifts: []
               }
             });
@@ -48,7 +44,18 @@ exports.getScheduleByDate = (req, res) => {
                 }, {
                   $push: { schedules: new ObjectId(schedule._id) }
                 })
-                  .then(() => res.status(200).send({ schedule }))
+                  .then(() => {
+                    Employee.find({ _id: { $in: schedule.employeeSchedules.map(es => es.employeeId) } })
+                      .then(employees => {
+                        let employeeSchedules = schedule.employeeSchedules.map(es => {
+                          es.employee = employees.filter(e => String(e._id) === String(es.employeeId))[0];
+                          return es;
+                        });
+
+                        schedule.employeeSchedules = employeeSchedules;
+                        return res.status(200).send({ schedule });
+                      });
+                  })
                   .catch(err => {
                     return res.status(500).send({
                       message:
@@ -63,7 +70,16 @@ exports.getScheduleByDate = (req, res) => {
                 });
               });
           } else {
-            return res.status(200).send({ schedule });
+            Employee.find({ _id: { $in: schedule.employeeSchedules.map(es => es.employeeId) } })
+              .then(employees => {
+                employeeSchedules = schedule.employeeSchedules.map(es => {
+                  es.employee = employees.filter(e => String(e._id) === String(es.employeeId))[0];
+                  return es;
+                });
+
+                schedule.employeeSchedules = employeeSchedules;
+                return res.status(200).send({ schedule });
+              });
           }
         })
         .catch(err => {
@@ -84,15 +100,15 @@ exports.updateSchedule = (req, res) => {
   const { rotaId, startDate } = req.params;
 
   Rota.findOne({ _id: rotaId, 'accessControl.editors': req.auth.userUuid })
-  .then(rota => {
+    .then(rota => {
 
       const scheduleIds = rota.schedules;
       Schedule.updateOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) }, req.body)
         .then(update => {
-          return res.status(200).send({ message: `Matched ${update.matchedCount} schedules, updated ${update.modifiedCount} schedules for rota with ID ${rotaId}.`})
+          return res.status(200).send({ message: `Matched ${update.matchedCount} schedules, updated ${update.modifiedCount} schedules for rota with ID ${rotaId}.` })
         })
         .catch(err => {
-          return res.status(500).send({ 
+          return res.status(500).send({
             message: err.message || `A problem occurred updating schedule for rota with ID ${rotaId}.`
           })
         })

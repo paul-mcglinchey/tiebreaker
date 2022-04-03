@@ -16,19 +16,19 @@ const StaffSelector = ({ employees, employeeIds, setEmployeeIds }: IStaffSelecto
   }
 
   return (
-    <div className="flex flex-1 flex-col space-y-2">
+    <div className="flex flex-1 flex-col space-y-2 bg-gray-900 p-4 rounded">
       {employees.map((e: IEmployee) => (
-        <div className="flex flex-grow justify-between py-2 px-2 bg-gray-900 rounded-lg">
-          <div className="">
-            <div>
+        <div className="flex flex-grow justify-between pb-4 border-b border-gray-600 last:border-0 last:pb-0">
+          <div className="flex flex-col space-y-1">
+            <div className="uppercase tracking-wider font-semibold text-lg">
               {e.name.firstName} {e.name.lastName}
             </div>
-            <div>
+            <div className="text-sm text-gray-600">
               {e.contactInfo.primaryEmail}
             </div>
           </div>
           <div>
-            <CustomCheckbox state={employeeIds.includes(e._id)} setState={() => toggleInclusion(e._id)} />
+            <CustomCheckbox state={employeeIds.includes(e._id || "")} setState={() => toggleInclusion(e._id || "")} />
           </div>
         </div>
       ))}

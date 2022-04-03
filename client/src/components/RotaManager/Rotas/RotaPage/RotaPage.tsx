@@ -27,7 +27,7 @@ const RotaPage = () => {
           {response && response.rota && (
             <div className="flex flex-col">
               <RotaHeader rota={response.rota} rotaService={rotaService} editing={editing} setEditing={setEditing} />
-              <Schedule rota={response.rota} rotaService={rotaService} />
+              <Schedule rota={response.rota} rotaService={rotaService} editing={editing} />
             </div>
           )}
         </Fragment>

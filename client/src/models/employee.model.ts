@@ -1,37 +1,37 @@
 import { DayOfWeek, EmployeeRole } from "./types";
 
 export interface IEmployee {
-  _id: string,
-  role: EmployeeRole,
-  reportsTo: String,
+  _id?: string,
+  role?: EmployeeRole,
+  reportsTo?: string,
   name: {
-    firstName: String,
-    lastName: String,
-    middleNames: String[]
+    firstName: string,
+    lastName: string,
+    middleNames?: string
   },
-  address: {
-    firstLine: String,
-    secondLine: String,
-    thirdLine: String,
-    city: String,
-    country: String,
-    postCode: String
-  } | undefined,
+  address?: {
+    firstLine?: string,
+    secondLine?: string,
+    thirdLine?: string,
+    city?: string,
+    country?: string,
+    postCode?: string
+  },
   contactInfo: {
-    primaryPhoneNumber: String,
-    primaryEmail: String,
-    emails: String[],
-    phoneNumbers: String[]
+    primaryPhoneNumber?: string,
+    primaryEmail: string,
+    emails?: string[],
+    phoneNumbers?: string[]
   },
-  birthdate: Date | undefined,
-  startDate: Date | undefined,
-  minHours: Date | undefined,
-  maxHours: Date | undefined,
-  unavailableDays: DayOfWeek[],
-  holidays: {
-    startDate: Date,
-    endDate: Date,
-    isPaid: boolean
+  birthdate?: string,
+  startDate?: string,
+  minHours?: string,
+  maxHours?: string,
+  unavailableDays?: DayOfWeek[],
+  holidays?: {
+    startDate?: string,
+    endDate?: string,
+    isPaid?: boolean
   }[],
-  employeeColour: string
+  employeeColour?: string
 }

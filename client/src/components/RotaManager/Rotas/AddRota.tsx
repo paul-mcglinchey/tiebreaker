@@ -12,7 +12,7 @@ const AddRota = () => {
     rotaGroup ? (
       <>
         <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>Add Rota</Toolbar>
-        <div className="flex justify-center lg:space-x-4">
+        <div className="flex justify-center">
           <AddRotaForm />
         </div>
       </>

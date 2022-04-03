@@ -15,7 +15,6 @@ export * from './update-group.model';
 export * from './tag-model';
 export * from './session.model';
 export * from './employee.model';
-export * from './add-employee.model';
 export * from './fetch.model';
 export * from './rota.model';
 export * from './schedule.model';

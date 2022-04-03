@@ -7,10 +7,11 @@ import { SquareIconButton } from "../../../Common";
 
 interface IScheduleProps {
   rota: IRota, 
-  rotaService: IRotaService
+  rotaService: IRotaService,
+  editing: boolean
 }
 
-const Schedule = ({ rota, rotaService }: IScheduleProps) => {
+const Schedule = ({ rota, rotaService, editing }: IScheduleProps) => {
 
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
   const currentWeek = rotaService.getWeek(currentWeekModifier);
@@ -46,6 +47,7 @@ const Schedule = ({ rota, rotaService }: IScheduleProps) => {
           currentWeek={currentWeek}
           currentWeekModifier={currentWeekModifier}
           rotaService={rotaService}
+          editing={editing}
         />
       </div>
     </div>

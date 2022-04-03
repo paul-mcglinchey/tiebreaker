@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
-import { EmployeeRole, IAddEmployee, IEmployee, IEmployeeResponse, IFetch, Status } from "../../../models";
-import { generateColour, requestBuilder } from "../../../services";
+import { EmployeeRole, IEmployee, IEmployeeResponse, IFetch } from "../../../models";
+import { EmployeeService, requestBuilder, StatusService } from "../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button } from "../../Common";
 import { useFetch } from "../../../hooks";
 import { Fetch } from "../../Common/Fetch";
@@ -31,7 +31,7 @@ const AddEmployeeForm = () => {
   const getEmployeeOptions = (employees: IEmployee[]): { value: string, label: any }[] => {
     return employees.map((e: IEmployee) => {
       return {
-        value: e._id,
+        value: e._id || "",
         label: (
           <div className="flex justify-between items-center">
             <div>{`${e.name.firstName} ${e.name.lastName}`}</div>
@@ -42,29 +42,7 @@ const AddEmployeeForm = () => {
     });
   }
 
-  const handleSubmit = async (values: IAddEmployee) => {
-    setStatus([...status, {
-      isLoading: true,
-      message: '',
-      type: Status.None
-    }])
-
-    // generates a new random colour to be used for profile display
-    values.employeeColour = generateColour();
-
-    await fetch(endpoints.employees(rotaGroup._id), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          setStatus([...status, { isLoading: false, message: `Added employee successfully`, type: Status.Success }]);
-        } else {
-          setStatus([...status, { isLoading: false, message: `A problem occurred adding the employee`, type: Status.Error }]);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setStatus([...status, { isLoading: false, message: `A problem occurred adding the employee`, type: Status.None }]);
-      })
-  }
+  const employeeService = new EmployeeService(new StatusService(status, setStatus));
 
   return (
     <Fetch
@@ -94,14 +72,14 @@ const AddEmployeeForm = () => {
             },
             birthdate: '',
             startDate: '',
-            minHours: undefined,
-            maxHours: undefined,
+            minHours: '',
+            maxHours: '',
             unavailableDays: [],
             employeeColour: ''
           }}
           validationSchema={employeeValidationSchema}
           onSubmit={(values) => {
-            handleSubmit(values);
+            employeeService.addEmployee(values, rotaGroup._id);
           }}
         >
           {({ errors, touched }) => (
