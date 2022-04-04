@@ -41,7 +41,7 @@ const AddSessionForm = ({ client }: { client: IClient }) => {
       values.tags!.push(t.value);
     })
 
-    await fetch((endpoints.sessions(client._id)), requestBuilder('PUT', undefined, values))
+    await fetch((endpoints.sessions(client._id || "")), requestBuilder('PUT', undefined, values))
       .then(res => {
         if (res.ok) {
           setStatus([...status, { isLoading: false, message: `Added session messagefully`, type: Status.Success }]);

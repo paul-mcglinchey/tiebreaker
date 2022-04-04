@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../utilities";
-import { EmployeeRole, IEmployee, IEmployeeResponse, IFetch } from "../../../models";
-import { EmployeeService, requestBuilder, StatusService } from "../../../services";
-import { CustomDate, FormSection, Selector, StyledField, Button } from "../../Common";
-import { useFetch } from "../../../hooks";
-import { Fetch } from "../../Common/Fetch";
+import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../../utilities";
+import { EmployeeRole, IEmployee, IEmployeeResponse, IFetch } from "../../../../models";
+import { EmployeeService, requestBuilder, StatusService } from "../../../../services";
+import { CustomDate, FormSection, Selector, StyledField, Button } from "../../../Common";
+import { useFetch } from "../../../../hooks";
+import { Fetch } from "../../../Common/Fetch";
 
-const AddEmployeeForm = () => {
+const FullEmployeeForm = () => {
 
   const { status, setStatus } = useContext(StatusContext);
   const { rotaGroup } = useContext(ApplicationContext);
@@ -46,7 +46,7 @@ const AddEmployeeForm = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id), requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ""), requestBuilder("GET"))}
       render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
@@ -79,7 +79,7 @@ const AddEmployeeForm = () => {
           }}
           validationSchema={employeeValidationSchema}
           onSubmit={(values) => {
-            employeeService.addEmployee(values, rotaGroup._id);
+            employeeService.addEmployee(values, rotaGroup._id || "");
           }}
         >
           {({ errors, touched }) => (
@@ -164,4 +164,4 @@ const AddEmployeeForm = () => {
   )
 }
 
-export default AddEmployeeForm;
+export default FullEmployeeForm;

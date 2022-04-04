@@ -63,6 +63,7 @@ module.exports = app => {
   // Delete a rota
   router.delete(
     '/:rotaId',
+    middleware.groupMiddleware.checkQueryHasGroupId,
     middleware.rotaMiddleware.checkRotaIdExists,
     middleware.rotaMiddleware.checkUserAccessToRota('owners'),
     rotas.deleteRota

@@ -9,7 +9,7 @@ const Dashboard = () => {
     const distinctEmployees: string[] = [];
 
     rotaGroups.forEach((rotaGroup: IRotaGroup) => {
-      rotaGroup.employees.forEach((employeeId: string) => {
+      rotaGroup.employees?.forEach((employeeId: string) => {
         if (!distinctEmployees.includes(employeeId)) distinctEmployees.push(employeeId);
       });
     });
@@ -21,7 +21,7 @@ const Dashboard = () => {
     const distinctRotas: string[] = [];
 
     rotaGroups.forEach((rotaGroup: IRotaGroup) => {
-      rotaGroup.rotas.forEach((rotaId: string) => {
+      rotaGroup.rotas?.forEach((rotaId: string) => {
         if (!distinctRotas.includes(rotaId)) distinctRotas.push(rotaId);
       });
     });
@@ -33,7 +33,7 @@ const Dashboard = () => {
     let totalClients: number = 0;
 
     clientGroups.forEach((clientGroup: IClientGroup) => {
-      totalClients += clientGroup.clients.length;
+      totalClients += clientGroup.clients?.length || 0;
     })
 
     return totalClients;

@@ -1,5 +1,4 @@
-import { AddClientForm } from ".";
-import { Toolbar } from "../../..";
+import { ClientForm, Toolbar } from "../../..";
 import { ToolbarType } from "../../../../models";
 
 
@@ -9,7 +8,7 @@ const AddClient = () => {
       <Toolbar toolbarTypes={[ToolbarType.ClientGroups]}>
         Add new clients
       </Toolbar>
-      <AddClientForm />
+      <ClientForm />
     </div>
   )
 }

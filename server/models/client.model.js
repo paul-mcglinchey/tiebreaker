@@ -10,15 +10,26 @@ const {
 const Client = mongoose.model(
   "Client",
   new Schema({
-    clientName: NameSchema,
+    accessControl: {
+      viewers: [ String ],
+      editors: [ String ],
+      owners: [ String ],
+    },
+    name: NameSchema,
     address: AddressSchema,
-    birthdate: { type: Date, required: true },
+    birthdate: Date,
     contactInfo: ContactInfoSchema,
     sessions: [SessionSchema],
     clientColour: String,
     activityLog: [ActivityLogSchema],
-    createdBy: String,
-    updatedBy: String
+    createdBy: {
+      userUuid: String,
+      username: String,
+    },
+    updatedBy: {
+      userUuid: String,
+      username: String
+    },
   }, { timestamps: true })
 );
 

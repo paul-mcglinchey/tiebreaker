@@ -23,7 +23,7 @@ const ClientPage = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients}/${clientId}`, requestBuilder(), [])}
+      fetchOutput={useFetch(endpoints.client(clientId || ""), requestBuilder(), [])}
       render={({ response }: IFetch<IClientResponse>) => (
         <Fragment>
           {response && response.client && (

@@ -27,6 +27,9 @@ exports.getScheduleByDate = (req, res) => {
 
             // Create a new schedule
             const schedule = new Schedule({
+              accessControl: {
+                viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
+              },
               startDate: new Date(startDate),
               employeeSchedules: employeeSchedules,
               createdBy: req.auth.userUuid,

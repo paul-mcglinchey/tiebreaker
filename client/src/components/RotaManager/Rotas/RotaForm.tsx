@@ -11,10 +11,11 @@ import { StaffSelector } from './Forms';
 
 interface IRotaFormProps {
   rota?: IRota | undefined,
-  handleSubmit: (values: IRota) => void
+  handleSubmit: (values: IRota) => void,
+  canAddEmployees?: boolean
 }
 
-const RotaForm = ({ rota, handleSubmit }: IRotaFormProps) => {
+const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProps) => {
 
   const { rotaGroup } = useContext(ApplicationContext);
 
@@ -42,10 +43,10 @@ const RotaForm = ({ rota, handleSubmit }: IRotaFormProps) => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.employees(rotaGroup._id), requestBuilder())}
+        fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder())}
         render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
           <Formik
-            initialValues={ rota || {
+            initialValues={rota || {
               name: '',
               description: '',
               startDay: startDay.value,
@@ -75,9 +76,11 @@ const RotaForm = ({ rota, handleSubmit }: IRotaFormProps) => {
                         {response.count > 0 && (
                           <StaffSelector employees={response.employees} employeeIds={employeeIds} setEmployeeIds={setEmployeeIds} />
                         )}
-                        <div className='flex justify-end'>
-                          <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
-                        </div>
+                        {canAddEmployees && (
+                          <div className='flex justify-end'>
+                            <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
+                          </div>
+                        )}
                       </div>
                     </FormSection>
                   ) : (
@@ -96,7 +99,7 @@ const RotaForm = ({ rota, handleSubmit }: IRotaFormProps) => {
           </Formik>
         )}
       />
-      <AddEmployeeModal modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen} groupId={rotaGroup._id} />
+      <AddEmployeeModal modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen} groupId={rotaGroup._id || ""} />
     </>
   )
 }

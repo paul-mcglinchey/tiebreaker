@@ -12,13 +12,14 @@ module.exports = app => {
   );
 
   // Get a client by id
-  router.get('/:clientId', clients.getClientById);
-
-  // CUD Operations - Requests should have a body
-  router.use(middleware.validationMiddleware.checkRequestHasBody);
+  router.get(
+    '/:clientId',
+    middleware.clientMiddleware.checkClientIdExists, 
+    clients.getClientById
+  );
 
   // Create a new client
-  router.post('/', middleware.groupMiddleware.checkBodyHasGroupId, clients.create);
+  router.post('/', middleware.validationMiddleware.checkRequestHasBody, clients.create);
 
   // Update a client
   router.put('/:clientId', clients.updateClient);
@@ -30,7 +31,11 @@ module.exports = app => {
   router.put('/:clientId/sessions', clients.addSession);
 
   // Delete a client by id
-  router.delete('/', clients.delete);
+  router.delete(
+    '/:clientId',
+    middleware.groupMiddleware.checkQueryHasGroupId,
+    clients.deleteClient
+  );
 
   app.use('/api/clients', router);
 }

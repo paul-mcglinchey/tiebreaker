@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { IGroup } from "../../models";
-import { IGroupService } from "../../services";
+import { generateColour, IGroupService } from "../../services";
 import { groupValidationSchema } from "../../utilities";
 import { StyledField, Button, ColourPicker, Modal } from "../Common";
 
@@ -14,19 +14,19 @@ interface IEditGroupProps<TGroup> {
 
 const EditGroup = <TGroup extends IGroup>({ editGroupOpen, toggleEditGroupOpen, groupService, g }: IEditGroupProps<TGroup>) => {
 
-  const [groupColour, setGroupColour] = useState<string>(g.colour);
+  const [groupColour, setGroupColour] = useState<string>(g.colour || generateColour());
 
   return (
     <Modal title="Edit group" modalOpen={editGroupOpen} toggleModalOpen={toggleEditGroupOpen}>
       <Formik
-        initialValues={{
-          'name': g.name,
-          'description': g.description,
+        initialValues={g || {
+          'name': '',
+          'description': '',
           'colour': groupColour
         }}
         validationSchema={groupValidationSchema}
         onSubmit={(values) => {
-          groupService.updateGroup({ ...values, colour: groupColour }, g._id);
+          groupService.updateGroup({ ...values, colour: groupColour }, g._id || "");
         }}
       >
         {({ errors, touched }) => (

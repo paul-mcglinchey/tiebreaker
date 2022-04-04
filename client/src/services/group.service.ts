@@ -1,4 +1,4 @@
-import { IAddGroup, IGroup, IUpdateGroup, Status } from "../models";
+import { IGroup, Status } from "../models";
 import { IGroupsEndpoint } from "../models/groups-endpoint.model";
 import { IGroupService, IStatusService, IUserService } from "./interfaces";
 import { requestBuilder } from "./request.service";
@@ -20,7 +20,7 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
     this.refresh = refresh;
   }
 
-  addGroup = (values: IAddGroup) => {
+  addGroup = (values: IGroup) => {
     this.statusService.setLoading(true);
 
     fetch(this.endpoint.groups, requestBuilder('POST', undefined, values))
@@ -38,7 +38,7 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
-  updateGroup = (values: IUpdateGroup, _id: string) => {
+  updateGroup = (values: IGroup, _id: string) => {
     this.statusService.setLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Group ID must be set before updating`, Status.Error);

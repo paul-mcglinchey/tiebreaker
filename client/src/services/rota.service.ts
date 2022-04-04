@@ -19,7 +19,7 @@ export class RotaService implements IRotaService {
       return this.statusService.appendStatus(false, 'Group must be set', Status.Error);
     }
 
-    fetch(endpoints.rotas(rotaGroup._id), requestBuilder('POST', undefined, values))
+    fetch(endpoints.rotas(rotaGroup._id || ""), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, 'Successfully added rota', Status.Success);
@@ -51,7 +51,7 @@ export class RotaService implements IRotaService {
   deleteRota = (r: IRota) => {
     this.statusService.setLoading(true);
 
-    fetch(endpoints.rota(r._id), requestBuilder("DELETE"))
+    fetch(endpoints.rota(r._id || ""), requestBuilder("DELETE"))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, `Successfully deleted ${r.name}`, Status.Success);
@@ -84,7 +84,7 @@ export class RotaService implements IRotaService {
   updateSchedule = (r: IRota, s: ISchedule) => {
     this.statusService.setLoading(true);
 
-    fetch(endpoints.schedules.put(r._id || "", new Date(s.startDate).toISOString().split('T')[0] || ""), requestBuilder("PUT", undefined, s))
+    fetch(endpoints.schedule(r._id || "", new Date(s.startDate || "").toISOString().split('T')[0] || ""), requestBuilder("PUT", undefined, s))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, `Successfully updated ${r.name}`, Status.Success);

@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { AddEmployeeForm } from ".";
 import { ToolbarType } from "../../../models";
 import { ApplicationContext } from "../../../utilities";
 import { Toolbar } from "../../Common";
 import { GroupPrompter } from "../../Groups";
+import { FullEmployeeForm } from "./Forms";
 
 const AddEmployee = () => {
 
@@ -16,7 +16,7 @@ const AddEmployee = () => {
           <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>
             Add new employees
           </Toolbar>
-          <AddEmployeeForm />
+          <FullEmployeeForm />
         </>
       ) : (
         <GroupPrompter href="/rotas/creategroup" />

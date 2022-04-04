@@ -163,9 +163,19 @@ exports.updateRota = (req, res) => {
 
 exports.deleteRota = (req, res) => {
   const { rotaId } = req.params;
+  const { groupId } = req.query;
 
   Rota.findByIdAndDelete(rotaId)
-    .then(() => res.status(200).send({ message: `Successfully deleted rota with ID ${rotaId}.`}))
+    .then(() => {
+      // Remove the rota from the group it belongs to
+      RotaGroup.findByIdAndUpdate(groupId, { $pull: { rotas: rotaId }})
+        .then(() => res.status(200).send({ message: `Successfully deleted rota with ID ${rotaId}.` }))
+        .catch(err => {
+          return res.status(500).send({
+            message: err || `A problem occurred while removing the rota from it's group. The rota was likely deleted successfully however.`
+          })
+        })
+    })
     .catch(err => {
       return res.status(500).send({ message: err || `An error occurred while deleting rota with ID ${rotaId}.`})
     })

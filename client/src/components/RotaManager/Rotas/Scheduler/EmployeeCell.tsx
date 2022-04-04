@@ -13,11 +13,11 @@ interface IEmployeeCellProps {
 
 const EmployeeCell = ({ values, day, employeeIndex, index, editing }: IEmployeeCellProps) => {
 
-  const currentDate = new Date(values.startDate);
-  currentDate.setDate(new Date(values.startDate).getDate() + day);
+  const currentDate = new Date(values.startDate || "");
+  currentDate.setDate(new Date(values.startDate || "").getDate() + day);
   //const currentISODate = currentDate.toISOString();
 
-  let cellValues = values.employeeSchedules[employeeIndex]?.shifts[index];
+  let cellValues = values?.employeeSchedules[employeeIndex]?.shifts[index];
 
   useEffect(() => {
     if (cellValues) {

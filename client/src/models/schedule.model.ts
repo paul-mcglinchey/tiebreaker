@@ -12,7 +12,12 @@ export interface IEmployeeSchedule {
 }
 
 export interface ISchedule {
-  startDate: Date,
+  accessControl?: {
+    viewers: string[],
+    editors: string[],
+    owners: string[],
+  },
+  startDate?: Date,
   employeeSchedules: IEmployeeSchedule[]
 }
 

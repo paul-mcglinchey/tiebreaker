@@ -1,36 +1,17 @@
 import { useContext } from "react"
-import { IClient, Status } from "../../../../models"
-import { generateColour, requestBuilder } from "../../../../services";
-import { endpoints, StatusContext } from "../../../../utilities";
+import { IClient } from "../../../../models"
+import { ClientService, generateColour, StatusService } from "../../../../services";
+import { StatusContext } from "../../../../utilities";
 import { ColourPicker } from "../../../Common"
 
 const ClientColourPicker = ({ client }: { client: IClient }) => {
 
   const profileColour = client.clientColour || generateColour();
   const { status, setStatus } = useContext(StatusContext);
-
-  const updateProfileColour = async (clientColour: string) => {
-    setStatus([...status, {
-      isLoading: true,
-      message: '',
-      type: Status.None
-    }]);
-
-    await fetch((endpoints.clientcolours(client && client._id)), requestBuilder('PUT', undefined, { clientColour: clientColour }))
-      .then(res => {
-        if (res.ok) {
-          setStatus([...status, { isLoading: false, message: `Updated client colour`, type: Status.Success }]);
-        } else {
-          setStatus([...status, { isLoading: false, message: `A problem occurred updating the client colour`, type: Status.Error }]);
-        }
-      })
-      .catch((err) => {
-        setStatus([...status, { isLoading: false, message: err.message || `A problem occurred updating the client colour`, type: Status.Error }]);
-      })
-  }
+  const clientService = new ClientService(new StatusService(status, setStatus));
 
   return (
-    <ColourPicker square={true} colour={profileColour} setColour={updateProfileColour} />
+    <ColourPicker square={true} colour={profileColour} setColour={(colour: string) => clientService.updateClient({ ...client, clientColour: colour }, client._id || "")} />
   )
 }
 

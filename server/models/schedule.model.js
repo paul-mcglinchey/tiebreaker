@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const { EmployeeSchema } = require('./employee.model');
 
 const ScheduleSchema = new Schema({
+  accessControl: {
+    viewers: [ String ],
+    editors: [ String ],
+    owners: [ String ],
+  },
   startDate: { type: Date, required: true },
   employeeSchedules: [{
     employeeId: {

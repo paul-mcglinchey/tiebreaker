@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
-  middleNames: { type: [String], required: false },
+  middleNames: { type: String, required: false },
   lastName: { type: String, trim: true, required: true }
 });
 

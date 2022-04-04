@@ -2,9 +2,9 @@ import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
 import InlineLink from '../Common/InlineLink';
 import { Fragment } from 'react';
-import { IClient, IUserResponse, userfrontapi } from '../../../../models';
+import { IClient, IUserResponse } from '../../../../models';
 import { Fetch } from '../../..';
-import { useUserFetch } from '../../../../hooks';
+import { useFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
 import { IFetch } from '../../../../models/fetch.model';
@@ -17,18 +17,18 @@ const ClientRow = ({ client }: { client: IClient }) => {
           <RowItem>
             <div className="flex items-center">
               <div className="">
-                <div className="text-sm font-medium text-white">{client.clientName.firstName} {client.clientName.lastName}</div>
-                <div className="text-sm">{client.contactInfo.primaryEmail}</div>
+                <div className="text-sm font-medium text-white">{client.fullName || "--"}</div>
+                <div className="text-sm">{client?.contactInfo?.primaryEmail || "--"}</div>
               </div>
             </div>
           </RowItem>
           <RowItem>
             <div className="flex items-center space-x-4 min-w-40">
               <span>
-                {new Date(client.updatedAt).toLocaleDateString()}
+                {new Date(client.updatedAt || "").toLocaleDateString()}
               </span>
                 <Fetch
-                  fetchOutput={useUserFetch(endpoints.user(client.updatedBy || ""), requestBuilder("GET", userfrontapi()), client.updatedBy || "")}
+                  fetchOutput={useFetch(endpoints.user(client.updatedBy || ""), requestBuilder("GET"))}
                   render={({ response }: IFetch<IUserResponse>) => (
                     <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}
@@ -39,10 +39,10 @@ const ClientRow = ({ client }: { client: IClient }) => {
           </RowItem>
           <RowItem>
             <div className="flex flex-grow items-center justify-start">
-              {client.sessions.length > 0 ? (
+              {client?.sessions?.length || 0 > 0 ? (
                 <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
                   <span className="self-center pt-0.5">Sessions</span>
-                  <span className="text-lg">{client.sessions.length}</span>
+                  <span className="text-lg">{client?.sessions?.length}</span>
                 </InlineLink>
               ) : (
                 <InlineLink to={`/clients/${client._id}/addsession`} color="text-green-500">

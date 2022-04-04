@@ -35,9 +35,9 @@ const ClientGroupDashboard = () => {
                     render={isCardFlipped => (
                       <div className="flex space-x-4">
                         {isCardFlipped ? (
-                          <DataPoint value={numberParser(g.clients.length)} label="clients" />
+                          <DataPoint value={numberParser(g.clients?.length || 0)} label="client" />
                           ) : (
-                          <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl))} label="users" />
+                          <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl || {}))} label="user" />
                         )}
                       </div>
                     )}

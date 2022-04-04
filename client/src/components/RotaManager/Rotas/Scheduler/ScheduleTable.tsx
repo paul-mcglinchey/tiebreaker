@@ -22,7 +22,7 @@ const ScheduleTable = ({ rota, currentWeek, currentWeekModifier, rotaService, ed
   return (
     <Fetch
       fetchOutput={useFetch(
-        endpoints.schedules.get(rota._id || "", currentWeek.firstDay.toISOString().split('T')[0] || ""),
+        endpoints.schedule(rota._id || "", currentWeek.firstDay.toISOString().split('T')[0] || ""),
         requestBuilder("GET"), [currentWeekModifier]
       )}
       render={({ response, isLoading }: IFetch<IScheduleResponse>) => (

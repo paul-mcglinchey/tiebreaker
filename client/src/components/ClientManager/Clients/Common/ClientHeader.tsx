@@ -1,12 +1,29 @@
-import { ArrowLeftIcon } from "@heroicons/react/solid";
-import { Link, useLocation } from "react-router-dom";
-import { ClientColourPicker } from ".";
+import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/solid";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SquareIconButton } from "../../..";
 import { IClient } from "../../../../models";
+import { ClientService, StatusService } from "../../../../services";
+import { ApplicationContext, StatusContext } from "../../../../utilities";
+import { DeleteDialog, Dropdown } from "../../../Common";
 
 const ClientHeader = ({ client }: { client: IClient }) => {
 
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const [deleteClientOpen, setDeleteClientOpen] = useState(false);
+  const toggleDeleteClientOpen = () => setDeleteClientOpen(!deleteClientOpen);
+  
+  const { status, setStatus } = useContext(StatusContext);
+  const clientService = new ClientService(new StatusService(status, setStatus));
+
+  const { clientGroup } = useContext(ApplicationContext);
+
+  const deleteClient = () => {
+    clientService.deleteClient(client._id || "", clientGroup._id || "");
+    navigate('/clients/dashboard', { replace: true });
+  }
 
   const getRouteName = () => {
     switch (pathname.split('/').pop()) {
@@ -32,15 +49,18 @@ const ClientHeader = ({ client }: { client: IClient }) => {
         </Link>
         <span> / </span>
         <span className="text-green-500">
-          {client && client.clientName && (
+          {client && client.name && (
             <span>{client.fullName}</span>
           )}
         </span>
         <span>{getRouteName()}</span>
       </div>
       <div>
-        <ClientColourPicker client={client} />
+        <Dropdown options={[
+          { label: 'Delete', action: () => toggleDeleteClientOpen(), Icon: TrashIcon },
+        ]} />
       </div>
+      <DeleteDialog dialogOpen={deleteClientOpen} toggleDialogOpen={toggleDeleteClientOpen} itemType="client" deleteAction={() => deleteClient()} />
     </div>
   )
 }

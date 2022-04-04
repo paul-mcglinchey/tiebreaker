@@ -1,9 +1,11 @@
 const ObjectId = require('mongoose').Types.ObjectId;
+const { client } = require('../models');
 const db = require('../models');
 const ClientGroup = db.clientgroup;
 const Client = db.client;
 const Session = db.session;
 const ActivityLog = db.activitylog;
+const userService = require('../services/user.service');
 
 // Read operations
 
@@ -32,7 +34,7 @@ exports.getClients = async (req, res) => {
             message: err.message || `A problem occurred fetching the number of clients for group with ID ${groupId}.`
           })
         });
-      
+
       // create the aggregate object (functions like an IQueryable)
       const aggregate = Client.aggregate();
 
@@ -40,11 +42,11 @@ exports.getClients = async (req, res) => {
       // add a new fullName field to filter on
       await aggregate
         .match(clientQuery)
-        .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
-      
+        .addFields({ fullName: { $concat: ['$clientName.firstName', ' ', '$clientName.lastName'] } });
+
       // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
       if (clientName) {
-          await aggregate.match({ fullName: { $regex: clientName, $options: 'i' } });
+        await aggregate.match({ fullName: { $regex: clientName, $options: 'i' } });
       }
 
       // finally build the other query parameters and return the aggregate as the clients queryable
@@ -52,17 +54,33 @@ exports.getClients = async (req, res) => {
         .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
         .skip(((pageNumber || 1) - 1) * pageSize)
         .limit(pageSize)
-        .then(clients => clients)
+        .exec()
         .catch(err => {
           return res.status(500).send({
             message: err.message || `A problem occurred fetching the list of clients for group with ID ${groupId}.`
           })
         });
 
-      return res.status(200).send({
-        count: clientCount,
-        clients: clients
-      });
+      let clientsWithUsers = clients.map(c => {
+        return userService.getUser(res, c.createdBy.userUuid)
+          .then(user => {
+            return {
+              ...c,
+              createdBy: {
+                ...c.createdBy,
+                username: user.username
+              }
+            }
+          });
+      })
+
+      Promise.all(clientsWithUsers).then(clients => {
+        return res.status(200).send({
+          count: clientCount,
+          clients: clients
+        });
+      })
+
     })
     .catch(err => {
       return res.status(500).send({
@@ -84,7 +102,7 @@ exports.getClientById = async (req, res) => {
   // apply a match operator and add a fullname field
   await aggregate
     .match({ _id: clientId })
-    .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
+    .addFields({ fullName: { $concat: ['$clientName.firstName', ' ', '$clientName.lastName'] } });
 
   const client = await aggregate
     .then(client => client[0])
@@ -100,35 +118,41 @@ exports.getClientById = async (req, res) => {
 // CUD Operations
 // Create and save a new client
 exports.create = (req, res) => {
+
+  const { groupId } = req.query;
+
   const {
-    firstName, lastName, middleNames,
-    addressLineOne, addressLineTwo, addressLineThree, city, country, postCode,
-    birthdate,
-    email, phoneNumber, emails, phoneNumbers,
-    clientColour
+    name,
+    address,
+    contactInfo,
+    clientColour,
+    birthdate
   } = req.body;
 
   // Create a new client
   const client = new Client({
-    clientName: {
-      firstName: firstName,
-      lastName: lastName,
-      middleNames: middleNames.split(" ")
+    accessControl: {
+      viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
+    },
+    name: {
+      firstName: name.firstName,
+      lastName: name.lastName,
+      middleNames: name.middleNames.split(" ")
     },
     address: {
-      firstLine: addressLineOne,
-      secondLine: addressLineTwo,
-      thirdLine: addressLineThree,
-      city: city,
-      country: country,
-      postCode: postCode
+      firstLine: address.firstLine,
+      secondLine: address.secondLine,
+      thirdLine: address.thirdLine,
+      city: address.city,
+      country: address.country,
+      postCode: address.postCode
     },
     birthdate: birthdate,
     contactInfo: {
-      primaryEmail: email,
-      primaryPhoneNumber: phoneNumber,
-      emails: emails,
-      phoneNumbers: phoneNumbers
+      primaryEmail: contactInfo.primaryEmail,
+      primaryPhoneNumber: contactInfo.primaryPhoneNumber,
+      emails: contactInfo.emails,
+      phoneNumbers: contactInfo.phoneNumbers
     },
     sessions: [],
     clientColour: clientColour,
@@ -136,8 +160,12 @@ exports.create = (req, res) => {
       task: "created",
       actor: req.auth.userUuid
     },
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+    createdBy: {
+      userUuid: req.auth.userUuid
+    },
+    updatedBy: {
+      userUuid: req.auth.userUuid
+    }
   });
 
   // Save client in the database
@@ -145,11 +173,11 @@ exports.create = (req, res) => {
     .save(client)
     .then(data => {
       // Add the client to the group which was selected
-      ClientGroup.updateOne({ 
-        _id: req.body.groupId,
-        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }] 
-      }, { 
-        $push: { clients: new ObjectId(data._id) } 
+      ClientGroup.updateOne({
+        _id: groupId,
+        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+      }, {
+        $push: { clients: new ObjectId(data._id) }
       })
         .then(() => {
           return res.status(200).send({
@@ -226,13 +254,15 @@ exports.addSession = (req, res) => {
     .then(client => {
 
       // update the metadata on the client
-      Client.findByIdAndUpdate(client._id, { 
-          updatedBy: req.auth.userUuid,
-          $push: { activityLog: {
+      Client.findByIdAndUpdate(client._id, {
+        updatedBy: req.auth.userUuid,
+        $push: {
+          activityLog: {
             task: "added session",
             actor: req.auth.userUuid
-          }}
-        })
+          }
+        }
+      })
         .catch(err => {
           if (err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
@@ -242,7 +272,7 @@ exports.addSession = (req, res) => {
           return res.status(500).send({
             message: err || `Could not update client with id ${clientId}`
           });
-      });
+        });
 
       res.status(200).send({ updatedClient: client })
     })
@@ -259,40 +289,22 @@ exports.addSession = (req, res) => {
 }
 
 // Deletes a client by ID
-exports.delete = (req, res) => {
-  // Update the group clients array to remove this client
-  ClientGroup.findOneAndUpdate({ 
-    groupName: req.body.groupName,
-    $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
-  }, { 
-    $pull: { clients: req.body.clientId } 
-  })
-    .catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: 'Client not found with id ' + req.query.clientId
-        });
-      };
-      return res.status(500).send({
-        message: 'Could not delete client with id ' + req.query.clientId
-      });
-    });
+exports.deleteClient = (req, res) => {
+  const { clientId } = req.params;
+  const { groupId } = req.query;
 
   // Delete the client from the clients db
-  Client.findOneAndDelete({ _id: req.body.clientId })
+  Client.findByIdAndDelete(clientId)
     .then(() => {
-      return res.status(200).send({
-        success: `Successfully deleted client ${req.body.clientId}`
-      })
+      ClientGroup.findByIdAndUpdate(groupId, { $pull: { clients: clientId } })
+        .then(() => res.status(200).send({ message: `Successfully deleted client with ID ${clientId}.` }))
+        .catch(err => {
+          return res.status(500).send({
+            message: err || `A problem occurred while removing the client from their group. The client was likely deleted successfully however.`
+          })
+        })
     })
     .catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: 'Client not found with id ' + req.query.clientId
-        });
-      };
-      return res.status(500).send({
-        message: 'Could not delete client with id ' + req.query.clientId
-      });
-    });
+      return res.status(500).send({ message: err || `An error occurred while deleting client with ID ${clientId}.` })
+    })
 }

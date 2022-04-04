@@ -7,7 +7,9 @@ export interface IRota {
   name?: string,
   description?: string,
   accessControl?: {
-    [key: string]: string[],
+    viewers: string[],
+    editors: string[],
+    owners: string[],
   },
   closingHour?: number,
   startDay?: DayOfWeek,
