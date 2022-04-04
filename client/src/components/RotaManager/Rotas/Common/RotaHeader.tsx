@@ -1,8 +1,8 @@
-import { EyeIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
+import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { Link, useNavigate } from "react-router-dom";
 import { ButtonType, IRota } from "../../../../models";
 import React, { useState } from "react";
-import { Button, DeleteModal, Dropdown } from "../../../Common";
+import { Button, DeleteDialog, Dropdown } from "../../../Common";
 import { IRotaService } from "../../../../services";
 import { EditRotaModal } from "../RotaPage";
 
@@ -28,6 +28,10 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
     navigate('/rotas/dashboard', { replace: true });
   }
 
+  const updateLockedStatus = () => {
+    rotaService.updateRota({ locked: !rota.locked }, rota);
+  }
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center space-x-3 text-white text-2xl font-semibold tracking-wider">
@@ -43,7 +47,10 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
         <span> / {editing ? 'Editing' : 'Viewing'}</span>
       </div>
       <div className="flex space-x-4 items-center">
-        <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => setEditing(!editing)} />
+        <Button buttonType={ButtonType.Secondary} content={rota.locked ? 'Locked' : 'Open'} Icon={rota.locked ? LockClosedIcon : LockOpenIcon} action={() => updateLockedStatus()} />
+        {!rota.locked && (
+          <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => setEditing(!editing)} />
+        )}
         <Dropdown options={[
           { label: 'Edit Rota Details', action: () => toggleEditRotaOpen(), Icon: PencilIcon },
           { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
@@ -51,7 +58,7 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
         ]} />
       </div>
       <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
-      <DeleteModal modalOpen={deletionOpen} toggleModalOpen={toggleDeletionOpen} deleteFunction={() => deleteRota()} description="rota" />
+      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => deleteRota()} />
     </div>
   )
 }

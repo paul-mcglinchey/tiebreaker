@@ -1,6 +1,9 @@
-import { ButtonType, IRota } from "../../../../models";
-import { Button, Modal } from "../../../Common";
-import AddRotaForm from "../AddRotaForm";
+import { useContext } from "react";
+import { IRota } from "../../../../models";
+import { RotaService, StatusService } from "../../../../services";
+import { StatusContext } from "../../../../utilities";
+import { Modal } from "../../../Common";
+import RotaForm from "../RotaForm";
 
 interface IEditRotaProps {
   modalOpen: boolean,
@@ -9,10 +12,13 @@ interface IEditRotaProps {
 }
 
 const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => {
+
+  const { status, setStatus } = useContext(StatusContext);
+  const rotaService = new RotaService(new StatusService(status, setStatus));
+
   return (
-    <Modal modalOpen={modalOpen}>
-      <AddRotaForm rota={rota} />
-      <Button buttonType={ButtonType.Cancel} action={() => toggleModalOpen()}/>
+    <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
+      <RotaForm rota={rota} handleSubmit={(values: IRota) => rotaService.updateRota(values, rota)}/>
     </Modal>
   ) 
 }

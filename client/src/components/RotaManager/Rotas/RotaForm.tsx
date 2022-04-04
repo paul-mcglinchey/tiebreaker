@@ -3,19 +3,22 @@ import { useContext, useState } from 'react';
 import { useFetch } from '../../../hooks';
 
 import { ButtonType, DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
-import { requestBuilder, RotaService, StatusService } from '../../../services';
-import { ApplicationContext, endpoints, rotaValidationSchema, StatusContext } from '../../../utilities';
+import { requestBuilder } from '../../../services';
+import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../utilities';
 import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../Common';
 import { AddEmployeeModal } from '../Employees';
 import { StaffSelector } from './Forms';
 
-const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
+interface IRotaFormProps {
+  rota?: IRota | undefined,
+  handleSubmit: (values: IRota) => void
+}
 
-  const { status, setStatus } = useContext(StatusContext);
+const RotaForm = ({ rota, handleSubmit }: IRotaFormProps) => {
+
   const { rotaGroup } = useContext(ApplicationContext);
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
-  const rotaService = new RotaService(new StatusService(status, setStatus));
 
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(false);
   const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
@@ -29,7 +32,7 @@ const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
     })
   }
 
-  const [employeeIds, setEmployeeIds] = useState<string[]>([]);
+  const [employeeIds, setEmployeeIds] = useState<string[]>(rota?.employeeIds || []);
   const toggleAllEmployees = (count: number, ids: string[]) => {
     employeeIds.length === count
       ? setEmployeeIds([])
@@ -51,7 +54,8 @@ const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
             }}
             validationSchema={rotaValidationSchema}
             onSubmit={(values) => {
-              rotaService.addRota({ ...values, employeeIds: employeeIds }, rotaGroup);
+              console.log(values);
+              handleSubmit({ ...values, employeeIds: employeeIds });
             }}
           >
             {({ errors, touched }) => (
@@ -85,7 +89,7 @@ const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
                   )}
                 </div>
                 <div className="flex justify-end">
-                  <Button status={status} content='Add rota' />
+                  <Button content='Add rota' />
                 </div>
               </Form>
             )}
@@ -97,4 +101,4 @@ const AddRotaForm = ({ rota }: { rota?: IRota | undefined }) => {
   )
 }
 
-export default AddRotaForm;
+export default RotaForm;

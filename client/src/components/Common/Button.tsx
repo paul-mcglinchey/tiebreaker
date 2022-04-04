@@ -20,11 +20,11 @@ const getButtonClasses = (buttonType: ButtonType): string => {
     case ButtonType.Secondary:
       return "text-blue-500 bg-transparent border-blue-500 hover:text-gray-300 hover:bg-blue-500 focus:text-gray-300 focus:bg-blue-500"
     case ButtonType.Tertiary:
-      return "border-0 text-blue-500 bg-transparent hover:text-blue-600 focus:text-blue-600"
+      return "border border-transparent text-blue-500 bg-transparent hover:border-blue-600"
     case ButtonType.Cancel:
-      return "border border-transparent text-red-500 bg-transparent hover:text-red-700 hover:border-red-700"
+      return "border border-transparent text-red-500 bg-transparent hover:border-red-700"
     default:
-      return "text-gray-300 border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
+      return "border text-gray-300 border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
   }
 }
 

@@ -1,26 +1,23 @@
 import { Form, Formik } from "formik";
 import { useState } from "react";
-import { ButtonType, IGroup } from "../../models";
+import { IGroup } from "../../models";
 import { IGroupService } from "../../services";
 import { groupValidationSchema } from "../../utilities";
-import { StyledField, Button, ColourPicker } from "../Common";
+import { StyledField, Button, ColourPicker, Modal } from "../Common";
 
 interface IEditGroupProps<TGroup> {
+  editGroupOpen: boolean,
   toggleEditGroupOpen: () => void,
   groupService: IGroupService<TGroup>,
   g: IGroup
 }
 
-const EditGroup = <TGroup extends IGroup>({ toggleEditGroupOpen, groupService, g }: IEditGroupProps<TGroup>) => {
+const EditGroup = <TGroup extends IGroup>({ editGroupOpen, toggleEditGroupOpen, groupService, g }: IEditGroupProps<TGroup>) => {
 
   const [groupColour, setGroupColour] = useState<string>(g.colour);
 
   return (
-    <div className="relative bg-gray-900 px-8 py-5 rounded w-3/4 top-32 left-1/2 transform -translate-x-1/2">
-      <div className="flex justify-between items-center border-b-2 border-gray-400/20 pb-2 mb-4">
-        <h1 className="text-2xl font-bold text-white">Edit group</h1>
-        <Button buttonType={ButtonType.Cancel} content='Cancel' action={toggleEditGroupOpen} />
-      </div>
+    <Modal title="Edit group" modalOpen={editGroupOpen} toggleModalOpen={toggleEditGroupOpen}>
       <Formik
         initialValues={{
           'name': g.name,
@@ -51,7 +48,7 @@ const EditGroup = <TGroup extends IGroup>({ toggleEditGroupOpen, groupService, g
           </Form>
         )}
       </Formik>
-    </div>
+    </Modal>
   )
 }
 

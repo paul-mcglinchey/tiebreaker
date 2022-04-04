@@ -5,9 +5,9 @@ import { requestBuilder } from "./request.service";
 
 export class RotaService implements IRotaService {
   statusService: IStatusService;
-  refresh: () => void = () => {};
+  refresh: () => void = () => { };
 
-  constructor(statusService: IStatusService, refresh: () => void = () => {}) {
+  constructor(statusService: IStatusService, refresh: () => void = () => { }) {
     this.statusService = statusService;
     this.refresh = refresh;
   }
@@ -29,6 +29,22 @@ export class RotaService implements IRotaService {
       })
       .catch(() => {
         this.statusService.appendStatus(false, 'A problem ocurred adding rota', Status.Error);
+      })
+  }
+
+  updateRota = (values: IRota, rota: IRota | undefined) => {
+    this.statusService.setLoading();
+
+    fetch(endpoints.rota(rota?._id || ""), requestBuilder('PUT', undefined, values))
+      .then(res => {
+        if (res.ok) {
+          this.statusService.appendStatus(false, 'Successfully updated rota', Status.Success);
+        } else {
+          this.statusService.appendStatus(false, 'A problem occurred updating rota', Status.Error);
+        }
+      })
+      .catch(() => {
+        this.statusService.appendStatus(false, 'A problem ocurred updating rota', Status.Error);
       })
   }
 

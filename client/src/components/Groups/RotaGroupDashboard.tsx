@@ -32,15 +32,15 @@ const RotaGroupDashboard = () => {
                     groupService={groupService}
                     key={g._id}
                     render={isCardFlipped => (
-                      <div className="flex space-x-4">
+                      <div className="flex space-x-8">
                         {isCardFlipped ? (
                           <>
-                            <DataPoint value={numberParser(g.employees.length)} label="employees" />
-                            <DataPoint value={numberParser(g.rotas.length)} label="rotas" />
+                            <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl))} label="users" />
                           </>
                         ) : (
                           <>
-                            <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl))} label="users" />
+                            <DataPoint value={numberParser(g.employees.length)} label="employees" />
+                            <DataPoint value={numberParser(g.rotas.length)} label="rotas" />
                           </>
                         )}
                       </div>

@@ -1,19 +1,22 @@
 import { useContext } from 'react';
-import { AddRotaForm } from '.';
 import { GroupPrompter, Toolbar } from '../..';
-import { ToolbarType } from '../../../models';
-import { ApplicationContext } from '../../../utilities';
+import { IRota, ToolbarType } from '../../../models';
+import { RotaService, StatusService } from '../../../services';
+import { ApplicationContext, StatusContext } from '../../../utilities';
+import RotaForm from './RotaForm';
 
 const AddRota = () => {
 
   const { rotaGroup } = useContext(ApplicationContext);
+  const { status, setStatus } = useContext(StatusContext);
+  const rotaService = new RotaService(new StatusService(status, setStatus));
 
   return (
     rotaGroup ? (
       <>
         <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>Add Rota</Toolbar>
         <div className="flex justify-center">
-          <AddRotaForm />
+          <RotaForm handleSubmit={(values: IRota) => rotaService.addRota(values, rotaGroup)} />
         </div>
       </>
     ) : (
