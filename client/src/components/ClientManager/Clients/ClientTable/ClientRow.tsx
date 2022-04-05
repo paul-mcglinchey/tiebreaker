@@ -39,7 +39,7 @@ const ClientRow = ({ client }: { client: IClient }) => {
           </RowItem>
           <RowItem>
             <div className="flex flex-grow items-center justify-start">
-              {client?.sessions?.length || 0 > 0 ? (
+              {(client?.sessions?.length || 0) > 0 ? (
                 <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
                   <span className="self-center pt-0.5">Sessions</span>
                   <span className="text-lg">{client?.sessions?.length}</span>

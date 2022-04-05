@@ -22,14 +22,8 @@ const Client = mongoose.model(
     sessions: [SessionSchema],
     clientColour: String,
     activityLog: [ActivityLogSchema],
-    createdBy: {
-      userUuid: String,
-      username: String,
-    },
-    updatedBy: {
-      userUuid: String,
-      username: String
-    },
+    createdBy: String,
+    updatedBy: String
   }, { timestamps: true })
 );
 

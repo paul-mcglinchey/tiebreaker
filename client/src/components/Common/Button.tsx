@@ -42,7 +42,7 @@ const Button = ({
     <button className={
       combineClassNames(
         getButtonClasses(buttonType),
-        "px-3 py-1 transition-all font-bold rounded flex space-x-2 items-center tracking-wider"
+        "px-3 py-1 transition-all font-bold rounded flex space-x-2 items-center justify-center tracking-wider"
       )}
       onClick={action}
       type={type}

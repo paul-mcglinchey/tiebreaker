@@ -30,4 +30,4 @@ export * from './types';
 export * from './contexts';
 export * from './base';
 
-export { userfront, userfrontapi } from './request-header.model';
+export { userfront } from './request-header.model';

@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
-import { IFetch, IRota, IUserResponse, userfrontapi } from '../../../../models';
-import { useUserFetch } from '../../../../hooks';
+import { IFetch, IRota, IUserResponse } from '../../../../models';
+import { useFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
 import RowItem from './RowItem';
@@ -23,7 +23,7 @@ const RotaListRow = ({ rota }: { rota: IRota }) => {
         <RowItem>
           <div className="flex items-center space-x-4 min-w-40">
             <Fetch
-              fetchOutput={useUserFetch(endpoints.user(rota.createdBy || ""), requestBuilder("GET", userfrontapi()), rota.createdBy || "")}
+              fetchOutput={useFetch(endpoints.user(rota.createdBy || ""), requestBuilder("GET"))}
               render={({ response }: IFetch<IUserResponse>) => (
                 <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                   {response && response.username}

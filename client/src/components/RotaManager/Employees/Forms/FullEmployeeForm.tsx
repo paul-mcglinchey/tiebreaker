@@ -4,7 +4,7 @@ import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeeResponse, IFetch } from "../../../../models";
 import { EmployeeService, requestBuilder, StatusService } from "../../../../services";
-import { CustomDate, FormSection, Selector, StyledField, Button } from "../../../Common";
+import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
 import { useFetch } from "../../../../hooks";
 import { Fetch } from "../../../Common/Fetch";
 
@@ -46,7 +46,7 @@ const FullEmployeeForm = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ""), requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder("GET"))}
       render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
@@ -119,20 +119,7 @@ const FullEmployeeForm = () => {
                     leaveTo="transform opacity-0 scale-y-0"
                     className="origin-top flex flex-col space-y-2"
                   >
-                    <div className="flex flex-col space-y-2">
-                      <StyledField name="addressLineOne" label="Address Line 1" errors={errors.address?.firstLine} touched={touched.address?.firstLine} />
-                      <StyledField name="addressLineTwo" label="Address Line 2" errors={errors.address?.secondLine} touched={touched.address?.secondLine} />
-                      <StyledField name="addressLineThree" label="Address Line 3" errors={errors.address?.thirdLine} touched={touched.address?.thirdLine} />
-                    </div>
-                    <div className="flex flex-1 md:flex-row flex-col md:space-x-4 space-x-0 space-y-2 md:space-y-0">
-                      <div className="basis-1/3">
-                        <StyledField autoComplete="false" name="city" label="City" errors={errors.address?.city} touched={touched.address?.city} />
-                      </div>
-                      <div className="basis-1/3">
-                        <StyledField name="country" label="Country" errors={errors.address?.country} touched={touched.address?.country} />
-                      </div>
-                      <StyledField name="postCode" label="Post Code" errors={errors.address?.postCode} touched={touched.address?.postCode} />
-                    </div>
+                    <AddressForm errors={errors} touched={touched} />
                   </Transition>
                 </FormSection>
                 <FormSection title="Scheduling requirements" state={requirementsActive} setState={setRequirementsActive}>

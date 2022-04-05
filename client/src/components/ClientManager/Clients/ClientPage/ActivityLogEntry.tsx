@@ -1,9 +1,8 @@
 import { CalendarIcon, CheckCircleIcon } from "@heroicons/react/outline";
 import { Fragment, useState } from "react";
 import { Fetch } from "../../..";
-import { useInterval, useUserFetch } from "../../../../hooks";
+import { useFetch, useInterval } from "../../../../hooks";
 import { IActivityLog } from "../../../../models";
-import { userfrontapi } from "../../../../models/request-header.model";
 import { parseTimeDifference, requestBuilder } from "../../../../services";
 import { endpoints } from "../../../../utilities";
 
@@ -20,7 +19,7 @@ const ActivityLogEntry = ({ al }: { al: IActivityLog }) => {
       <div className="flex py-2 space-x-2 items-center">
         <CheckCircleIcon className="w-5 text-green-500"/>
         <Fetch
-          fetchOutput={useUserFetch(endpoints.user(al.actor), requestBuilder("GET", userfrontapi()), al.actor)}
+          fetchOutput={useFetch(endpoints.user(al.actor), requestBuilder("GET"))}
           render={({ response }: any) => (
             <Fragment>
               <span className="px-2 py-1 text-sm tracking-wide bg-blue-500/10 rounded-lg">

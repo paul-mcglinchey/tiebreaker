@@ -16,7 +16,7 @@ const AddRota = () => {
       <>
         <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>Add Rota</Toolbar>
         <div className="flex justify-center">
-          <RotaForm handleSubmit={(values: IRota) => rotaService.addRota(values, rotaGroup)} />
+          <RotaForm handleSubmit={(values: IRota) => rotaService.addRota(values, rotaGroup)} canAddEmployees />
         </div>
       </>
     ) : (

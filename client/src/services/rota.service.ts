@@ -48,19 +48,21 @@ export class RotaService implements IRotaService {
       })
   }
 
-  deleteRota = (r: IRota) => {
+  deleteRota = (r: IRota, groupId: string | undefined) => {
     this.statusService.setLoading(true);
 
-    fetch(endpoints.rota(r._id || ""), requestBuilder("DELETE"))
+    if (!groupId || !r._id) return this.statusService.appendStatus(false, `A problem occurred deleting the rota.`, Status.Error);
+
+    fetch(endpoints.rota(r._id, groupId), requestBuilder("DELETE"))
       .then(res => {
         if (res.ok) {
-          this.statusService.appendStatus(false, `Successfully deleted ${r.name}`, Status.Success);
+          this.statusService.appendStatus(false, `Successfully deleted rota`, Status.Success);
         } else {
-          this.statusService.appendStatus(false, `A problem ocurred deleting ${r.name}`, Status.Error);
+          this.statusService.appendStatus(false, `A problem ocurred deleting the rota`, Status.Error);
         }
       })
       .catch(() => {
-        this.statusService.appendStatus(false, `A problem occurred deleting ${r.name}`, Status.Error);
+        this.statusService.appendStatus(false, `A problem occurred deleting the rota`, Status.Error);
       })
   }
 
@@ -83,17 +85,20 @@ export class RotaService implements IRotaService {
 
   updateSchedule = (r: IRota, s: ISchedule) => {
     this.statusService.setLoading(true);
+    
+    let startDate = new Date(s.startDate || "").toISOString().split('T')[0];
+    if (!r._id || !startDate) return this.statusService.appendStatus(false, 'Something went wrong...', Status.Error);
 
-    fetch(endpoints.schedule(r._id || "", new Date(s.startDate || "").toISOString().split('T')[0] || ""), requestBuilder("PUT", undefined, s))
+    fetch(endpoints.schedule(r._id, startDate), requestBuilder("PUT", undefined, s))
       .then(res => {
         if (res.ok) {
-          this.statusService.appendStatus(false, `Successfully updated ${r.name}`, Status.Success);
+          this.statusService.appendStatus(false, `Successfully updated schedule`, Status.Success);
         } else {
-          this.statusService.appendStatus(false, `A problem ocurred updating ${r.name}`, Status.Error);
+          this.statusService.appendStatus(false, `A problem ocurred updating the schedule`, Status.Error);
         }
       })
       .catch(() => {
-        this.statusService.appendStatus(false, `A problem occurred updating ${r.name}`, Status.Error);
+        this.statusService.appendStatus(false, `A problem occurred updating the schedule`, Status.Error);
       })
   }
 }

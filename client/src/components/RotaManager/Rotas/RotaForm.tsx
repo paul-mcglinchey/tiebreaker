@@ -33,33 +33,27 @@ const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProp
     })
   }
 
-  const [employeeIds, setEmployeeIds] = useState<string[]>(rota?.employeeIds || []);
-  const toggleAllEmployees = (count: number, ids: string[]) => {
-    employeeIds.length === count
-      ? setEmployeeIds([])
-      : setEmployeeIds(ids)
-  }
-
   return (
     <>
       <Fetch
         fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder())}
         render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
           <Formik
-            initialValues={rota || {
-              name: '',
-              description: '',
-              startDay: startDay.value,
-              closingHour: 22,
-              employeeIds: [],
+            initialValues={{
+              name: rota?.name || '',
+              description: rota?.description || '',
+              startDay: rota?.startDay || startDay.value,
+              closingHour: rota?.closingHour || 22,
+              employeeIds: rota?.employeeIds || [],
+              checked: false
             }}
             validationSchema={rotaValidationSchema}
             onSubmit={(values) => {
               console.log(values);
-              handleSubmit({ ...values, employeeIds: employeeIds });
+              handleSubmit({ ...values });
             }}
           >
-            {({ errors, touched }) => (
+            {({ values, errors, touched, setFieldValue }) => (
               <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
                 <div className="flex flex-col space-y-4">
                   <div className="flex space-x-4">
@@ -71,10 +65,15 @@ const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProp
                 </div>
                 <div className="flex flex-col space-y-4">
                   {response ? (
-                    <FormSection title="Employees" state={employeeIds.length === response.count} setState={() => toggleAllEmployees(response.count, response.employees.map((e: IEmployee) => e._id || ""))}>
+                    <FormSection title="Employees" state={values.employeeIds.length > 0} setState={() => setFieldValue("employeeIds", values.employeeIds?.length > 0 ? [] : response.employees.map((e: IEmployee) => e._id) )}>
                       <div className="flex flex-col space-y-4 flex-grow rounded">
-                        {response.count > 0 && (
-                          <StaffSelector employees={response.employees} employeeIds={employeeIds} setEmployeeIds={setEmployeeIds} />
+                        {response && response.count > 0 && (
+                          <StaffSelector 
+                            name="employeeIds" 
+                            items={response.employees} 
+                            formValues={values.employeeIds || []}
+                            setFieldValue={setFieldValue}
+                          />
                         )}
                         {canAddEmployees && (
                           <div className='flex justify-end'>

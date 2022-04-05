@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { IEmployeeSchedule, ISchedule } from "../../../../models"
 import { ScheduleShiftInput } from "./Common";
 
@@ -13,7 +13,7 @@ interface IEmployeeCellProps {
 
 const EmployeeCell = ({ values, day, employeeIndex, index, editing }: IEmployeeCellProps) => {
 
-  const currentDate = new Date(values.startDate || "");
+  const currentDate = useMemo(() => new Date(values.startDate || ""), [values.startDate]);
   currentDate.setDate(new Date(values.startDate || "").getDate() + day);
   //const currentISODate = currentDate.toISOString();
 
@@ -23,7 +23,7 @@ const EmployeeCell = ({ values, day, employeeIndex, index, editing }: IEmployeeC
     if (cellValues) {
       cellValues.date = currentDate;
     }
-  }, [cellValues])
+  }, [cellValues, currentDate])
 
   return (
     <div className="flex justify-center items-center space-x-2">

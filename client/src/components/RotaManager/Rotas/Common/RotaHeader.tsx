@@ -1,10 +1,11 @@
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { Link, useNavigate } from "react-router-dom";
 import { ButtonType, IRota } from "../../../../models";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, DeleteDialog, Dropdown } from "../../../Common";
 import { IRotaService } from "../../../../services";
 import { EditRotaModal } from "../RotaPage";
+import { ApplicationContext } from "../../../../utilities";
 
 interface IRotaHeaderProps {
   rota: IRota,
@@ -15,6 +16,8 @@ interface IRotaHeaderProps {
 
 const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
 
+  const { rotaGroup } = useContext(ApplicationContext);
+
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
 
@@ -24,7 +27,7 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
   const navigate = useNavigate();
 
   const deleteRota = () => {
-    rotaService.deleteRota(rota);
+    rotaService.deleteRota(rota, rotaGroup._id);
     navigate('/rotas/dashboard', { replace: true });
   }
 

@@ -79,7 +79,7 @@ exports.addEmployee = async (req, res) => {
     name: {
       firstName: name.firstName,
       lastName: name.lastName,
-      middleNames: name.middleNames || []
+      middleNames: name.middleNames && name.middleNames.split(" ")
     },
     address: {
       firstLine: address?.addressLineOne,

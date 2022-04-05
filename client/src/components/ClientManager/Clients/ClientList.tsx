@@ -51,7 +51,7 @@ const ClientList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients(clientGroup._id || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, refresh])}
+      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, refresh])}
       render={({ response, error, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {!error ? (

@@ -1,11 +1,9 @@
 const ObjectId = require('mongoose').Types.ObjectId;
-const { client } = require('../models');
 const db = require('../models');
 const ClientGroup = db.clientgroup;
 const Client = db.client;
 const Session = db.session;
 const ActivityLog = db.activitylog;
-const userService = require('../services/user.service');
 
 // Read operations
 
@@ -61,25 +59,10 @@ exports.getClients = async (req, res) => {
           })
         });
 
-      let clientsWithUsers = clients.map(c => {
-        return userService.getUser(res, c.createdBy.userUuid)
-          .then(user => {
-            return {
-              ...c,
-              createdBy: {
-                ...c.createdBy,
-                username: user.username
-              }
-            }
-          });
-      })
-
-      Promise.all(clientsWithUsers).then(clients => {
-        return res.status(200).send({
-          count: clientCount,
-          clients: clients
-        });
-      })
+      return res.status(200).send({
+        count: clientCount,
+        clients: clients
+      });
 
     })
     .catch(err => {
@@ -160,12 +143,8 @@ exports.create = (req, res) => {
       task: "created",
       actor: req.auth.userUuid
     },
-    createdBy: {
-      userUuid: req.auth.userUuid
-    },
-    updatedBy: {
-      userUuid: req.auth.userUuid
-    }
+    createdBy: req.auth.userUuid,
+    updatedBy: req.auth.userUuid
   });
 
   // Save client in the database

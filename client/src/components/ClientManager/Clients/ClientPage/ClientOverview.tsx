@@ -1,7 +1,6 @@
 import { Fetch } from "../../..";
-import { useUserFetch } from "../../../../hooks";
-import { IClient, IUserResponse, userfrontapi } from "../../../../models";
-import { IFetch } from "../../../../models/fetch.model";
+import { useFetch } from "../../../../hooks";
+import { IClient, IFetch, IUserResponse } from "../../../../models";
 import { generateColour, getInitials, requestBuilder } from "../../../../services";
 import { endpoints } from "../../../../utilities";
 import InfoTabs from "./InfoTabs";
@@ -27,7 +26,7 @@ const ClientOverview = ({ client }: { client: IClient }) => {
             <span className="text-gray-400 tracking-wide text-sm">
               Last updated: {new Date(updatedAt || "").toLocaleDateString()}
                 <Fetch
-                  fetchOutput={useUserFetch(endpoints.user(updatedBy || ""), requestBuilder("GET", userfrontapi()), updatedBy || "")}
+                  fetchOutput={useFetch(endpoints.user(updatedBy || ""), requestBuilder("GET"))}
                   render={({ response }: IFetch<IUserResponse>) => (
                     <span> by <span className="font-medium px-2 py-1 bg-gray-800 tracking-wide rounded-lg select-none">
                       {response && response.username}

@@ -3,10 +3,10 @@ const BASE_API_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/
 export const endpoints = {
     "origin": BASE_API_URL,
     "clients": (groupId: string) => BASE_API_URL + `clients?groupId=${groupId}`,
-    "client": (clientId: string, groupId?: string) => BASE_API_URL + `clients/${clientId}${groupId ? '?groupId=' + groupId : ''}`, 
+    "client": (clientId: string, groupId?: string) => BASE_API_URL + `clients/${clientId}${groupId ? ('?groupId=' + groupId) : ''}`, 
     "sessions": (clientId: string) => BASE_API_URL + `clients/${clientId}/sessions`,
     "rotas": (groupId: string) => BASE_API_URL + `rotas?groupId=${groupId}`,
-    "rota": (rotaId: string) => BASE_API_URL + `rotas/${rotaId}`,
+    "rota": (rotaId: string, groupId?: string) => BASE_API_URL + `rotas/${rotaId}${groupId ? ('?groupId=' + groupId) : ''}`,
     "schedule": (rotaId: string, startDate: string) => BASE_API_URL +  `rotas/${rotaId}/schedules/${startDate}`,
     "employees": (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
     "employee": (employeeId: string) => BASE_API_URL + `employees/${employeeId}`,

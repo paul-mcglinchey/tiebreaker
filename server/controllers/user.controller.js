@@ -15,6 +15,7 @@ exports.getUserById = (req, res) => {
   this.getUser(res, userId).then(user => res.status(200).send(user));
 }
 
+// Common functionality
 exports.getUser = (res, userId) => {
 
   return fetch(`https://api.userfront.com/v0/users/${userId}`, {
@@ -24,7 +25,13 @@ exports.getUser = (res, userId) => {
       'Authorization': `Bearer ${ufApiKey}`
     }
   })
-    .then(res => res.json())
+    .then(response => {
+      if (!response.ok) {
+        return res.status(response.status).send({ message: response.statusText });
+      }
+
+      return response;
+    })
     .catch(err => {
       return res.status(500).send({ message: err.message || `Some error occurred while getting the user.` })
     })
