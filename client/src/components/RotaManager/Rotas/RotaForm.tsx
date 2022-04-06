@@ -12,10 +12,10 @@ import { StaffSelector } from './Forms';
 interface IRotaFormProps {
   rota?: IRota | undefined,
   handleSubmit: (values: IRota) => void,
-  canAddEmployees?: boolean
+  submitButton?: JSX.Element;
 }
 
-const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProps) => {
+const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
   const { rotaGroup } = useContext(ApplicationContext);
 
@@ -65,21 +65,19 @@ const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProp
                 </div>
                 <div className="flex flex-col space-y-4">
                   {response ? (
-                    <FormSection title="Employees" state={values.employeeIds.length > 0} setState={() => setFieldValue("employeeIds", values.employeeIds?.length > 0 ? [] : response.employees.map((e: IEmployee) => e._id) )}>
+                    <FormSection title="Employees" state={values.employeeIds.length > 0} setState={() => setFieldValue("employeeIds", values.employeeIds?.length > 0 ? [] : response.employees.map((e: IEmployee) => e._id))}>
                       <div className="flex flex-col space-y-4 flex-grow rounded">
                         {response && response.count > 0 && (
-                          <StaffSelector 
-                            name="employeeIds" 
-                            items={response.employees} 
+                          <StaffSelector
+                            name="employeeIds"
+                            items={response.employees}
                             formValues={values.employeeIds || []}
                             setFieldValue={setFieldValue}
                           />
                         )}
-                        {canAddEmployees && (
-                          <div className='flex justify-end'>
-                            <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
-                          </div>
-                        )}
+                        <div className='flex justify-end'>
+                          <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
+                        </div>
                       </div>
                     </FormSection>
                   ) : (
@@ -91,7 +89,7 @@ const RotaForm = ({ rota, handleSubmit, canAddEmployees = false }: IRotaFormProp
                   )}
                 </div>
                 <div className="flex justify-end">
-                  <Button content='Add rota' />
+                  {submitButton ? submitButton : <Button content='Add rota' />}
                 </div>
               </Form>
             )}

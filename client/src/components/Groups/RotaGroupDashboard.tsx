@@ -1,13 +1,18 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useFetch, useRefresh, useStatus } from "../../hooks";
-import { IFetch, IGroupsResponse, IRotaGroup, ToolbarType } from "../../models";
-import { numberParser, requestBuilder, RotaGroupService } from "../../services";
+import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../models";
+import { requestBuilder, RotaGroupService } from "../../services";
 import { endpoints } from "../../utilities";
-import { Fetch, SpinnerIcon, Toolbar } from "../Common";
+import { Fetch, SpinnerIcon } from "../Common";
+import { GroupToolbar } from "../Toolbar";
+import AddGroupModal from "./AddGroupModal";
 import { DataPoint, GroupCard } from "./GroupCard";
 import GroupPrompter from "./GroupPrompter";
 
 const RotaGroupDashboard = () => {
+
+  const [addGroupOpen, setAddGroupOpen] = useState(false);
+  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
   const { dependency, refresh } = useRefresh();
   const { statusService } = useStatus();
@@ -15,9 +20,9 @@ const RotaGroupDashboard = () => {
 
   return (
     <Fragment>
-      <Toolbar toolbarTypes={[ToolbarType.RotaGroups]} showSelector={false}>Group Management</Toolbar>
+      <GroupToolbar title="Group management" groupType={GroupType.ROTA} />
       <Fetch
-        fetchOutput={useFetch(endpoints.groups("rota").groups, requestBuilder("GET"), [dependency])}
+        fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">
@@ -35,12 +40,12 @@ const RotaGroupDashboard = () => {
                       <div className="flex space-x-8">
                         {isCardFlipped ? (
                           <>
-                            <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl || {}))} label="user" />
+                            <DataPoint value={groupService.getTotalUsers(g.accessControl)} label="user" />
                           </>
                         ) : (
                           <>
-                            <DataPoint value={numberParser(g.employees?.length || 0)} label="employee" />
-                            <DataPoint value={numberParser(g.rotas?.length || 0)} label="rota" />
+                            <DataPoint value={g.employees?.length} label="employee" />
+                            <DataPoint value={g.rotas?.length} label="rota" />
                           </>
                         )}
                       </div>
@@ -49,11 +54,12 @@ const RotaGroupDashboard = () => {
                 ))}
               </div>
             ) : (
-              <GroupPrompter href='/rotas/creategroup' />
+              <GroupPrompter action={toggleAddGroupOpen} />
             )
           )
         )}
       />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} groupService={groupService} />
     </Fragment>
   )
 }

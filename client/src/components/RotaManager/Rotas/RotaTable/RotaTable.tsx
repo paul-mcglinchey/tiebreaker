@@ -1,14 +1,12 @@
 import { Fragment } from "react";
 import { SpinnerIcon } from "../../..";
 import { IRota, ISortable } from "../../../../models";
-import RotaPrompter from "../RotaPrompter";
 import Header from "./Header";
 import InteractiveHeader from "./InteractiveHeader";
 import RotaListRow from "./RotaListRow";
 
 interface IRotaTableProps extends ISortable {
   rotas: IRota[],
-  count: number,
   headers: Array<{
     name: string, value: string, interactive: boolean
   }>,
@@ -17,7 +15,6 @@ interface IRotaTableProps extends ISortable {
 
 const RotaTable = ({
   rotas,
-  count,
   sortField,
   setSortField,
   sortDirection,
@@ -47,15 +44,11 @@ const RotaTable = ({
           </tr>
         </thead>
         <Fragment>
-          {rotas && count > 0 ? (
-            <tbody className="divide-y divide-gray-700">
-              {rotas.map((r) => (
-                <RotaListRow rota={r} key={r._id} />
-              ))}
-            </tbody>
-          ) : (
-            <RotaPrompter />
-          )}
+          <tbody className="divide-y divide-gray-700">
+            {rotas.map((r) => (
+              <RotaListRow rota={r} key={r._id} />
+            ))}
+          </tbody>
         </Fragment>
       </table>
       {isLoading && (

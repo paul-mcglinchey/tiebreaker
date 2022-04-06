@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { TrashIcon, DotsVerticalIcon, PencilIcon } from '@heroicons/react/solid';
 import { SquareIconButton } from '../..';
 import { IGroup } from '../../../models';
-import EditGroup from '../EditGroup';
 import { IGroupService } from '../../../services';
 import { DeleteDialog } from '../../Common';
+import { EditGroupModal } from '..';
 
 interface IGroupProps<TGroup> {
   g: TGroup,
@@ -45,7 +45,7 @@ const GroupCard = <TGroup extends IGroup>({ g, groupService, render }: IGroupPro
           </div>
         </div>
       </div>
-      <EditGroup editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} groupService={groupService} g={g} />
+      <EditGroupModal editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} groupService={groupService} g={g} />
       <DeleteDialog dialogOpen={deleteGroupOpen} toggleDialogOpen={toggleDeleteGroupOpen} itemType="group" deleteAction={() => groupService.deleteGroup(g)} />
     </>
   )

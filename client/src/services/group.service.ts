@@ -38,7 +38,7 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
-  updateGroup = (values: IGroup, _id: string) => {
+  updateGroup = (values: IGroup, _id: string | undefined) => {
     this.statusService.setLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Group ID must be set before updating`, Status.Error);
@@ -75,8 +75,10 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       })
   }
 
-  getTotalUsers = (accessControl: { [key: string]: string[] }): number => {
+  getTotalUsers = (accessControl?: { [key: string]: string[] }): number => {
     const distinctUsers: string[] = [];
+
+    if (!accessControl) return 0;
 
     Object.keys(accessControl).forEach((key: string) => {
       accessControl[key]?.forEach((userId: string) => !distinctUsers.includes(userId) && distinctUsers.push(userId));

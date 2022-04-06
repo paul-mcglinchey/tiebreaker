@@ -1,4 +1,6 @@
 export enum ToolbarType {
   ClientGroups,
-  RotaGroups
+  RotaGroups,
+  Client,
+  Rota
 }

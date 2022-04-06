@@ -1,8 +1,7 @@
 export const clientLinks = [
   { name: 'Dashboard', href: 'clients/dashboard' },
   { name: 'Add Clients', href: 'clients/addclients' },
-  { name: 'Groups', href: 'clients/groups' },
-  { name: 'Create Group', href: 'clients/creategroup' }
+  { name: 'Groups', href: 'clients/groups' }
 ];
 
 export const rotaLinks = [

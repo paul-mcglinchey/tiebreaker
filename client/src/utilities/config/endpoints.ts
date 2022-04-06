@@ -1,3 +1,5 @@
+import { GroupType } from "../../models";
+
 const BASE_API_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/api/';
 
 export const endpoints = {
@@ -10,7 +12,7 @@ export const endpoints = {
     "schedule": (rotaId: string, startDate: string) => BASE_API_URL +  `rotas/${rotaId}/schedules/${startDate}`,
     "employees": (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
     "employee": (employeeId: string) => BASE_API_URL + `employees/${employeeId}`,
-    groups: (groupType: string) => {
+    groups: (groupType: GroupType) => {
         return {
             groups: BASE_API_URL + `${groupType}groups`
         }

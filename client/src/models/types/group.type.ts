@@ -1,3 +1,4 @@
-export enum Group {
-  CLIENT, ROTA
+export enum GroupType {
+  CLIENT = "client", 
+  ROTA = "rota"
 }

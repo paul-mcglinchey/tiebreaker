@@ -1,12 +1,12 @@
 import { TableIcon } from '@heroicons/react/solid';
 import Prompter from '../../Common/Prompter';
 
-const RotaPrompter = () => {
+const RotaPrompter = ({ action }: { action: () => void }) => {
   return (
     <Prompter 
       Icon={TableIcon}
       title="Add a rota to get started"
-      route="/rotas/addrota"
+      action={action}
     />
   )
 }

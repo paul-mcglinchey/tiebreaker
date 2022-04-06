@@ -3,7 +3,8 @@ import { useRefresh, useStateCallback } from "../../hooks";
 import { ButtonType, IChanges, IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
 import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
-import { Button, Toolbar } from "../Common";
+import { Button } from "../Common";
+import { Toolbar } from "../Toolbar";
 import { AddListItem, ListItem } from "./Common";
 
 const AdminPanel = () => {
@@ -44,7 +45,7 @@ const AdminPanel = () => {
 
   return (
     <div>
-      <Toolbar>Admin Panel</Toolbar>
+      <Toolbar title="Admin panel" />
       <div>
         <div className="flex flex-col space-y-2 text-gray-200">
           <div className="flex justify-between items-center">

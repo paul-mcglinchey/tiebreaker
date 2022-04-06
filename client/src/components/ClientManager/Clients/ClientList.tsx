@@ -6,8 +6,8 @@ import { ClientPrompter } from '.';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
 import { IClientsResponse, IFetch, IFilter } from '../../../models';
-import { Fetch, FetchError } from '../../Common';
-import { useFetch } from '../../../hooks';
+import { Fetch, FetchError, Modal } from '../../Common';
+import { useFetch, useRefresh } from '../../../hooks';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -19,6 +19,7 @@ const headers = [
 const ClientList = () => {
 
   const { clientGroup } = useContext(ApplicationContext);
+  const { dependency, refresh }  = useRefresh();
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -26,8 +27,8 @@ const ClientList = () => {
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
 
-  const [refresh, setRefresh] = useState(false);
-  const toggleRefresh = () => setRefresh(!refresh);
+  const [addClientOpen, setAddClientOpen] = useState(false);
+  const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen);
 
   const [filters, setFilters] = useState<IFilter>({
     'clientName': { value: null, label: 'Name' }
@@ -51,7 +52,7 @@ const ClientList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, refresh])}
+      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
       render={({ response, error, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {!error ? (
@@ -65,7 +66,6 @@ const ClientList = () => {
                   />
                   <ClientTable
                     clients={response.clients}
-                    totalClients={response.count}
                     sortField={sortField}
                     setSortField={setSortField}
                     sortDirection={sortDirection}
@@ -78,12 +78,15 @@ const ClientList = () => {
               </Fragment>
             ) : (
               !isLoading && (
-                <ClientPrompter />
+                <ClientPrompter action={toggleAddClientOpen} />
               )
             )
           ) : (
-            <FetchError error={error} isLoading={isLoading} toggleRefresh={toggleRefresh} />
+            <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
           )}
+          <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
+
+          </Modal>
         </div>
       )}
     />

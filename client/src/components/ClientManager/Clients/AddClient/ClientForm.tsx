@@ -76,6 +76,8 @@ const ClientForm = ({ client }: IClientFormProps) => {
             <div className="flex justify-between">
               <StyledField type="date" name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
             </div>
+          </div>
+          <div>
             <FormSection title="Address" state={addressActive} setState={setAddressActive}>
               <Transition
                 show={addressActive}

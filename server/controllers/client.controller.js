@@ -120,7 +120,7 @@ exports.create = (req, res) => {
     name: {
       firstName: name.firstName,
       lastName: name.lastName,
-      middleNames: name.middleNames.split(" ")
+      middleNames: name.middleNames && name.middleNames.split(" ")
     },
     address: {
       firstLine: address.firstLine,

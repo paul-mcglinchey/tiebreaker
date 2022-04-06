@@ -9,9 +9,9 @@ interface IFormSectionProps extends IChildrenProps {
 
 const FormSection = ({ children, title, state, setState }: IFormSectionProps) => {
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col mt-6">
       <div className="mb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-2">
           <h3 className="text-2xl font-semibold text-gray-400 tracking-wide">{title}</h3>
           {typeof state === "boolean" && typeof setState === "function" && (
             <CustomCheckbox state={state} setState={setState} />

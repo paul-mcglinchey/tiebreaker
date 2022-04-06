@@ -1,14 +1,18 @@
-import { Fragment } from "react";
-import { Toolbar } from "..";
+import { Fragment, useState } from "react";
 import { useFetch, useRefresh, useStatus } from "../../hooks";
-import { IClientGroup, IFetch, IGroupsResponse, ToolbarType } from "../../models";
-import { ClientGroupService, numberParser, requestBuilder } from "../../services";
+import { GroupType, IClientGroup, IFetch, IGroupsResponse } from "../../models";
+import { ClientGroupService, requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
+import { GroupToolbar } from "../Toolbar";
+import AddGroupModal from "./AddGroupModal";
 import { DataPoint, GroupCard } from "./GroupCard";
 import GroupPrompter from "./GroupPrompter";
 
 const ClientGroupDashboard = () => {
+
+  const [addGroupOpen, setAddGroupOpen] = useState(false);
+  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
   const { dependency, refresh } = useRefresh();
   const { statusService } = useStatus();
@@ -16,9 +20,9 @@ const ClientGroupDashboard = () => {
 
   return (
     <Fragment>
-      <Toolbar toolbarTypes={[ToolbarType.ClientGroups]} showSelector={false}>Group Management</Toolbar>
+      <GroupToolbar title="Group management" groupType={GroupType.CLIENT} showGroupInfo createGroupAction={toggleAddGroupOpen} />
       <Fetch
-        fetchOutput={useFetch(endpoints.groups("client").groups, requestBuilder("GET"), [dependency])}
+        fetchOutput={useFetch(endpoints.groups(GroupType.CLIENT).groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">
@@ -35,9 +39,9 @@ const ClientGroupDashboard = () => {
                     render={isCardFlipped => (
                       <div className="flex space-x-4">
                         {isCardFlipped ? (
-                          <DataPoint value={numberParser(g.clients?.length || 0)} label="client" />
-                          ) : (
-                          <DataPoint value={numberParser(groupService.getTotalUsers(g.accessControl || {}))} label="user" />
+                          <DataPoint value={groupService.getTotalUsers(g.accessControl)} label="user" />
+                        ) : (
+                          <DataPoint value={g.clients?.length || 0} label="client" />
                         )}
                       </div>
                     )}
@@ -45,11 +49,12 @@ const ClientGroupDashboard = () => {
                 ))}
               </div>
             ) : (
-              <GroupPrompter href='/clients/creategroup' />
+              <GroupPrompter action={toggleAddGroupOpen} />
             )
           )
-        )} 
+        )}
       />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} groupService={groupService} />
     </Fragment>
   )
 }

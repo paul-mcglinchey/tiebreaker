@@ -1,12 +1,13 @@
 import { Fragment, useContext, useState } from 'react';
-import { Fetch } from '../..';
+import { Fetch, RotaForm } from '../..';
 import { RotaTable } from './RotaTable';
-import { useFetch } from '../../../hooks';
+import { useFetch, useStatus } from '../../../hooks';
 import { ApplicationContext, endpoints } from '../../../utilities';
-import { requestBuilder } from '../../../services';
+import { requestBuilder, RotaService } from '../../../services';
 import { IFetch } from '../../../models/fetch.model';
 import RotaPrompter from './RotaPrompter';
 import { IRotasResponse } from '../../../models/rotas-response.model';
+import { Modal } from '../../Common';
 
 const headers = [
   { name: "Rota name", value: "name", interactive: true },
@@ -23,17 +24,23 @@ const RotaList = () => {
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
 
+  const [addRotaOpen, setAddRotaOpen] = useState(false);
+  const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
+
+  const { statusService } = useStatus();
+  const rotaService = new RotaService(statusService);
+
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.rotas(rotaGroup && rotaGroup._id || ""), requestBuilder(), [sortField, sortDirection])}
-      render={({ response, isLoading }: IFetch<IRotasResponse>) => (
-        <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
+    <>
+      <Fetch
+        fetchOutput={useFetch(endpoints.rotas(rotaGroup._id || ""), requestBuilder(), [sortField, sortDirection])}
+        render={({ response, isLoading }: IFetch<IRotasResponse>) => (
+          <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
               <Fragment>
                 <div className="flex flex-col flex-grow space-y-4">
                   <RotaTable
                     rotas={response.rotas}
-                    count={response.count}
                     sortField={sortField}
                     setSortField={setSortField}
                     sortDirection={sortDirection}
@@ -44,12 +51,16 @@ const RotaList = () => {
                 </div>
               </Fragment>
             ) : (
-              <RotaPrompter />
+              <RotaPrompter action={toggleAddRotaOpen} />
             )}
-        </div>
-      )
-      }
-    />
+          </div>
+        )
+        }
+      />
+      <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>
+        <RotaForm handleSubmit={(values) => rotaService.addRota(values, rotaGroup)} />
+      </Modal>
+    </>
   )
 }
 

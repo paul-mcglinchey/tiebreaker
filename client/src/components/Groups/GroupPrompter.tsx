@@ -1,13 +1,12 @@
 import { UserGroupIcon } from '@heroicons/react/solid';
-import { IProps } from '../../models';
 import Prompter from '../Common/Prompter';
 
-const GroupPrompter = ({ href }: IProps) => {
+const GroupPrompter = ({ action }: { action: () => void }) => {
   return (
     <Prompter 
       Icon={UserGroupIcon}
       title="Create a group to get started"
-      route={href}
+      action={action}
     />
   )
 }

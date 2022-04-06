@@ -1,5 +1,5 @@
 import { useFetch } from "../../hooks";
-import { Application, IClientGroup, IGroupsResponse, IRotaGroup } from "../../models";
+import { Application, GroupType, IClientGroup, IGroupsResponse, IRotaGroup } from "../../models";
 import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { AppCard } from "./Common";
@@ -39,8 +39,8 @@ const Dashboard = () => {
     return totalClients;
   }
 
-  const clientGroupsResponse = useFetch<IGroupsResponse<IClientGroup>>(endpoints.groups("client").groups, requestBuilder("GET")).response;
-  const rotaGroupsResponse = useFetch<IGroupsResponse<IRotaGroup>>(endpoints.groups("rota").groups, requestBuilder("GET")).response;
+  const clientGroupsResponse = useFetch<IGroupsResponse<IClientGroup>>(endpoints.groups(GroupType.CLIENT).groups, requestBuilder("GET")).response;
+  const rotaGroupsResponse = useFetch<IGroupsResponse<IRotaGroup>>(endpoints.groups(GroupType.ROTA).groups, requestBuilder("GET")).response;
 
   return (
     <div className="flex flex-col md:flex-row justify-start text-gray-200 mt-10 font-semibold tracking-wide gap-8">

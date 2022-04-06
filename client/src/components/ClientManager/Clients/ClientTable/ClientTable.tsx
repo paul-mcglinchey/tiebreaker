@@ -2,12 +2,10 @@ import { Fragment } from "react";
 import { ClientRow, Header } from ".";
 import { SpinnerIcon } from "../../..";
 import { IClient, ISortable } from "../../../../models";
-import { ClientPrompter } from "../Common";
 import InteractiveHeader from "./InteractiveHeader";
 
 interface IClientTableProps extends ISortable {
   clients: IClient[],
-  totalClients: number,
   headers: Array<{
     name: string, value: string, interactive: boolean
   }>,
@@ -16,7 +14,6 @@ interface IClientTableProps extends ISortable {
 
 const ClientTable = ({
   clients,
-  totalClients,
   sortField,
   setSortField,
   sortDirection,
@@ -46,15 +43,11 @@ const ClientTable = ({
           </tr>
         </thead>
         <Fragment>
-          {clients && totalClients > 0 ? (
-            <tbody className="divide-y divide-gray-700">
-                {clients.map((c) => (
-                  <ClientRow client={c} key={c._id} />
-                ))}
-            </tbody>
-          ) : (
-            <ClientPrompter />
-          )}
+          <tbody className="divide-y divide-gray-700">
+            {clients.map((c) => (
+              <ClientRow client={c} key={c._id} />
+            ))}
+          </tbody>
         </Fragment>
       </table>
       {isLoading && (

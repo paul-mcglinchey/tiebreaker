@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { IClientGroup, IRotaGroup, IStatus } from './models';
-import { AddClient, AddClientGroup, AddEmployee, AddRota, AddRotaGroup, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
+import { AddClient, AddEmployee, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
 import { ApplicationContext, StatusContext } from './utilities';
 import { getItemInStorage } from './services';
 import { AdminPanel } from './components/AdminPanel';
@@ -64,7 +64,6 @@ export default function App() {
                 <Route path=":clientId/*" element={<ClientPage />} />
                 <Route path="addclients" element={<AddClient />} />
                 <Route path="groups" element={<ClientGroupDashboard />} />
-                <Route path="creategroup" element={<AddClientGroup />} />
               </Route>
 
               {/* Rota manager specific routes */}
@@ -78,7 +77,6 @@ export default function App() {
                 <Route path="addrota" element={<AddRota />} />
                 <Route path="addemployee" element={<AddEmployee />} />
                 <Route path="groups" element={<RotaGroupDashboard />} />
-                <Route path="creategroup" element={<AddRotaGroup />} />
               </Route>
 
               {/* Unprotected routes */}

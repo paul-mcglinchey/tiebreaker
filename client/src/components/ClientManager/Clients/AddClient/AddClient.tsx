@@ -1,13 +1,16 @@
-import { ClientForm, Toolbar } from "../../..";
-import { ToolbarType } from "../../../../models";
-
+import { useContext } from "react";
+import { ClientForm } from "../../..";
+import { GroupType } from "../../../../models";
+import { ApplicationContext } from "../../../../utilities";
+import { GroupToolbar } from "../../../Toolbar";
 
 const AddClient = () => {
+
+  const { clientGroup, setClientGroup } = useContext(ApplicationContext);
+
   return (
     <div>
-      <Toolbar toolbarTypes={[ToolbarType.ClientGroups]}>
-        Add new clients
-      </Toolbar>
+      <GroupToolbar title="Add client" groupType={GroupType.CLIENT} showSelector group={clientGroup} setGroup={setClientGroup} />
       <ClientForm />
     </div>
   )

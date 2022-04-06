@@ -1,5 +1,4 @@
 import { Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
 import { useDelayedRendering } from '../../hooks';
 
 interface IconProps {
@@ -9,11 +8,11 @@ interface IconProps {
 
 interface IPrompterProps {
   title: string,
-  route: string,
+  action: () => void,
   Icon: React.FC<IconProps>
 }
 
-const Prompter = ({ Icon, title, route }: IPrompterProps) => {
+const Prompter = ({ Icon, title, action }: IPrompterProps) => {
 
   const show = useDelayedRendering(100);
 
@@ -26,8 +25,9 @@ const Prompter = ({ Icon, title, route }: IPrompterProps) => {
       leave="transition ease-in duration-75"
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
+      className="flex justify-center"
     >
-      <Link to={route} className="flex justify-center mt-32">
+      <button onClick={() => action()} className="flex justify-center mt-32">
         <div className="flex bg-gray-800 text-3xl sm:text-5xl text-white font-extrabold p-4 rounded-lg transform hover:scale-105 transition-all text-center">
           <div className="flex tracking-wide">
             <div>
@@ -38,7 +38,7 @@ const Prompter = ({ Icon, title, route }: IPrompterProps) => {
             </span>
           </div>
         </div>
-      </Link>
+      </button>
     </Transition>
   )
 }

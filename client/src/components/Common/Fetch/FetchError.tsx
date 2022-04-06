@@ -1,4 +1,5 @@
-import { SpinnerIcon } from "./icons";
+import { SpinnerIcon } from "../icons";
+
 
 interface IFetchErrorProps {
   error: { message?: string } | undefined,

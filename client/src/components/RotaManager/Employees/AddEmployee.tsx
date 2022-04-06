@@ -1,26 +1,17 @@
 import { useContext } from "react";
-import { ToolbarType } from "../../../models";
+import { GroupType } from "../../../models";
 import { ApplicationContext } from "../../../utilities";
-import { Toolbar } from "../../Common";
-import { GroupPrompter } from "../../Groups";
+import { GroupToolbar } from "../../Toolbar";
 import { FullEmployeeForm } from "./Forms";
 
 const AddEmployee = () => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { rotaGroup, setRotaGroup } = useContext(ApplicationContext);
 
   return (
     <div>
-      {rotaGroup ? (
-        <>
-          <Toolbar toolbarTypes={[ToolbarType.RotaGroups]}>
-            Add new employees
-          </Toolbar>
-          <FullEmployeeForm />
-        </>
-      ) : (
-        <GroupPrompter href="/rotas/creategroup" />
-      )}
+      <GroupToolbar title="Add employee" groupType={GroupType.ROTA} showSelector group={rotaGroup} setGroup={setRotaGroup} />
+      <FullEmployeeForm />
     </div>
   )
 }

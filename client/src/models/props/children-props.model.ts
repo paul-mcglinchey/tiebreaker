@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface IChildrenProps {
-  children: React.ReactNode
+  children: ReactNode
 }
