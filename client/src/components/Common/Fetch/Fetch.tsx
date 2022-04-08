@@ -1,4 +1,5 @@
-export default function Fetch({ render, fetchOutput }: any) {
-  console.log(typeof render);
+const Fetch = ({ render, fetchOutput }: any) => {
   return render(fetchOutput);
 }
+
+export default Fetch;

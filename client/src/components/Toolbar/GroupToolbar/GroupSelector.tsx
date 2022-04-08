@@ -14,7 +14,7 @@ interface IGroupSelectorProps<TGroup> {
 const GroupSelector = <TGroup extends IGroup>({ groupType, setGroup, groups }: IGroupSelectorProps<TGroup>) => {
 
   const storageKey = `${groupType}Group`;
-
+  
   const storageHasValidGroup = (groups: TGroup[]): boolean => {
     return groups && getItemInStorage(storageKey) && groups.filter((g: TGroup) => g._id === getItemInStorage(storageKey)._id).length > 0;
   }
@@ -58,7 +58,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroup, groups }: I
           leaveTo="transform opacity-0 scale-95"
           className="z-50 origin-top-right absolute right-0 mt-2"
         >
-          <Menu.Items className="whitespace-nowrap rounded-md bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="whitespace-nowrap min-w-60 rounded-md bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
               <div className="flex px-4 py-2 font-bold justify-between items-center">
                 <span>

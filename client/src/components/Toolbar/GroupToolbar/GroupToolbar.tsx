@@ -28,7 +28,7 @@ const GroupToolbar = <TGroup extends IGroup>({ title, createGroupAction, showSel
                   <GroupInfoDisplay groupCount={response.count} />
                 )}
                 {showSelector && setGroup && (
-                  <GroupSelector groupType="rota" setGroup={setGroup} groups={response.groups} />
+                  <GroupSelector groupType={groupType} setGroup={setGroup} groups={response.groups} />
                 )}
               </div>
             </Toolbar>

@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Fetch, RotaForm } from '../..';
 import { RotaTable } from './RotaTable';
 import { useFetch, useStatus } from '../../../hooks';
@@ -37,19 +37,17 @@ const RotaList = () => {
         render={({ response, isLoading }: IFetch<IRotasResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
-              <Fragment>
-                <div className="flex flex-col flex-grow space-y-4">
-                  <RotaTable
-                    rotas={response.rotas}
-                    sortField={sortField}
-                    setSortField={setSortField}
-                    sortDirection={sortDirection}
-                    setSortDirection={setSortDirection}
-                    headers={headers}
-                    isLoading={isLoading}
-                  />
-                </div>
-              </Fragment>
+              <div className="flex flex-col flex-grow space-y-4">
+                <RotaTable
+                  rotas={response.rotas}
+                  sortField={sortField}
+                  setSortField={setSortField}
+                  sortDirection={sortDirection}
+                  setSortDirection={setSortDirection}
+                  headers={headers}
+                  isLoading={isLoading}
+                />
+              </div>
             ) : (
               <RotaPrompter action={toggleAddRotaOpen} />
             )}

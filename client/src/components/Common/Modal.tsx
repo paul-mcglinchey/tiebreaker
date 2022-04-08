@@ -29,7 +29,7 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, subMod
       <div className={combineClassNames(
         "absolute bg-gray-900 px-8 py-5 flex flex-col rounded top-32 transform", 
         subModal ? '' : 'left-1/2 -translate-x-1/2',
-        widthClass && !subModal ? widthClass : (subModal ? 'w-full' : 'w-2/3')
+        widthClass && !subModal ? widthClass : (subModal ? 'w-120 -left-20' : 'w-2/3')
       )}>
         <div className="flex justify-between items-center border-b-2 border-gray-400/20 pb-2 mb-8">
           <h1 className="text-2xl font-bold text-white">{title}</h1>

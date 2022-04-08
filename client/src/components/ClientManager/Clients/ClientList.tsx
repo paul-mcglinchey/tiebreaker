@@ -1,13 +1,13 @@
 import { Fragment, useContext, useState } from 'react';
-import { SearchBar } from '../..';
-import { Paginator } from '../..';
 import { ClientTable } from './ClientTable';
 import { ClientPrompter } from '.';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
 import { IClientsResponse, IFetch, IFilter } from '../../../models';
-import { Fetch, FetchError, Modal } from '../../Common';
+import { Fetch, Modal } from '../..';
 import { useFetch, useRefresh } from '../../../hooks';
+import { SearchBar } from './Common';
+import { Paginator } from '../../Common';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -19,7 +19,7 @@ const headers = [
 const ClientList = () => {
 
   const { clientGroup } = useContext(ApplicationContext);
-  const { dependency, refresh }  = useRefresh();
+  const { dependency } = useRefresh();
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -52,37 +52,33 @@ const ClientList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients(clientGroup && clientGroup._id || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
-      render={({ response, error, isLoading }: IFetch<IClientsResponse>) => (
+      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
+      render={({ response, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-          {!error ? (
-            response && response.count > 0 ? (
-              <Fragment>
-                <div className="flex flex-col flex-grow space-y-4">
-                  <SearchBar
-                    filters={filters}
-                    setFilters={setFilters}
-                    searchField='clientName'
-                  />
-                  <ClientTable
-                    clients={response.clients}
-                    sortField={sortField}
-                    setSortField={setSortField}
-                    sortDirection={sortDirection}
-                    setSortDirection={setSortDirection}
-                    headers={headers}
-                    isLoading={isLoading}
-                  />
-                </div>
-                <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.count} />
-              </Fragment>
-            ) : (
-              !isLoading && (
-                <ClientPrompter action={toggleAddClientOpen} />
-              )
-            )
+          {response && response.count > 0 ? (
+            <Fragment>
+              <div className="flex flex-col flex-grow space-y-4">
+                <SearchBar
+                  filters={filters}
+                  setFilters={setFilters}
+                  searchField='clientName'
+                />
+                <ClientTable
+                  clients={response.clients}
+                  sortField={sortField}
+                  setSortField={setSortField}
+                  sortDirection={sortDirection}
+                  setSortDirection={setSortDirection}
+                  headers={headers}
+                  isLoading={isLoading}
+                />
+              </div>
+              <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.count} />
+            </Fragment>
           ) : (
-            <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
+            !isLoading && (
+              <ClientPrompter action={toggleAddClientOpen} />
+            )
           )}
           <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
 

@@ -16,8 +16,12 @@ module.exports = {
       minHeight: {
         '96': '40rem'
       },
+      width: {
+        '120': '120%'
+      },
       minWidth: {
         '40': '10rem',
+        '60': '15rem'
       },
       scale: {
         '100-1/2': '1.005',
