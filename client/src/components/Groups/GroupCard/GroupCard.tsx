@@ -30,7 +30,7 @@ const GroupCard = <TGroup extends IGroup>({ g, groupService, render }: IGroupPro
             <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.name}</h1>
             <div className="flex space-x-4">
               <SquareIconButton Icon={PencilIcon} action={() => toggleEditGroupOpen()} />
-              <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} additionalClasses={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
+              <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} className={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
             </div>
           </div>
           <div className="flex justify-between items-end my-4">

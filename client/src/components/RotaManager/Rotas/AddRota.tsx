@@ -13,7 +13,7 @@ const AddRota = () => {
 
   return (
     <>
-      <GroupToolbar title="Add rota" groupType={GroupType.ROTA} showSelector group={rotaGroup} setGroup={setRotaGroup} />
+      <GroupToolbar title="Add rota" groupType={GroupType.ROTA} showSelector setGroup={setRotaGroup} />
       <div className="flex justify-center">
         <RotaForm handleSubmit={(values: IRota) => rotaService.addRota(values, rotaGroup)} />
       </div>

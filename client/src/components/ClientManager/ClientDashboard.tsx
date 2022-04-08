@@ -11,7 +11,7 @@ import { ClientList } from './Clients';
 const ClientDashboard = () => {
 
   const { dependency, refresh } = useRefresh();
-  const { clientGroup, setClientGroup } = useContext(ApplicationContext);
+  const { setClientGroup } = useContext(ApplicationContext);
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -27,7 +27,7 @@ const ClientDashboard = () => {
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Clients" groupType={GroupType.CLIENT} showGroupInfo showSelector group={clientGroup} setGroup={setClientGroup}  />
+                <GroupToolbar title="Clients" groupType={GroupType.CLIENT} showGroupInfo showSelector setGroup={setClientGroup}  />
                 <ClientList />
               </>
             ) : (

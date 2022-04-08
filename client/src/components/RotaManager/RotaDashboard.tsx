@@ -14,7 +14,7 @@ import RotaList from './Rotas/RotaList';
 const RotaDashboard = () => {
 
   const { dependency, refresh } = useRefresh();
-  const context = useContext(ApplicationContext);
+  const { setRotaGroup } = useContext(ApplicationContext);
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -30,7 +30,7 @@ const RotaDashboard = () => {
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Rotas" groupType={GroupType.ROTA} showSelector {...context} />
+                <GroupToolbar title="Rotas" createGroupAction={toggleAddGroupOpen} groupType={GroupType.ROTA} showSelector setGroup={setRotaGroup} />
                 <RotaList />
               </>
             ) : (

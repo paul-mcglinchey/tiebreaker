@@ -13,8 +13,11 @@ const FullEmployeeForm = () => {
   const { status, setStatus } = useContext(StatusContext);
   const { rotaGroup } = useContext(ApplicationContext);
 
-  const [addressActive, setAddressActive] = useState(false);
-  const [requirementsActive, setRequirementsActive] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
+  const [showRequirements, setShowRequirements] = useState(false);
+
+  const toggleShowAddress = () => setShowAddress(!showAddress);
+  const toggleShowRequirements = () => setShowRequirements(!showRequirements);
 
   const [employeeRole, setEmployeeRole] = useState<{ value: EmployeeRole, label: EmployeeRole }>({ value: EmployeeRole.Staff, label: EmployeeRole.Staff });
   const [reportsTo, setReportsTo] = useState<{ value: string, label: string } | undefined>();
@@ -46,7 +49,7 @@ const FullEmployeeForm = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ""), requestBuilder("GET"))}
       render={({ response }: IFetch<IEmployeeResponse>) => (
         <Formik
           initialValues={{
@@ -108,9 +111,9 @@ const FullEmployeeForm = () => {
                     <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
                   </div>
                 </FormSection>
-                <FormSection title="Employee address" state={addressActive} setState={setAddressActive}>
+                <FormSection title="Employee address" showExpander expanded={showAddress} expanderAction={toggleShowAddress}>
                   <Transition
-                    show={addressActive}
+                    show={showAddress}
                     enter="transition ease-out duration-200"
                     enterFrom="transform opacity-0 scale-y-0"
                     enterTo="transform opacity-100 scale-y-100"
@@ -122,9 +125,9 @@ const FullEmployeeForm = () => {
                     <AddressForm errors={errors} touched={touched} />
                   </Transition>
                 </FormSection>
-                <FormSection title="Scheduling requirements" state={requirementsActive} setState={setRequirementsActive}>
+                <FormSection title="Scheduling requirements" showExpander expanded={showRequirements} expanderAction={toggleShowRequirements}>
                   <Transition
-                    show={requirementsActive}
+                    show={showRequirements}
                     enter="transition ease-out duration-200"
                     enterFrom="transform opacity-0 scale-y-0"
                     enterTo="transform opacity-100 scale-y-100"

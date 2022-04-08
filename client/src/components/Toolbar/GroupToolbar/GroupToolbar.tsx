@@ -12,11 +12,10 @@ interface IGroupToolbarProps<TGroup> extends IToolbarProps {
   groupType: GroupType,
   showGroupInfo?: boolean,
   showSelector?: boolean,
-  group?: TGroup,
   setGroup?: (group: TGroup) => void,
 }
 
-const GroupToolbar = <TGroup extends IGroup>({ title, createGroupAction, showSelector, showGroupInfo, groupType, group, setGroup }: IGroupToolbarProps<TGroup>) => {
+const GroupToolbar = <TGroup extends IGroup>({ title, createGroupAction, showSelector, showGroupInfo, groupType, setGroup }: IGroupToolbarProps<TGroup>) => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groups(groupType).groups, requestBuilder("GET"))}
@@ -28,8 +27,8 @@ const GroupToolbar = <TGroup extends IGroup>({ title, createGroupAction, showSel
                 {showGroupInfo && (
                   <GroupInfoDisplay groupCount={response.count} />
                 )}
-                {showSelector && group && setGroup && (
-                  <GroupSelector groupType="rota" group={group} setGroup={setGroup} groups={response.groups} />
+                {showSelector && setGroup && (
+                  <GroupSelector groupType="rota" setGroup={setGroup} groups={response.groups} />
                 )}
               </div>
             </Toolbar>

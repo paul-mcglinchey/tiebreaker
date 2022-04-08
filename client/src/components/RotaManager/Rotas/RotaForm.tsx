@@ -36,7 +36,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder())}
+        fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ''), requestBuilder())}
         render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
           <Formik
             initialValues={{
@@ -49,7 +49,6 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
             }}
             validationSchema={rotaValidationSchema}
             onSubmit={(values) => {
-              console.log(values);
               handleSubmit({ ...values });
             }}
           >
@@ -96,7 +95,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
           </Formik>
         )}
       />
-      <AddEmployeeModal modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen} groupId={rotaGroup._id || ""} />
+      <AddEmployeeModal modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen} groupId={rotaGroup && rotaGroup._id || ''} />
     </>
   )
 }

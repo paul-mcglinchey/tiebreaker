@@ -33,7 +33,7 @@ const InteractiveHeader = ({
         {children}
       </div>
       <div>
-        <SquareIconButton additionalClasses="w-4 h-4" Icon={getButton()} action={handleSorting} />
+        <SquareIconButton className="w-4 h-4" Icon={getButton()} action={handleSorting} />
       </div>
     </div>
   )

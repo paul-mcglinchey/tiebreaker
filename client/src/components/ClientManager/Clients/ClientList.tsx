@@ -39,11 +39,11 @@ const ClientList = () => {
     var queryString = "";
 
     queryString += `pageNumber=${pageNumber}&pageSize=${pageSize}&`;
-    queryString += `sortField=${sortField}&sortDirection=${sortDirection}&`
+    queryString += `sortField=${sortField}&sortDirection=${sortDirection}`
 
     for (var key in filters) {
       if (filters[key]!.value) {
-        queryString += `${key}=${filters[key]!.value}&`
+        queryString += `&${key}=${filters[key]!.value}&`
       }
     }
 
@@ -52,7 +52,7 @@ const ClientList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
+      fetchOutput={useFetch(`${endpoints.clients(clientGroup && clientGroup._id || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
       render={({ response, error, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {!error ? (

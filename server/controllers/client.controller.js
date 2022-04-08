@@ -34,7 +34,7 @@ exports.getClients = async (req, res) => {
         });
 
       // create the aggregate object (functions like an IQueryable)
-      const aggregate = Client.aggregate();
+      const aggregate = await Client.aggregate();
 
       // apply a match operator to the pipeline to only return clients for the current group
       // add a new fullName field to filter on

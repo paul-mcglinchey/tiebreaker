@@ -1,20 +1,29 @@
 import { IChildrenProps } from "../../../models";
 import { CustomCheckbox } from ".";
+import { combineClassNames } from "../../../services";
+import { SquareIconButton } from "..";
+import { ChevronUpIcon } from "@heroicons/react/solid";
 
 interface IFormSectionProps extends IChildrenProps {
   title: string,
   state?: boolean,
-  setState?: (state: boolean) => void
+  setState?: (state: boolean) => void,
+  showExpander?: boolean,
+  expanded?: boolean
+  expanderAction?: () => void
 }
 
-const FormSection = ({ children, title, state, setState }: IFormSectionProps) => {
+const FormSection = ({ children, title, state, setState, showExpander, expanded, expanderAction }: IFormSectionProps) => {
   return (
     <div className="flex flex-col mt-6">
       <div className="mb-2">
-        <div className="flex justify-between items-center px-2">
-          <h3 className="text-2xl font-semibold text-gray-400 tracking-wide">{title}</h3>
+        <div className="flex justify-between items-center px-2 text-gray-400">
+          <h3 className="text-2xl font-semibold tracking-wide">{title}</h3>
           {typeof state === "boolean" && typeof setState === "function" && (
             <CustomCheckbox state={state} setState={setState} />
+          )}
+          {showExpander && expanderAction && (
+            <SquareIconButton Icon={ChevronUpIcon} action={() => expanderAction()} className={combineClassNames("transform", expanded && "rotate-180")} />
           )}
         </div>
         <hr className="mt-2 border-gray-700" />

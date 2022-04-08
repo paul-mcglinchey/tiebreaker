@@ -4,11 +4,11 @@ interface IIconButtonProps {
   Icon: any,
   action?: () => void,
   colour?: string,
-  additionalClasses?: string | boolean
+  className?: string
   buttonSize?: IconButtonSize
 }
 
-const SquareIconButton = ({ Icon, action, colour = "text-current", additionalClasses = "", buttonSize = IconButtonSize.Medium }: IIconButtonProps) => {
+const SquareIconButton = ({ Icon, action, colour = "text-current", className, buttonSize = IconButtonSize.Medium }: IIconButtonProps) => {
 
   const getButtonSize = (): string => {
     return `h-${buttonSize} w-${buttonSize}`
@@ -19,8 +19,8 @@ const SquareIconButton = ({ Icon, action, colour = "text-current", additionalCla
   }
 
   return (
-    <button onClick={action}>
-      <Icon className={`${getButtonSize()} ${getColour()} ${additionalClasses} transform hover:scale-110 transition-transform`} />
+    <button type="button" onClick={action}>
+      <Icon className={`${getButtonSize()} ${getColour()} ${className && className} transform hover:scale-110 transition-transform`} />
     </button>
   )
 }
