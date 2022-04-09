@@ -8,10 +8,9 @@ interface IModalProps {
   modalOpen: boolean,
   toggleModalOpen: () => void
   widthClass?: string
-  subModal?: boolean
 }
 
-const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, subModal }: IChildrenProps & IModalProps) => {
+const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChildrenProps & IModalProps) => {
   return (
     <Transition
       show={modalOpen}
@@ -22,14 +21,13 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, subMod
       leaveFrom="transform opacity-100"
       leaveTo="transform opacity-0"
       className={combineClassNames(
-        "absolute inset-0 z-10 bg-gray-700/50",
-        subModal ? "h-full" : "w-screen h-screen"
+        "absolute inset-0 z-10 bg-gray-700/50 flex justify-center",
+        "w-screen h-screen"
       )}
     >
       <div className={combineClassNames(
-        "absolute bg-gray-900 px-8 py-5 flex flex-col rounded top-32 transform", 
-        subModal ? '' : 'left-1/2 -translate-x-1/2',
-        widthClass && !subModal ? widthClass : (subModal ? 'w-120 -left-20' : 'w-2/3')
+        "absolute bg-gray-900 px-8 py-5 flex flex-col rounded top-32 transform",
+        widthClass || 'w-2/3'
       )}>
         <div className="flex justify-between items-center border-b-2 border-gray-400/20 pb-2 mb-8">
           <h1 className="text-2xl font-bold text-white">{title}</h1>

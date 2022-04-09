@@ -16,7 +16,7 @@ const AddEmployeeModal = ({ modalOpen, toggleModalOpen, groupId }: IAddEmployeeM
   const employeeService = new EmployeeService(new StatusService(status, setStatus));
 
   return (
-    <Modal title="Add employee" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen} subModal>
+    <Modal title="Add employee" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
       <CompactEmployeeForm employeeService={employeeService} groupId={groupId} />
     </Modal>
   )

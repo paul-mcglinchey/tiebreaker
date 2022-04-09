@@ -1,12 +1,12 @@
 import { Formik, Form } from 'formik';
 import { useContext, useState } from 'react';
-import { useFetch } from '../../../hooks';
+import { useFetch, useStatus } from '../../../hooks';
 
-import { ButtonType, DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
-import { requestBuilder } from '../../../services';
+import { DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
+import { EmployeeService, requestBuilder } from '../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../utilities';
 import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../Common';
-import { AddEmployeeModal } from '../Employees';
+import { CompactEmployeeForm } from '../Employees/Forms';
 import { StaffSelector } from './Forms';
 
 interface IRotaFormProps {
@@ -18,11 +18,10 @@ interface IRotaFormProps {
 const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
   const { rotaGroup } = useContext(ApplicationContext);
+  const { statusService } = useStatus()
+  const employeeService = new EmployeeService(statusService);
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
-
-  const [addEmployeeOpen, setAddEmployeeOpen] = useState(false);
-  const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
   const getDaysOfWeekOptions = () => {
     return Object.keys(DayOfWeek).filter((day: any) => isNaN(day)).map((day: string) => {
@@ -74,8 +73,8 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
                             setFieldValue={setFieldValue}
                           />
                         )}
-                        <div className='flex justify-end'>
-                          <Button content='Add employees' buttonType={ButtonType.Tertiary} type="button" action={() => toggleAddEmployeeOpen()} />
+                        <div className="flex">
+                          <CompactEmployeeForm employeeService={employeeService} groupId={rotaGroup._id || ""} />
                         </div>
                       </div>
                     </FormSection>
@@ -95,7 +94,6 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
           </Formik>
         )}
       />
-      <AddEmployeeModal modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen} groupId={rotaGroup && rotaGroup._id || ''} />
     </>
   )
 }
