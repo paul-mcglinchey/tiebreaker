@@ -74,7 +74,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
                           />
                         )}
                         <div className="flex">
-                          <CompactEmployeeForm employeeService={employeeService} groupId={rotaGroup._id || ""} />
+                          <CompactEmployeeForm onSubmit={() => console.log('here')} employeeService={employeeService} groupId={rotaGroup._id || ""} />
                         </div>
                       </div>
                     </FormSection>

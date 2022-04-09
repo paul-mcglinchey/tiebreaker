@@ -7,9 +7,10 @@ import { Button, StyledField } from "../../../Common";
 interface ICompactEmployeeForm {
   employeeService: IEmployeeService
   groupId: string
+  onSubmit?: () => void
 }
 
-const CompactEmployeeForm = ({ employeeService, groupId }: ICompactEmployeeForm) => {
+const CompactEmployeeForm = ({ onSubmit }: ICompactEmployeeForm) => {
   return (
     <Formik
       initialValues={{
@@ -23,11 +24,11 @@ const CompactEmployeeForm = ({ employeeService, groupId }: ICompactEmployeeForm)
       }}
       validationSchema={employeeValidationSchema}
       onSubmit={(values) => {
-        employeeService.addEmployee(values, groupId);
+        console.log(values);
       }}
     >
-      {({ errors, touched }) => (
-        <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
+      {({ errors, touched, ...props }) => (
+        <Form onSubmit={onSubmit || props.handleSubmit} className="flex flex-1 flex-col space-y-8 text-gray-200">
           <div className="flex space-x-4 items-center">
             <StyledField compact name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
