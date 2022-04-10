@@ -5,9 +5,7 @@ import { ClientGroupService, requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
 import { GroupToolbar } from "../Toolbar";
-import AddGroupModal from "./AddGroupModal";
-import { DataPoint, GroupCard } from "./GroupCard";
-import GroupPrompter from "./GroupPrompter";
+import { AddGroupModal, DataPoint, GroupCard, GroupPrompter } from ".";
 
 const ClientGroupDashboard = () => {
 

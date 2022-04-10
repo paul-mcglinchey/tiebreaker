@@ -3,7 +3,7 @@ import { IRota } from "../../../../models";
 import { RotaService, StatusService } from "../../../../services";
 import { StatusContext } from "../../../../utilities";
 import { Modal } from "../../../Common";
-import RotaForm from "../RotaForm";
+import { RotaForm } from "..";
 
 interface IEditRotaProps {
   modalOpen: boolean,

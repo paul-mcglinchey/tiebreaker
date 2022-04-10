@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { IClientGroup, IRotaGroup, IStatus } from './models';
-import { AddClient, AddEmployee, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
+import { AddClient, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Employees, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
 import { ApplicationContext, StatusContext } from './utilities';
 import { getItemInStorage } from './services';
 import { AdminPanel } from './components/AdminPanel';
@@ -75,7 +75,7 @@ export default function App() {
                 <Route path="dashboard" element={<RotaDashboard />} />
                 <Route path=":rotaId/*" element={<RotaPage />} />
                 <Route path="addrota" element={<AddRota />} />
-                <Route path="addemployee" element={<AddEmployee />} />
+                <Route path="employees" element={<Employees />} />
                 <Route path="groups" element={<RotaGroupDashboard />} />
               </Route>
 

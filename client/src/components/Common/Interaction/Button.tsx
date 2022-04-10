@@ -1,6 +1,6 @@
-import { SpinnerIcon } from '.';
-import { combineClassNames } from '../../services';
-import { ButtonType, IStatus } from '../../models';
+import { combineClassNames } from '../../../services';
+import { ButtonType, IStatus } from '../../../models';
+import { SpinnerIcon } from '..';
 
 export interface IButtonProps {
   status?: IStatus[],

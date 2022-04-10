@@ -5,10 +5,7 @@ import { requestBuilder, RotaGroupService } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
 import { GroupToolbar } from "../Toolbar";
-import AddGroupModal from "./AddGroupModal";
-import { DataPoint, GroupCard } from "./GroupCard";
-import GroupPrompter from "./GroupPrompter";
-
+import { DataPoint, GroupCard, AddGroupModal, GroupPrompter } from ".";
 const RotaGroupDashboard = () => {
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);

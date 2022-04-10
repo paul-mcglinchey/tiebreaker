@@ -1,28 +1,23 @@
-import { RowItem } from '.';
 import { ViewGridAddIcon } from '@heroicons/react/outline';
-import InlineLink from '../Common/InlineLink';
-import { Fragment } from 'react';
-import { IClient, IUserResponse } from '../../../../models';
-import { Fetch } from '../../..';
+import { IClient, IUserResponse, IFetch } from '../../../../models';
 import { useFetch } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
-import { IFetch } from '../../../../models/fetch.model';
+import { InlineLink, TableRow, TableRowItem, Fetch } from '../../../Common';
 
 const ClientRow = ({ client }: { client: IClient }) => {
 
   return (
-    <Fragment>
-        <tr className="bg-gray-900 border-gray-700">
-          <RowItem>
+    <TableRow>
+          <TableRowItem>
             <div className="flex items-center">
               <div className="">
                 <div className="text-sm font-medium text-white">{client.fullName || "--"}</div>
                 <div className="text-sm">{client?.contactInfo?.primaryEmail || "--"}</div>
               </div>
             </div>
-          </RowItem>
-          <RowItem>
+          </TableRowItem>
+          <TableRowItem>
             <div className="flex items-center space-x-4 min-w-40">
               <span>
                 {new Date(client.updatedAt || "").toLocaleDateString()}
@@ -36,8 +31,8 @@ const ClientRow = ({ client }: { client: IClient }) => {
                   )}
                 />
             </div>
-          </RowItem>
-          <RowItem>
+          </TableRowItem>
+          <TableRowItem>
             <div className="flex flex-grow items-center justify-start">
               {(client?.sessions?.length || 0) > 0 ? (
                 <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
@@ -51,16 +46,15 @@ const ClientRow = ({ client }: { client: IClient }) => {
                 </InlineLink>
               )}
             </div>
-          </RowItem>
-          <RowItem>
+          </TableRowItem>
+          <TableRowItem>
             <div className="flex items-center space-x-2 justify-end">
               <InlineLink to={`/clients/${client._id}/overview`} color="text-gray-500">Overview</InlineLink>
               <InlineLink to={`/clients/${client._id}/view`} color="text-gray-500">View</InlineLink>
               <InlineLink to={`/clients/${client._id}/edit`} color="text-blue-500">Edit</InlineLink>
             </div>
-          </RowItem>
-        </tr>
-    </Fragment>
+          </TableRowItem>
+        </TableRow>
   )
 }
 

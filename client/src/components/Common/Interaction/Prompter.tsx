@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import { useDelayedRendering } from '../../hooks';
+import { useDelayedRendering } from '../../../hooks';
 
 interface IconProps {
   childComp?: React.ReactNode

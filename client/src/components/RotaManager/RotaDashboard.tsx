@@ -1,15 +1,15 @@
+import { UserGroupIcon } from '@heroicons/react/solid';
 import { useContext, useState } from 'react';
 
 import { Fetch } from '..';
 import { useFetch, useRefresh, useStatus } from '../../hooks';
-import { GroupType, IGroupsResponse, IRotaGroup } from '../../models';
-import { IFetch } from '../../models/fetch.model';
+import { GroupType, IGroupsResponse, IRotaGroup, IFetch } from '../../models';
 import { requestBuilder, RotaGroupService } from '../../services';
 import { ApplicationContext, endpoints } from '../../utilities';
-import { FetchError } from '../Common';
-import { AddGroupModal, GroupPrompter } from '../Groups';
+import { FetchError, Prompter } from '../Common';
+import { AddGroupModal } from '../Groups';
 import { GroupToolbar } from '../Toolbar';
-import RotaList from './Rotas/RotaList';
+import { RotaList } from './Rotas';
 
 const RotaDashboard = () => {
 
@@ -35,7 +35,7 @@ const RotaDashboard = () => {
               </>
             ) : (
               !isLoading && (
-                <GroupPrompter action={toggleAddGroupOpen} />
+                <Prompter title='Create a group to get started' Icon={UserGroupIcon} action={toggleAddGroupOpen} />
               )
             )
           ) : (

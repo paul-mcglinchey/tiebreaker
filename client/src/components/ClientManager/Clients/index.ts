@@ -1,5 +1,6 @@
 export * from './AddClient';
 export * from './ClientPage';
+export * from './ClientTable';
 export * from './EditClient';
 export * from './ViewClient';
 export * from './Sessions';

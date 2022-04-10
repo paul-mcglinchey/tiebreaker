@@ -15,14 +15,22 @@ interface IGroupToolbarProps<TGroup> extends IToolbarProps {
   setGroup?: (group: TGroup) => void,
 }
 
-const GroupToolbar = <TGroup extends IGroup>({ title, createGroupAction, showSelector, showGroupInfo, groupType, setGroup }: IGroupToolbarProps<TGroup>) => {
+const GroupToolbar = <TGroup extends IGroup>({ 
+  title, 
+  addEmployeeAction, 
+  createGroupAction, 
+  showSelector, 
+  showGroupInfo, 
+  groupType, 
+  setGroup 
+}: IGroupToolbarProps<TGroup>) => {
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.groups(groupType).groups, requestBuilder("GET"))}
       render={({ response, error }: IFetch<IGroupsResponse<TGroup>>) => (
         <>
           {!error && response && (
-            <Toolbar title={title} createGroupAction={createGroupAction}>
+            <Toolbar title={title} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
               <div className="flex md:space-x-4 justify-end">
                 {showGroupInfo && (
                   <GroupInfoDisplay groupCount={response.count} />

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../../utilities";
-import { EmployeeRole, IEmployee, IEmployeeResponse, IFetch } from "../../../../models";
+import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
 import { EmployeeService, requestBuilder, StatusService } from "../../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
 import { useFetch } from "../../../../hooks";
@@ -49,8 +49,8 @@ const FullEmployeeForm = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ""), requestBuilder("GET"))}
-      render={({ response }: IFetch<IEmployeeResponse>) => (
+      fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder("GET"))}
+      render={({ response }: IFetch<IEmployeesResponse>) => (
         <Formik
           initialValues={{
             reportsTo: '',

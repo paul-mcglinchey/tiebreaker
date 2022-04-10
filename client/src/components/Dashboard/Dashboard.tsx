@@ -45,7 +45,10 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col md:flex-row justify-start text-gray-200 mt-10 font-semibold tracking-wide gap-8">
       {clientGroupsResponse && clientGroupsResponse.groups && (
-        <AppCard title={Application.ClientManager} href="/clients/dashboard" subtitle="Manage all of your clients here."
+        <AppCard 
+          title={Application.ClientManager} 
+          href="/clients/dashboard" 
+          subtitle="Manage all of your clients here."
           datapoints={[
             {
               title: 'group',
@@ -56,10 +59,14 @@ const Dashboard = () => {
               value: getTotalClients(clientGroupsResponse.groups)
             }
           ]}
+          colours={{ from: 'from-orange-400', to: 'to-red-500' }}
         />
       )}
       {rotaGroupsResponse && rotaGroupsResponse.groups && (
-        <AppCard title={Application.RotaManager} href="/rotas/dashboard" subtitle="Manage all of your rotas here."
+        <AppCard 
+          title={Application.RotaManager} 
+          href="/rotas/dashboard" 
+          subtitle="Manage all of your rotas here."
           datapoints={[
             {
               title: 'group',
@@ -74,6 +81,7 @@ const Dashboard = () => {
               value: getTotalEmployees(rotaGroupsResponse.groups)
             }
           ]}
+          colours={{ from: 'from-blue-500', to: 'to-purple-600' }}
         />
       )}
     </div>

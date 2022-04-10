@@ -1,8 +1,12 @@
-import { MenuIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/outline'
-import { IInteractiveHeaderProps } from '../../../../models';
-import { SquareIconButton } from '../../../Common';
+import { MenuIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/outline';
+import { IChildrenProps, ISortable } from '../../../models';
+import { SquareIconButton } from '..';
 
-const InteractiveHeader = ({ 
+interface IInteractiveHeaderProps extends ISortable, IChildrenProps {
+  value: string
+}
+
+const TableInteractiveHeader = ({ 
   sortField, 
   sortDirection, 
   setSortField, 
@@ -39,4 +43,4 @@ const InteractiveHeader = ({
   )
 }
 
-export default InteractiveHeader;
+export default TableInteractiveHeader;

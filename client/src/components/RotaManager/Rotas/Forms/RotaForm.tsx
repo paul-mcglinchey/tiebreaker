@@ -1,13 +1,12 @@
 import { Formik, Form } from 'formik';
 import { useContext, useState } from 'react';
-import { useFetch, useStatus } from '../../../hooks';
+import { useFetch } from '../../../../hooks';
 
-import { DayOfWeek, IEmployee, IEmployeeResponse, IFetch, IRota } from '../../../models';
-import { EmployeeService, requestBuilder } from '../../../services';
-import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../utilities';
-import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../Common';
-import { CompactEmployeeForm } from '../Employees/Forms';
-import { StaffSelector } from './Forms';
+import { DayOfWeek, IEmployee, IEmployeesResponse, IFetch, IRota } from '../../../../models';
+import { requestBuilder } from '../../../../services';
+import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../../utilities';
+import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../../Common';
+import { StaffSelector } from '.';
 
 interface IRotaFormProps {
   rota?: IRota | undefined,
@@ -18,8 +17,6 @@ interface IRotaFormProps {
 const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
   const { rotaGroup } = useContext(ApplicationContext);
-  const { statusService } = useStatus()
-  const employeeService = new EmployeeService(statusService);
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
 
@@ -35,8 +32,8 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.employees(rotaGroup && rotaGroup._id || ''), requestBuilder())}
-        render={({ response, isLoading }: IFetch<IEmployeeResponse>) => (
+        fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder())}
+        render={({ response, isLoading }: IFetch<IEmployeesResponse>) => (
           <Formik
             initialValues={{
               name: rota?.name || '',
@@ -52,8 +49,8 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
             }}
           >
             {({ values, errors, touched, setFieldValue }) => (
-              <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
-                <div className="flex flex-col space-y-4">
+              <Form className="flex flex-1 flex-col space-y-6 text-gray-200">
+                <div className="flex flex-col space-y-3">
                   <div className="flex space-x-4">
                     <StyledField name="name" label="Name" errors={errors.name} touched={touched.name} />
                     <Selector options={getDaysOfWeekOptions()} option={startDay} setValue={(e) => setStartDay(e)} label="Start Day" />
@@ -73,9 +70,6 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
                             setFieldValue={setFieldValue}
                           />
                         )}
-                        <div className="flex">
-                          <CompactEmployeeForm onSubmit={() => console.log('here')} employeeService={employeeService} groupId={rotaGroup._id || ""} />
-                        </div>
                       </div>
                     </FormSection>
                   ) : (

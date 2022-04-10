@@ -1,13 +1,11 @@
 import { Fragment, useContext, useState } from 'react';
-import { ClientTable } from './ClientTable';
-import { ClientPrompter } from '.';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
-import { IClientsResponse, IFetch, IFilter } from '../../../models';
-import { Fetch, Modal } from '../..';
+import { IClient, IClientsResponse, IFetch, IFilter } from '../../../models';
 import { useFetch, useRefresh } from '../../../hooks';
-import { SearchBar } from './Common';
-import { Paginator } from '../../Common';
+import { SearchBar, ClientTableRow, ClientForm } from '.';
+import { Paginator, Table, Fetch, Modal, Prompter } from '../../Common';
+import { UserAddIcon } from '@heroicons/react/solid';
 
 const headers = [
   { name: "Name", value: "clientName", interactive: true },
@@ -31,7 +29,7 @@ const ClientList = () => {
   const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen);
 
   const [filters, setFilters] = useState<IFilter>({
-    'clientName': { value: null, label: 'Name' }
+    'name': { value: null, label: 'Name' }
   });
 
   const buildQueryString = () => {
@@ -43,7 +41,7 @@ const ClientList = () => {
 
     for (var key in filters) {
       if (filters[key]!.value) {
-        queryString += `&${key}=${filters[key]!.value}&`
+        queryString += `&${key}=${filters[key]!.value}`
       }
     }
 
@@ -61,27 +59,32 @@ const ClientList = () => {
                 <SearchBar
                   filters={filters}
                   setFilters={setFilters}
-                  searchField='clientName'
+                  searchField='name'
                 />
-                <ClientTable
-                  clients={response.clients}
+                <Table
                   sortField={sortField}
                   setSortField={setSortField}
                   sortDirection={sortDirection}
                   setSortDirection={setSortDirection}
                   headers={headers}
                   isLoading={isLoading}
-                />
+                >
+                  <>
+                    {response.clients.map((c: IClient, index: number) => (
+                      <ClientTableRow client={c} key={index} />
+                    ))}
+                  </>
+                </Table>
               </div>
               <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.count} />
             </Fragment>
           ) : (
             !isLoading && (
-              <ClientPrompter action={toggleAddClientOpen} />
+              <Prompter title="Add a client to get started" Icon={UserAddIcon} action={toggleAddClientOpen} />
             )
           )}
           <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
-
+            <ClientForm />
           </Modal>
         </div>
       )}

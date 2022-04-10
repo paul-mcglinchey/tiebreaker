@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { combineClassNames } from "../../../../services";
+import { combineClassNames } from "../../../services";
 
 interface IInlineLinkProps {
   children: any,

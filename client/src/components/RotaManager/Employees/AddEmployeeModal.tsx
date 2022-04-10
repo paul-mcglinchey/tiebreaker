@@ -6,18 +6,17 @@ import { CompactEmployeeForm } from "./Forms"
 
 interface IAddEmployeeModalProps {
   modalOpen: boolean,
-  toggleModalOpen: () => void,
-  groupId: string
+  toggleModalOpen: () => void
 }
 
-const AddEmployeeModal = ({ modalOpen, toggleModalOpen, groupId }: IAddEmployeeModalProps) => {
+const AddEmployeeModal = ({ modalOpen, toggleModalOpen }: IAddEmployeeModalProps) => {
 
   const { status, setStatus } = useContext(StatusContext);
   const employeeService = new EmployeeService(new StatusService(status, setStatus));
 
   return (
     <Modal title="Add employee" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
-      <CompactEmployeeForm employeeService={employeeService} groupId={groupId} />
+      <CompactEmployeeForm employeeService={employeeService} />
     </Modal>
   )
 }

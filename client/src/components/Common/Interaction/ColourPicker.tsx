@@ -1,8 +1,8 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { Fragment } from "react";
-import { combineClassNames } from "../../services";
-import { colours } from "../../utilities";
+import { combineClassNames } from "../../../services";
+import { colours } from "../../../utilities";
 
 interface IColourPickerProps {
   colour: string,

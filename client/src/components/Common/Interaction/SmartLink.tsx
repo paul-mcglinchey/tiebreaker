@@ -1,5 +1,5 @@
 import { useResolvedPath, useMatch, Link, PathMatch } from 'react-router-dom';
-import { IChildrenProps, IProps } from '../../../../models';
+import { IChildrenProps, IProps } from '../../../models';
 
 interface ISmartLinkProps extends IProps, IChildrenProps {
   to: string,

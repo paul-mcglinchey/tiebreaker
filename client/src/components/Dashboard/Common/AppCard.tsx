@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
+import { combineClassNames } from "../../../services";
 
+interface IGradient {
+  from: string,
+  to?: string,
+  via?: string
+}
 interface IAppCardProps {
   title: string,
   subtitle: string,
@@ -7,16 +13,26 @@ interface IAppCardProps {
   datapoints: {
     title: string,
     value: number
-  }[]
+  }[],
+  colours?: string | IGradient
 }
 
-const AppCard = ({ title, subtitle, href, datapoints }: IAppCardProps) => {
+const AppCard = ({ title, subtitle, href, datapoints, colours }: IAppCardProps) => {
+
   return (
     <Link className="flex-grow" to={href}>
-      <div className="flex flex-col h-full space-y-4 bg-gray-800 text-blue-300 px-8 py-5 shadow-lg rounded-lg transform hover:scale-102 transition-transform">
+      {console.log(colours)}
+      <div className={combineClassNames(
+        "flex flex-col h-full space-y-4 bg-gradient-to-b text-white from-red-500 px-8 py-5 shadow-lg rounded-lg transform hover:scale-102 transition-transform",
+        colours
+          ? typeof colours === "string"
+            ? `from-${colours}`
+            : `${colours.from} ${colours.to && colours.to} ${colours.via && colours.via}`
+          : "from-orange-500 to-red-500"
+      )}>
         <div>
           <h1 className="text-4xl text-left font-semibold tracking-wide">{title}</h1>
-          <hr className="mt-4 border-gray-700" />
+          <hr className="mt-4 border-b-2 border-gray-200" />
         </div>
         <div className="flex flex-col space-y-4 text-gray-300">
           <div>

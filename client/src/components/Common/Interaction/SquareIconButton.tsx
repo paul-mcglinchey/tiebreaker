@@ -1,4 +1,4 @@
-import { IconButtonSize } from "../../models"
+import { IconButtonSize } from "../../../models"
 
 interface IIconButtonProps {
   Icon: any,

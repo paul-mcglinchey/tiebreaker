@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { ButtonType } from "../../../models";
 import { combineClassNames } from "../../../services";
-import Button from "../Button";
+import { Button } from "..";
 
 interface IDialogProps {
   dialogOpen: boolean,

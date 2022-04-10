@@ -1,6 +1,6 @@
-import { IChildrenProps } from "../../../../models";
+import { IChildrenProps } from "../../../models";
 
-const Header = ({ children }: IChildrenProps) => {
+const TableHeader = ({ children }: IChildrenProps) => {
 
   return (
     <th
@@ -12,4 +12,4 @@ const Header = ({ children }: IChildrenProps) => {
   )
 }
 
-export default Header;
+export default TableHeader;

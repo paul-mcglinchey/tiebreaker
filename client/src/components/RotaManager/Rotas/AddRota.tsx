@@ -3,7 +3,7 @@ import { GroupType, IRota } from '../../../models';
 import { RotaService, StatusService } from '../../../services';
 import { ApplicationContext, StatusContext } from '../../../utilities';
 import { GroupToolbar } from '../../Toolbar';
-import RotaForm from './RotaForm';
+import { RotaForm } from '.';
 
 const AddRota = () => {
 

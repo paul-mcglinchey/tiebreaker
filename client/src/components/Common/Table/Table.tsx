@@ -1,53 +1,44 @@
-import { Fragment } from "react";
-import { SpinnerIcon } from "../../..";
-import { IRota, ISortable } from "../../../../models";
-import Header from "./Header";
-import InteractiveHeader from "./InteractiveHeader";
-import RotaListRow from "./RotaListRow";
+import { Fragment } from "react"
+import { ITable } from "../../../models"
+import { SpinnerIcon } from "../icons"
+import { TableHeader, TableInteractiveHeader } from "."
 
-interface IRotaTableProps extends ISortable {
-  rotas: IRota[],
-  headers: Array<{
-    name: string, value: string, interactive: boolean
-  }>,
-  isLoading: boolean
+interface ITableProps extends ITable {
+  children: JSX.Element
 }
 
-const RotaTable = ({
-  rotas,
+const Table = ({
   sortField,
-  setSortField,
   sortDirection,
+  setSortField,
   setSortDirection,
+  isLoading,
   headers,
-  isLoading
-}: IRotaTableProps) => {
-
+  children
+}: ITableProps) => {
   return (
     <div className="relative shadow overflow-x-scroll md:overflow-x-auto rounded-md">
       <table className="min-w-full">
         <thead className="bg-gray-800">
           <tr>
             {headers.map((h, i) => (
-              <Header key={i}>
+              <TableHeader key={i}>
                 {h.interactive ? (
-                  <InteractiveHeader sortField={sortField} sortDirection={sortDirection} setSortField={setSortField} setSortDirection={setSortDirection} key={i} value={h.value}>
+                  <TableInteractiveHeader sortField={sortField} sortDirection={sortDirection} setSortField={setSortField} setSortDirection={setSortDirection} key={i} value={h.value}>
                     {h.name}
-                  </InteractiveHeader>
+                  </TableInteractiveHeader>
                 ) : (
                   <span>
                     {h.value}
                   </span>
                 )}
-              </Header>
+              </TableHeader>
             ))}
           </tr>
         </thead>
         <Fragment>
           <tbody className="divide-y divide-gray-700">
-            {rotas.map((r) => (
-              <RotaListRow rota={r} key={r._id} />
-            ))}
+            {children}
           </tbody>
         </Fragment>
       </table>
@@ -60,4 +51,4 @@ const RotaTable = ({
   )
 }
 
-export default RotaTable;
+export default Table;

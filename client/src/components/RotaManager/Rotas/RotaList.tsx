@@ -1,13 +1,12 @@
 import { useContext, useState } from 'react';
 import { Fetch, RotaForm } from '../..';
-import { RotaTable } from './RotaTable';
 import { useFetch, useStatus } from '../../../hooks';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder, RotaService } from '../../../services';
-import { IFetch } from '../../../models/fetch.model';
-import RotaPrompter from './RotaPrompter';
-import { IRotasResponse } from '../../../models/rotas-response.model';
-import { Modal } from '../../Common';
+import { IFetch, IRota, IRotasResponse } from '../../../models';
+import { Modal, Prompter, Table } from '../../Common';
+import { TableIcon } from '@heroicons/react/solid';
+import { RotaTableRow } from './RotaTable';
 
 const headers = [
   { name: "Rota name", value: "name", interactive: true },
@@ -33,23 +32,28 @@ const RotaList = () => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.rotas(rotaGroup && rotaGroup._id || ""), requestBuilder(), [sortField, sortDirection])}
+        fetchOutput={useFetch(endpoints.rotas((rotaGroup && rotaGroup._id) || ""), requestBuilder(), [sortField, sortDirection])}
         render={({ response, isLoading }: IFetch<IRotasResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
               <div className="flex flex-col flex-grow space-y-4">
-                <RotaTable
-                  rotas={response.rotas}
+                <Table
                   sortField={sortField}
                   setSortField={setSortField}
                   sortDirection={sortDirection}
                   setSortDirection={setSortDirection}
                   headers={headers}
                   isLoading={isLoading}
-                />
+                >
+                  <>
+                    {response.rotas.map((r: IRota, index: number) => (
+                      <RotaTableRow rota={r} key={index} />
+                    ))}
+                  </>
+                </Table>
               </div>
             ) : (
-              <RotaPrompter action={toggleAddRotaOpen} />
+              <Prompter title="Add a rota to get started" Icon={TableIcon} action={toggleAddRotaOpen} />
             )}
           </div>
         )}

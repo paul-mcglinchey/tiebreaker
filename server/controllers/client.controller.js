@@ -10,7 +10,7 @@ const ActivityLog = db.activitylog;
 // Retrieve all clients from the database
 exports.getClients = async (req, res) => {
 
-  let { pageSize, pageNumber, groupId, sortField, sortDirection, clientName } = await req.query;
+  let { pageSize, pageNumber, groupId, sortField, sortDirection, name } = await req.query;
 
   pageSize = parseInt(pageSize);
   pageNumber = parseInt(pageNumber);
@@ -34,17 +34,17 @@ exports.getClients = async (req, res) => {
         });
 
       // create the aggregate object (functions like an IQueryable)
-      const aggregate = await Client.aggregate();
+      const aggregate = Client.aggregate();
 
       // apply a match operator to the pipeline to only return clients for the current group
       // add a new fullName field to filter on
       await aggregate
         .match(clientQuery)
-        .addFields({ fullName: { $concat: ['$clientName.firstName', ' ', '$clientName.lastName'] } });
+        .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } });
 
       // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
-      if (clientName) {
-        await aggregate.match({ fullName: { $regex: clientName, $options: 'i' } });
+      if (name) {
+        await aggregate.match({ fullName: { $regex: name, $options: 'i' } });
       }
 
       // finally build the other query parameters and return the aggregate as the clients queryable
