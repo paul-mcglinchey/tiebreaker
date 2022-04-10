@@ -6,11 +6,11 @@ import { FullEmployeeForm } from "./Forms";
 
 const AddEmployee = () => {
 
-  const { setRotaGroup } = useContext(ApplicationContext);
+  const { setGroupId } = useContext(ApplicationContext);
 
   return (
     <div>
-      <GroupToolbar title="Add employee" groupType={GroupType.ROTA} showSelector setGroup={setRotaGroup} />
+      <GroupToolbar title="Add employee" groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
       <FullEmployeeForm />
     </div>
   )

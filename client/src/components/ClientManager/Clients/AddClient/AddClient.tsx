@@ -6,11 +6,11 @@ import { GroupToolbar } from "../../../Toolbar";
 
 const AddClient = () => {
 
-  const { setClientGroup } = useContext(ApplicationContext);
+  const { setGroupId } = useContext(ApplicationContext);
 
   return (
     <div>
-      <GroupToolbar title="Add client" groupType={GroupType.CLIENT} showSelector setGroup={setClientGroup} />
+      <GroupToolbar title="Add client" groupType={GroupType.CLIENT} showSelector setGroupId={setGroupId} />
       <ClientForm />
     </div>
   )

@@ -16,7 +16,7 @@ interface IRotaHeaderProps {
 
 const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
@@ -27,7 +27,7 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
   const navigate = useNavigate();
 
   const deleteRota = () => {
-    rotaService.deleteRota(rota, rotaGroup._id);
+    rotaService.deleteRota(rota, groupId);
     navigate('/rotas/dashboard', { replace: true });
   }
 

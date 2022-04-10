@@ -85,7 +85,7 @@ exports.getClientById = async (req, res) => {
   // apply a match operator and add a fullname field
   await aggregate
     .match({ _id: clientId })
-    .addFields({ fullName: { $concat: ['$clientName.firstName', ' ', '$clientName.lastName'] } });
+    .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } });
 
   const client = await aggregate
     .then(client => client[0])
@@ -108,7 +108,7 @@ exports.create = (req, res) => {
     name,
     address,
     contactInfo,
-    clientColour,
+    colour,
     birthdate
   } = req.body;
 
@@ -138,7 +138,7 @@ exports.create = (req, res) => {
       phoneNumbers: contactInfo.phoneNumbers
     },
     sessions: [],
-    clientColour: clientColour,
+    colour: colour,
     activityLog: {
       task: "created",
       actor: req.auth.userUuid

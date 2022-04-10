@@ -8,19 +8,12 @@ import {
   useLocation
 } from 'react-router-dom';
 
-import { IClientGroup, IRotaGroup, IStatus } from './models';
 import { AddClient, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Employees, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
-import { ApplicationContext, StatusContext } from './utilities';
-import { getItemInStorage } from './services';
 import { AdminPanel } from './components/AdminPanel';
+import { StatusProvider } from './utilities';
 
 export default function App() {
-  const [status, setStatus] = useState<IStatus[]>([]);
   const location = useLocation();
-
-  // groups
-  const [rotaGroup, setRotaGroup] = useState<IRotaGroup>(getItemInStorage("rotaGroup"));
-  const [clientGroup, setClientGroup] = useState<IClientGroup>(getItemInStorage("clientGroup"));
 
   // provide state for the current application
   const [currentApplication, setCurrentApplication] = useState(undefined);
@@ -37,8 +30,7 @@ export default function App() {
   }
 
   return (
-    <ApplicationContext.Provider value={{ clientGroup: clientGroup, setClientGroup: setClientGroup, rotaGroup: rotaGroup, setRotaGroup: setRotaGroup }}>
-      <StatusContext.Provider value={{ status: status, setStatus: setStatus }}>
+      <StatusProvider>
         <div className="">
           {getAccess() && (
             <NavMenu currentApplication={currentApplication} />
@@ -94,7 +86,6 @@ export default function App() {
             </Routes>
           </div>
         </div >
-      </StatusContext.Provider>
-    </ApplicationContext.Provider>
+      </StatusProvider>
   );
 }

@@ -11,14 +11,14 @@ const ClientGroupDashboard = () => {
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
-
   const { dependency, refresh } = useRefresh();
+
   const { statusService } = useStatus();
   const groupService = new ClientGroupService(statusService, refresh);
 
   return (
     <Fragment>
-      <GroupToolbar title="Group management" groupType={GroupType.CLIENT} showGroupInfo createGroupAction={toggleAddGroupOpen} />
+      <GroupToolbar title="Group management" groupType={GroupType.CLIENT} createGroupAction={toggleAddGroupOpen} />
       <Fetch
         fetchOutput={useFetch(endpoints.groups(GroupType.CLIENT).groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (

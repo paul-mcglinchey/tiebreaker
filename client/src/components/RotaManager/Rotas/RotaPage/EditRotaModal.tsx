@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { IRota } from "../../../../models";
-import { RotaService, StatusService } from "../../../../services";
-import { StatusContext } from "../../../../utilities";
+import { RotaService } from "../../../../services";
 import { Modal } from "../../../Common";
 import { RotaForm } from "..";
+import { useStatus } from "../../../../hooks";
 
 interface IEditRotaProps {
   modalOpen: boolean,
@@ -13,8 +12,8 @@ interface IEditRotaProps {
 
 const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => {
 
-  const { status, setStatus } = useContext(StatusContext);
-  const rotaService = new RotaService(new StatusService(status, setStatus));
+  const { statusService } = useStatus();
+  const rotaService = new RotaService(statusService);
 
   return (
     <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>

@@ -11,7 +11,7 @@ import { GroupToolbar } from "../../Toolbar";
 const Employees = () => {
 
   const { dependency, refresh } = useRefresh();
-  const { setRotaGroup } = useContext(ApplicationContext);
+  const { setGroupId } = useContext(ApplicationContext);
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -30,7 +30,7 @@ const Employees = () => {
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} groupType={GroupType.ROTA} showSelector setGroup={setRotaGroup} />
+                <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
               </>
             ) : (
               !isLoading && (

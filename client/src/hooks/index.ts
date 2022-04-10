@@ -6,3 +6,4 @@ export { default as useRefresh } from './useRefresh';
 export { default as useStatus } from './useStatus';
 export { default as useStateCallback } from './useStateCallback';
 export { default as useIsMounted } from './useIsMounted';
+export { default as useSessionStorage } from './useSessionStorage';

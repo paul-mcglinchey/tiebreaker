@@ -15,7 +15,7 @@ module.exports = app => {
   // Create a new clientGroup
   router.post(
     '/', 
-    middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
+    middleware.groupMiddleware.checkIfGroupNameExists(ClientGroup),
     clientGroup.createClientGroup
   );
 
@@ -26,7 +26,6 @@ module.exports = app => {
   router.put(
     '/',
     middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
-    middleware.groupMiddleware.checkIfGroupNameExists(ClientGroup),
     clientGroup.updateClientGroup
   )
 

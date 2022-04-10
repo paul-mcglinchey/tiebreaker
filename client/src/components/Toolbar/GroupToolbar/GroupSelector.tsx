@@ -1,42 +1,42 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { useIsMounted } from "../../../hooks";
 import { IGroup } from "../../../models";
-import { combineClassNames, getItemInStorage } from "../../../services";
+import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../services";
 
 interface IGroupSelectorProps<TGroup> {
   groupType: string,
   group?: TGroup,
-  setGroup: (group: TGroup) => void,
+  setGroupId: Dispatch<SetStateAction<string>>
   groups: TGroup[] 
 }
 
-const GroupSelector = <TGroup extends IGroup>({ groupType, setGroup, groups }: IGroupSelectorProps<TGroup>) => {
+const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }: IGroupSelectorProps<TGroup>) => {
 
-  const storageKey = `${groupType}Group`;
-  
-  const storageHasValidGroup = (groups: TGroup[]): boolean => {
-    return groups && getItemInStorage(storageKey) && groups.filter((g: TGroup) => g._id === getItemInStorage(storageKey)._id).length > 0;
-  }
+  const isMounted = useIsMounted();
+  const storageKey = `${groupType}GroupId`;
 
-  const updateGroup = (group: TGroup) => {
+  const updateGroup = (groupId: string | undefined) => {
+    if (!groupId) return;
+
     // Update the group held in storage
-    sessionStorage.setItem(storageKey, JSON.stringify(group))
+    setItemInStorage(storageKey, groupId);
 
     // Update the group held in state
-    setGroup(group);
+    isMounted() && setGroupId(groupId);
+  }
+
+  const getGroupName = (groupId: string | undefined | null): string | undefined => {
+    return groups.filter((g: TGroup) => g._id === groupId)[0]?.name;
   }
 
   useEffect(() => {
-    let componentIsMounted = true;
+    let storedGroupId = getItemInStorage(storageKey);
 
-    componentIsMounted
-      && !storageHasValidGroup(groups)
-      && updateGroup(storageHasValidGroup(groups) ? getItemInStorage(storageKey) : groups[0])
+    let isStoredGroupValid = groups.filter((g: TGroup) => g._id === storedGroupId).length > 0;
 
-    return () => {
-      componentIsMounted = false;
-    }
+    isMounted() && !isStoredGroupValid && updateGroup(groups[0]?._id)
   }, []);
 
   return (  
@@ -44,7 +44,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroup, groups }: I
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
-            {storageHasValidGroup(groups) ? getItemInStorage(storageKey).name : 'Groups'}
+            {getGroupName(getItemInStorage(storageKey)) || 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -69,7 +69,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroup, groups }: I
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button
-                      onClick={() => updateGroup(g)}
+                      onClick={() => updateGroup(g._id)}
                       className={combineClassNames(
                         active ? 'text-gray-400' : '',
                         'block px-4 py-2 text-sm font-medium'

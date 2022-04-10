@@ -1,4 +1,4 @@
-import { IRota, IRotaGroup, ISchedule, Status } from "../models";
+import { IRota, ISchedule, Status } from "../models";
 import { endpoints } from "../utilities";
 import { IRotaService, IStatusService } from "./interfaces";
 import { requestBuilder } from "./request.service";
@@ -12,14 +12,14 @@ export class RotaService implements IRotaService {
     this.refresh = refresh;
   }
 
-  addRota = (values: IRota, rotaGroup: IRotaGroup) => {
-    this.statusService.setLoading();
+  addRota = (values: IRota, groupId: string) => {
+    this.statusService.updateIsLoading(true);
 
-    if (!rotaGroup) {
+    if (!groupId) {
       return this.statusService.appendStatus(false, 'Group must be set', Status.Error);
     }
 
-    fetch(endpoints.rotas(rotaGroup._id || ""), requestBuilder('POST', undefined, values))
+    fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, 'Successfully added rota', Status.Success);
@@ -30,10 +30,11 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, 'A problem ocurred adding rota', Status.Error);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 
   updateRota = (values: IRota, rota: IRota | undefined) => {
-    this.statusService.setLoading();
+    this.statusService.updateIsLoading(true);
 
     fetch(endpoints.rota(rota?._id || ""), requestBuilder('PUT', undefined, values))
       .then(res => {
@@ -46,10 +47,11 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, 'A problem ocurred updating rota', Status.Error);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 
   deleteRota = (r: IRota, groupId: string | undefined) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     if (!groupId || !r._id) return this.statusService.appendStatus(false, `A problem occurred deleting the rota.`, Status.Error);
 
@@ -64,6 +66,7 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred deleting the rota`, Status.Error);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 
   getWeek = (weekModifier: number): { firstDay: Date, lastDay: Date } => {
@@ -84,7 +87,7 @@ export class RotaService implements IRotaService {
   }
 
   updateSchedule = (r: IRota, s: ISchedule) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
     
     let startDate = new Date(s.startDate || "").toISOString().split('T')[0];
     if (!r._id || !startDate) return this.statusService.appendStatus(false, 'Something went wrong...', Status.Error);
@@ -100,5 +103,6 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred updating the schedule`, Status.Error);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 }

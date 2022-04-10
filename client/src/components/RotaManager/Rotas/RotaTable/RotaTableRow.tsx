@@ -1,6 +1,6 @@
 import { UserAddIcon } from '@heroicons/react/solid';
 import { IFetch, IRota, IUserResponse } from '../../../../models';
-import { useFetch } from '../../../../hooks';
+import { useSessionStorage } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
 import { requestBuilder } from '../../../../services';
 import { Fetch, InlineLink, TableRow, TableRowItem } from '../../../Common';
@@ -14,7 +14,7 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
         </TableRowItem>
         <TableRowItem>
           <Fetch
-            fetchOutput={useFetch(endpoints.user(rota.createdBy || ""), requestBuilder("GET"))}
+            fetchOutput={useSessionStorage(endpoints.user(rota.createdBy || ""), requestBuilder("GET"))}
             render={({ response }: IFetch<IUserResponse>) => (
               <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                 {response && response.username}
@@ -43,7 +43,7 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
           </div>
         </TableRowItem>
         <TableRowItem>
-          <div className="flex space-x-2 justify-end">
+          <div className="flex flex-grow space-x-2 justify-end">
             <InlineLink to={`/rotas/${rota._id}/view`} color="text-gray-500">View</InlineLink>
           </div>
         </TableRowItem>

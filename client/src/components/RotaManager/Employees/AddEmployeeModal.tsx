@@ -1,6 +1,5 @@
-import { useContext } from "react"
-import { EmployeeService, StatusService } from "../../../services"
-import { StatusContext } from "../../../utilities"
+import { useStatus } from "../../../hooks"
+import { EmployeeService } from "../../../services"
 import { Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
@@ -11,8 +10,8 @@ interface IAddEmployeeModalProps {
 
 const AddEmployeeModal = ({ modalOpen, toggleModalOpen }: IAddEmployeeModalProps) => {
 
-  const { status, setStatus } = useContext(StatusContext);
-  const employeeService = new EmployeeService(new StatusService(status, setStatus));
+  const { statusService } = useStatus();
+  const employeeService = new EmployeeService(statusService);
 
   return (
     <Modal title="Add employee" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>

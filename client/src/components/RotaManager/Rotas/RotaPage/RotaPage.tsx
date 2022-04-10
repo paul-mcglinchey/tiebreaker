@@ -1,21 +1,21 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 import {
   useParams 
 } from "react-router";
 import { Fetch } from "../../..";
-import { useFetch, useRefresh } from "../../../../hooks";
+import { useFetch, useRefresh, useStatus } from "../../../../hooks";
 import { IFetch, IRotaResponse } from "../../../../models";
-import { requestBuilder, RotaService, StatusService } from "../../../../services";
-import { endpoints, StatusContext } from "../../../../utilities";
+import { requestBuilder, RotaService } from "../../../../services";
+import { endpoints } from "../../../../utilities";
 import { RotaHeader, Schedule } from "..";
 
 const RotaPage = () => {
 
-  const { status, setStatus } = useContext(StatusContext);
+  const { dependency, refresh } = useRefresh();
+  const { statusService } = useStatus();
+  const rotaService = new RotaService(statusService, refresh);
 
   const { rotaId } = useParams();
-  const { dependency, refresh } = useRefresh();
-  const rotaService = new RotaService(new StatusService(status, setStatus), refresh);
   
   const [editing, setEditing] = useState<boolean>(false);
 

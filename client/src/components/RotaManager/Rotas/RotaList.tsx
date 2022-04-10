@@ -18,7 +18,7 @@ const headers = [
 
 const RotaList = () => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
@@ -32,7 +32,7 @@ const RotaList = () => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.rotas((rotaGroup && rotaGroup._id) || ""), requestBuilder(), [sortField, sortDirection])}
+        fetchOutput={useFetch(groupId && endpoints.rotas(groupId), requestBuilder(), [groupId, sortField, sortDirection])}
         render={({ response, isLoading }: IFetch<IRotasResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
@@ -59,7 +59,7 @@ const RotaList = () => {
         )}
       />
       <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>
-        <RotaForm handleSubmit={(values) => rotaService.addRota(values, rotaGroup)} />
+        <RotaForm handleSubmit={(values) => rotaService.addRota(values, groupId)} />
       </Modal>
     </>
   )

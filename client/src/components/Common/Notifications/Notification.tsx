@@ -1,34 +1,36 @@
 import { XIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 import { useEffect, useState } from 'react';
-import { combineClassNames, IStatusService } from '../../../services';
+import { combineClassNames } from '../../../services';
 import { Status } from '../../../models/types/status.type';
 import { IStatus } from '../../../models';
+import { useDelayedRendering, useIsMounted } from '../../../hooks';
 
 interface INotificationProps {
   status: IStatus,
-  statusService: IStatusService
+  removeStatus: (statusId: string) => void
 }
 
-const Notification = ({ status, statusService }: INotificationProps) => {
+const Notification = ({ status, removeStatus }: INotificationProps) => {
 
+  const show = useDelayedRendering(100);
   const [open, setOpen] = useState(true);
+  const isMounted = useIsMounted();
 
   const close = () => {
-    setOpen(false);
+    isMounted() && setOpen(false);
+    setTimeout(() => removeStatus(status._id), 1000);
   }
 
   useEffect(() => {
-    setTimeout(() => close(), 5000);
-
-    return () => statusService.removeStatus(status);
-  })
+    setTimeout(() => close(), 3000)
+  }, [])
 
   return (
     <Transition
-      show={open && !status.isLoading}
+      show={show && open && !status.isLoading}
       enter="transition ease-in-out duration-300"
-      enterFrom="transform translate-x-full"
+      enterFrom="transform translate-x-96"
       enterTo="transform translate-x-0"
       leave="transition ease-in-out duration-300"
       leaveFrom="transform translate-x-0"

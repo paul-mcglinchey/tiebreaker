@@ -42,7 +42,7 @@ const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClie
         {!isMinPage() && (
           <div><SquareIconButton Icon={ChevronLeftIcon} action={decrementPageNumber} className={!isMinPage() ? 'hover:text-gray-200' : ''} /></div>
         )}
-        <div className={`pb-1 font-bold tracking-wide ${isMinPage() && 'pl-12'} ${isMaxPage() && 'pr-12'}`}>{pageNumber} of {Math.ceil(totalClients / pageSize)}</div>
+        <div className={`pb-1 font-bold tracking-wide ${isMinPage() && 'pl-8'} ${isMaxPage() && 'pr-8'}`}>{pageNumber} of {Math.ceil(totalClients / pageSize)}</div>
         {!isMaxPage() && (
           <div><SquareIconButton Icon={ChevronRightIcon} action={incrementPageNumber} className={!isMaxPage() ? 'hover:text-gray-200' : ''} /></div>
         )}

@@ -14,7 +14,7 @@ export interface IClient extends IHasName, IHasAddress, IHasContactInfo {
   updatedAt?: Date,
   createdBy?: string,
   updatedBy?: string,
-  clientColour?: string | undefined,
+  colour?: string,
   activityLog?: IActivityLog[],
   fullName?: string,
   groupId?: string

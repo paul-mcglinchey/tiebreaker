@@ -1,9 +1,6 @@
-import { IClientGroup } from "..";
-import { IRotaGroup } from "..";
+import { Dispatch, SetStateAction } from "react";
 
 export interface IApplicationContext {
-  rotaGroup: IRotaGroup,
-  setRotaGroup: (group: IRotaGroup) => void,
-  clientGroup: IClientGroup,
-  setClientGroup: (group: IClientGroup) => void
+  groupId: string
+  setGroupId: Dispatch<SetStateAction<string>>
 }

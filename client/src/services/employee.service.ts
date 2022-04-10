@@ -14,7 +14,6 @@ export class EmployeeService implements IEmployeeService {
   }
 
   addEmployee = (values: IEmployee, groupId: string) => {
-    this.statusService.setLoading();
 
     // generates a new random colour to be used for profile display
     values.employeeColour = generateColour();

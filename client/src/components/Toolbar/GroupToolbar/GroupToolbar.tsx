@@ -1,42 +1,38 @@
-import { useFetch } from "../../../hooks";
+import { useSessionStorage } from "../../../hooks";
 import { GroupType, IFetch, IGroup, IGroupsResponse } from "../../../models";
 import { requestBuilder } from "../../../services";
 import { endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { IToolbarProps } from "../models";
-import Toolbar from "../Toolbar";
-import GroupInfoDisplay from "./GroupInfoDisplay"
-import GroupSelector from "./GroupSelector"
+import { Toolbar } from "..";
+import { GroupSelector } from "."
+import { Dispatch, SetStateAction } from "react";
 
-interface IGroupToolbarProps<TGroup> extends IToolbarProps {
+interface IGroupToolbarProps extends IToolbarProps {
   groupType: GroupType,
-  showGroupInfo?: boolean,
   showSelector?: boolean,
-  setGroup?: (group: TGroup) => void,
+  setGroupId?: Dispatch<SetStateAction<string>>,
 }
 
 const GroupToolbar = <TGroup extends IGroup>({ 
   title, 
-  addEmployeeAction, 
+  addEmployeeAction,
+  addClientAction,
   createGroupAction, 
-  showSelector, 
-  showGroupInfo, 
+  showSelector,
   groupType, 
-  setGroup 
-}: IGroupToolbarProps<TGroup>) => {
+  setGroupId
+}: IGroupToolbarProps) => {
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups(groupType).groups, requestBuilder("GET"))}
+      fetchOutput={useSessionStorage(endpoints.groups(groupType).groups, requestBuilder("GET"), [], true)}
       render={({ response, error }: IFetch<IGroupsResponse<TGroup>>) => (
         <>
           {!error && response && (
-            <Toolbar title={title} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
+            <Toolbar title={title} addClientAction={addClientAction} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
               <div className="flex md:space-x-4 justify-end">
-                {showGroupInfo && (
-                  <GroupInfoDisplay groupCount={response.count} />
-                )}
-                {showSelector && setGroup && (
-                  <GroupSelector groupType={groupType} setGroup={setGroup} groups={response.groups} />
+                {showSelector && setGroupId && (
+                  <GroupSelector groupType={groupType} setGroupId={setGroupId} groups={response.groups} />
                 )}
               </div>
             </Toolbar>

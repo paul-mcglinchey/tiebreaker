@@ -1,27 +1,24 @@
 import { IGroup, Status } from "../models";
 import { IGroupsEndpoint } from "../models/groups-endpoint.model";
-import { IGroupService, IStatusService, IUserService } from "./interfaces";
+import { IGroupService, IStatusService } from "./interfaces";
 import { requestBuilder } from "./request.service";
-import { getItemInStorage } from "./session-storage.service";
-import { UserService } from "./user.service";
+import { removeItemInStorage } from "./session-storage.service";
 
 export abstract class GroupService<TGroup extends IGroup> implements IGroupService<TGroup> {
   endpoint: IGroupsEndpoint;
   groupType: string;
   statusService: IStatusService;
-  userService: IUserService;
   refresh: () => void;
 
   constructor(endpoint: IGroupsEndpoint, groupType: string, statusService: IStatusService, refresh: () => void) {
     this.endpoint = endpoint;
     this.groupType = groupType;
     this.statusService = statusService;
-    this.userService = new UserService(statusService);
     this.refresh = refresh;
   }
 
   addGroup = (values: IGroup) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     fetch(this.endpoint.groups, requestBuilder('POST', undefined, values))
       .then(res => {
@@ -36,10 +33,15 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred creating the group`, Status.Error);
       })
+      .finally(() => {
+        this.statusService.updateIsLoading(false)
+        removeItemInStorage(this.endpoint.groups)
+        this.refresh();
+      })
   }
 
   updateGroup = (values: IGroup, _id: string | undefined) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Group ID must be set before updating`, Status.Error);
 
@@ -54,24 +56,31 @@ export abstract class GroupService<TGroup extends IGroup> implements IGroupServi
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred updating the group`, Status.Error);
       })
+      .finally(() => {
+        this.statusService.updateIsLoading(false)
+        removeItemInStorage(this.endpoint.groups)
+        this.refresh();
+      })
   }
 
   deleteGroup = async (g: TGroup) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     fetch(this.endpoint.groups, requestBuilder("DELETE", undefined, { _id: g._id }))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, `Successfully deleted ${g.name}`, Status.Success);
-
-          // Check if the group is in session storage and remove it if so
-          getItemInStorage(this.groupType + "Group")._id === g._id && sessionStorage.setItem(this.groupType + "Group", "");
         } else {
           this.statusService.appendStatus(false, `A problem ocurred deleting ${g.name}`, Status.Error);
         }
       })
       .catch(() => {
         this.statusService.appendStatus(false, '', Status.None);
+      })
+      .finally(() => {
+        this.statusService.updateIsLoading(false)
+        removeItemInStorage(this.endpoint.groups)
+        this.refresh();
       })
   }
 

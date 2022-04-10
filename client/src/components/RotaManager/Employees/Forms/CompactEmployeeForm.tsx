@@ -11,7 +11,7 @@ interface ICompactEmployeeForm {
 
 const CompactEmployeeForm = ({ employeeService }: ICompactEmployeeForm) => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   return (
     <Formik
@@ -26,7 +26,7 @@ const CompactEmployeeForm = ({ employeeService }: ICompactEmployeeForm) => {
       }}
       validationSchema={employeeValidationSchema}
       onSubmit={(values) => {
-        employeeService.addEmployee(values, rotaGroup._id || "");
+        employeeService.addEmployee(values, groupId);
       }}
     >
       {({ errors, touched }) => (

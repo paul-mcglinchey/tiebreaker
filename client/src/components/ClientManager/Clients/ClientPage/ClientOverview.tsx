@@ -7,12 +7,12 @@ import InfoTabs from "./InfoTabs";
 
 const ClientOverview = ({ client }: { client: IClient }) => {
 
-  const { clientColour, fullName, createdAt, updatedAt, updatedBy } = client;
+  const { colour, fullName, createdAt, updatedAt, updatedBy } = client;
 
   return (
     <div className={`bg-gray-800/40 flex justify-between w-full mt-10 mb-4 rounded-lg text-gray-200 shadow-md space-x-8`}>
       <div className="flex m-5 pr-10 space-x-6 border-r-2 border-gray-700">
-        <div style={{ backgroundColor: clientColour ? clientColour : generateColour() }} className="w-32 h-32 rounded-full shadow-lg">
+        <div style={{ backgroundColor: colour || generateColour() }} className="w-32 h-32 rounded-full shadow-lg">
           <span className="text-5xl inline-block font-bold tracking-wide relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             {getInitials(fullName || "")}
           </span>

@@ -16,7 +16,7 @@ interface IRotaFormProps {
 
 const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
 
@@ -32,7 +32,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder())}
+        fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder(), [groupId])}
         render={({ response, isLoading }: IFetch<IEmployeesResponse>) => (
           <Formik
             initialValues={{

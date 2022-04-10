@@ -2,7 +2,7 @@ import { UserGroupIcon } from '@heroicons/react/solid';
 import { useContext, useState } from 'react';
 
 import { Fetch } from '..';
-import { useFetch, useRefresh, useStatus } from '../../hooks';
+import { useRefresh, useSessionStorage, useStatus } from '../../hooks';
 import { GroupType, IGroupsResponse, IRotaGroup, IFetch } from '../../models';
 import { requestBuilder, RotaGroupService } from '../../services';
 import { ApplicationContext, endpoints } from '../../utilities';
@@ -14,7 +14,7 @@ import { RotaList } from './Rotas';
 const RotaDashboard = () => {
 
   const { dependency, refresh } = useRefresh();
-  const { setRotaGroup } = useContext(ApplicationContext);
+  const { setGroupId } = useContext(ApplicationContext);
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -24,13 +24,13 @@ const RotaDashboard = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder(), [dependency])}
+      fetchOutput={useSessionStorage(endpoints.groups(GroupType.ROTA).groups, requestBuilder(), [dependency])}
       render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
         <>
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Rotas" createGroupAction={toggleAddGroupOpen} groupType={GroupType.ROTA} showSelector setGroup={setRotaGroup} />
+                <GroupToolbar title="Rotas" createGroupAction={toggleAddGroupOpen} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
                 <RotaList />
               </>
             ) : (

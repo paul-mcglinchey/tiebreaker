@@ -17,7 +17,7 @@ const RotaGroupDashboard = () => {
 
   return (
     <Fragment>
-      <GroupToolbar title="Group management" groupType={GroupType.ROTA} />
+      <GroupToolbar title="Group management" groupType={GroupType.ROTA} createGroupAction={toggleAddGroupOpen} />
       <Fetch
         fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder("GET"), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (

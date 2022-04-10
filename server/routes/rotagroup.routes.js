@@ -14,7 +14,7 @@ module.exports = app => {
   // Create a new rotagroup
   router.post(
     '/', 
-    middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
+    middleware.groupMiddleware.checkIfGroupNameExists(RotaGroup),
     rotagroup.createRotaGroup
   );
 
@@ -25,7 +25,6 @@ module.exports = app => {
   router.put(
     '/',
     middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
-    middleware.groupMiddleware.checkIfGroupNameExists(RotaGroup),
     rotagroup.updateRotaGroup
   )
 
@@ -35,7 +34,6 @@ module.exports = app => {
   // Delete a rotagroup
   router.delete('/',
     middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
-    middleware.groupMiddleware.checkIfGroupNameExists(RotaGroup),
     rotagroup.deleteRotaGroup
   );
 

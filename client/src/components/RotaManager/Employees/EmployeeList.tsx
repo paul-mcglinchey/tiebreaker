@@ -14,7 +14,7 @@ const headers = [
 
 const EmployeeList = () => {
 
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
@@ -28,7 +28,7 @@ const EmployeeList = () => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.rotas(rotaGroup._id || ""), requestBuilder(), [sortField, sortDirection])}
+        fetchOutput={useFetch(endpoints.rotas(groupId), requestBuilder(), [sortField, sortDirection])}
         render={({ response, isLoading }: IFetch<IEmployeesResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (

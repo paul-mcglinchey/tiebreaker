@@ -1,17 +1,16 @@
 import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { ApplicationContext, employeeValidationSchema, endpoints, StatusContext } from "../../../../utilities";
+import { ApplicationContext, employeeValidationSchema, endpoints } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
-import { EmployeeService, requestBuilder, StatusService } from "../../../../services";
+import { EmployeeService, requestBuilder } from "../../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
-import { useFetch } from "../../../../hooks";
+import { useFetch, useStatus } from "../../../../hooks";
 import { Fetch } from "../../../Common/Fetch";
 
 const FullEmployeeForm = () => {
 
-  const { status, setStatus } = useContext(StatusContext);
-  const { rotaGroup } = useContext(ApplicationContext);
+  const { groupId } = useContext(ApplicationContext);
 
   const [showAddress, setShowAddress] = useState(false);
   const [showRequirements, setShowRequirements] = useState(false);
@@ -45,11 +44,12 @@ const FullEmployeeForm = () => {
     });
   }
 
-  const employeeService = new EmployeeService(new StatusService(status, setStatus));
+  const { statusService } = useStatus();
+  const employeeService = new EmployeeService(statusService);
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(rotaGroup._id || ""), requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder("GET"))}
       render={({ response }: IFetch<IEmployeesResponse>) => (
         <Formik
           initialValues={{
@@ -82,7 +82,7 @@ const FullEmployeeForm = () => {
           }}
           validationSchema={employeeValidationSchema}
           onSubmit={(values) => {
-            employeeService.addEmployee(values, rotaGroup._id || "");
+            employeeService.addEmployee(values, groupId);
           }}
         >
           {({ errors, touched }) => (
@@ -144,7 +144,7 @@ const FullEmployeeForm = () => {
                 </FormSection>
               </div>
               <div className="flex justify-end my-10">
-                <Button status={status} content='Add Employee' />
+                <Button content='Add Employee' />
               </div>
             </Form>
           )}

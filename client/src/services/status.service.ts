@@ -1,36 +1,26 @@
 import { IStatus, Status } from "../models";
 import { IStatusService } from "./interfaces/status.service.interface";
+import { v4 as uuidv4 } from 'uuid';
 
 export class StatusService implements IStatusService {
-  status: IStatus[];
-  setStatus: (status: IStatus[]) => void;
+  addStatus: (status: IStatus) => void;
+  setLoading: (isLoading: boolean) => void;
 
-  constructor(status: IStatus[], setStatus: (status: IStatus[]) => void) {
-    this.status = status;
-    this.setStatus = setStatus;
-  }
-
-  getStatusFeed = (): IStatus[] => {
-    return this.status;
-  }
-
-  removeStatus = (statusItemToRemove: IStatus): void => {
-    this.status.filter((statusItem: IStatus) => statusItem !== statusItemToRemove);
+  constructor(addStatus: (status: IStatus) => void, setLoading: (isLoading: boolean) => void) {
+    this.addStatus = addStatus;
+    this.setLoading = setLoading;
   }
 
   appendStatus = (isLoading: boolean, message: string, type: Status): void => {
-    this.setStatus([...this.status, {
+    this.addStatus({
+      _id: uuidv4(),
       isLoading: isLoading,
       message: message,
       type: type
-    }])
+    })
   }
 
-  setLoading = (loading: boolean = true): void => {
-    this.setStatus([...this.status, {
-      isLoading: loading,
-      message: '',
-      type: Status.None
-    }])
+  updateIsLoading = (isLoading: boolean) => {
+    this.setLoading(isLoading);
   }
 }

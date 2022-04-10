@@ -3,11 +3,11 @@ import { StatusService } from "../services";
 import { StatusContext } from "../utilities"
 
 const useStatus = () => {
-  const { status, setStatus } = useContext(StatusContext);
+  const { status, addStatus, removeStatus, setLoading } = useContext(StatusContext);
 
-  const statusService = new StatusService(status, setStatus);
+  const statusService = new StatusService(addStatus, setLoading);
 
-  return { statusService, status, setStatus }
+  return { statusService, status, addStatus, removeStatus }
 }
 
 export default useStatus;

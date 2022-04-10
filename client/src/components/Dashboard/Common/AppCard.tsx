@@ -21,9 +21,8 @@ const AppCard = ({ title, subtitle, href, datapoints, colours }: IAppCardProps) 
 
   return (
     <Link className="flex-grow" to={href}>
-      {console.log(colours)}
       <div className={combineClassNames(
-        "flex flex-col h-full space-y-4 bg-gradient-to-b text-white from-red-500 px-8 py-5 shadow-lg rounded-lg transform hover:scale-102 transition-transform",
+        "flex flex-col h-full space-y-4 bg-gradient-to-b text-white px-8 py-5 shadow-lg rounded-lg transform hover:scale-102 transition-transform",
         colours
           ? typeof colours === "string"
             ? `from-${colours}`

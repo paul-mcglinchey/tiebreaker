@@ -1,60 +1,57 @@
 import { ViewGridAddIcon } from '@heroicons/react/outline';
-import { IClient, IUserResponse, IFetch } from '../../../../models';
-import { useFetch } from '../../../../hooks';
-import { endpoints } from '../../../../utilities';
+import { useSessionStorage } from '../../../../hooks';
+import { IClient, IFetch, IUserResponse } from '../../../../models';
 import { requestBuilder } from '../../../../services';
-import { InlineLink, TableRow, TableRowItem, Fetch } from '../../../Common';
+import { endpoints } from '../../../../utilities';
+import { Fetch, InlineLink, TableRow, TableRowItem } from '../../../Common';
 
 const ClientRow = ({ client }: { client: IClient }) => {
-
   return (
     <TableRow>
-          <TableRowItem>
-            <div className="flex items-center">
-              <div className="">
-                <div className="text-sm font-medium text-white">{client.fullName || "--"}</div>
-                <div className="text-sm">{client?.contactInfo?.primaryEmail || "--"}</div>
-              </div>
-            </div>
-          </TableRowItem>
-          <TableRowItem>
-            <div className="flex items-center space-x-4 min-w-40">
-              <span>
-                {new Date(client.updatedAt || "").toLocaleDateString()}
-              </span>
-                <Fetch
-                  fetchOutput={useFetch(endpoints.user(client.updatedBy || ""), requestBuilder("GET"))}
-                  render={({ response }: IFetch<IUserResponse>) => (
-                    <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
-                      {response && response.username}
-                    </span>
-                  )}
-                />
-            </div>
-          </TableRowItem>
-          <TableRowItem>
-            <div className="flex flex-grow items-center justify-start">
-              {(client?.sessions?.length || 0) > 0 ? (
-                <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
-                  <span className="self-center pt-0.5">Sessions</span>
-                  <span className="text-lg">{client?.sessions?.length}</span>
-                </InlineLink>
-              ) : (
-                <InlineLink to={`/clients/${client._id}/addsession`} color="text-green-500">
-                  <div className="whitespace-nowrap">Add session</div>
-                  <ViewGridAddIcon className="w-6 h-6" />
-                </InlineLink>
+      <TableRowItem>
+        <div className="flex flex-col">
+          <div className="text-sm font-medium text-white">{client.fullName || "--"}</div>
+          <div className="text-sm">{client?.contactInfo?.primaryEmail || "--"}</div>
+        </div>
+      </TableRowItem>
+      <TableRowItem>
+        <div className="flex items-center space-x-4 min-w-40">
+          <span>
+            {new Date(client.updatedAt || "").toLocaleDateString()}
+          </span>
+          <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
+            <Fetch 
+              fetchOutput={useSessionStorage(endpoints.user(client.updatedBy || ""), requestBuilder())}
+              render={({ response }: IFetch<IUserResponse>) => (
+                <div>{response?.username || '--'}</div>
               )}
-            </div>
-          </TableRowItem>
-          <TableRowItem>
-            <div className="flex items-center space-x-2 justify-end">
-              <InlineLink to={`/clients/${client._id}/overview`} color="text-gray-500">Overview</InlineLink>
-              <InlineLink to={`/clients/${client._id}/view`} color="text-gray-500">View</InlineLink>
-              <InlineLink to={`/clients/${client._id}/edit`} color="text-blue-500">Edit</InlineLink>
-            </div>
-          </TableRowItem>
-        </TableRow>
+            />
+          </span>
+        </div>
+      </TableRowItem>
+      <TableRowItem>
+        <div className="flex flex-grow items-center justify-start">
+          {(client?.sessions?.length || 0) > 0 ? (
+            <InlineLink to={`/clients/${client._id}/addsession`} color="text-amber-400">
+              <span className="self-center pt-0.5">Sessions</span>
+              <span className="text-lg">{client?.sessions?.length}</span>
+            </InlineLink>
+          ) : (
+            <InlineLink to={`/clients/${client._id}/addsession`} color="text-green-500">
+              <div className="whitespace-nowrap">Add session</div>
+              <ViewGridAddIcon className="w-6 h-6" />
+            </InlineLink>
+          )}
+        </div>
+      </TableRowItem>
+      <TableRowItem>
+        <div className="flex flex-grow items-center space-x-2 justify-end">
+          <InlineLink to={`/clients/${client._id}/overview`} color="text-gray-500">Overview</InlineLink>
+          <InlineLink to={`/clients/${client._id}/view`} color="text-gray-500">View</InlineLink>
+          <InlineLink to={`/clients/${client._id}/edit`} color="text-blue-500">Edit</InlineLink>
+        </div>
+      </TableRowItem>
+    </TableRow>
   )
 }
 

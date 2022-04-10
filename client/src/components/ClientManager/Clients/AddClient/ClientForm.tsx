@@ -2,21 +2,23 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { ClientService, StatusService } from "../../../../services";
+import { ClientService, generateColour } from "../../../../services";
 import { CustomDate, StyledField, Button } from "../../..";
-import { ApplicationContext, clientValidationSchema, StatusContext } from "../../../../utilities";
+import { ApplicationContext, clientValidationSchema } from "../../../../utilities";
 import { AddressForm, FormSection } from "../../../Common";
 import { IClient } from "../../../../models";
+import { useStatus } from "../../../../hooks";
 
 interface IClientFormProps {
-  client?: IClient
+  client?: IClient,
+  refresh?: () => void
 }
 
-const ClientForm = ({ client }: IClientFormProps) => {
+const ClientForm = ({ client, refresh }: IClientFormProps) => {
 
-  const { clientGroup } = useContext(ApplicationContext);
-  const { status, setStatus } = useContext(StatusContext);
-  const clientService = new ClientService(new StatusService(status, setStatus));
+  const { groupId } = useContext(ApplicationContext);
+  const { statusService } = useStatus();
+  const clientService = new ClientService(statusService, refresh);
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);
@@ -48,13 +50,13 @@ const ClientForm = ({ client }: IClientFormProps) => {
         birthdate: '',
       }}
       validationSchema={clientValidationSchema}
-      onSubmit={(values) => {
-        clientService.addClient(values, clientGroup._id || "");
+      onSubmit={(values, actions) => {
+        clientService.addClient({ ...values, colour: generateColour() }, groupId);
+        actions.resetForm();
       }}
     >
       {({ errors, touched }) => (
         <Form>
-          {console.log(errors)}
           <div className="flex flex-grow flex-col space-y-3 content-end">
             <div className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-1 md:space-y-0">
               <StyledField name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />

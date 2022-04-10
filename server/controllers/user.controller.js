@@ -12,7 +12,9 @@ exports.getUserById = (req, res) => {
   // UPDATE TO USE MIDDLEWARE CHECK
   if (!userId) return res.status(400).send({ message: 'UserID not set' });
 
-  this.getUser(res, userId).then(user => res.status(200).send(user));
+  this.getUser(res, userId).then(user => {
+    return res.status(200).send(user)
+  });
 }
 
 // Common functionality
@@ -29,8 +31,8 @@ exports.getUser = (res, userId) => {
       if (!response.ok) {
         return res.status(response.status).send({ message: response.statusText });
       }
-
-      return response;
+      
+      return response.json();
     })
     .catch(err => {
       return res.status(500).send({ message: err.message || `Some error occurred while getting the user.` })

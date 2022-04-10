@@ -2,9 +2,9 @@ import { Fragment, useContext, useState } from 'react';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { requestBuilder } from '../../../services';
 import { IClient, IClientsResponse, IFetch, IFilter } from '../../../models';
-import { useFetch, useRefresh } from '../../../hooks';
-import { SearchBar, ClientTableRow, ClientForm } from '.';
-import { Paginator, Table, Fetch, Modal, Prompter } from '../../Common';
+import { useFetch } from '../../../hooks';
+import { SearchBar, ClientTableRow } from '.';
+import { Paginator, Table, Fetch, Prompter } from '../../Common';
 import { UserAddIcon } from '@heroicons/react/solid';
 
 const headers = [
@@ -14,19 +14,20 @@ const headers = [
   { name: "Options", value: "", interactive: false },
 ]
 
-const ClientList = () => {
+interface IClientListProps {
+  toggleAddClientOpen: () => void,
+  dependency: boolean
+}
 
-  const { clientGroup } = useContext(ApplicationContext);
-  const { dependency } = useRefresh();
+const ClientList = ({ toggleAddClientOpen, dependency }: IClientListProps) => {
+
+  const { groupId } = useContext(ApplicationContext);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
-
-  const [addClientOpen, setAddClientOpen] = useState(false);
-  const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen);
 
   const [filters, setFilters] = useState<IFilter>({
     'name': { value: null, label: 'Name' }
@@ -50,7 +51,11 @@ const ClientList = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.clients((clientGroup && clientGroup._id) || "")}&${buildQueryString()}`, requestBuilder("GET"), [pageSize, pageNumber, filters, sortField, sortDirection, clientGroup, dependency])}
+      fetchOutput={useFetch(
+        groupId && `${endpoints.clients(groupId)}&${buildQueryString()}`, 
+        requestBuilder("GET"), 
+        [pageSize, pageNumber, filters, sortField, sortDirection, groupId, dependency]
+      )}
       render={({ response, isLoading }: IFetch<IClientsResponse>) => (
         <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
           {response && response.count > 0 ? (
@@ -83,9 +88,6 @@ const ClientList = () => {
               <Prompter title="Add a client to get started" Icon={UserAddIcon} action={toggleAddClientOpen} />
             )
           )}
-          <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
-            <ClientForm />
-          </Modal>
         </div>
       )}
     />

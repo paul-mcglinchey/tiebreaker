@@ -1,18 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const useRefresh = () => {
-  
-  let componentIsMounted = true;
   const [dependency, setDependency] = useState(false);
   const refresh = () => {
-    if (componentIsMounted) setDependency(!dependency)
+    setDependency(!dependency)
   }
-
-  useEffect(() => {
-    return () => {
-      componentIsMounted = false;
-    }
-  })
 
   return { dependency, refresh };
 }

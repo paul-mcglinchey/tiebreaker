@@ -20,7 +20,7 @@ const Client = mongoose.model(
     birthdate: Date,
     contactInfo: ContactInfoSchema,
     sessions: [SessionSchema],
-    clientColour: String,
+    colour: String,
     activityLog: [ActivityLogSchema],
     createdBy: String,
     updatedBy: String

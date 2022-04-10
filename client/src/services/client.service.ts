@@ -1,4 +1,4 @@
-import { IClient, Status } from "../models";
+import { IClient, ISession, Status } from "../models";
 import { endpoints } from "../utilities";
 import { IClientService, IStatusService } from "./interfaces";
 import { requestBuilder } from "./request.service";
@@ -13,7 +13,7 @@ export class ClientService implements IClientService {
   }
 
   addClient = (values: IClient, groupId: string) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, { ...values, groupId: groupId }))
       .then(res => {
@@ -26,10 +26,14 @@ export class ClientService implements IClientService {
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred adding the client`, Status.Error);
       })
+      .finally(() => {
+        this.statusService.updateIsLoading(false)
+        this.refresh();
+      })
   }
 
   updateClient = (values: IClient, _id: string) => {
-    this.statusService.setLoading(true);
+    this.statusService.updateIsLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Couldn't find a client with that ID`, Status.Error);
 
@@ -43,10 +47,11 @@ export class ClientService implements IClientService {
         console.error(err);
         this.statusService.appendStatus(false, `A problem occurred updating the client`, Status.Error);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 
-  deleteClient = async (_id: string, groupId: string) => {
-    this.statusService.setLoading(true);
+  deleteClient = (_id: string, groupId: string) => {
+    this.statusService.updateIsLoading(true);
 
     if (!_id) return this.statusService.appendStatus(false, `Couldn't find a client with that ID`, Status.Error);
 
@@ -62,5 +67,25 @@ export class ClientService implements IClientService {
         console.error(err);
         this.statusService.appendStatus(false, 'A problem occurred deleting client', Status.None);
       })
+      .finally(() => this.statusService.updateIsLoading(false))
+  }
+
+  addSession = (clientId: string | undefined, session: ISession) => {
+    this.statusService.updateIsLoading(true);
+
+    if (!clientId) return this.statusService.appendStatus(false, `Client ID not set`, Status.Error);
+
+    fetch((endpoints.sessions(clientId)), requestBuilder('PUT', undefined, session))
+      .then(res => {
+        if (res.ok) {
+          this.statusService.appendStatus(false, `Successfully added session`, Status.Success);
+        } else {
+          this.statusService.appendStatus(false, `A problem occurred adding the session`, Status.Error);
+        }
+      })
+      .catch(() => {
+        this.statusService.appendStatus(false, `A problem occurred adding the session`, Status.Error);
+      })
+      .finally(() => this.statusService.updateIsLoading(false))
   }
 } 
