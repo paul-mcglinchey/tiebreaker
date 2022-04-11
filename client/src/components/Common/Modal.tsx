@@ -24,7 +24,6 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, keepOp
         ? "hidden"
         : "auto"
     }
-  
   })
 
   return (

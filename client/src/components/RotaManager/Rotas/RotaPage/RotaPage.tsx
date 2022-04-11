@@ -21,7 +21,7 @@ const RotaPage = () => {
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.rota(rotaId || "")}`, requestBuilder(), [dependency])}
+      fetchOutput={useFetch(`${endpoints.rota(rotaId || "")}`, requestBuilder(), [dependency], false)}
       render={({ response }: IFetch<IRotaResponse>) => (
         <Fragment>
           {response && response.rota && (

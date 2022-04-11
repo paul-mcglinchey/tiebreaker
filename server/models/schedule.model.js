@@ -24,6 +24,7 @@ const ScheduleSchema = new Schema({
       onHoliday: { type: Boolean, required: false, default: false }
     }]
   }],
+  locked: { type: Boolean, default: false },
   createdBy: String,
   updatedBy: String
 }, { timestamps: true })

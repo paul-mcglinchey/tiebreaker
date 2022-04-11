@@ -18,6 +18,7 @@ export interface ISchedule {
     owners: string[],
   },
   startDate?: Date,
+  locked?: boolean,
   employeeSchedules: IEmployeeSchedule[]
 }
 

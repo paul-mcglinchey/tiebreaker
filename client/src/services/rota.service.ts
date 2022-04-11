@@ -47,7 +47,10 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, 'A problem ocurred updating rota', Status.Error);
       })
-      .finally(() => this.statusService.updateIsLoading(false))
+      .finally(() => {
+        this.statusService.updateIsLoading(false);
+        this.refresh();
+      })
   }
 
   deleteRota = (r: IRota, groupId: string | undefined) => {

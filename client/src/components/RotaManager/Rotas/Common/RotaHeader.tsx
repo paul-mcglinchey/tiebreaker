@@ -50,13 +50,14 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
         <span> / {editing ? 'Editing' : 'Viewing'}</span>
       </div>
       <div className="flex space-x-4 items-center">
-        <Button buttonType={ButtonType.Secondary} content={rota.locked ? 'Locked' : 'Open'} Icon={rota.locked ? LockClosedIcon : LockOpenIcon} action={() => updateLockedStatus()} />
         {!rota.locked && (
           <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => setEditing(!editing)} />
         )}
+        {rota.locked && <LockClosedIcon className="text-gray-400 w-6 h-6"/>}
         <Dropdown options={[
           { label: 'Edit Rota Details', action: () => toggleEditRotaOpen(), Icon: PencilIcon },
           { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
+          { label: rota.locked ? 'Unlock rota' : 'Lock rota', action: () => updateLockedStatus(), Icon: rota.locked ? LockOpenIcon : LockClosedIcon },
           { label: 'Delete', action: () => toggleDeletionOpen(), Icon: TrashIcon },
         ]} />
       </div>

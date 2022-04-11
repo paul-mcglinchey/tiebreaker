@@ -1,3 +1,4 @@
+import { LockClosedIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
 import { Fragment } from "react";
 import { useFetch } from "../../../../hooks";
@@ -41,8 +42,16 @@ const ScheduleTable = ({ rota, currentWeek, currentWeekModifier, rotaService, ed
                     <table className="min-w-full">
                       <thead className="bg-gray-800">
                         <tr>
-                          <th className="px-6">
-                            <Button buttonType={ButtonType.Secondary} content='Save' type="submit" />
+                          <th className="py-3 px-6">
+                            {values.locked ? (
+                              <div>
+                                <LockClosedIcon className="text-red-500 w-5 h-5" />
+                              </div>
+                            ) : (
+                              editing && (
+                                <Button buttonType={ButtonType.Tertiary} content='Save' type="submit" />
+                              )
+                            )}
                           </th>
                           {dayCycle.map((day: number, index: number) => (
                             <Fragment key={index}>

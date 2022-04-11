@@ -2,6 +2,7 @@ import { Transition } from "@headlessui/react";
 import { ButtonType } from "../../../models";
 import { combineClassNames } from "../../../services";
 import { Button } from "..";
+import { useEffect } from "react";
 
 interface IDialogProps {
   dialogOpen: boolean,
@@ -11,6 +12,17 @@ interface IDialogProps {
 }
 
 const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) => {
+
+  useEffect(() => {
+    let body = document.querySelector("body");
+    
+    if (body) {
+      body.style.overflow = dialogOpen
+        ? "hidden"
+        : "auto"
+    }
+  })
+
   return (
     <Transition
       show={dialogOpen}

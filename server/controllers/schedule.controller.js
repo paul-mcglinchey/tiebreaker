@@ -73,16 +73,22 @@ exports.getScheduleByDate = (req, res) => {
                 });
               });
           } else {
-            Employee.find({ _id: { $in: schedule.employeeSchedules.map(es => es.employeeId) } })
-              .then(employees => {
-                employeeSchedules = schedule.employeeSchedules.map(es => {
-                  es.employee = employees.filter(e => String(e._id) === String(es.employeeId))[0];
-                  return es;
-                });
+            // If the schedule start date is in the future (or current) and the schedule is not locked then update the employees to contain
+            // all the employees belonging to the current rota
+            let current = new Date();
+            let scheduleStartDate = new Date(schedule.startDate);
+            
+            if (scheduleStartDate > current.setDate(current.getDate() - 7) && !schedule.locked) {
+              
+            } else {
+              // If the schedule start date is in the past then automatically lock it if it isn't already
 
-                schedule.employeeSchedules = employeeSchedules;
-                return res.status(200).send({ schedule });
-              });
+            }
+
+            this.updateEmployees(res, rota, schedule).then(schedule => {
+              // Joining the employee data to the schedules, this will keep the employees up to date even when the schedule is in the past
+              this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ schedule }))
+            });
           }
         })
         .catch(err => {
@@ -97,6 +103,50 @@ exports.getScheduleByDate = (req, res) => {
       });
     });
 };
+
+exports.updateEmployees = (res, rota, schedule) => {
+  let current = new Date();
+  let scheduleStartDate = new Date(schedule.startDate);
+
+  if (scheduleStartDate > current.setDate(current.getDate() - 7)) {
+    if (!schedule.locked) {
+      // get the employees which exist in the rota but not on the current schedule
+      let scheduleEmployees = schedule.employeeSchedules.map(es => String(es.employeeId));
+      let missingEmployees = rota.employeeIds.filter(rid => !scheduleEmployees.includes(String(rid)))
+      
+      // Add the missing employees to the schedule
+      missingEmployees.forEach(eId => schedule.employeeSchedules.push({ employeeId: eId }));
+    }
+  } else {
+    if (!schedule.locked) {
+      // lock the schedule as it's in the past
+      schedule.locked = true;
+    }
+  }
+  
+  return schedule.save()
+    .then(schedule => schedule)
+    .catch(err => {
+      return res.status(500).send({ message: err.message || `A problem occurred while updating the schedule with ID ${schedule._id}.`})
+    })
+}
+
+exports.joinEmployees = (res, schedule) => {
+  return Employee.find({ _id: { $in: schedule.employeeSchedules.map(es => es.employeeId) } })
+    .then(employees => {
+      let employeeSchedules = schedule.employeeSchedules.map(es => {
+        es.employee = employees.filter(e => String(e._id) === String(es.employeeId))[0];
+        return es;
+      });
+
+      schedule.employeeSchedules = employeeSchedules;
+
+      return schedule;
+    })
+    .catch(err => {
+      return res.status(500).send({ message: err.message || `A problem occurred while fetching employee data for the schedule.`})
+    })
+}
 
 // Update a schedule
 exports.updateSchedule = (req, res) => {
