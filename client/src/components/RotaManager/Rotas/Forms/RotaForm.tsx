@@ -5,8 +5,9 @@ import { useFetch } from '../../../../hooks';
 import { DayOfWeek, IEmployee, IEmployeesResponse, IFetch, IRota } from '../../../../models';
 import { requestBuilder } from '../../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../../utilities';
-import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection } from '../../../Common';
+import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection, InlineLink } from '../../../Common';
 import { StaffSelector } from '.';
+import { ExternalLinkIcon } from '@heroicons/react/solid';
 
 interface IRotaFormProps {
   rota?: IRota | undefined,
@@ -44,8 +45,9 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
               checked: false
             }}
             validationSchema={rotaValidationSchema}
-            onSubmit={(values) => {
+            onSubmit={(values, actions) => {
               handleSubmit({ ...values });
+              actions.resetForm();
             }}
           >
             {({ values, errors, touched, setFieldValue }) => (
@@ -80,7 +82,13 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
                     )
                   )}
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-between">
+                  <InlineLink to="/rotas/employees/true">
+                    <div>
+                      Add employees
+                    </div>
+                    <ExternalLinkIcon className="w-5 h-5" />
+                  </InlineLink>
                   {submitButton ? submitButton : <Button content='Add rota' />}
                 </div>
               </Form>

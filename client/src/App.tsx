@@ -68,6 +68,7 @@ export default function App() {
                 <Route path=":rotaId/*" element={<RotaPage />} />
                 <Route path="addrota" element={<AddRota />} />
                 <Route path="employees" element={<Employees />} />
+                <Route path="employees/:isAddEmployeeOpen" element={<Employees />} />
                 <Route path="groups" element={<RotaGroupDashboard />} />
               </Route>
 

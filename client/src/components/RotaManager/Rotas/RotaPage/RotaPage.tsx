@@ -1,13 +1,14 @@
 import { Fragment, useState } from "react";
 import {
-  useParams 
+  useParams
 } from "react-router";
 import { Fetch } from "../../..";
 import { useFetch, useRefresh, useStatus } from "../../../../hooks";
-import { IFetch, IRotaResponse } from "../../../../models";
+import { IFetch, IScheduleResponse } from "../../../../models";
 import { requestBuilder, RotaService } from "../../../../services";
 import { endpoints } from "../../../../utilities";
 import { RotaHeader, Schedule } from "..";
+import { Formik } from "formik";
 
 const RotaPage = () => {
 
@@ -16,18 +17,49 @@ const RotaPage = () => {
   const rotaService = new RotaService(statusService, refresh);
 
   const { rotaId } = useParams();
-  
+
   const [editing, setEditing] = useState<boolean>(false);
+  const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
+  const currentWeek = rotaService.getWeek(currentWeekModifier);
 
   return (
     <Fetch
-      fetchOutput={useFetch(`${endpoints.rota(rotaId || "")}`, requestBuilder(), [dependency], false)}
-      render={({ response }: IFetch<IRotaResponse>) => (
+      fetchOutput={useFetch(
+        `${endpoints.schedule(rotaId || "", currentWeek.firstDay.toISOString().split('T')[0] || "")}`,
+        requestBuilder(), [dependency, currentWeekModifier], false)
+      }
+      render={({ response, isLoading }: IFetch<IScheduleResponse>) => (
         <Fragment>
-          {response && response.rota && (
+          {!isLoading && response && response.rota && (
             <div className="flex flex-col">
-              <RotaHeader rota={response.rota} rotaService={rotaService} editing={editing} setEditing={setEditing} />
-              <Schedule rota={response.rota} rotaService={rotaService} editing={editing} />
+              <Formik
+                initialValues={response.schedule}
+                onSubmit={(values, { resetForm }) => {
+                  resetForm({ values: response.schedule });
+                  rotaService.updateSchedule(rotaId, values);
+                }}
+              >
+                {({ handleSubmit, values }) => (
+                  <>
+                    <RotaHeader 
+                      handleSubmit={handleSubmit} 
+                      rota={response.rota} 
+                      rotaService={rotaService} 
+                      editing={editing} 
+                      setEditing={setEditing} 
+                    />
+                    <Schedule 
+                      handleSubmit={handleSubmit}
+                      values={values} 
+                      rota={response.rota}
+                      editing={editing}
+                      currentWeek={currentWeek}
+                      currentWeekModifier={currentWeekModifier} 
+                      setCurrentWeekModifier={setCurrentWeekModifier} 
+                    />
+                  </>
+                )}
+              </Formik>
             </div>
           )}
         </Fragment>

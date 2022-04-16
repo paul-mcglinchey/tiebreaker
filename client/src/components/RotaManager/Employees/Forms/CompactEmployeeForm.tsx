@@ -1,17 +1,14 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
-import { useContext } from "react";
-import { IEmployeeService } from "../../../../services";
-import { ApplicationContext, employeeValidationSchema } from "../../../../utilities";
+import { IEmployee } from "../../../../models";
+import { employeeValidationSchema } from "../../../../utilities";
 import { Button, StyledField } from "../../../Common";
 
-interface ICompactEmployeeForm {
-  employeeService: IEmployeeService
+interface ICompactEmployeeFormProps {
+  handleSubmit: (values: IEmployee) => void
 }
 
-const CompactEmployeeForm = ({ employeeService }: ICompactEmployeeForm) => {
-
-  const { groupId } = useContext(ApplicationContext);
+const CompactEmployeeForm = ({ handleSubmit }: ICompactEmployeeFormProps) => {
 
   return (
     <Formik
@@ -25,8 +22,9 @@ const CompactEmployeeForm = ({ employeeService }: ICompactEmployeeForm) => {
         }
       }}
       validationSchema={employeeValidationSchema}
-      onSubmit={(values) => {
-        employeeService.addEmployee(values, groupId);
+      onSubmit={(values, actions) => {
+        handleSubmit(values);
+        actions.resetForm();
       }}
     >
       {({ errors, touched }) => (

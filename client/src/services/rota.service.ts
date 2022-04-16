@@ -30,7 +30,10 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, 'A problem ocurred adding rota', Status.Error);
       })
-      .finally(() => this.statusService.updateIsLoading(false))
+      .finally(() => {
+        this.statusService.updateIsLoading(false);
+        this.refresh();
+      })
   }
 
   updateRota = (values: IRota, rota: IRota | undefined) => {
@@ -89,13 +92,13 @@ export class RotaService implements IRotaService {
     return { firstDay, lastDay };
   }
 
-  updateSchedule = (r: IRota, s: ISchedule) => {
+  updateSchedule = (rotaId: string | undefined, s: ISchedule) => {
     this.statusService.updateIsLoading(true);
     
     let startDate = new Date(s.startDate || "").toISOString().split('T')[0];
-    if (!r._id || !startDate) return this.statusService.appendStatus(false, 'Something went wrong...', Status.Error);
+    if (!rotaId || !startDate) return this.statusService.appendStatus(false, 'Something went wrong...', Status.Error);
 
-    fetch(endpoints.schedule(r._id, startDate), requestBuilder("PUT", undefined, s))
+    fetch(endpoints.schedule(rotaId, startDate), requestBuilder("PUT", undefined, s))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, `Successfully updated schedule`, Status.Success);
@@ -106,6 +109,9 @@ export class RotaService implements IRotaService {
       .catch(() => {
         this.statusService.appendStatus(false, `A problem occurred updating the schedule`, Status.Error);
       })
-      .finally(() => this.statusService.updateIsLoading(false))
+      .finally(() => {
+        this.statusService.updateIsLoading(false);
+        this.refresh();
+      })
   }
 }

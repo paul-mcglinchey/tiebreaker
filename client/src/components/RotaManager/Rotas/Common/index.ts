@@ -1,1 +1,2 @@
-export { default as RotaHeader } from './RotaHeader';
+export { default as EditRotaModal } from './EditRotaModal';
+export { default as AddRotaModal } from './AddRotaModal';

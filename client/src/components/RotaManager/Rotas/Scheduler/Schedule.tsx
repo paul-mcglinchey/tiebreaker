@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { ScheduleTable } from "../../..";
-import { IRota } from "../../../../models";
-import { IRotaService } from "../../../../services";
+import { IRota, ISchedule } from "../../../../models";
 import { ScheduleSwitcher } from "./Common";
 
 interface IScheduleProps {
+  handleSubmit: () => void
   rota: IRota,
-  rotaService: IRotaService,
+  currentWeek: { firstDay: Date, lastDay: Date },
+  values: ISchedule
   editing: boolean
+  currentWeekModifier: number
+  setCurrentWeekModifier: Dispatch<SetStateAction<number>>
 }
 
-const Schedule = ({ rota, rotaService, editing }: IScheduleProps) => {
+const Schedule = ({ handleSubmit, rota, currentWeek, values, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
 
-  const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
-  const currentWeek = rotaService.getWeek(currentWeekModifier);
-  const cycleBack = () => setCurrentWeekModifier(currentWeekModifier - 1);
-  const cycleForwards = () => setCurrentWeekModifier(currentWeekModifier + 1);
+  const cycleBack = () => updateScheduleWeek(currentWeekModifier - 1);
+  const cycleForwards = () => updateScheduleWeek(currentWeekModifier + 1);
+
+  const updateScheduleWeek = (modifier: number) => {
+    handleSubmit();
+    setCurrentWeekModifier(modifier);
+  }
 
   return (
     <div className="flex flex-col flex-grow space-y-4 mt-10 text-gray-200">
@@ -30,7 +36,7 @@ const Schedule = ({ rota, rotaService, editing }: IScheduleProps) => {
         rota={rota}
         currentWeek={currentWeek}
         currentWeekModifier={currentWeekModifier}
-        rotaService={rotaService}
+        values={values}
         editing={editing}
       />
     </div>

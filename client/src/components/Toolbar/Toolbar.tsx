@@ -1,7 +1,7 @@
 import { IToolbarProps } from "./models";
 import ToolbarCreateButton from "./ToolbarCreateButton";
 
-const Toolbar = ({ children, title, createGroupAction, addClientAction, addEmployeeAction }: IToolbarProps) => {
+const Toolbar = ({ children, title, createGroupAction, addRotaAction, addClientAction, addEmployeeAction }: IToolbarProps) => {
   return (
     <div className="flex-col xl:flex">
       <div className="flex sm:flex-row flex-col sm:space-y-0 space-y-4 justify-between pb-4 text-white">
@@ -12,6 +12,9 @@ const Toolbar = ({ children, title, createGroupAction, addClientAction, addEmplo
           )}
           {addEmployeeAction && (
             <ToolbarCreateButton content='Add employee' action={addEmployeeAction} />
+          )}
+          {addRotaAction && (
+            <ToolbarCreateButton content='Add rota' action={addRotaAction} />
           )}
           {createGroupAction && (
             <ToolbarCreateButton content='Create group' action={createGroupAction} />

@@ -4,17 +4,18 @@ import { ButtonType, IRota } from "../../../../models";
 import React, { useContext, useState } from "react";
 import { Button, DeleteDialog, Dropdown } from "../../../Common";
 import { IRotaService } from "../../../../services";
-import { EditRotaModal } from "../RotaPage";
+import { EditRotaModal } from "..";
 import { ApplicationContext } from "../../../../utilities";
 
 interface IRotaHeaderProps {
+  handleSubmit: () => void
   rota: IRota,
   rotaService: IRotaService,
   editing: boolean,
   setEditing: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
+const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
 
   const { groupId } = useContext(ApplicationContext);
 
@@ -29,6 +30,11 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
   const deleteRota = () => {
     rotaService.deleteRota(rota, groupId);
     navigate('/rotas/dashboard', { replace: true });
+  }
+
+  const updateEditingStatus = () => {
+    handleSubmit();
+    setEditing(!editing);
   }
 
   const updateLockedStatus = () => {
@@ -51,7 +57,7 @@ const RotaHeader = ({ rota, rotaService, editing, setEditing }: IRotaHeaderProps
       </div>
       <div className="flex space-x-4 items-center">
         {!rota.locked && (
-          <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => setEditing(!editing)} />
+          <Button buttonType={ButtonType.Secondary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => updateEditingStatus()} />
         )}
         {rota.locked && <LockClosedIcon className="text-gray-400 w-6 h-6"/>}
         <Dropdown options={[

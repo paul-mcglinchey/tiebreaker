@@ -14,13 +14,14 @@ interface IGroupToolbarProps extends IToolbarProps {
   setGroupId?: Dispatch<SetStateAction<string>>,
 }
 
-const GroupToolbar = <TGroup extends IGroup>({ 
-  title, 
+const GroupToolbar = <TGroup extends IGroup>({
+  title,
   addEmployeeAction,
   addClientAction,
-  createGroupAction, 
+  addRotaAction,
+  createGroupAction,
   showSelector,
-  groupType, 
+  groupType,
   setGroupId
 }: IGroupToolbarProps) => {
   return (
@@ -29,12 +30,12 @@ const GroupToolbar = <TGroup extends IGroup>({
       render={({ response, error }: IFetch<IGroupsResponse<TGroup>>) => (
         <>
           {!error && response && (
-            <Toolbar title={title} addClientAction={addClientAction} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
-              <div className="flex md:space-x-4 justify-end">
+            <Toolbar title={title} addRotaAction={addRotaAction} addClientAction={addClientAction} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
+              <>
                 {showSelector && setGroupId && (
                   <GroupSelector groupType={groupType} setGroupId={setGroupId} groups={response.groups} />
                 )}
-              </div>
+              </>
             </Toolbar>
           )}
         </>

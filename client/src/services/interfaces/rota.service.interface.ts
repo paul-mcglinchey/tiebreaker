@@ -5,5 +5,5 @@ export interface IRotaService {
   updateRota: (values: IRota, rota: IRota | undefined) => void,
   deleteRota: (r: IRota, groupId: string | undefined) => void,
   getWeek: (weekModifier: number) => { firstDay: Date, lastDay: Date },
-  updateSchedule: (r: IRota, s: ISchedule) => void,
+  updateSchedule: (rotaId: string | undefined, s: ISchedule) => void,
 }

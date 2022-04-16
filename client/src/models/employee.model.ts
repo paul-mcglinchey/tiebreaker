@@ -14,6 +14,7 @@ export interface IEmployee {
     lastName: string,
     middleNames?: string
   },
+  fullName?: string,
   address?: {
     firstLine?: string,
     secondLine?: string,

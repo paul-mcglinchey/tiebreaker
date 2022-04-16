@@ -1,21 +1,25 @@
-import { useStatus } from "../../../hooks"
-import { EmployeeService } from "../../../services"
+import { useContext } from "react"
+import { IEmployeeService } from "../../../services"
+import { ApplicationContext } from "../../../utilities"
 import { Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
 interface IAddEmployeeModalProps {
-  modalOpen: boolean,
-  toggleModalOpen: () => void
+  addEmployeeOpen: boolean,
+  toggleAddEmployeeOpen: () => void,
+  employeeService: IEmployeeService
 }
 
-const AddEmployeeModal = ({ modalOpen, toggleModalOpen }: IAddEmployeeModalProps) => {
+const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen, employeeService }: IAddEmployeeModalProps) => {
 
-  const { statusService } = useStatus();
-  const employeeService = new EmployeeService(statusService);
+  const { groupId } = useContext(ApplicationContext);
 
   return (
-    <Modal title="Add employee" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
-      <CompactEmployeeForm employeeService={employeeService} />
+    <Modal title="Add employee" modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen}>
+      <CompactEmployeeForm handleSubmit={(values) => {
+        employeeService.addEmployee(values, groupId);
+        toggleAddEmployeeOpen();
+      }} />
     </Modal>
   )
 }

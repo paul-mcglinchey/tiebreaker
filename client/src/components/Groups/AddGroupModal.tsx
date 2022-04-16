@@ -12,7 +12,12 @@ interface IAddGroupModalProps<TGroup> {
 const AddGroupModal = <TGroup extends IGroup>({ addGroupOpen, toggleAddGroupOpen, groupService }: IAddGroupModalProps<TGroup>) => {
   return (
     <Modal title="Add group" modalOpen={addGroupOpen} toggleModalOpen={toggleAddGroupOpen}>
-      <GroupForm handleSubmit={(values) => groupService.addGroup(values)} />
+      <GroupForm 
+        handleSubmit={(values) => {
+          groupService.addGroup(values);
+          toggleAddGroupOpen();
+        }} 
+      />
     </Modal>
   )
 }

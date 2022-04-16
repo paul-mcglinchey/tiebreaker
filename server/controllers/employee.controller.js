@@ -33,7 +33,9 @@ exports.getEmployees = async (req, res) => {
       const aggregate = Employee.aggregate();
     
       // apply a match operator to the aggregate
-      await aggregate.match(employeeQuery)
+      await aggregate
+        .match(employeeQuery)
+        .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } });
     
       // build the query and execute the aggregator
       const employees = await aggregate

@@ -1,4 +1,5 @@
 import { IEmployee } from "./employee.model";
+import { IRota } from "./rota.model";
 
 export interface IScheduleShift {
   date: Date,
@@ -23,5 +24,6 @@ export interface ISchedule {
 }
 
 export interface IScheduleResponse {
+  rota: IRota
   schedule: ISchedule
 }

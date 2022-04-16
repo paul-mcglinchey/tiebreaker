@@ -1,11 +1,11 @@
 import { UserIcon } from "@heroicons/react/solid";
 import { useContext, useState } from "react";
-import { useFetch, useStatus } from "../../../hooks";
-import { IEmployeesResponse, IFetch } from "../../../models";
-import { EmployeeService, requestBuilder } from "../../../services";
+import { useFetch } from "../../../hooks";
+import { IEmployee, IEmployeesResponse, IFetch } from "../../../models";
+import { requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
-import { Fetch, Modal, Prompter, Table } from "../../Common";
-import { CompactEmployeeForm } from "./Forms";
+import { Fetch, Prompter, Table } from "../../Common";
+import { EmployeeTableRow } from "./EmployeeTable";
 
 const headers = [
   { name: "Employee name", value: "name", interactive: true },
@@ -22,13 +22,10 @@ const EmployeeList = () => {
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(false);
   const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
-  const { statusService } = useStatus();
-  const employeeService = new EmployeeService(statusService);
-
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.rotas(groupId), requestBuilder(), [sortField, sortDirection])}
+        fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder(), [sortField, sortDirection], false)}
         render={({ response, isLoading }: IFetch<IEmployeesResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
@@ -41,22 +38,23 @@ const EmployeeList = () => {
                   headers={headers}
                   isLoading={isLoading}
                 >
-                  <div></div>
+                  <>
+                    {response.employees.map((employee: IEmployee, index: number) => (
+                      <EmployeeTableRow employee={employee} key={index} />
+                    ))}
+                  </>
                 </Table>
               </div>
             ) : (
-              <Prompter 
-                title="Add your employees here" 
-                Icon={UserIcon} 
-                action={toggleAddEmployeeOpen} 
+              <Prompter
+                title="Add your employees here"
+                Icon={UserIcon}
+                action={toggleAddEmployeeOpen}
               />
             )}
           </div>
         )}
       />
-      <Modal title="Add employee" modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen}>
-        <CompactEmployeeForm employeeService={employeeService} />
-      </Modal>
     </>
   )
 }

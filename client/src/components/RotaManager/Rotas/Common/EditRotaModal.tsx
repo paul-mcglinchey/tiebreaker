@@ -1,6 +1,6 @@
 import { IRota } from "../../../../models";
 import { RotaService } from "../../../../services";
-import { Modal } from "../../../Common";
+import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
 import { useStatus } from "../../../../hooks";
 
@@ -17,7 +17,13 @@ const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => 
 
   return (
     <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
-      <RotaForm rota={rota} handleSubmit={(values: IRota) => rotaService.updateRota(values, rota)}/>
+      <RotaForm 
+        rota={rota} 
+        submitButton={<Button content='Update rota' />} 
+        handleSubmit={(values: IRota) => {
+          rotaService.updateRota(values, rota);
+          toggleModalOpen();
+        }}/>
     </Modal>
   ) 
 }

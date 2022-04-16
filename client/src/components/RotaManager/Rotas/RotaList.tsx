@@ -16,7 +16,11 @@ const headers = [
   { name: "Options", value: "", interactive: false },
 ]
 
-const RotaList = () => {
+interface IRotaListProps {
+  dependency: boolean
+}
+
+const RotaList = ({ dependency }: IRotaListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
 
@@ -32,7 +36,7 @@ const RotaList = () => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(groupId && endpoints.rotas(groupId), requestBuilder(), [groupId, sortField, sortDirection])}
+        fetchOutput={useFetch(groupId && endpoints.rotas(groupId), requestBuilder(), [groupId, sortField, sortDirection, dependency])}
         render={({ response, isLoading }: IFetch<IRotasResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (

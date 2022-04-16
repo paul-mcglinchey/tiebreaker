@@ -87,7 +87,7 @@ exports.getScheduleByDate = (req, res) => {
 
             this.updateEmployees(res, rota, schedule).then(schedule => {
               // Joining the employee data to the schedules, this will keep the employees up to date even when the schedule is in the past
-              this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ schedule }))
+              this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ rota, schedule }))
             });
           }
         })
