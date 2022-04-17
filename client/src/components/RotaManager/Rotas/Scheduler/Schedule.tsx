@@ -7,18 +7,20 @@ interface IScheduleProps {
   handleSubmit: () => void
   rota: IRota,
   currentWeek: { firstDay: Date, lastDay: Date },
+  touched: any
   values: ISchedule
   editing: boolean
   currentWeekModifier: number
   setCurrentWeekModifier: Dispatch<SetStateAction<number>>
 }
 
-const Schedule = ({ handleSubmit, rota, currentWeek, values, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
+const Schedule = ({ handleSubmit, rota, currentWeek, values, touched, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
 
   const cycleBack = () => updateScheduleWeek(currentWeekModifier - 1);
   const cycleForwards = () => updateScheduleWeek(currentWeekModifier + 1);
 
   const updateScheduleWeek = (modifier: number) => {
+    console.log(touched)
     handleSubmit();
     setCurrentWeekModifier(modifier);
   }

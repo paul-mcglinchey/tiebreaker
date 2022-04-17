@@ -1,7 +1,8 @@
+import { PlusIcon } from "@heroicons/react/solid"
 import { useContext } from "react"
 import { IEmployeeService } from "../../../services"
 import { ApplicationContext } from "../../../utilities"
-import { Modal } from "../../Common"
+import { Button, Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
 interface IAddEmployeeModalProps {
@@ -16,10 +17,18 @@ const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen, employeeServ
 
   return (
     <Modal title="Add employee" modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen}>
-      <CompactEmployeeForm handleSubmit={(values) => {
-        employeeService.addEmployee(values, groupId);
-        toggleAddEmployeeOpen();
-      }} />
+      <CompactEmployeeForm 
+        handleSubmit={(values) => {
+          employeeService.addEmployee(values, groupId);
+          toggleAddEmployeeOpen();
+        }} 
+        submissionBar={(
+          <div className="justify-between flex">
+            
+            <Button content="Add employee" Icon={PlusIcon} />
+          </div>
+        )}
+      />
     </Modal>
   )
 }

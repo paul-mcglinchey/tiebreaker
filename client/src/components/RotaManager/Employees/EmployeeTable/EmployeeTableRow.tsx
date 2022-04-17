@@ -1,11 +1,13 @@
 import { IEmployee } from "../../../../models"
+import { IEmployeeService } from "../../../../services"
 import { InlineButton, TableRow, TableRowItem } from "../../../Common"
 
 interface IEmployeeTableRowProps {
   employee: IEmployee
+  employeeService: IEmployeeService
 }
 
-const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
+const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps) => {
   return (
     <TableRow>
       <TableRowItem>
@@ -16,7 +18,7 @@ const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
       </TableRowItem>
       <TableRowItem>
         <div className="flex flex-grow justify-end">
-          <InlineButton action={() => { }} color="text-red-500">
+          <InlineButton action={() => employeeService.deleteEmployee(employee._id)} color="text-red-500">
             <div>Delete employee</div>
           </InlineButton>
         </div>

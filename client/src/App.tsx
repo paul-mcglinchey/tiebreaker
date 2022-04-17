@@ -8,7 +8,7 @@ import {
   useLocation
 } from 'react-router-dom';
 
-import { AddClient, AddRota, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Employees, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
+import { AddClient, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Employees, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
 import { AdminPanel } from './components/AdminPanel';
 import { StatusProvider } from './utilities';
 
@@ -66,7 +66,6 @@ export default function App() {
               }>
                 <Route path="dashboard" element={<RotaDashboard />} />
                 <Route path=":rotaId/*" element={<RotaPage />} />
-                <Route path="addrota" element={<AddRota />} />
                 <Route path="employees" element={<Employees />} />
                 <Route path="employees/:isAddEmployeeOpen" element={<Employees />} />
                 <Route path="groups" element={<RotaGroupDashboard />} />

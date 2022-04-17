@@ -2,7 +2,7 @@ import { UserIcon } from "@heroicons/react/solid";
 import { useContext, useState } from "react";
 import { useFetch } from "../../../hooks";
 import { IEmployee, IEmployeesResponse, IFetch } from "../../../models";
-import { requestBuilder } from "../../../services";
+import { IEmployeeService, requestBuilder } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch, Prompter, Table } from "../../Common";
 import { EmployeeTableRow } from "./EmployeeTable";
@@ -12,7 +12,12 @@ const headers = [
   { name: "Options", value: "", interactive: false },
 ]
 
-const EmployeeList = () => {
+interface IEmployeeListProps {
+  dependency: boolean
+  employeeService: IEmployeeService
+}
+
+const EmployeeList = ({ dependency, employeeService }: IEmployeeListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
 
@@ -25,7 +30,7 @@ const EmployeeList = () => {
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder(), [sortField, sortDirection], false)}
+        fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder(), [groupId, dependency, sortField, sortDirection], false)}
         render={({ response, isLoading }: IFetch<IEmployeesResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
@@ -40,7 +45,7 @@ const EmployeeList = () => {
                 >
                   <>
                     {response.employees.map((employee: IEmployee, index: number) => (
-                      <EmployeeTableRow employee={employee} key={index} />
+                      <EmployeeTableRow employee={employee} key={index} employeeService={employeeService} />
                     ))}
                   </>
                 </Table>

@@ -1,6 +1,7 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
 const RotaGroup = db.rotagroup;
+const Rota = db.rota;
 const { Employee } = db.employee;
 
 // Read operations
@@ -137,4 +138,27 @@ exports.addEmployee = async (req, res) => {
           err.message || `Some error occurred while adding new employee.`
       });
     });
+}
+
+exports.deleteEmployee = async (req, res) => {
+  // Get the employee ID from the query params
+  const { employeeId } = req.params;
+
+  // Do a soft delete of the employee i.e remove it from the group it belongs to and any rotas which it's included in
+  // This way a history can be maintained within the schedules
+  RotaGroup.updateOne({ employees: employeeId }, { $pull: { employees: employeeId }})
+    .then(() => {
+      Rota.updateMany({ employees: employeeId }, { $pull: { employees: employeeId }})
+        .then(() => res.status(200).send({ message: `Successfully deleted employee with ID ${employeeId}.`}))
+        .catch(err => {
+          return res.status(500).send({
+            message: err.message | `A problem occurred deleting employee with ID ${employeeId}.`
+          });
+        })
+    })
+    .catch(err => {
+      return res.status(500).send({
+        message: err.message | `A problem occurred deleting employee with ID ${employeeId}.`
+      })
+    })
 }

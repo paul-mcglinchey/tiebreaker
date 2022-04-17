@@ -6,9 +6,10 @@ import { Button, StyledField } from "../../../Common";
 
 interface ICompactEmployeeFormProps {
   handleSubmit: (values: IEmployee) => void
+  submissionBar: JSX.Element | undefined
 }
 
-const CompactEmployeeForm = ({ handleSubmit }: ICompactEmployeeFormProps) => {
+const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFormProps) => {
 
   return (
     <Formik
@@ -34,9 +35,11 @@ const CompactEmployeeForm = ({ handleSubmit }: ICompactEmployeeFormProps) => {
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
             <StyledField compact name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />
           </div>
-          <div className="self-end">
-            <Button content="Add employee" Icon={PlusIcon} />
-          </div>
+          {submissionBar ? submissionBar : (
+            <div className="self-end">
+              <Button content="Add employee" Icon={PlusIcon} />
+            </div>
+          )}
         </Form>
       )}
     </Formik>

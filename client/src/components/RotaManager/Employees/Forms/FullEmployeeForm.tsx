@@ -5,7 +5,7 @@ import { ApplicationContext, employeeValidationSchema, endpoints } from "../../.
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
 import { EmployeeService, requestBuilder } from "../../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
-import { useFetch, useStatus } from "../../../../hooks";
+import { useFetch, useRefresh, useStatus } from "../../../../hooks";
 import { Fetch } from "../../../Common/Fetch";
 
 const FullEmployeeForm = () => {
@@ -45,11 +45,12 @@ const FullEmployeeForm = () => {
   }
 
   const { statusService } = useStatus();
-  const employeeService = new EmployeeService(statusService);
+  const { refresh, dependency } = useRefresh();
+  const employeeService = new EmployeeService(statusService, refresh);
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder("GET"))}
+      fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder("GET"), [dependency])}
       render={({ response }: IFetch<IEmployeesResponse>) => (
         <Formik
           initialValues={{

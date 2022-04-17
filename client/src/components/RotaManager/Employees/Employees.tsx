@@ -5,7 +5,7 @@ import { useFetch, useRefresh, useStatus } from "../../../hooks";
 import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
 import { EmployeeService, requestBuilder, RotaGroupService } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
-import { Fetch, FetchError } from "../../Common";
+import { Fetch, FetchError, SpinnerIcon } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
 import { GroupToolbar } from "../../Toolbar";
 
@@ -27,29 +27,35 @@ const Employees = () => {
   const employeeService = new EmployeeService(statusService, refresh);
 
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder(), [dependency])}
-      render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
-        <>
-          {!error ? (
+    <>
+      <Fetch
+        fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder())}
+        render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
+          isLoading ? (
+            <div>
+              <SpinnerIcon className="text-white h-12 w-12" />
+            </div>
+          ) : (
             response && response.count > 0 ? (
               <>
                 <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
-                <EmployeeList />
+                <EmployeeList dependency={dependency} employeeService={employeeService} />
               </>
             ) : (
-              !isLoading && (
+              error ? (
+                <FetchError />
+              ) : (
                 <GroupPrompter action={toggleAddGroupOpen} />
               )
             )
-          ) : (
-            <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
-          )}
-          <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} groupService={groupService} />
-          <AddEmployeeModal addEmployeeOpen={addEmployeeOpen} toggleAddEmployeeOpen={toggleAddEmployeeOpen} employeeService={employeeService} />
-        </>
-      )}
-    />
+          )
+        )}
+      />
+      <>
+        <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} groupService={groupService} />
+        <AddEmployeeModal addEmployeeOpen={addEmployeeOpen} toggleAddEmployeeOpen={toggleAddEmployeeOpen} employeeService={employeeService} />
+      </>
+    </>
   )
 }
 
