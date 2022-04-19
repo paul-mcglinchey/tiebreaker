@@ -144,12 +144,20 @@ exports.deleteEmployee = async (req, res) => {
   // Get the employee ID from the query params
   const { employeeId } = req.params;
 
+  // Get the groupId from the body
+  const { groupId } = req.body;
+
   // Do a soft delete of the employee i.e remove it from the group it belongs to and any rotas which it's included in
   // This way a history can be maintained within the schedules
-  RotaGroup.updateOne({ employees: employeeId }, { $pull: { employees: employeeId }})
-    .then(() => {
-      Rota.updateMany({ employees: employeeId }, { $pull: { employees: employeeId }})
-        .then(() => res.status(200).send({ message: `Successfully deleted employee with ID ${employeeId}.`}))
+  RotaGroup.findByIdAndUpdate(groupId, { $pull: { employees: employeeId }})
+    .then(rotagroup => {
+
+      let rotaIds = rotagroup.rotas;
+
+      Rota.updateMany({ _id: { $in: rotaIds }}, { $pull: { employeeIds: employeeId }})
+        .then(rotas => {
+          return res.status(200).send({ message: `Successfully deleted employee with ID ${employeeId}.`});
+        })
         .catch(err => {
           return res.status(500).send({
             message: err.message | `A problem occurred deleting employee with ID ${employeeId}.`

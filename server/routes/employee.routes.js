@@ -1,7 +1,6 @@
 module.exports = app => {
   const employees = require('../controllers/employee.controller.js');
   const middleware = require('../middlewares');
-  const RotaGroup = require('../models').rotagroup;
 
   var router = require('express').Router();
 
@@ -22,7 +21,8 @@ module.exports = app => {
   // Delete an employee (soft)
   router.delete(
     '/:employeeId',
-    middleware.groupMiddleware.checkUserAccessToGroup(RotaGroup, 'owners'),
+    middleware.groupMiddleware.checkBodyHasGroupId,
+    middleware.employeeMiddleware.checkUserAccessToGroup('owners'),
     employees.deleteEmployee
   )
 

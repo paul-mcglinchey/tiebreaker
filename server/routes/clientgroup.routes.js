@@ -14,7 +14,7 @@ module.exports = app => {
 
   // Create a new clientGroup
   router.post(
-    '/', 
+    '/',
     middleware.groupMiddleware.checkIfGroupNameExists(ClientGroup),
     clientGroup.createClientGroup
   );
@@ -34,7 +34,7 @@ module.exports = app => {
 
   // Delete a clientGroup
   router.delete(
-    '/', 
+    '/',
     middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
     clientGroup.deleteClientGroup
   );

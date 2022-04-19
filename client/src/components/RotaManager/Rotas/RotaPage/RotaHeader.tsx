@@ -13,9 +13,10 @@ interface IRotaHeaderProps {
   rotaService: IRotaService,
   editing: boolean,
   setEditing: React.Dispatch<React.SetStateAction<boolean>>
+  dirty: boolean
 }
 
-const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing }: IRotaHeaderProps) => {
+const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirty }: IRotaHeaderProps) => {
 
   const { groupId } = useContext(ApplicationContext);
 
@@ -33,7 +34,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing }: IR
   }
 
   const updateEditingStatus = () => {
-    handleSubmit();
+    dirty && handleSubmit();
     setEditing(!editing);
   }
 

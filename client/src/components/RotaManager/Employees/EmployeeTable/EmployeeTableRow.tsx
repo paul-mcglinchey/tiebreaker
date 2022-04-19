@@ -1,6 +1,8 @@
+import { useContext, useState } from "react"
 import { IEmployee } from "../../../../models"
 import { IEmployeeService } from "../../../../services"
-import { InlineButton, TableRow, TableRowItem } from "../../../Common"
+import { ApplicationContext } from "../../../../utilities"
+import { DeleteDialog, InlineButton, TableRow, TableRowItem } from "../../../Common"
 
 interface IEmployeeTableRowProps {
   employee: IEmployee
@@ -8,6 +10,12 @@ interface IEmployeeTableRowProps {
 }
 
 const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps) => {
+
+  const { groupId } = useContext(ApplicationContext);
+
+  const [deleteEmployeeOpen, setDeleteEmployeeOpen] = useState(false);
+  const toggleDeleteEmployeeOpen = () => setDeleteEmployeeOpen(!deleteEmployeeOpen);
+
   return (
     <TableRow>
       <TableRowItem>
@@ -18,11 +26,17 @@ const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps)
       </TableRowItem>
       <TableRowItem>
         <div className="flex flex-grow justify-end">
-          <InlineButton action={() => employeeService.deleteEmployee(employee._id)} color="text-red-500">
-            <div>Delete employee</div>
+          <InlineButton action={() => toggleDeleteEmployeeOpen()} color="text-red-500">
+            <div>Delete</div>
           </InlineButton>
         </div>
       </TableRowItem>
+      <DeleteDialog 
+        dialogOpen={deleteEmployeeOpen} 
+        toggleDialogOpen={toggleDeleteEmployeeOpen} 
+        itemType="employee" 
+        deleteAction={() => employeeService.deleteEmployee(employee._id, groupId)} 
+      />
     </TableRow>
   )
 }

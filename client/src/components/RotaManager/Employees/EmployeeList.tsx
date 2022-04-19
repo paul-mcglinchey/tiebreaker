@@ -15,17 +15,15 @@ const headers = [
 interface IEmployeeListProps {
   dependency: boolean
   employeeService: IEmployeeService
+  toggleAddEmployeeOpen: () => void
 }
 
-const EmployeeList = ({ dependency, employeeService }: IEmployeeListProps) => {
+const EmployeeList = ({ dependency, employeeService, toggleAddEmployeeOpen }: IEmployeeListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
-
-  const [addEmployeeOpen, setAddEmployeeOpen] = useState(false);
-  const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
   return (
     <>

@@ -1,7 +1,7 @@
 const checkUserAccessToGroup = (Model, accessRequired) => {
   return (req, res, next) => {
 
-    const { _id } = req.body || req.params;
+    const { _id } = req.body || req.params || req.query;
 
     Model.findById(_id)
       .then((data) => {
@@ -26,7 +26,7 @@ const checkUserAccessToGroup = (Model, accessRequired) => {
 const checkIfGroupExists = (Model) => {
   return (req, res, next) => {
 
-    const { _id, name } = req.body || req.params;
+    const { _id, name } = req.body || req.params || req.query;
 
     Model.find({ $or: [{ _id: _id }, { name: name }] })
       .then(data => {

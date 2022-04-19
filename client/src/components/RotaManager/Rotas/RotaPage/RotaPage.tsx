@@ -39,10 +39,11 @@ const RotaPage = () => {
                   rotaService.updateSchedule(rotaId, values);
                 }}
               >
-                {({ handleSubmit, values, touched }) => (
+                {({ handleSubmit, values, dirty }) => (
                   <>
                     <RotaHeader 
                       handleSubmit={handleSubmit} 
+                      dirty={dirty}
                       rota={response.rota} 
                       rotaService={rotaService} 
                       editing={editing} 
@@ -51,7 +52,7 @@ const RotaPage = () => {
                     <Schedule 
                       handleSubmit={handleSubmit}
                       values={values}
-                      touched={touched}
+                      dirty={dirty}
                       rota={response.rota}
                       editing={editing}
                       currentWeek={currentWeek}

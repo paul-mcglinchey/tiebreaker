@@ -39,7 +39,7 @@ const Employees = () => {
             response && response.count > 0 ? (
               <>
                 <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
-                <EmployeeList dependency={dependency} employeeService={employeeService} />
+                <EmployeeList dependency={dependency} employeeService={employeeService} toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
               </>
             ) : (
               error ? (

@@ -17,6 +17,12 @@ exports.getScheduleByDate = (req, res) => {
       Schedule.findOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) })
         .then(schedule => {
           if (!schedule) {
+            // Check if the schedule being requested is in the past
+            let currentDate = new Date();
+
+            console.log(new Date(startDate), new Date(currentDate.setDate(currentDate.getDate() - 7)))
+            if (new Date(startDate) < currentDate.setDate(currentDate.getDate() - 7)) return res.status(200).send({ message: `No schedule found with start date ${startDate}.` })
+
             // Automatically create a new schedule for this week if it doesn't exist
             const employeeSchedules = rota.employeeIds.map(e => {
               return {
@@ -48,16 +54,7 @@ exports.getScheduleByDate = (req, res) => {
                   $push: { schedules: new ObjectId(schedule._id) }
                 })
                   .then(() => {
-                    Employee.find({ _id: { $in: schedule.employeeSchedules.map(es => es.employeeId) } })
-                      .then(employees => {
-                        let employeeSchedules = schedule.employeeSchedules.map(es => {
-                          es.employee = employees.filter(e => String(e._id) === String(es.employeeId))[0];
-                          return es;
-                        });
-
-                        schedule.employeeSchedules = employeeSchedules;
-                        return res.status(200).send({ schedule });
-                      });
+                    this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ rota, schedule }))
                   })
                   .catch(err => {
                     return res.status(500).send({
@@ -73,18 +70,6 @@ exports.getScheduleByDate = (req, res) => {
                 });
               });
           } else {
-            // If the schedule start date is in the future (or current) and the schedule is not locked then update the employees to contain
-            // all the employees belonging to the current rota
-            let current = new Date();
-            let scheduleStartDate = new Date(schedule.startDate);
-            
-            if (scheduleStartDate > current.setDate(current.getDate() - 7) && !schedule.locked) {
-              
-            } else {
-              // If the schedule start date is in the past then automatically lock it if it isn't already
-
-            }
-
             this.updateEmployees(res, rota, schedule).then(schedule => {
               // Joining the employee data to the schedules, this will keep the employees up to date even when the schedule is in the past
               this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ rota, schedule }))
@@ -113,7 +98,7 @@ exports.updateEmployees = (res, rota, schedule) => {
       // get the employees which exist in the rota but not on the current schedule
       let scheduleEmployees = schedule.employeeSchedules.map(es => String(es.employeeId));
       let missingEmployees = rota.employeeIds.filter(rid => !scheduleEmployees.includes(String(rid)))
-      
+
       // Add the missing employees to the schedule
       missingEmployees.forEach(eId => schedule.employeeSchedules.push({ employeeId: eId }));
     }
@@ -123,11 +108,11 @@ exports.updateEmployees = (res, rota, schedule) => {
       schedule.locked = true;
     }
   }
-  
+
   return schedule.save()
     .then(schedule => schedule)
     .catch(err => {
-      return res.status(500).send({ message: err.message || `A problem occurred while updating the schedule with ID ${schedule._id}.`})
+      return res.status(500).send({ message: err.message || `A problem occurred while updating the schedule with ID ${schedule._id}.` })
     })
 }
 
@@ -144,7 +129,7 @@ exports.joinEmployees = (res, schedule) => {
       return schedule;
     })
     .catch(err => {
-      return res.status(500).send({ message: err.message || `A problem occurred while fetching employee data for the schedule.`})
+      return res.status(500).send({ message: err.message || `A problem occurred while fetching employee data for the schedule.` })
     })
 }
 

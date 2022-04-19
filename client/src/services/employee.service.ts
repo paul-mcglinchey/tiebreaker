@@ -34,11 +34,11 @@ export class EmployeeService implements IEmployeeService {
       })
   }
 
-  deleteEmployee = async (employeeId: string | undefined) => {
+  deleteEmployee = async (employeeId: string | undefined, groupId: string | undefined) => {
 
-    if (!employeeId) return this.statusService.appendStatus(false, 'An employee ID must be provided...', Status.Error);
+    if (!employeeId || !groupId) return this.statusService.appendStatus(false, 'Both an employee ID and group ID are required', Status.Error);
 
-    fetch(endpoints.employee(employeeId), requestBuilder('DELETE'))
+    fetch(endpoints.employee(employeeId), requestBuilder('DELETE', undefined, { groupId: groupId }))
       .then(res => {
         if (res.ok) {
           this.statusService.appendStatus(false, 'Successfully deleted employee', Status.Success);
