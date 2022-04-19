@@ -1,5 +1,4 @@
 const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
 
 const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
@@ -9,7 +8,7 @@ const NameSchema = new Schema({
 
 const ContactInfoSchema = new Schema({
   primaryPhoneNumber: { type: String, trim: true, required: false },
-  primaryEmail: { type: String, trim: true, required: false },
+  primaryEmail: { type: String, trim: true, required: true },
   emails: [{
     name: { type: String, required: true },
     email: { type: String, required: true }

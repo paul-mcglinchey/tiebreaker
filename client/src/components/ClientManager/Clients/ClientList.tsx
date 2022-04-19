@@ -8,7 +8,7 @@ import { Paginator, Table, Fetch, Prompter } from '../../Common';
 import { UserAddIcon } from '@heroicons/react/solid';
 
 const headers = [
-  { name: "Name", value: "clientName", interactive: true },
+  { name: "Name", value: "name", interactive: true },
   { name: "Last updated", value: "updatedAt", interactive: true },
   { name: "Sessions", value: "sessions", interactive: true },
   { name: "Options", value: "", interactive: false },

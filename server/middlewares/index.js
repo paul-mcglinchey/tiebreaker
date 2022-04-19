@@ -5,6 +5,7 @@ const validationMiddleware = require('./validation.middleware');
 const rotaMiddleware = require('./rota.middleware');
 const scheduleMiddleware = require('./schedule.middleware');
 const employeeMiddleware = require('./employee.middleware');
+const errorMiddleware = require('./error.middleware');
 
 module.exports = {
   authMiddleware,
@@ -13,5 +14,6 @@ module.exports = {
   validationMiddleware,
   rotaMiddleware,
   scheduleMiddleware,
-  employeeMiddleware
+  employeeMiddleware,
+  errorMiddleware
 };

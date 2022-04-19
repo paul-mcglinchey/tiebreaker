@@ -1,9 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const middleware = require('./middlewares');
+const express     = require('express');
+const dotenv      = require('dotenv').config();
+const cors        = require('cors');
+const middleware  = require('./middlewares');
 
-const app = express();
-const apiPort = process.env.PORT || 3001;
+const app     = express();
+const PORT    = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +49,8 @@ require('./routes/rotagroup.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/grouplist.routes')(app);
 
+app.use(middleware.errorMiddleware.errorHandler);
+
 // Check if a default grouplist exists, if not we need to create one
 const grouplistController = require('./controllers/grouplist.controller');
 grouplistController.createDefaultLists();
@@ -57,4 +60,4 @@ var currentDateTime = new Date();
 var currentTime = currentDateTime.getUTCHours() + ':' + currentDateTime.getUTCMinutes();
 
 // set port, listen for requests
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort} in environment ${process.env.NODE_ENV || 'dev'} @ ${currentTime}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT} in environment ${process.env.NODE_ENV || 'dev'} @ ${currentTime}`))

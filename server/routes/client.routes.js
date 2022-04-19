@@ -8,24 +8,25 @@ module.exports = app => {
   router.get(
     '/',
     middleware.groupMiddleware.checkQueryHasGroupId, 
-    clients.getClients
+    clients.get
   );
 
   // Get a client by id
   router.get(
     '/:clientId',
     middleware.clientMiddleware.checkClientIdExists, 
-    clients.getClientById
+    clients.getById
   );
 
   // Create a new client
-  router.post('/', middleware.validationMiddleware.checkRequestHasBody, clients.create);
+  router.post(
+    '/', 
+    middleware.validationMiddleware.checkRequestHasBody, 
+    clients.create
+  );
 
   // Update a client
-  router.put('/:clientId', clients.updateClient);
-
-  // Update a client's colour
-  router.put('/:clientId/colours', clients.updateColour);
+  router.put('/:clientId', clients.update);
 
   // Add a session to a client
   router.put('/:clientId/sessions', clients.addSession);
@@ -34,7 +35,7 @@ module.exports = app => {
   router.delete(
     '/:clientId',
     middleware.groupMiddleware.checkQueryHasGroupId,
-    clients.deleteClient
+    clients.delete
   );
 
   app.use('/api/clients', router);
