@@ -1,41 +1,39 @@
-module.exports = app => {
-  const rotagroup = require('../controllers/rotagroup.controller.js');
-  const middleware = require('../middlewares');
-  const db = require('../models');
-  const RotaGroup = db.rotagroup;
-  var router = require('express').Router();
+const rotagroup       = require('../controllers/rotagroup.controller.js');
+const middleware      = require('../middlewares');
 
-  // Get all groups that the user belongs to
-  router.get('/', rotagroup.getRotaGroups);
-  
-  // CUD Operations, need a request body
-  router.use(middleware.validationMiddleware.checkRequestHasBody);
+const db        = require('../models');
+const RotaGroup = db.rotagroup;
+const router    = require('express').Router({ mergeParams: true });
 
-  // Create a new rotagroup
-  router.post(
-    '/', 
-    middleware.groupMiddleware.checkIfGroupNameExists(RotaGroup),
-    rotagroup.createRotaGroup
-  );
+// Get all groups that the user belongs to
+router.get('/', rotagroup.get);
 
-  // PUT Endpoints will require editor access
-  router.use(middleware.groupMiddleware.checkUserAccessToGroup(RotaGroup, 'editors'));
-  
-  // Update a group
-  router.put(
-    '/',
-    middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
-    rotagroup.updateRotaGroup
-  )
+// Create a new rotagroup
+router.post(
+  '/',
+  middleware.groupMiddleware.checkIfGroupNameExists(RotaGroup, false),
+  middleware.validationMiddleware.checkRequestHasBody,
+  rotagroup.create
+);
 
-  // DELETE Endpoints will require owner access
-  router.use(middleware.groupMiddleware.checkUserAccessToGroup(RotaGroup, 'owners'));
+// Update a group
+router.put(
+  '/:groupId',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
+  middleware.validationMiddleware.checkRequestHasBody,
+  rotagroup.update
+)
 
-  // Delete a rotagroup
-  router.delete('/',
-    middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
-    rotagroup.deleteRotaGroup
-  );
+// Delete a rotagroup
+router.delete(
+  '/:groupId',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
+  middleware.groupMiddleware.checkAccess(RotaGroup, 'owners'),
+  rotagroup.delete
+);
 
-  app.use('/api/rotagroups', router);
-}
+router.use('/:groupId/rotas', require('./rota.routes'));
+
+module.exports = router

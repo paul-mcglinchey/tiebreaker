@@ -1,6 +1,5 @@
-import { useSessionStorage } from "../../../hooks";
+import { useRequestBuilder, useSessionStorage } from "../../../hooks";
 import { GroupType, IFetch, IGroup, IGroupsResponse } from "../../../models";
-import { requestBuilder } from "../../../services";
 import { endpoints } from "../../../utilities";
 import { Fetch } from "../../Common";
 import { IToolbarProps } from "../models";
@@ -24,9 +23,12 @@ const GroupToolbar = <TGroup extends IGroup>({
   groupType,
   setGroupId
 }: IGroupToolbarProps) => {
+
+  const { requestBuilder } = useRequestBuilder()
+
   return (
     <Fetch
-      fetchOutput={useSessionStorage(endpoints.groups(groupType).groups, requestBuilder("GET"), [], true)}
+      fetchOutput={useSessionStorage(endpoints.groups(groupType).groups, requestBuilder(), [], true)}
       render={({ response, error }: IFetch<IGroupsResponse<TGroup>>) => (
         <>
           {!error && response && (

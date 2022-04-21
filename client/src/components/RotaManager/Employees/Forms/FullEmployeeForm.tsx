@@ -3,14 +3,14 @@ import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
-import { EmployeeService, requestBuilder } from "../../../../services";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
-import { useFetch, useRefresh, useStatus } from "../../../../hooks";
+import { useEmployeeService, useFetch, useRefresh, useRequestBuilder } from "../../../../hooks";
 import { Fetch } from "../../../Common/Fetch";
 
 const FullEmployeeForm = () => {
 
   const { groupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [showAddress, setShowAddress] = useState(false);
   const [showRequirements, setShowRequirements] = useState(false);
@@ -44,13 +44,12 @@ const FullEmployeeForm = () => {
     });
   }
 
-  const { statusService } = useStatus();
   const { refresh, dependency } = useRefresh();
-  const employeeService = new EmployeeService(statusService, refresh);
+  const employeeService = useEmployeeService(refresh);
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder("GET"), [dependency])}
+      fetchOutput={useFetch(endpoints.employees(groupId), requestBuilder(), [dependency])}
       render={({ response }: IFetch<IEmployeesResponse>) => (
         <Formik
           initialValues={{

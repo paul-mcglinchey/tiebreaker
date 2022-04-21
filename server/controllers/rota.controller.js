@@ -10,9 +10,9 @@ const { Employee } = db.employee;
 exports.getRotas = async (req, res) => {
 
   // Get the groupId from the query
-  const { groupId } = await req.query;
+  const { groupId } = req.params;
 
-  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userUuid })
+  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
     .then(async (group) => {
 
       // all the rotas that belong to the requested group
@@ -90,7 +90,7 @@ exports.getRotaById = (req, res) => {
 
 exports.addRota = async (req, res) => {
 
-  const { groupId } = req.query;
+  const { groupId } = req.params;
 
   const {
     name, description, startDay, employeeIds, closingHour
@@ -101,16 +101,16 @@ exports.addRota = async (req, res) => {
     name: name,
     description: description,
     accessControl: {
-      viewers: req.auth.userUuid,
-      editors: req.auth.userUuid,
-      owners: req.auth.userUuid,
+      viewers: req.auth.userId,
+      editors: req.auth.userId,
+      owners: req.auth.userId,
     },
     startDay: startDay,
     closingHour: closingHour,
     schedule: [],
     employeeIds: employeeIds,
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId
   });
 
   // save the rota to the database
@@ -121,7 +121,7 @@ exports.addRota = async (req, res) => {
       // Add the employee to the group which was selected
       RotaGroup.updateOne({
         _id: groupId,
-        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+        $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
       }, {
         $push: { rotas: new ObjectId(rota._id) }
       })

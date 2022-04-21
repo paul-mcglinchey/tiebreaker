@@ -1,29 +1,25 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
+const { Schema }  = require('mongoose');
+const mongoose    = require('mongoose');
 
-const { SessionSchema } = require('./session.model');
-const { ActivityLogSchema } = require('./activitylog.model');
-const {
-  NameSchema, AddressSchema, ContactInfoSchema
-} = require('./common/demographics.schema');
+const { ActivityLogSchema }       = require('./activitylog.model');
+const { AuditSchema }             = require('./common/audit.schema');
+
+const { NameSchema, AddressSchema, ContactInfoSchema } = require('./common/demographics.schema');
 
 const Client = mongoose.model(
   "Client",
   new Schema({
-    accessControl: {
-      viewers: [ String ],
-      editors: [ String ],
-      owners: [ String ],
-    },
     name: NameSchema,
     address: AddressSchema,
     birthdate: Date,
     contactInfo: ContactInfoSchema,
-    sessions: [SessionSchema],
+    sessions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Session'
+    }],
     colour: String,
     activityLog: [ActivityLogSchema],
-    createdBy: String,
-    updatedBy: String
+    audit: AuditSchema
   }, { timestamps: true })
 );
 

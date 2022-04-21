@@ -1,34 +1,17 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-
-import Userfront from "@userfront/core";
-import { Transition } from "@headlessui/react";
 
 import { IconWrapper } from '.';
 import { StyledField, Button } from '../..';
 import { signupValidationSchema } from '../../../utilities';
-
-
-Userfront.init("wn9p69b5");
+import { IUser } from '../../../models';
+import { useAuth } from '../../../hooks';
 
 const Signup = () => {
+  const { signup } = useAuth();
 
-  const [error, setError] = useState('');
-
-  const handleSubmit = (values: { email: string, username: string, password: string }) => {
-
-    setError('');
-
-    Userfront.signup({
-      method: "password",
-      email: values.email,
-      username: values.username,
-      password: values.password
-    })
-      .catch((error) => {
-        setError(error.message);
-      })
+  const handleSubmit = (user: IUser) => {
+    signup(user);
   }
 
   return (
@@ -67,19 +50,6 @@ const Signup = () => {
             </Form>
           )}
         </Formik>
-        <Transition
-          show={error ? true : false}
-          enter="transition ease-in-out duration-150"
-          enterFrom="transform opacity-0 scale-y-0"
-          enterTo="transform opacity-100 scale-y-100"
-          leave="transition ease-in-out duration-150"
-          leaveFrom="transform opacity-100 scale-y-100"
-          leaveTo="transform opacity-0 scale-y-0"
-        >
-          <div className="mt-10 flex border-2 border-red-500 text-red-500 p-2 justify-center rounded">
-            {error}
-          </div>
-        </Transition>
       </div>
     </IconWrapper>
   )

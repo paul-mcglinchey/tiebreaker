@@ -2,9 +2,8 @@ import { UserGroupIcon } from '@heroicons/react/solid';
 import { useContext, useState } from 'react';
 
 import { Fetch } from '..';
-import { useFetch, useRefresh, useStatus } from '../../hooks';
+import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from '../../hooks';
 import { GroupType, IGroupsResponse, IRotaGroup, IFetch } from '../../models';
-import { requestBuilder, RotaGroupService, RotaService } from '../../services';
 import { ApplicationContext, endpoints } from '../../utilities';
 import { FetchError, Prompter } from '../Common';
 import { AddGroupModal } from '../Groups';
@@ -15,6 +14,7 @@ const RotaDashboard = () => {
 
   const { dependency, refresh } = useRefresh();
   const { setGroupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -22,9 +22,8 @@ const RotaDashboard = () => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const { statusService } = useStatus();
-  const groupService = new RotaGroupService(statusService, refresh);
-  const rotaService = new RotaService(statusService, refresh);
+  const groupService = useGroupService(GroupType.ROTA, refresh);
+  const rotaService = useRotaService(refresh);
 
   return (
     <Fetch
@@ -35,7 +34,7 @@ const RotaDashboard = () => {
             response && response.count > 0 ? (
               <>
                 <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
-                <RotaList dependency={dependency} />
+                <RotaList dependency={dependency} refresh={refresh} />
               </>
             ) : (
               !isLoading && (

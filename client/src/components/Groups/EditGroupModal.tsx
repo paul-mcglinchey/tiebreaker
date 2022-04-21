@@ -1,19 +1,18 @@
-import { IGroup } from "../../models";
-import { IGroupService } from "../../services";
+import { IGroup, IGroupService } from "../../models";
 import { Button, Modal } from "../Common";
 import GroupForm from "./GroupForm";
 
-interface IEditGroupProps<TGroup> {
+interface IEditGroupProps {
   editGroupOpen: boolean,
   toggleEditGroupOpen: () => void,
-  groupService: IGroupService<TGroup>,
+  groupService: IGroupService,
   g: IGroup
 }
 
-const EditGroupModal = <TGroup extends IGroup>({ editGroupOpen, toggleEditGroupOpen, groupService, g }: IEditGroupProps<TGroup>) => {
+const EditGroupModal = ({ editGroupOpen, toggleEditGroupOpen, groupService, g }: IEditGroupProps) => {
   return (
     <Modal title="Edit group" modalOpen={editGroupOpen} toggleModalOpen={toggleEditGroupOpen}>
-      <GroupForm g={g} handleSubmit={(values, _id) => groupService.updateGroup(values, _id)} submitButton={<Button content='Update group' />}/>
+      <GroupForm g={g} handleSubmit={(values, groupId) => groupService.updateGroup(values, groupId)} submitButton={<Button content='Update group' />}/>
     </Modal>
   )
 }

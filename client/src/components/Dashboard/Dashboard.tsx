@@ -1,10 +1,12 @@
-import { useSessionStorage } from "../../hooks";
+import { useFetch, useRequestBuilder } from "../../hooks";
 import { Application, GroupType, IClientGroup, IGroupsResponse, IRotaGroup } from "../../models";
-import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { AppCard } from "./Common";
 
 const Dashboard = () => {
+
+  const { requestBuilder } = useRequestBuilder();
+
   const getTotalEmployees = (rotaGroups: IRotaGroup[]): number => {
     const distinctEmployees: string[] = [];
 
@@ -39,8 +41,8 @@ const Dashboard = () => {
     return totalClients;
   }
 
-  const clientGroupsResponse = useSessionStorage<IGroupsResponse<IClientGroup>>(endpoints.groups(GroupType.CLIENT).groups, requestBuilder("GET")).response;
-  const rotaGroupsResponse = useSessionStorage<IGroupsResponse<IRotaGroup>>(endpoints.groups(GroupType.ROTA).groups, requestBuilder("GET")).response;
+  const clientGroupsResponse = useFetch<IGroupsResponse<IClientGroup>>(endpoints.groups(GroupType.CLIENT).groups, requestBuilder()).response;
+  const rotaGroupsResponse = useFetch<IGroupsResponse<IRotaGroup>>(endpoints.groups(GroupType.ROTA).groups, requestBuilder()).response;
 
   return (
     <div className="flex flex-col md:flex-row justify-start text-gray-200 mt-10 font-semibold tracking-wide gap-8">

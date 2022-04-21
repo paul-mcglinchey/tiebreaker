@@ -1,5 +1,4 @@
-import { IRota } from "../../../../models";
-import { IRotaService } from "../../../../services";
+import { IRota, IRotaService } from "../../../../models";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
 import { useContext } from "react";

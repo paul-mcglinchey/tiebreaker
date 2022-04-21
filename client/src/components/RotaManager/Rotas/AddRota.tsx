@@ -1,16 +1,18 @@
 import { useContext } from 'react';
 import { GroupType, IRota } from '../../../models';
-import { RotaService } from '../../../services';
 import { ApplicationContext } from '../../../utilities';
 import { GroupToolbar } from '../../Toolbar';
 import { RotaForm } from '.';
-import { useStatus } from '../../../hooks';
+import { useRotaService } from '../../../hooks';
 
-const AddRota = () => {
+interface IAddRotaProps {
+  refresh?: () => void
+}
+
+const AddRota = ({ refresh }: IAddRotaProps) => {
 
   const { groupId, setGroupId } = useContext(ApplicationContext);
-  const { statusService } = useStatus();
-  const rotaService = new RotaService(statusService);
+  const rotaService = useRotaService(refresh);
 
   return (
     <>

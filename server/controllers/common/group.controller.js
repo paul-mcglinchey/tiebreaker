@@ -1,107 +1,76 @@
-const db = require('../../models');
-const GroupList = db.grouplist;
+const asyncHandler    = require('express-async-handler');
+const db              = require('../../models');
+const GroupList       = db.grouplist;
 
 // Get all groups
-exports.getGroups = (Model) => {
-  return async (req, res) => {
+exports.get = (Model) => {
+  return asyncHandler(async (req, res) => {
 
     // the mongoose query to fetch the groups for the current user
-    let groupQuery = { 'accessControl.viewers': req.auth.userUuid };
+    let groupQuery = { 'accessControl.viewers': req.auth.userId };
 
-    const groupCount = await Model
-      .countDocuments(groupQuery)
-      .then(groupCount => groupCount)
-      .catch(err => {
-        return res.status(500).send({
-          message: err.message || `A problem occurred fetching the number of groups for user with ID ${req.auth.userUuid}.`
-        })
-      });
+    const count = await Model.countDocuments(groupQuery)
+    const groups = await Model.find(groupQuery)
 
-    const groups = await Model
-      .find(groupQuery)
-      .then(groups => groups)
-      .catch(err => {
-        return res.status(401).send({
-          message:
-            err.message || `An error occurred while getting groups for user with ID: ${req.auth.userUuid}.`
-        });
-      });
-
-    return res.status(200).send({
-      count: groupCount,
+    return res.status(200).json({
+      count: count,
       groups: groups
     });
-  }
+  })
 }
 
 // Create group
-exports.createGroup = (getGroupModel) => {
-  return async (req, res) => {
-    // get the ID of the default list set to create the group with
-    const defaultListsId = await GroupList.find({ default: true })
-      .then(defaultLists => defaultLists._id)
-      .catch(err => res.status(500).send({ message: err.message || `A problem occurred getting the default list.`}))
-    
-    const group = getGroupModel(defaultListsId, req);
+exports.create = (Group) => {
+  return asyncHandler(async (req, res) => {
+    // destructure the body
+    const { name, description, colour } = req.body
 
-    // save the group to the database
-    group
-      .save(group)
-      .then(data => {
-        return res.status(200).send({ data: data, message: `Group ${req.body.name} added.` })
-      })
-      .catch(err => {
-        return res.status(500).send({
-          message: err.message || `Some error occurred while creating the group.`
-        });
-      });
-  }
+    // get the ID of the default list set to create the group with
+    const defaultListsId = await GroupList
+      .find({ default: true })
+      .then(defaultLists => defaultLists._id)
+    
+    const group = await Group.create({
+      name, description, colour,
+      accessControl: {
+        viewers: [req.auth.userId],
+        editors: [req.auth.userId],
+        owners: [req.auth.userId]
+      },
+      listDefinitions: [defaultListsId],
+    })
+
+    return res.status(201).json(group)
+  })
 }
 
 // Update group
-exports.updateGroup = (Group) => {
-  return (req, res) => {
-    const { _id } = req.body;
+exports.update = (Group) => {
+  return asyncHandler(async (req, res) => {
+    const { groupId } = req.params
 
-    Group.findByIdAndUpdate(_id, req.body)
-      .then(() => res.status(200).send({ message: `Successfully updated group with ID ${_id}.`}))
-      .catch(err => {
-        return res.status(500).send({ message: err || `A problem occurred while updating group with ID ${_id}.`})
-      })
-  }
+    const group = await Group.findByIdAndUpdate(groupId, req.body)
+
+    return res.status(200).json(group)
+  })
 }
 
 // Delete group
-exports.deleteGroup = (Group, cleanupFunction) => {
-  return (req, res) => {
-    const { _id } = req.body;
+exports.delete = (Group, cleanupFunction) => {
+  return asyncHandler(async (req, res) => {
+    const { groupId } = req.params
 
-    // check that the _id has been passed correctly or return a 400
-    if (!_id) return res.status(400).send({ message: 'A valid ID must be provided in order to delete a group.' })
+    const group = await Group.findOne(groupId)
 
-    if (!req.groupexists) return res.status(400).send({ message: "Group doesn't exist" });
+    if (!group) {
+      res.status(400)
+      throw new Error('Group not found')
+    }
 
-    Group.findOne({ _id: _id, 'accessControl.owners': req.auth.userUuid })
-      .then(group => {
-        cleanupFunction(group, req, res);
-      })
-      .then(() => {
-        Group.findOneAndDelete({ _id: _id, 'accessControl.owners': req.auth.userUuid })
-          .then(group => {
-            return res.status(200).send({
-              success: `Group ${group.groupName} successfully deleted.`
-            })
-          })
-          .catch(err => {
-            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-              return res.status(404).send({
-                message: 'Group not found with id ' + _id
-              });
-            };
-            return res.status(500).send({
-              message: 'Could not delete group with id ' + _id
-            });
-          });
-      })
-  }
+    await group.remove()
+
+    await cleanupFunction(group)
+    
+    return res.json({ message: 'Deleted group' })
+  })
 }

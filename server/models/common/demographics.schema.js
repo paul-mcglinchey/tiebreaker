@@ -4,7 +4,7 @@ const NameSchema = new Schema({
   firstName: { type: String, trim: true, required: true },
   middleNames: { type: String, required: false },
   lastName: { type: String, trim: true, required: true }
-});
+}, { timestamps: true });
 
 const ContactInfoSchema = new Schema({
   primaryPhoneNumber: { type: String, trim: true, required: false },
@@ -17,7 +17,7 @@ const ContactInfoSchema = new Schema({
     name: { type: String, required: true },
     number: { type: Number, required: true }
   }]
-});
+}, { timestamps: true });
 
 const AddressSchema = new Schema({
   firstLine: { type: String, trim: true, required: false },
@@ -26,7 +26,7 @@ const AddressSchema = new Schema({
   city: { type: String, trim: true, required: false },
   country: { type: String, required: false },
   postCode: { type: String, required: false }
-});
+}, { timestamps: true });
 
 module.exports = {
   NameSchema, ContactInfoSchema, AddressSchema

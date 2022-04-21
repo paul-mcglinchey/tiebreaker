@@ -1,9 +1,8 @@
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { ButtonType, IRota } from "../../../../models";
+import { ButtonType, IRota, IRotaService } from "../../../../models";
 import React, { useContext, useState } from "react";
 import { Button, DeleteDialog, Dropdown } from "../../../Common";
-import { IRotaService } from "../../../../services";
 import { EditRotaModal } from "..";
 import { ApplicationContext } from "../../../../utilities";
 
@@ -29,7 +28,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
   const navigate = useNavigate();
 
   const deleteRota = () => {
-    rotaService.deleteRota(rota, groupId);
+    rotaService.deleteRota(rota._id, groupId);
     navigate('/rotas/dashboard', { replace: true });
   }
 
@@ -39,7 +38,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
   }
 
   const updateLockedStatus = () => {
-    rotaService.updateRota({ locked: !rota.locked }, rota);
+    rotaService.updateRota({ locked: !rota.locked }, rota._id, groupId);
   }
 
   return (

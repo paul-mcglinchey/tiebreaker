@@ -1,6 +1,6 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { useContext, useState } from "react"
-import { IEmployeeService } from "../../../services"
+import { IEmployeeService } from "../../../models"
 import { ApplicationContext } from "../../../utilities"
 import { Button, Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"

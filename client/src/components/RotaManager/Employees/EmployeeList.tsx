@@ -1,8 +1,7 @@
 import { UserIcon } from "@heroicons/react/solid";
 import { useContext, useState } from "react";
-import { useFetch } from "../../../hooks";
-import { IEmployee, IEmployeesResponse, IFetch } from "../../../models";
-import { IEmployeeService, requestBuilder } from "../../../services";
+import { useFetch, useRequestBuilder } from "../../../hooks";
+import { IEmployee, IEmployeeService, IEmployeesResponse, IFetch } from "../../../models";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch, Prompter, Table } from "../../Common";
 import { EmployeeTableRow } from "./EmployeeTable";
@@ -21,6 +20,7 @@ interface IEmployeeListProps {
 const EmployeeList = ({ dependency, employeeService, toggleAddEmployeeOpen }: IEmployeeListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");

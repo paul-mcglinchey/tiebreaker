@@ -1,9 +1,8 @@
 import { Formik, Form } from 'formik';
 import { useContext, useState } from 'react';
-import { useFetch } from '../../../../hooks';
+import { useFetch, useRequestBuilder } from '../../../../hooks';
 
 import { DayOfWeek, IEmployee, IEmployeesResponse, IFetch, IRota } from '../../../../models';
-import { requestBuilder } from '../../../../services';
 import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../../utilities';
 import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection, InlineLink } from '../../../Common';
 import { StaffSelector } from '.';
@@ -18,6 +17,7 @@ interface IRotaFormProps {
 const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
   const { groupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });
 

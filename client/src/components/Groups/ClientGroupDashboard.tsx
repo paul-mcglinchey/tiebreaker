@@ -1,7 +1,6 @@
 import { Fragment, useState } from "react";
-import { useFetch, useRefresh, useStatus } from "../../hooks";
+import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { GroupType, IClientGroup, IFetch, IGroupsResponse } from "../../models";
-import { ClientGroupService, requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
 import { GroupToolbar } from "../Toolbar";
@@ -11,16 +10,17 @@ const ClientGroupDashboard = () => {
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
+  
   const { dependency, refresh } = useRefresh();
+  const { requestBuilder } = useRequestBuilder();
 
-  const { statusService } = useStatus();
-  const groupService = new ClientGroupService(statusService, refresh);
+  const { groupService } = useGroupService(GroupType.CLIENT, refresh);
 
   return (
     <Fragment>
       <GroupToolbar title="Group management" groupType={GroupType.CLIENT} createGroupAction={toggleAddGroupOpen} />
       <Fetch
-        fetchOutput={useFetch(endpoints.groups(GroupType.CLIENT).groups, requestBuilder("GET"), [dependency])}
+        fetchOutput={useFetch(endpoints.groups(GroupType.CLIENT).groups, requestBuilder(), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">

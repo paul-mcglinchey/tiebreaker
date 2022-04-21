@@ -1,15 +1,11 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
-const {
-  NameSchema, AddressSchema, ContactInfoSchema
-} = require('./common/demographics.schema');
+const { Schema }    = require('mongoose');
+const mongoose      = require('mongoose');
+
+const { AuditSchema }           = require('./common/audit.schema');
+
+const { NameSchema, AddressSchema, ContactInfoSchema } = require('./common/demographics.schema');
 
 const EmployeeSchema = new Schema({
-  accessControl: {
-    viewers: [ String ],
-    editors: [ String ],
-    owners: [ String ],
-  },
   role: { type: String, required: false },
   department: { type: String, required: false },
   reportsTo: { type: String, required: false },
@@ -30,9 +26,8 @@ const EmployeeSchema = new Schema({
       isPaid: { type: Boolean, required: false, default: true }
     }
   ],
-  createdBy: String,
-  updatedBy: String,
-  employeeColour: String
+  colour: String,
+  audit: AuditSchema
 }, { timestamps: true });
 
 const Employee = mongoose.model(

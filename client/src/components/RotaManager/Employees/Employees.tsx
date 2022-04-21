@@ -1,9 +1,8 @@
 import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { AddEmployeeModal, EmployeeList } from "../..";
-import { useFetch, useRefresh, useStatus } from "../../../hooks";
+import { useEmployeeService, useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../../hooks";
 import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
-import { EmployeeService, requestBuilder, RotaGroupService } from "../../../services";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch, FetchError, SpinnerIcon } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
@@ -15,6 +14,7 @@ const Employees = () => {
 
   const { dependency, refresh } = useRefresh();
   const { setGroupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -22,9 +22,8 @@ const Employees = () => {
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(isAddEmployeeOpen ? true : false);
   const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
-  const { statusService } = useStatus();
-  const groupService = new RotaGroupService(statusService, refresh);
-  const employeeService = new EmployeeService(statusService, refresh);
+  const groupService = useGroupService(GroupType.ROTA, refresh);
+  const employeeService = useEmployeeService(refresh);
 
   return (
     <>

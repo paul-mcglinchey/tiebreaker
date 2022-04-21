@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
+const { UsersSchema } = require('./common/users.schema');
+const { AuditSchema } = require('./common/audit.schema');
+
 const RotaGroup = mongoose.model(
   "RotaGroup",
   new Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: false },
-    accessControl: {
-      viewers: [String],
-      editors: [String],
-      owners: [String]
+    name: { 
+      type: String, required: true 
+    },
+    description: {
+      type: String, required: false 
     },
     employees: [{
       type: Schema.Types.ObjectId,
@@ -19,9 +21,16 @@ const RotaGroup = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'Rota'
     }],
-    listDefinitions: [String],
-    colour: { type: String, required: false }
-  })
+    listDefinitions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'GroupList'
+    }],
+    colour: { 
+      type: String, required: false 
+    },
+    users: [UsersSchema],
+    audit: AuditSchema
+  }, { timestamps: true })
 )
 
 module.exports = RotaGroup;

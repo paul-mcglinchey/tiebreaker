@@ -1,5 +1,7 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
+const { Schema }  = require('mongoose');
+const mongoose    = require('mongoose');
+
+const { AuditSchema } = require('./common/audit.schema');
 
 const GroupList = mongoose.model(
   "GroupList",
@@ -13,8 +15,7 @@ const GroupList = mongoose.model(
         colour: { type: String, required: true }
       }]
     }],
-    createdBy: String,
-    updatedBy: String,
+    audit: AuditSchema,
     default: { type: Boolean, required: false, default: false }
   }, { timestamps: true })
 );

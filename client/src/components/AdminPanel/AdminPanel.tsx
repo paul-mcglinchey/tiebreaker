@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useRefresh, useStateCallback } from "../../hooks";
+import { useRefresh, useRequestBuilder, useStateCallback } from "../../hooks";
 import { ButtonType, IChanges, IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
-import { requestBuilder } from "../../services";
 import { endpoints } from "../../utilities";
 import { Button } from "../Common";
 import { Toolbar } from "../Toolbar";
@@ -10,14 +9,16 @@ import { AddListItem, ListItem } from "./Common";
 const AdminPanel = () => {
 
   const [defaultGrouplists, setDefaultGrouplists] = useStateCallback<IGrouplistResponse>({} as IGrouplistResponse);
-  const { dependency, refresh } = useRefresh();
   const [changes, setChanges] = useState<IChanges>({ deletions: 0, edits: 0, additions: 0 })
+  const { dependency, refresh } = useRefresh();
+
+  const { requestBuilder } = useRequestBuilder();
 
   useEffect(() => {
     let componentIsMounted = true;
 
     const _fetch = () => {
-      fetch(endpoints.defaultgrouplists, requestBuilder("GET"))
+      fetch(endpoints.defaultgrouplists, requestBuilder())
         .then(res => res.json())
         .then((json: IDefaultGrouplistResponse) => {
           componentIsMounted && setDefaultGrouplists(json.defaultLists);

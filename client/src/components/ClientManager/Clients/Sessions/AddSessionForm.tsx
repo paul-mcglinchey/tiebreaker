@@ -1,20 +1,25 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../../../utilities/schema';
 import { Button } from '../../../Common';
 import { CustomDate, StyledField, StyledTagField } from '../../..';
-import { ClientService } from '../../../../services';
 import { IClient, ITag } from '../../../../models';
-import { useStatus } from '../../../../hooks';
+import { useClientService } from '../../../../hooks';
+import { ApplicationContext } from '../../../../utilities';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
 
-const AddSessionForm = ({ client }: { client: IClient }) => {
+interface IAddSessionProps {
+  client: IClient
+}
 
-  const { statusService } = useStatus();
-  const clientService = new ClientService(statusService);
-  const [tags, setTags] = useState<ITag[]>([]);
+const AddSessionForm = ({ client }: IAddSessionProps) => {
+
+  const [tags, setTags] = useState<ITag[]>([])
+
+  const clientService = useClientService()
+  const { groupId } = useContext(ApplicationContext)
 
   return (
     <div className="flex flex-1">
@@ -27,7 +32,7 @@ const AddSessionForm = ({ client }: { client: IClient }) => {
         }}
         validationSchema={sessionValidationSchema}
         onSubmit={(values, { resetForm }) => {
-          clientService.addSession(client._id, { ...values, tags: tags });
+          clientService.addSession({ ...values, tags: tags }, client._id, groupId);
           resetForm();
         }}
       >

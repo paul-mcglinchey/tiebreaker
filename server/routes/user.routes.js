@@ -1,13 +1,31 @@
 module.exports = app => {
-  const user = require('../controllers/user.controller.js');
+  const user        = require('../controllers/user.controller.js')
+  const middleware  = require('../middlewares/auth.middleware')
 
   var router = require('express').Router();
 
-  // Get the current user
-  router.get('/current', user.getCurrentUser);
+  router.post(
+    '/signup',
+    user.signup
+  )
 
-  // Get a specific user
-  router.get('/:userId', user.getUserById);
+  router.post(
+    '/login',
+    user.login
+  )
+
+  // Add auth protection to routes after this point
+  router.use(middleware.protect)
+
+  router.get(
+    '/current', 
+    user.getCurrent
+  );
+
+  router.get(
+    '/:userId', 
+    user.getById
+  );
 
   app.use('/api/users', router);
 }

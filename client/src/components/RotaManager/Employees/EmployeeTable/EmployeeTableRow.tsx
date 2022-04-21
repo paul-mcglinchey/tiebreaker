@@ -1,6 +1,5 @@
 import { useContext, useState } from "react"
-import { IEmployee } from "../../../../models"
-import { IEmployeeService } from "../../../../services"
+import { IEmployee, IEmployeeService } from "../../../../models"
 import { ApplicationContext } from "../../../../utilities"
 import { DeleteDialog, InlineButton, TableRow, TableRowItem } from "../../../Common"
 

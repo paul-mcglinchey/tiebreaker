@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { 
   Navigate,
   Route, 
@@ -12,18 +12,19 @@ import {
   ViewClient 
 } from "..";
 import { ClientOverview, Fetch } from "../../..";
-import { useFetch } from "../../../../hooks";
+import { useFetch, useRequestBuilder } from "../../../../hooks";
 import { IClient, IFetch } from "../../../../models";
-import { requestBuilder } from "../../../../services";
-import { endpoints } from "../../../../utilities";
+import { ApplicationContext, endpoints } from "../../../../utilities";
 
 const ClientPage = () => {
 
-  const { clientId } = useParams();
+  const { clientId } = useParams()
+  const { groupId } = useContext(ApplicationContext)
+  const { requestBuilder } = useRequestBuilder()
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.client(clientId || ""), requestBuilder(), [])}
+      fetchOutput={useFetch(endpoints.client(clientId || "", groupId), requestBuilder(), [])}
       render={({ response: client }: IFetch<IClient>) => (
         <Fragment>
           {client && (

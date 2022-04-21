@@ -1,73 +1,72 @@
-module.exports = app => {
-  const rotas = require('../controllers/rota.controller.js');
-  const schedules = require('../controllers/schedule.controller.js');
-  const middleware = require('../middlewares');
+const rotas       = require('../controllers/rota.controller.js');
+const schedules   = require('../controllers/schedule.controller.js');
+const middleware  = require('../middlewares');
 
-  var router = require('express').Router();
+var router = require('express').Router({ mergeParams: true });
 
-  // Get all rotas which the current user has view access to
-  router.get(
-    '/', 
-    middleware.groupMiddleware.checkQueryHasGroupId, 
-    rotas.getRotas
-  );
+// Validate that a group ID has been supplied in the params
+router.use(middleware.groupMiddleware.checkIfQueryHasGroupId);
 
-  // Get rota by ID
-  router.get(
-    '/:rotaId',
-    middleware.rotaMiddleware.checkRotaIdExists, 
-    rotas.getRotaById
-  );
+// Get all rotas which the current user has view access to
+router.get(
+  '/',
+  rotas.getRotas
+);
 
-  // Gets all schedules for a rota
-  router.get(
-    '/:rotaId/schedules/:startDate',
-    middleware.rotaMiddleware.checkRotaIdExists,
-    middleware.scheduleMiddleware.checkQueryHasDate,
-    schedules.getScheduleByDate
-  );
+// Get rota by ID
+router.get(
+  '/:rotaId',
+  middleware.rotaMiddleware.checkRotaIdExists,
+  rotas.getRotaById
+);
 
-  // Add a new rota
-  router.post(
-    '/', 
-    middleware.groupMiddleware.checkQueryHasGroupId,
-    middleware.validationMiddleware.checkRequestHasBody, 
-    rotas.addRota
-  );
+// Gets all schedules for a rota
+router.get(
+  '/:rotaId/schedules/:startDate',
+  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.scheduleMiddleware.checkQueryHasDate,
+  schedules.getScheduleByDate
+);
 
-  // Add a new schedule
-  router.post(
-    '/:rotaId/schedules',
-    middleware.rotaMiddleware.checkRotaIdExists,
-    middleware.validationMiddleware.checkRequestHasBody,
-    schedules.addSchedule
-  )
+// Add a new rota
+router.post(
+  '/',
+  middleware.validationMiddleware.checkRequestHasBody,
+  rotas.addRota
+);
 
-  // Update a rota
-  router.put(
-    '/:rotaId',
-    middleware.rotaMiddleware.checkRotaIdExists,
-    middleware.validationMiddleware.checkRequestHasBody,
-    rotas.updateRota
-  );
+// Add a new schedule
+router.post(
+  '/:rotaId/schedules',
+  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.validationMiddleware.checkRequestHasBody,
+  schedules.addSchedule
+)
 
-  // Update a schedule belonging to a rota
-  router.put(
-    '/:rotaId/schedules/:startDate',
-    middleware.rotaMiddleware.checkRotaIdExists,
-    middleware.scheduleMiddleware.checkQueryHasDate,
-    middleware.rotaMiddleware.checkUserAccessToRota('editors'),
-    schedules.updateSchedule
-  )
+// Update a rota
+router.put(
+  '/:rotaId',
+  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.validationMiddleware.checkRequestHasBody,
+  rotas.updateRota
+);
 
-  // Delete a rota
-  router.delete(
-    '/:rotaId',
-    middleware.groupMiddleware.checkQueryHasGroupId,
-    middleware.rotaMiddleware.checkRotaIdExists,
-    middleware.rotaMiddleware.checkUserAccessToRota('owners'),
-    rotas.deleteRota
-  )
+// Update a schedule belonging to a rota
+router.put(
+  '/:rotaId/schedules/:startDate',
+  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.scheduleMiddleware.checkQueryHasDate,
+  middleware.rotaMiddleware.checkUserAccessToRota('editors'),
+  schedules.updateSchedule
+)
 
-  app.use('/api/rotas', router);
-}
+// Delete a rota
+router.delete(
+  '/:rotaId',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.rotaMiddleware.checkUserAccessToRota('owners'),
+  rotas.deleteRota
+)
+
+module.exports = router

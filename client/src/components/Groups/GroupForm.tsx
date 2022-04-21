@@ -7,7 +7,7 @@ import { Button, ColourPicker, StyledField } from "../Common";
 
 interface IGroupFormProps {
   g?: IGroup,
-  handleSubmit: (values: IGroup, _id?: string) => void,
+  handleSubmit: (values: IGroup, groupId?: string) => void,
   submitButton?: JSX.Element
 }
 

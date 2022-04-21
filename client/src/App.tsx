@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Userfront from "@userfront/core";
 
 import {
   Routes,
@@ -11,22 +10,21 @@ import {
 import { AddClient, ClientDashboard, ClientGroupDashboard, ClientManager, ClientPage, Dashboard, Employees, Login, NavMenu, NotificationContainer, PasswordReset, PasswordResetRequest, RotaDashboard, RotaGroupDashboard, RotaManager, RotaPage, Signup } from './components';
 import { AdminPanel } from './components/AdminPanel';
 import { StatusProvider } from './utilities';
+import { useAuth } from './hooks';
 
 export default function App() {
   const location = useLocation();
+  const { getAccess } = useAuth();
 
   // provide state for the current application
   const [currentApplication, setCurrentApplication] = useState(undefined);
-
-  // @ts-ignore
-  const getAccess = () => Userfront.accessToken();
 
   const PrivateRoute = ({ children }: any) => {
     return getAccess() ? children : <Navigate to="/login" state={{ from: location }} />;
   }
 
   const AdminRoute = ({ children }: any) => {
-    return (Userfront.user.hasRole && Userfront.user.hasRole("admin")) ? children : <Navigate to="/" state={{ from: location }} />
+    return children || <Navigate to="/" />
   }
 
   return (

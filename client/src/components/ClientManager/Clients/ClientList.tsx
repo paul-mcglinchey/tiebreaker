@@ -1,8 +1,7 @@
 import { Fragment, useContext, useState } from 'react';
 import { ApplicationContext, endpoints } from '../../../utilities';
-import { requestBuilder } from '../../../services';
 import { IClient, IClientsResponse, IFetch, IFilter } from '../../../models';
-import { useFetch } from '../../../hooks';
+import { useFetch, useRequestBuilder } from '../../../hooks';
 import { SearchBar, ClientTableRow } from '.';
 import { Paginator, Table, Fetch, Prompter } from '../../Common';
 import { UserAddIcon } from '@heroicons/react/solid';
@@ -22,6 +21,7 @@ interface IClientListProps {
 const ClientList = ({ toggleAddClientOpen, dependency }: IClientListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -52,8 +52,8 @@ const ClientList = ({ toggleAddClientOpen, dependency }: IClientListProps) => {
   return (
     <Fetch
       fetchOutput={useFetch(
-        groupId && `${endpoints.clients(groupId)}&${buildQueryString()}`, 
-        requestBuilder("GET"), 
+        groupId && `${endpoints.clients(groupId)}?${buildQueryString()}`, 
+        requestBuilder(), 
         [pageSize, pageNumber, filters, sortField, sortDirection, groupId, dependency]
       )}
       render={({ response, isLoading }: IFetch<IClientsResponse>) => (

@@ -1,30 +1,18 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Userfront from "@userfront/core";
-import { Transition } from "@headlessui/react";
 import { Formik, Form } from 'formik';
 
 import { IconWrapper } from '.';
 import { loginValidationSchema } from '../../../utilities';
 import { StyledField, Button } from '../..';
-
-Userfront.init("wn9p69b5");
+import { useAuth } from '../../../hooks';
+import { IUser } from '../../../models';
 
 const Login = () => {
 
-  const [error, setError] = useState(null);
+  const { login } = useAuth();
 
-  const handleSubmit = (values: { emailOrUsername: string, password: string }) => {
-    setError(null);
-
-    Userfront.login({
-      method: "password",
-      emailOrUsername: values.emailOrUsername,
-      password: values.password
-    })
-      .catch((error) => {
-        setError(error.message);
-      })
+  const handleSubmit = (user: IUser) => {
+    login(user)
   }
 
   return (
@@ -37,7 +25,7 @@ const Login = () => {
           }}
           validationSchema={loginValidationSchema}
           onSubmit={(values) => {
-            handleSubmit(values);
+            handleSubmit({ email: values.emailOrUsername, username: values.emailOrUsername, password: values.password });
           }}
         >
           {({ errors, touched }) => (
@@ -66,19 +54,6 @@ const Login = () => {
             </Form>
           )}
         </Formik>
-        <Transition
-          show={error ? true : false}
-          enter="transition ease-in-out duration-150"
-          enterFrom="transform opacity-0 scale-y-0"
-          enterTo="transform opacity-100 scale-y-100"
-          leave="transition ease-in-out duration-150"
-          leaveFrom="transform opacity-100 scale-y-100"
-          leaveTo="transform opacity-0 scale-y-0"
-        >
-          <div className="mt-10 flex border-2 border-red-500 text-red-500 p-2 justify-center rounded">
-            {error}
-          </div>
-        </Transition>
       </div>
     </IconWrapper>
   )

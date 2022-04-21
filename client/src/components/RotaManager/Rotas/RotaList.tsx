@@ -1,8 +1,7 @@
 import { useContext, useState } from 'react';
 import { Fetch, RotaForm } from '../..';
-import { useFetch, useStatus } from '../../../hooks';
+import { useFetch, useRequestBuilder, useRotaService } from '../../../hooks';
 import { ApplicationContext, endpoints } from '../../../utilities';
-import { requestBuilder, RotaService } from '../../../services';
 import { IFetch, IRota, IRotasResponse } from '../../../models';
 import { Modal, Prompter, Table } from '../../Common';
 import { TableIcon } from '@heroicons/react/solid';
@@ -17,12 +16,14 @@ const headers = [
 ]
 
 interface IRotaListProps {
+  refresh: () => void
   dependency: boolean
 }
 
-const RotaList = ({ dependency }: IRotaListProps) => {
+const RotaList = ({ refresh, dependency }: IRotaListProps) => {
 
   const { groupId } = useContext(ApplicationContext);
+  const { requestBuilder } = useRequestBuilder();
 
   const [sortField, setSortField] = useState(headers[1]!.value);
   const [sortDirection, setSortDirection] = useState("descending");
@@ -30,8 +31,7 @@ const RotaList = ({ dependency }: IRotaListProps) => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const { statusService } = useStatus();
-  const rotaService = new RotaService(statusService);
+  const rotaService = useRotaService(refresh);
 
   return (
     <>

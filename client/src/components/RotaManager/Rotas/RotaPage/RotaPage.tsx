@@ -1,31 +1,33 @@
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import {
   useParams
 } from "react-router";
 import { Fetch } from "../../..";
-import { useFetch, useRefresh, useStatus } from "../../../../hooks";
+import { useFetch, useRefresh, useRequestBuilder, useRotaService } from "../../../../hooks";
 import { IFetch, IScheduleResponse } from "../../../../models";
-import { requestBuilder, RotaService } from "../../../../services";
-import { endpoints } from "../../../../utilities";
+import { ApplicationContext, endpoints } from "../../../../utilities";
 import { RotaHeader, Schedule } from "..";
 import { Formik } from "formik";
 
 const RotaPage = () => {
 
-  const { dependency, refresh } = useRefresh();
-  const { statusService } = useStatus();
-  const rotaService = new RotaService(statusService, refresh);
+  const rotaId = useParams()["rotaId"] || ""
+  const { requestBuilder } = useRequestBuilder()
+  const { groupId } = useContext(ApplicationContext)
 
-  const { rotaId } = useParams();
+  const { dependency, refresh } = useRefresh()
+  const rotaService = useRotaService(refresh)
 
-  const [editing, setEditing] = useState<boolean>(false);
-  const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0);
-  const currentWeek = rotaService.getWeek(currentWeekModifier);
+  const [editing, setEditing] = useState<boolean>(false)
+  const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
+
+  const currentWeek = rotaService.getWeek(currentWeekModifier)
+  const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""
 
   return (
     <Fetch
       fetchOutput={useFetch(
-        `${endpoints.schedule(rotaId || "", currentWeek.firstDay.toISOString().split('T')[0] || "")}`,
+        `${endpoints.schedule(rotaId, groupId, startDate)}`,
         requestBuilder(), [dependency, currentWeekModifier], false)
       }
       render={({ response, isLoading }: IFetch<IScheduleResponse>) => (
@@ -36,28 +38,27 @@ const RotaPage = () => {
                 initialValues={response.schedule}
                 onSubmit={(values, { resetForm }) => {
                   resetForm({ values: response.schedule });
-                  rotaService.updateSchedule(rotaId, values);
+                  rotaService.updateSchedule(values, rotaId, groupId);
                 }}
               >
                 {({ handleSubmit, values, dirty }) => (
                   <>
-                    <RotaHeader 
-                      handleSubmit={handleSubmit} 
+                    <RotaHeader
+                      handleSubmit={handleSubmit}
                       dirty={dirty}
-                      rota={response.rota} 
-                      rotaService={rotaService} 
-                      editing={editing} 
-                      setEditing={setEditing} 
+                      rota={response.rota}
+                      rotaService={rotaService}
+                      editing={editing}
+                      setEditing={setEditing}
                     />
-                    <Schedule 
+                    <Schedule
                       handleSubmit={handleSubmit}
                       values={values}
                       dirty={dirty}
-                      rota={response.rota}
                       editing={editing}
                       currentWeek={currentWeek}
-                      currentWeekModifier={currentWeekModifier} 
-                      setCurrentWeekModifier={setCurrentWeekModifier} 
+                      currentWeekModifier={currentWeekModifier}
+                      setCurrentWeekModifier={setCurrentWeekModifier}
                     />
                   </>
                 )}

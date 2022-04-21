@@ -1,15 +1,14 @@
-import { IGroup } from "../../models";
-import { IGroupService } from "../../services";
+import { IGroupService } from "../../models";
 import { Modal } from "../Common";
 import GroupForm from "./GroupForm";
 
-interface IAddGroupModalProps<TGroup> {
+interface IAddGroupModalProps {
   addGroupOpen: boolean,
   toggleAddGroupOpen: () => void,
-  groupService: IGroupService<TGroup>
+  groupService: IGroupService
 }
 
-const AddGroupModal = <TGroup extends IGroup>({ addGroupOpen, toggleAddGroupOpen, groupService }: IAddGroupModalProps<TGroup>) => {
+const AddGroupModal = ({ addGroupOpen, toggleAddGroupOpen, groupService }: IAddGroupModalProps) => {
   return (
     <Modal title="Add group" modalOpen={addGroupOpen} toggleModalOpen={toggleAddGroupOpen}>
       <GroupForm 

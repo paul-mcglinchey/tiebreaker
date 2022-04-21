@@ -1,7 +1,6 @@
 import { Fragment, useState } from "react";
-import { useFetch, useRefresh, useStatus } from "../../hooks";
+import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../models";
-import { requestBuilder, RotaGroupService } from "../../services";
 import { endpoints } from "../../utilities";
 import { Fetch, SpinnerIcon } from "../Common";
 import { GroupToolbar } from "../Toolbar";
@@ -11,15 +10,16 @@ const RotaGroupDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
+  const { requestBuilder } = useRequestBuilder();
+
   const { dependency, refresh } = useRefresh();
-  const { statusService } = useStatus();
-  const groupService = new RotaGroupService(statusService, refresh);
+  const groupService = useGroupService(GroupType.ROTA, refresh);
 
   return (
     <Fragment>
       <GroupToolbar title="Group management" groupType={GroupType.ROTA} createGroupAction={toggleAddGroupOpen} />
       <Fetch
-        fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder("GET"), [dependency])}
+        fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder(), [dependency])}
         render={({ response, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
           isLoading ? (
             <div className="flex justify-center py-10">

@@ -16,11 +16,11 @@ const checkUserAccessToClient = (accessRequired) => {
     Client.findById(clientId)
       .then((data) => {
         if (data.accessControl) {
-          if (data.accessControl[accessRequired].includes(req.auth.userUuid)) {
+          if (data.accessControl[accessRequired].includes(req.auth.userId)) {
             next();
           } else {
             return res.status(403).send({
-              message: `User with ID ${req.auth.userUuid} not properly authorized to perform that action on client with ID ${clientId}.`
+              message: `User with ID ${req.auth.userId} not properly authorized to perform that action on client with ID ${clientId}.`
             });
           }
         }

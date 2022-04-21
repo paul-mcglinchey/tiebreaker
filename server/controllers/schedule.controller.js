@@ -9,7 +9,7 @@ exports.getScheduleByDate = (req, res) => {
 
   const { rotaId, startDate } = req.params;
 
-  Rota.findOne({ _id: rotaId, 'accessControl.viewers': req.auth.userUuid })
+  Rota.findOne({ _id: rotaId, 'accessControl.viewers': req.auth.userId })
     .then((rota) => {
 
       const scheduleIds = rota.schedules;
@@ -34,12 +34,12 @@ exports.getScheduleByDate = (req, res) => {
             // Create a new schedule
             const schedule = new Schedule({
               accessControl: {
-                viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
+                viewers: [req.auth.userId], editors: [req.auth.userId], owners: [req.auth.userId]
               },
               startDate: new Date(startDate),
               employeeSchedules: employeeSchedules,
-              createdBy: req.auth.userUuid,
-              updatedBy: req.auth.userUuid
+              createdBy: req.auth.userId,
+              updatedBy: req.auth.userId
             });
 
             // Save schedule in the database
@@ -49,7 +49,7 @@ exports.getScheduleByDate = (req, res) => {
                 // Add the schedule to the rota which was selected
                 Rota.updateOne({
                   _id: rotaId,
-                  $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+                  $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
                 }, {
                   $push: { schedules: new ObjectId(schedule._id) }
                 })
@@ -137,7 +137,7 @@ exports.joinEmployees = (res, schedule) => {
 exports.updateSchedule = (req, res) => {
   const { rotaId, startDate } = req.params;
 
-  Rota.findOne({ _id: rotaId, 'accessControl.editors': req.auth.userUuid })
+  Rota.findOne({ _id: rotaId, 'accessControl.editors': req.auth.userId })
     .then(rota => {
 
       const scheduleIds = rota.schedules;
@@ -168,8 +168,8 @@ exports.addSchedule = (req, res) => {
   const schedule = new Schedule({
     startDate: startDate,
     employeeSchedules: employeeSchedules,
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId
   });
 
   // Save schedule in the database
@@ -179,7 +179,7 @@ exports.addSchedule = (req, res) => {
       // Add the schedule to the rota which was selected
       Rota.updateOne({
         _id: rotaId,
-        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+        $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
       }, {
         $push: { schedules: new ObjectId(schedule._id) }
       })

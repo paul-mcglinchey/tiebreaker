@@ -12,7 +12,7 @@ exports.getEmployees = async (req, res) => {
   // Get the groupId from the query
   let { groupId } = await req.query;
 
-  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userUuid })
+  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
     .then(async (group) => {
 
       // all the employees that belong to the requested group
@@ -26,7 +26,7 @@ exports.getEmployees = async (req, res) => {
         .then(employeeCount => employeeCount)
         .catch(err => { 
           return res.status(500).send({
-            message: err.message || `A problem occurred fetching the number of employees which user with ID ${req.auth.userUuid} has view access to.`
+            message: err.message || `A problem occurred fetching the number of employees which user with ID ${req.auth.userId} has view access to.`
           })
         });
 
@@ -43,7 +43,7 @@ exports.getEmployees = async (req, res) => {
         .then(employees => employees)
         .catch(err => {
           return res.status(500).send({
-            message: err.message || `A problem occurred fetching the employees which user with ID ${req.auth.userUuid} has view access to.`
+            message: err.message || `A problem occurred fetching the employees which user with ID ${req.auth.userId} has view access to.`
           })
         });
       
@@ -75,7 +75,7 @@ exports.addEmployee = async (req, res) => {
   // Create a new employee
   const employee = new Employee({
     accessControl: {
-      viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
+      viewers: [req.auth.userId], editors: [req.auth.userId], owners: [req.auth.userId]
     },
     role: role || '',
     reportsTo: reportsTo || '',
@@ -104,8 +104,8 @@ exports.addEmployee = async (req, res) => {
     maxHours: maxHours,
     unavailableDays: unavailableDays,
     holidays: holidays,
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid,
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId,
     employeeColour: employeeColour
   });
 
@@ -116,7 +116,7 @@ exports.addEmployee = async (req, res) => {
       // Add the employee to the group which was selected
       RotaGroup.updateOne({
         _id: groupId,
-        $or: [{ 'accessControl.editors': req.auth.userUuid }, { 'accessControl.owners': req.auth.userUuid }]
+        $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
       }, {
         $push: { employees: new ObjectId(employee._id) }
       })

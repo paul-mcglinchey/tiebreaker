@@ -1,11 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import { ScheduleTable } from "../../..";
-import { IRota, ISchedule } from "../../../../models";
+import { ISchedule } from "../../../../models";
 import { ScheduleSwitcher } from "./Common";
 
 interface IScheduleProps {
   handleSubmit: () => void
-  rota: IRota,
   currentWeek: { firstDay: Date, lastDay: Date },
   dirty: boolean
   values: ISchedule
@@ -14,7 +13,7 @@ interface IScheduleProps {
   setCurrentWeekModifier: Dispatch<SetStateAction<number>>
 }
 
-const Schedule = ({ handleSubmit, rota, currentWeek, values, dirty, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
+const Schedule = ({ handleSubmit, currentWeek, values, dirty, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
 
   const cycleBack = () => updateScheduleWeek(currentWeekModifier - 1);
   const cycleForwards = () => updateScheduleWeek(currentWeekModifier + 1);
@@ -34,9 +33,7 @@ const Schedule = ({ handleSubmit, rota, currentWeek, values, dirty, editing, cur
         modifier={currentWeekModifier}
       />
       <ScheduleTable
-        rota={rota}
         currentWeek={currentWeek}
-        currentWeekModifier={currentWeekModifier}
         values={values}
         editing={editing}
       />

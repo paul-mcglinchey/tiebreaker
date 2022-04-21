@@ -1,40 +1,108 @@
-const { ufApiKey } = require('../config/auth.config');
-const fetch = require('node-fetch');
+const asyncHandler        = require('express-async-handler')
+const jwt                 = require('jsonwebtoken')
+const bcrypt              = require('bcryptjs')
+const User                = require('../models/user.model')
 
-exports.getCurrentUser = (req, res) => {
-  this.getUser(res, req.auth.userUuid);
-}
-
-exports.getUserById = (req, res) => {
-
+exports.getById = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   // UPDATE TO USE MIDDLEWARE CHECK
-  if (!userId) return res.status(400).send({ message: 'UserID not set' });
+  if (!userId) {
+    res.status(400)
+    throw new Error('Request requires a user ID')
+  }
 
-  this.getUser(res, userId).then(user => {
-    return res.status(200).send(user)
-  });
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404)
+    throw new Error('Resource not found')
+  }
+
+  res.json(user)
+})
+
+// @desc    Get current user data
+// @route   GET /api/users/current
+// @access  Private
+exports.getCurrent = (req, res) => {
+  console.log(req.auth)
 }
 
-// Common functionality
-exports.getUser = (res, userId) => {
-
-  return fetch(`https://api.userfront.com/v0/users/${userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ufApiKey}`
+// Generate JWT
+const generateToken = (user) => {
+  return jwt.sign(
+    {user}, 
+    process.env.JWT_SECRET, 
+    {
+      expiresIn: '30d'
     }
-  })
-    .then(response => {
-      if (!response.ok) {
-        return res.status(response.status).send({ message: response.statusText });
-      }
-      
-      return response.json();
-    })
-    .catch(err => {
-      return res.status(500).send({ message: err.message || `Some error occurred while getting the user.` })
-    })
+  )
 }
+
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+exports.login = asyncHandler(async (req, res) => {
+  const { email, username, password } = req.body
+
+  if (!(email || username) || !password) {
+    res.status(400)
+    throw new Error('Request requires a username/email and password')
+  }
+
+  // Check for a user based on either the email or username
+  const user = await User.findOne({ $or: [{ username: username }, { email: email }] })
+
+  if (user && await bcrypt.compare(password, user.password)) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      token: generateToken({ userId: user._id, clientGroups: user.clientGroups, rotaGroups: user.rotaGroups })
+    })
+  } else {
+    res.status(401)
+    throw new Error('Unable to authenticate user')
+  }
+})
+
+// @desc    Signup a new user
+// @route   POST /api/users
+// @access  Public
+exports.signup = asyncHandler(async (req, res) => {
+
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    res.status(400)
+    throw new Error('Request requires the following fields: username, email, password')
+  }
+
+  // Check if the user exists
+  const userExists = await User.findOne({ $or: [{ username: username }, { email: email }] });
+
+  if (userExists) {
+    res.status(400)
+    throw new Error('User already exists.');
+  }
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Create the user
+  const user = await User.create({ username, email, password: hashedPassword });
+
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      token: generateToken(user._id)
+    })
+  } else {
+    res.status(400)
+    throw new Error('A problem occurred while signing up the user')
+  }
+})

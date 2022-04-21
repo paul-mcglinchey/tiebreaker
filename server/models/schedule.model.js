@@ -1,14 +1,13 @@
 const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
+
+const { AuditSchema } = require('./common/audit.schema');
 const { EmployeeSchema } = require('./employee.model');
 
 const ScheduleSchema = new Schema({
-  accessControl: {
-    viewers: [ String ],
-    editors: [ String ],
-    owners: [ String ],
+  startDate: { 
+    type: Date, required: true 
   },
-  startDate: { type: Date, required: true },
   employeeSchedules: [{
     employeeId: {
       type: Schema.Types.ObjectId,
@@ -24,9 +23,10 @@ const ScheduleSchema = new Schema({
       onHoliday: { type: Boolean, required: false, default: false }
     }]
   }],
-  locked: { type: Boolean, default: false },
-  createdBy: String,
-  updatedBy: String
+  locked: { 
+    type: Boolean, default: false 
+  },
+  audit: AuditSchema
 }, { timestamps: true })
 
 const Schedule = mongoose.model("Schedule", ScheduleSchema);

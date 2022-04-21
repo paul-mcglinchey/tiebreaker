@@ -1,4 +1,4 @@
-import { ITag } from "./tag-model"
+import { ITag } from "./tag.model"
 
 export interface ISession {
   title?: string,

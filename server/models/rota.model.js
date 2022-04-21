@@ -1,35 +1,42 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
-const { EmployeeSchema } = require('./employee.model');
+const { Schema }  = require('mongoose');
+const mongoose    = require('mongoose');
+
+const { AuditSchema }           = require('./common/audit.schema');
+const { UsersSchema }           = require('./common/users.schema');
+const { EmployeeSchema }        = require('./employee.model');
 
 const Rota = mongoose.model(
   "Rota",
   new Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: false },
-    accessControl: {
-      viewers: [ String ],
-      editors: [ String ],
-      owners: [ String ],
+    name: { 
+      type: String, required: true 
+    },
+    description: { 
+      type: String, required: false 
     },
     startDay: { 
-      type: String,
-      required: true 
+      type: String, required: true 
     },
     closingHour: {
-      type: Number,
-      required: true
+      type: Number, required: true
     },
     schedules: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Schedule'
+      type: Schema.Types.ObjectId, ref: 'Schedule'
     }],
-    employeeIds: [String],
-    employees: { type: [EmployeeSchema], required: false, default: [] },
-    locked: { type: Boolean, required: false, default: false },
-    createdBy: String,
-    updatedBy: String,
-    colour: { type: String, required: false }
+    employeeIds: [{
+      type: Schema.Types.ObjectId, ref: 'Employee'
+    }],
+    employees: { 
+      type: [EmployeeSchema], required: false, default: [] 
+    },
+    locked: { 
+      type: Boolean, required: false, default: false 
+    },
+    colour: { 
+      type: String, required: false 
+    },
+    users: [UsersSchema],
+    audit: AuditSchema
   }, { timestamps: true })
 );
 

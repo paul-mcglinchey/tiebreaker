@@ -1,11 +1,13 @@
 import { ViewGridAddIcon } from '@heroicons/react/outline';
-import { useSessionStorage } from '../../../../hooks';
+import { useRequestBuilder, useSessionStorage } from '../../../../hooks';
 import { IClient, IFetch, IUserResponse } from '../../../../models';
-import { requestBuilder } from '../../../../services';
 import { endpoints } from '../../../../utilities';
 import { Fetch, InlineLink, TableRow, TableRowItem } from '../../../Common';
 
 const ClientRow = ({ client }: { client: IClient }) => {
+
+  const { requestBuilder } = useRequestBuilder()
+
   return (
     <TableRow>
       <TableRowItem>

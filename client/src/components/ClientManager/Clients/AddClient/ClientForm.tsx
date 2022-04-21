@@ -2,12 +2,12 @@ import { useContext, useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
-import { ClientService, generateColour } from "../../../../services";
+import { generateColour } from "../../../../services";
 import { CustomDate, StyledField, Button } from "../../..";
 import { ApplicationContext, clientValidationSchema } from "../../../../utilities";
 import { AddressForm, FormSection } from "../../../Common";
 import { IClient } from "../../../../models";
-import { useStatus } from "../../../../hooks";
+import { useClientService } from "../../../../hooks";
 
 interface IClientFormProps {
   client?: IClient,
@@ -17,8 +17,7 @@ interface IClientFormProps {
 const ClientForm = ({ client, refresh }: IClientFormProps) => {
 
   const { groupId } = useContext(ApplicationContext);
-  const { statusService } = useStatus();
-  const clientService = new ClientService(statusService, refresh);
+  const clientService = useClientService(refresh);
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
   const toggleMiddleNamesRequired = () => setMiddleNamesRequired(!middleNamesRequired);

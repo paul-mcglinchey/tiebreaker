@@ -1,19 +1,21 @@
 import { IRota } from "../../../../models";
-import { RotaService } from "../../../../services";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
-import { useStatus } from "../../../../hooks";
+import { useRotaService } from "../../../../hooks";
+import { useContext } from "react";
+import { ApplicationContext } from "../../../../utilities";
 
 interface IEditRotaProps {
   modalOpen: boolean,
   toggleModalOpen: () => void,
   rota?: IRota
+  refresh?: () => void
 }
 
-const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => {
+const EditRotaModal = ({ modalOpen, toggleModalOpen, rota, refresh }: IEditRotaProps) => {
 
-  const { statusService } = useStatus();
-  const rotaService = new RotaService(statusService);
+  const rotaService = useRotaService(refresh)
+  const { groupId } = useContext(ApplicationContext)
 
   return (
     <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
@@ -21,7 +23,7 @@ const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => 
         rota={rota} 
         submitButton={<Button content='Update rota' />} 
         handleSubmit={(values: IRota) => {
-          rotaService.updateRota(values, rota);
+          rotaService.updateRota(values, rota?._id, groupId);
           toggleModalOpen();
         }}/>
     </Modal>

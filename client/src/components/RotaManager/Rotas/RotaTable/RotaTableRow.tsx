@@ -1,11 +1,12 @@
 import { UserAddIcon } from '@heroicons/react/solid';
 import { IFetch, IRota, IUserResponse } from '../../../../models';
-import { useSessionStorage } from '../../../../hooks';
+import { useRequestBuilder, useSessionStorage } from '../../../../hooks';
 import { endpoints } from '../../../../utilities';
-import { requestBuilder } from '../../../../services';
 import { Fetch, InlineLink, TableRow, TableRowItem } from '../../../Common';
 
 const RotaTableRow = ({ rota }: { rota: IRota }) => {
+
+  const { requestBuilder } = useRequestBuilder()
 
   return (
       <TableRow>
@@ -14,7 +15,7 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
         </TableRowItem>
         <TableRowItem>
           <Fetch
-            fetchOutput={useSessionStorage(endpoints.user(rota.createdBy || ""), requestBuilder("GET"))}
+            fetchOutput={useSessionStorage(endpoints.user(rota.createdBy || ""), requestBuilder())}
             render={({ response }: IFetch<IUserResponse>) => (
               <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
                 {response && response.username}

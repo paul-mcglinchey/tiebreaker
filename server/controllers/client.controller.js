@@ -1,9 +1,9 @@
-const asyncHandler = require('express-async-handler');
-const ObjectId = require('mongoose').Types.ObjectId;
-const db = require('../models');
-const ClientGroup = db.clientgroup;
-const Client = db.client;
-const Session = db.session;
+const asyncHandler        = require('express-async-handler');
+const ObjectId            = require('mongoose').Types.ObjectId;
+const db                  = require('../models');
+const ClientGroup         = db.clientgroup;
+const Client              = db.client;
+const Session             = db.session;
 
 // Read operations
 
@@ -20,10 +20,10 @@ exports.get = asyncHandler(async (req, res) => {
     throw new Error(`Request is missing one of the following parameters: pageSize, pageNumber, groupId, sortField, sortDirection.`)
   }
 
-  const group = await ClientGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userUuid })
+  const group = await ClientGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
 
   if (!group) {
-    res.status(400);
+    res.status(404);
     throw new Error(`Group with ID ${groupId} not found.`)
   }
 
@@ -95,7 +95,7 @@ exports.create = asyncHandler(async (req, res) => {
 
   const client = await Client.create({
     accessControl: {
-      viewers: [req.auth.userUuid], editors: [req.auth.userUuid], owners: [req.auth.userUuid]
+      viewers: [req.auth.userId], editors: [req.auth.userId], owners: [req.auth.userId]
     },
     name,
     address,
@@ -104,10 +104,10 @@ exports.create = asyncHandler(async (req, res) => {
     colour,
     activityLog: {
       task: "created",
-      actor: req.auth.userUuid
+      actor: req.auth.userId
     },
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId
   })
 
   // Check that the newly created client has an _id
@@ -133,7 +133,7 @@ exports.update = asyncHandler(async (req, res) => {
   const updateBody = req.body.updateBody;
   updateBody.activityLog.push({
     task: "updated",
-    actor: req.auth.userUuid
+    actor: req.auth.userId
   })
   
   const client = Client.findByIdAndUpdate(clientId, updateBody);
@@ -154,8 +154,8 @@ exports.addSession = asyncHandler(async (req, res) => {
 
   const session = await Session.create({
     title, description, tags, sessionDate,
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId
   });
 
   if (!session._id) throw new Error('Something went wrong creating the session.')
@@ -165,7 +165,7 @@ exports.addSession = asyncHandler(async (req, res) => {
       $push: { sessions: session._id },
       $push: { activityLog: {
         task: "added session",
-        actor: req.auth.userUuid
+        actor: req.auth.userId
       }}
     });
 
@@ -174,16 +174,17 @@ exports.addSession = asyncHandler(async (req, res) => {
 
 // Deletes a client by ID
 exports.delete = asyncHandler(async (req, res) => {
-  const { clientId } = req.params;
-  const { groupId } = req.query;
+  const { clientId, groupId } = req.params
 
-  if (!clientId || !groupId) {
+  const group = await ClientGroup.findOne(groupId)
+
+  if (!group) {
     res.status(400)
-    throw new Error('Request requires both a client and group ID.')
+    throw new Error('Group not found')
   }
-
+  
   // Soft delete the client (remove from group)
-  await ClientGroup.findByIdAndUpdate(groupId, { $pull: { clients: clientId }});
+  await group.update({ $pull: { clients: clientId }})
 
-  return res.status(200).json({ message: 'Deleted client' }); 
+  return res.status(200).json({ message: 'Deleted client' });
 })

@@ -8,7 +8,7 @@ export * from './activity-log.model';
 export * from './sortable.model';
 export * from './filter.model';
 export * from './client-group-model';
-export * from './tag-model';
+export * from './tag.model';
 export * from './session.model';
 export * from './employee.model';
 export * from './fetch.model';
@@ -25,10 +25,10 @@ export * from './groups-endpoint.model';
 export * from './grouplist-response.model';
 export * from './changes.model';
 export * from './table.model';
+export * from './user.model';
 
 export * from './props';
 export * from './types';
 export * from './contexts';
 export * from './base';
-
-export { userfront } from './request-header.model';
+export * from './services';
