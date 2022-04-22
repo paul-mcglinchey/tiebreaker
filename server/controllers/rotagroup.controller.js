@@ -18,9 +18,6 @@ exports.update = groupController.update(RotaGroup)
 exports.delete = groupController.delete(RotaGroup, asyncHandler(async (group) => {
   const { rotas: rotaIds, employees: employeeIds } = group
 
-  const rotas = await Rota.find({ _id: rotaIds })
-  const employees = await Employee.find({ _id: employeeIds })
-
-  await rotas.remove()
-  await employees.remove()
+  await Rota.deleteMany({ _id: rotaIds })
+  await Employee.deleteMany({ _id: employeeIds })
 }))

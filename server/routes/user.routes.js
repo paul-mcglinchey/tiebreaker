@@ -1,6 +1,6 @@
 module.exports = app => {
-  const user        = require('../controllers/user.controller.js')
-  const middleware  = require('../middlewares/auth.middleware')
+  const user = require('../controllers/user.controller.js')
+  const middleware = require('../middlewares/auth.middleware')
 
   var router = require('express').Router();
 
@@ -18,12 +18,16 @@ module.exports = app => {
   router.use(middleware.protect)
 
   router.get(
-    '/current', 
+    '/authenticate'
+  )
+
+  router.get(
+    '/current',
     user.getCurrent
   );
 
   router.get(
-    '/:userId', 
+    '/:userId',
     user.getById
   );
 

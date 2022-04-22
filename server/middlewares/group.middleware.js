@@ -24,7 +24,6 @@ const checkAccess = (Group, accessRequired) => {
 }
 
 const checkIfQueryHasGroupId = asyncHandler(async (req, res, next) => {
-  console.log(req.params)
   const { groupId } = req.params;
 
   if (!groupId) {

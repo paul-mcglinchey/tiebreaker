@@ -23,6 +23,11 @@ const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) =
     }
   })
 
+  const handlePositiveAction = () => {
+    action()
+    toggleDialogOpen()
+  }
+
   return (
     <Transition
       show={dialogOpen}
@@ -35,14 +40,14 @@ const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) =
       className="absolute w-screen h-screen inset-0 bg-gray-700/60 z-10"
     >
       <div className={combineClassNames(
-        "absolute w-3/4 sm:w-1/2 text-center drop-shadow-md bg-gray-900 p-5 flex flex-col space-y-12 rounded-lg left-1/2 top-32 transform -translate-x-1/2"
+        "absolute w-3/4 sm:w-auto text-center drop-shadow-md bg-gray-900 p-5 flex flex-col space-y-12 rounded-lg left-1/2 top-32 transform -translate-x-1/2"
       )}>
         <div className="flex justify-center">
           <h3 className="text-base md:text-2xl font-bold tracking-widest text-gray-200">{title}</h3>
         </div>
         <div className="flex justify-between md:justify-center space-x-4 text-sm md:text-xl">
           <Button action={toggleDialogOpen} type="button" content="Cancel" buttonType={ButtonType.Cancel} />
-          <Button action={action} type="button" content="Yes!" buttonType={ButtonType.Tertiary} />
+          <Button action={handlePositiveAction} type="button" content="Yes!" buttonType={ButtonType.Tertiary} />
         </div>
       </div>
     </Transition>

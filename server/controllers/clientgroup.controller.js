@@ -17,7 +17,5 @@ exports.update = groupController.update(ClientGroup)
 exports.delete = groupController.delete(ClientGroup, asyncHandler(async (group) => {
   const { clients: clientIds } = group
 
-  const clients = await Client.find({ _id: clientIds })
-
-  await clients.remove()
+  await Client.deleteMany({ _id: clientIds })
 }))

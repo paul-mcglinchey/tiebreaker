@@ -6,13 +6,16 @@ import useStatus from "./useStatus";
 
 const useEmployeeService = (refresh: () => void = () => {}): IUseEmployeeService => {
   
-  const { appendStatus } = useStatus()
+  const { appendStatus, updateIsLoading } = useStatus()
   const { requestBuilder } = useRequestBuilder()
 
-  const addEmployee = async (values: IEmployee, groupId: string) => {
+  const addEmployee = async (values: IEmployee, groupId: string | undefined) => {
+    updateIsLoading(true);
+
+    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error);
 
     // generates a new random colour to be used for profile display
-    values.employeeColour = generateColour();
+    values.colour = generateColour();
 
     fetch(endpoints.employees(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
@@ -26,15 +29,16 @@ const useEmployeeService = (refresh: () => void = () => {}): IUseEmployeeService
         appendStatus(false, 'A problem ocurred adding employee', Status.Error);
       })
       .finally(() => {
+        updateIsLoading(false);
         refresh();
       })
   }
 
   const deleteEmployee = async (employeeId: string | undefined, groupId: string | undefined) => {
 
-    if (!employeeId || !groupId) return appendStatus(false, 'Both an employee ID and group ID are required', Status.Error);
+    if (!employeeId || !groupId) return appendStatus(false, 'Something went wrong...', Status.Error);
 
-    fetch(endpoints.employee(employeeId), requestBuilder('DELETE', undefined, { groupId: groupId }))
+    fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
       .then(res => {
         if (res.ok) {
           appendStatus(false, 'Successfully deleted employee', Status.Success);

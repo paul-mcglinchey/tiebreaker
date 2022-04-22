@@ -5,60 +5,42 @@ const ClientGroup         = db.clientgroup;
 const Client              = db.client;
 const Session             = db.session;
 
-// Read operations
-
 // Retrieve all clients from the database
 exports.get = asyncHandler(async (req, res) => {
+  const { groupId } = req.params
+  const { sortField, sortDirection, name } = req.query
 
-  let { pageSize, pageNumber, groupId, sortField, sortDirection, name } = req.query;
+  const pageSize = parseInt(req.query.pageSize)
+  const pageNumber = parseInt(req.query.pageNumber)
 
-  pageSize = parseInt(pageSize);
-  pageNumber = parseInt(pageNumber);
-
-  if (!pageSize || !pageNumber || !groupId || !sortField || !sortDirection) {
+  if (!pageSize || !groupId || !sortField || !sortDirection) {
     res.status(400);
     throw new Error(`Request is missing one of the following parameters: pageSize, pageNumber, groupId, sortField, sortDirection.`)
   }
 
-  const group = await ClientGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
+  const group = await ClientGroup.findById(groupId)
 
   if (!group) {
     res.status(404);
     throw new Error(`Group with ID ${groupId} not found.`)
   }
 
-  // all the clients that belong to the requested group
-  let clientIds = group.clients;
-
-  // the mongoose query to fetch those clients
-  let clientQuery = { _id: { $in: clientIds } };
-
   // Get the count of documents which match this query
-  const clientCount = await Client.countDocuments(clientQuery);
-
-  // create the aggregate object (functions like an IQueryable)
-  const aggregate = Client.aggregate();
+  const count = await Client.countDocuments({ _id: { $in: group.clients } });
 
   // apply a match operator to the pipeline to only return clients for the current group
   // add a new fullName field to filter on
-  aggregate
-    .match(clientQuery)
-    .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } });
-
-  // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
-  if (name) {
-    aggregate.match({ fullName: { $regex: name, $options: 'i' } });
-  }
-
-  // finally build the other query parameters and return the aggregate as the clients queryable
-  const clients = await aggregate
-    .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
+  const clients = await Client.aggregate()
+    .match({ _id: { $in: group.clients } })
+    .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } })
+    .match(name ? { fullName: { $regex: name, $options: 'i' } } : {})
+    .sort({ [sortField]: (sortDirection === "descending" ? -1 : 1) })
     .skip(((pageNumber || 1) - 1) * pageSize)
     .limit(pageSize)
     .exec()
 
   return res.status(200).json({
-    count: clientCount,
+    count: count,
     clients: clients
   });
 });
@@ -83,37 +65,23 @@ exports.getById = asyncHandler(async (req, res) => {
   return res.status(200).json(client[0]);
 })
 
-// CUD Operations
 // Create and save a new client
 exports.create = asyncHandler(async (req, res) => {
-
-  const { groupId } = req.query;
-
-  const { 
-    name, address, contactInfo, colour, birthdate
-  } = req.body;
+  const { groupId } = req.params;
 
   const client = await Client.create({
-    accessControl: {
-      viewers: [req.auth.userId], editors: [req.auth.userId], owners: [req.auth.userId]
-    },
-    name,
-    address,
-    birthdate,
-    contactInfo,
-    colour,
+    ...req.body,
     activityLog: {
       task: "created",
       actor: req.auth.userId
     },
-    createdBy: req.auth.userId,
-    updatedBy: req.auth.userId
+    audit: {
+      createdBy: req.auth.userId,
+      updatedBy: req.auth.userId
+    }
   })
 
-  // Check that the newly created client has an _id
-  if (!client._id) {
-    throw new Error('Something went wrong creating the client.')
-  }
+  if (!client) throw new Error('Problem occurred creating client')
 
   // Update the clientgroup with the newly added client
   await ClientGroup.findByIdAndUpdate(groupId, { $push: { clients: new ObjectId(client._id) } });

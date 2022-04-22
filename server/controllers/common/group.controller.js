@@ -1,13 +1,15 @@
-const asyncHandler    = require('express-async-handler');
-const db              = require('../../models');
-const GroupList       = db.grouplist;
+const asyncHandler    = require('express-async-handler')
+const ObjectId        = require('mongoose').Types.ObjectId
+const db              = require('../../models')
+const GroupList       = db.grouplist
+const Permission      = db.permission
 
 // Get all groups
 exports.get = (Model) => {
   return asyncHandler(async (req, res) => {
 
     // the mongoose query to fetch the groups for the current user
-    let groupQuery = { 'accessControl.viewers': req.auth.userId };
+    let groupQuery = { 'accessControl.viewers': req.auth.userId }
 
     const count = await Model.countDocuments(groupQuery)
     const groups = await Model.find(groupQuery)
@@ -15,7 +17,7 @@ exports.get = (Model) => {
     return res.status(200).json({
       count: count,
       groups: groups
-    });
+    })
   })
 }
 
@@ -29,15 +31,18 @@ exports.create = (Group) => {
     const defaultListsId = await GroupList
       .find({ default: true })
       .then(defaultLists => defaultLists._id)
+
+    // get all permissions
+    const permissions = await Permission.find()
+    const permissionIds = permissions.map(p => p._id)
     
     const group = await Group.create({
       name, description, colour,
-      accessControl: {
-        viewers: [req.auth.userId],
-        editors: [req.auth.userId],
-        owners: [req.auth.userId]
-      },
       listDefinitions: [defaultListsId],
+      users: [{
+        user: new ObjectId(req.auth.userId),
+        permissions: permissionIds
+      }]
     })
 
     return res.status(201).json(group)
@@ -60,7 +65,7 @@ exports.delete = (Group, cleanupFunction) => {
   return asyncHandler(async (req, res) => {
     const { groupId } = req.params
 
-    const group = await Group.findOne(groupId)
+    const group = await Group.findById(groupId)
 
     if (!group) {
       res.status(400)
@@ -71,6 +76,6 @@ exports.delete = (Group, cleanupFunction) => {
 
     await cleanupFunction(group)
     
-    return res.json({ message: 'Deleted group' })
+    return res.json({ groupId: group._id, message: 'Deleted group' })
   })
 }

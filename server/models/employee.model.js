@@ -1,6 +1,7 @@
 const { Schema }    = require('mongoose');
 const mongoose      = require('mongoose');
 
+const { ActivityLogSchema }     = require('./activitylog.model');
 const { AuditSchema }           = require('./common/audit.schema');
 
 const { NameSchema, AddressSchema, ContactInfoSchema } = require('./common/demographics.schema');
@@ -9,9 +10,9 @@ const EmployeeSchema = new Schema({
   role: { type: String, required: false },
   department: { type: String, required: false },
   reportsTo: { type: String, required: false },
-  name: NameSchema,
+  name: { type: NameSchema, required: true },
   address: AddressSchema,
-  contactInfo: ContactInfoSchema,
+  contactInfo: { type: ContactInfoSchema, required: true},
   birthdate: { type: Date, required: false },
   startDate: { type: Date, required: false },
   minHours: { type: Number, required: false },
@@ -27,6 +28,7 @@ const EmployeeSchema = new Schema({
     }
   ],
   colour: String,
+  activityLog: [ActivityLogSchema],
   audit: AuditSchema
 }, { timestamps: true });
 

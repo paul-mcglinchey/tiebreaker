@@ -11,11 +11,9 @@ const userSchema = mongoose.Schema({
   password: { 
     type: String, required: true 
   },
-  clientGroups: [{
-    type: Schema.Types.ObjectId,
-    ref: 'ClientGroup'
-  }],
-  rotaGroups: [{}]
+  isAdmin: {
+    type: Boolean, default: false
+  }
 }, { timeStamps: true });
 
 module.exports = mongoose.model('User', userSchema);

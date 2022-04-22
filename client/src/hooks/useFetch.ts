@@ -29,9 +29,7 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCac
       } else {
         fetch(url, options)
           .then(res => {
-            if (!res.ok) {
-              if (componentIsMounted) throw res.statusText;
-            }
+            if (!res.ok) throw new Error(res.statusText)
 
             return res.json();
           })

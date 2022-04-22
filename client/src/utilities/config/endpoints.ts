@@ -5,8 +5,9 @@ const BASE_API_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/
 export const endpoints = {
     "origin"    : BASE_API_URL,
 
-    "login"     : BASE_API_URL + `users/login`,
-    "signup"    : BASE_API_URL + `users/signup`,
+    "login"         : BASE_API_URL + `users/login`,
+    "signup"        : BASE_API_URL + `users/signup`,
+    "authenticate"  : BASE_API_URL + `users/authenticate`,
 
     "clients"   : (groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients`,
     "client"    : (clientId: string, groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}`, 
@@ -17,8 +18,8 @@ export const endpoints = {
     "rota"      : (rotaId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}`,
     "schedules" : (rotaId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}/schedules`,
     "schedule"  : (rotaId: string, groupId: string, startDate: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}/schedules/${startDate}`,
-    "employees" : (groupId: string) => BASE_API_URL + `employees?groupId=${groupId}`,
-    "employee"  : (employeeId: string) => BASE_API_URL + `employees/${employeeId}`,
+    "employees" : (groupId: string) => BASE_API_URL + `rotagroups/${groupId}/employees`,
+    "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/employees/${employeeId}`,
     
     groups      : (groupType: GroupType) => {
         return {

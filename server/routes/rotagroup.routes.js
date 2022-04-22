@@ -30,10 +30,10 @@ router.delete(
   '/:groupId',
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.groupMiddleware.checkIfGroupExists(RotaGroup),
-  middleware.groupMiddleware.checkAccess(RotaGroup, 'owners'),
   rotagroup.delete
 );
 
 router.use('/:groupId/rotas', require('./rota.routes'));
+router.use('/:groupId/employees', require('./employee.routes'));
 
 module.exports = router

@@ -10,7 +10,7 @@ const useRequestBuilder = () => {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${bearerToken || authToken}`
+        'Authorization': (bearerToken || authToken) ? `Bearer ${bearerToken || authToken}` : ''
       }
     }
   

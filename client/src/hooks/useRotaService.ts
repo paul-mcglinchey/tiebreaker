@@ -1,18 +1,18 @@
 import { IRota, IRotaService, ISchedule, Status } from "../models"
 import { endpoints } from "../utilities";
 import { useRequestBuilder, useStatus } from ".";
+import { useNavigate } from "react-router";
 
 const useRotaService = (refresh: () => void = () => {}): IRotaService => {
   
   const { appendStatus, updateIsLoading } = useStatus()
   const { requestBuilder } = useRequestBuilder()
+  const navigate = useNavigate();
 
   const addRota = (values: IRota, groupId: string) => {
     updateIsLoading(true);
 
-    if (!groupId) {
-      return appendStatus(false, 'Group must be set', Status.Error);
-    }
+    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error);
 
     fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
@@ -27,7 +27,7 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
       })
       .finally(() => {
         updateIsLoading(false);
-        refresh();
+        navigate('/rotas/dashboard', { replace: true });
       })
   }
 

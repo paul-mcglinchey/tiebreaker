@@ -1,5 +1,5 @@
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ButtonType, IRota, IRotaService } from "../../../../models";
 import React, { useContext, useState } from "react";
 import { Button, DeleteDialog, Dropdown } from "../../../Common";
@@ -24,13 +24,6 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
 
   const [editRotaOpen, setEditRotaOpen] = useState<boolean>(false);
   const toggleEditRotaOpen = () => setEditRotaOpen(!editRotaOpen);
-
-  const navigate = useNavigate();
-
-  const deleteRota = () => {
-    rotaService.deleteRota(rota._id, groupId);
-    navigate('/rotas/dashboard', { replace: true });
-  }
 
   const updateEditingStatus = () => {
     dirty && handleSubmit();
@@ -68,7 +61,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
         ]} />
       </div>
       <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
-      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => deleteRota()} />
+      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => rotaService.deleteRota(rota._id, groupId)} />
     </div>
   )
 }

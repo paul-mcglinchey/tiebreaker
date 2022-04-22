@@ -9,30 +9,30 @@ const useClientService = (refresh: () => void = () => {}): IClientService => {
   const { appendStatus, updateIsLoading } = useStatus()
 
   const addClient = (values: IClient, groupId: string | undefined) => {
-    
-    if (!groupId) return appendStatus(false, 'Request is missing a group ID', Status.Error)
+    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error)
     
     updateIsLoading(true);
 
-    fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, { ...values, groupId: groupId }))
+    fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully added client`, Status.Success);
+          appendStatus(false, `Successfully added client`, Status.Success)
         } else {
-          appendStatus(false, `A problem occurred adding client`, Status.Error);
+          appendStatus(false, `A problem occurred adding client`, Status.Error)
         }
       })
-      .catch(() => {
-        appendStatus(false, `A problem occurred adding the client`, Status.Error);
+      .catch(err => {
+        console.error(err)
+        appendStatus(false, `A problem occurred adding the client`, Status.Error)
       })
       .finally(() => {
         updateIsLoading(false)
-        refresh();
+        refresh()
       })
   }
 
   const updateClient = (values: IClient, clientId: string | undefined, groupId: string | undefined) => {
-    if (!clientId || !groupId) return appendStatus(false, `Request is missing a group or client ID`, Status.Error);
+    if (!clientId || !groupId) return appendStatus(false, `Group and client must be set`, Status.Error);
     
     updateIsLoading(true);
 
@@ -50,7 +50,7 @@ const useClientService = (refresh: () => void = () => {}): IClientService => {
   }
 
   const deleteClient = (clientId: string | undefined, groupId: string | undefined) => {
-    if (!clientId || !groupId) return appendStatus(false, `Request is missing a group or client ID`, Status.Error);
+    if (!clientId || !groupId) return appendStatus(false, `Group and client must be set`, Status.Error);
     
     updateIsLoading(true);
 

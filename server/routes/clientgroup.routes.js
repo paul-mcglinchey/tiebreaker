@@ -23,7 +23,6 @@ router.put(
   middleware.groupMiddleware.checkIfGroupNameExists(ClientGroup),
   middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
   middleware.validationMiddleware.checkRequestHasBody,
-  middleware.groupMiddleware.checkAccess(ClientGroup, 'editors'),
   clientGroup.update
 )
 
@@ -32,7 +31,6 @@ router.delete(
   '/:groupId',
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.groupMiddleware.checkIfGroupExists(ClientGroup),
-  middleware.groupMiddleware.checkAccess(ClientGroup, 'owners'),
   clientGroup.delete
 );
 

@@ -1,6 +1,9 @@
 const asyncHandler  = require('express-async-handler')
-const secrets       = require('../config/auth.config')
 const jwt           = require('jsonwebtoken')
+
+const secrets       = require('../config/auth.config')
+const db            = require('../models')
+const User          = db.user
 
 const protect = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization
@@ -9,14 +12,25 @@ const protect = asyncHandler(async (req, res, next) => {
     authHeader.startsWith("Bearer") && 
     authHeader.split(" ")[1]
 
-  if (!token) return res.sendStatus(401)
+  if (!token) {
+    res.status(401)
+    throw new Error('Unauthorized')
+  }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
-    if (err) return res.sendStatus(403)
-    req.auth = auth
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
+    req.auth = await User.findById(decoded.userId).select('-password')
+
+    if (!req.auth) {
+      res.status(401)
+      throw new Error('User not found')
+    }
+    
     next()
-  })
+  } catch (err) {
+    throw new Error(err)
+  }
 })
 
 const checkUserHasAdminRole = (req, res, next) => {

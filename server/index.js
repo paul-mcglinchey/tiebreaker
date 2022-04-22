@@ -44,7 +44,6 @@ require('./routes/user.routes')(app);
 app.use(middleware.authMiddleware.protect);
 
 // routes
-require('./routes/employee.routes')(app);
 require('./routes/grouplist.routes')(app);
 
 app.use('/api/clientgroups', require('./routes/clientgroup.routes'))

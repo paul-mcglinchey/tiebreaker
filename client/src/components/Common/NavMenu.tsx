@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
-import Userfront from '@userfront/core';
 
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -9,14 +8,11 @@ import { SmartLink, ThumbIcon, WideIcon } from '..';
 import { clientLinks, rotaLinks } from '../../utilities';
 import { combineClassNames } from '../../services';
 import { Application, IProps } from '../../models';
-
-const handleLogout = () => {
-  Userfront.logout({ redirect: '/login' });
-}
+import { useAuth } from '../../hooks';
 
 const NavMenu = ({ currentApplication }: IProps) => {
 
-  const isUserAdmin: boolean = Userfront.user.hasRole ? Userfront.user.hasRole("admin") : false;
+  const { user, logout } = useAuth();
 
   let links: { name: string, href: string }[] = [];
 
@@ -85,7 +81,7 @@ const NavMenu = ({ currentApplication }: IProps) => {
 
                   {/* Profile dropdown */}
                   <div className="font-semibold tracking-wide text-white hidden md:block">
-                    {Userfront.user.username}
+                    {}
                   </div>
                   <Menu as="div" className="ml-3 relative">
                     <div>
@@ -105,9 +101,9 @@ const NavMenu = ({ currentApplication }: IProps) => {
                     >
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                         <div className="px-4 py-2 font-semibold tracking-wide block md:hidden">
-                          {Userfront.user.username}
+                          {user?.username}
                         </div>
-                        {isUserAdmin && (
+                        {user?.isAdmin && (
                           <Menu.Item>
                             {({ active }) => (
                               <Link
@@ -141,7 +137,7 @@ const NavMenu = ({ currentApplication }: IProps) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => handleLogout()}
+                              onClick={() => logout()}
                               className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
                             >
                               Sign out

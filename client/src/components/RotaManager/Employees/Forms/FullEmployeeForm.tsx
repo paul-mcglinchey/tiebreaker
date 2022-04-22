@@ -37,7 +37,7 @@ const FullEmployeeForm = () => {
         label: (
           <div className="flex justify-between items-center">
             <div>{`${e.name.firstName} ${e.name.lastName}`}</div>
-            <div style={{ backgroundColor: e.employeeColour }} className="uppercase text-xs font-semibold text-white rounded px-2 py-1">{e.role}</div>
+            <div style={{ backgroundColor: e.colour }} className="uppercase text-xs font-semibold text-white rounded px-2 py-1">{e.role}</div>
           </div>
         )
       }
