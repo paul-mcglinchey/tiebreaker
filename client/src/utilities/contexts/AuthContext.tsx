@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useRequestBuilder } from "../../hooks";
 import { IChildrenProps, IUser } from "../../models";
@@ -30,10 +30,6 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
 
   const { requestBuilder } = useRequestBuilder()
 
-  useEffect(() => {
-    if (!user) navigate('/login')
-  }, [user])
-
   const updateUser = (user: IUser) => {
     setUser(user)
     setJsonItemInStorage('user', user);
@@ -46,7 +42,7 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
 
     fetch(endpoints.login, requestBuilder('POST', undefined, user))
       .then(res => res.json())
-      .then(json => updateUser(json))
+      .then((json: IUser) => updateUser(json))
       .finally(() => setIsLoading(false))
   }
 
@@ -55,7 +51,7 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
 
     fetch(endpoints.signup, requestBuilder('POST', undefined, user))
       .then(res => res.json())
-      .then(json => updateUser(json))
+      .then((json: IUser) => updateUser(json))
       .finally(() => setIsLoading(false))
   }
 
@@ -68,8 +64,8 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
     isLoading,
     login: useCallback((user: IUser) => login(user), []),
     signup: useCallback((user: IUser) => signup(user), []),
-    getAccess: useCallback(() => getAccess(), []),
-    getToken: useCallback(() => getToken(), [])
+    getAccess: getAccess,
+    getToken: getToken
   }
 
   return (
