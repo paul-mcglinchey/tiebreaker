@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from '../../hooks';
-import { GroupType, IClientGroup, IFetch, IGroupsResponse } from '../../models';
+import { IFetch, IGroupsResponse } from '../../models';
 import { ApplicationContext, endpoints } from '../../utilities';
 import { Fetch, FetchError, Modal, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
@@ -18,17 +18,17 @@ const ClientDashboard = () => {
   const [addClientOpen, setAddClientOpen] = useState(false)
   const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen)
 
-  const groupService = useGroupService(GroupType.CLIENT, refresh)
+  const groupService = useGroupService(refresh)
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups(GroupType.CLIENT).groups, requestBuilder(), [dependency])}
-      render={({ response, error, isLoading }: IFetch<IGroupsResponse<IClientGroup>>) => (
+      fetchOutput={useFetch(endpoints.groups, requestBuilder(), [dependency])}
+      render={({ response, error, isLoading }: IFetch<IGroupsResponse>) => (
         <>
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Clients" groupType={GroupType.CLIENT} addClientAction={toggleAddClientOpen} showSelector setGroupId={setGroupId} />
+                <GroupToolbar title="Clients" addClientAction={toggleAddClientOpen} showSelector setGroupId={setGroupId} />
                 <ClientList toggleAddClientOpen={toggleAddClientOpen} dependency={dependency} />
               </>
             ) : (

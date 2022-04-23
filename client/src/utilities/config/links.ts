@@ -1,6 +1,9 @@
+export const dashboardLinks = [
+  { name: 'Groups', href: '/groups' }
+]
+
 export const clientLinks = [
   { name: 'Dashboard', href: '/clients/dashboard' },
-  { name: 'Groups', href: '/clients/groups' }
 ];
 
 export const rotaLinks = [

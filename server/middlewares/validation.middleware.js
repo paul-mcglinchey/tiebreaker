@@ -8,9 +8,8 @@ const checkRequestHasId = (req, res, next) => {
 
 // validates all requests that should have a body, do have a body
 const checkRequestHasBody = (req, res, next) => {
-    // Validate request
     if (!req.body) return res.status(400).send({ message: "Content cannot be empty!" });
-    
+
     next();
 }
 

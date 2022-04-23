@@ -1,7 +1,7 @@
 const asyncHandler        = require('express-async-handler');
 const ObjectId            = require('mongoose').Types.ObjectId;
 const db                  = require('../models');
-const ClientGroup         = db.clientgroup;
+const Group         = db.group;
 const Client              = db.client;
 const Session             = db.session;
 
@@ -18,7 +18,7 @@ exports.get = asyncHandler(async (req, res) => {
     throw new Error(`Request is missing one of the following parameters: pageSize, pageNumber, groupId, sortField, sortDirection.`)
   }
 
-  const group = await ClientGroup.findById(groupId)
+  const group = await Group.findById(groupId)
 
   if (!group) {
     res.status(404);
@@ -83,8 +83,8 @@ exports.create = asyncHandler(async (req, res) => {
 
   if (!client) throw new Error('Problem occurred creating client')
 
-  // Update the clientgroup with the newly added client
-  await ClientGroup.findByIdAndUpdate(groupId, { $push: { clients: new ObjectId(client._id) } });
+  // Update the group with the newly added client
+  await Group.findByIdAndUpdate(groupId, { $push: { clients: new ObjectId(client._id) } });
 
   return res.status(201).json(client);
 });
@@ -144,7 +144,7 @@ exports.addSession = asyncHandler(async (req, res) => {
 exports.delete = asyncHandler(async (req, res) => {
   const { clientId, groupId } = req.params
 
-  const group = await ClientGroup.findOne(groupId)
+  const group = await Group.findOne(groupId)
 
   if (!group) {
     res.status(400)

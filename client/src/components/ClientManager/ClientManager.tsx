@@ -6,7 +6,7 @@ import { NavMenu } from "../Common";
 
 const ClientManager = () => {
 
-  const [groupId, setGroupId] = useState<string>(getItemInStorage("clientGroupId") || "");
+  const [groupId, setGroupId] = useState<string>(getItemInStorage("groupId") || "");
 
   return (
     <ApplicationContext.Provider value={{ groupId: groupId, setGroupId: setGroupId }}>

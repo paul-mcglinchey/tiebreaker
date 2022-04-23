@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { AddEmployeeModal, EmployeeList } from "../..";
 import { useEmployeeService, useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../../hooks";
-import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
+import { IFetch, IGroupsResponse } from "../../../models";
 import { ApplicationContext, endpoints } from "../../../utilities";
 import { Fetch, FetchError, SpinnerIcon, GroupToolbar } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
@@ -21,14 +21,14 @@ const Employees = () => {
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(isAddEmployeeOpen ? true : false);
   const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
-  const groupService = useGroupService(GroupType.ROTA, refresh);
+  const groupService = useGroupService(refresh);
   const employeeService = useEmployeeService(refresh);
 
   return (
     <>
       <Fetch
-        fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder())}
-        render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
+        fetchOutput={useFetch(endpoints.groups, requestBuilder())}
+        render={({ response, error, isLoading }: IFetch<IGroupsResponse>) => (
           isLoading ? (
             <div>
               <SpinnerIcon className="text-white h-12 w-12" />
@@ -36,7 +36,7 @@ const Employees = () => {
           ) : (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
+                <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} showSelector setGroupId={setGroupId} />
                 <EmployeeList dependency={dependency} employeeService={employeeService} toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
               </>
             ) : (

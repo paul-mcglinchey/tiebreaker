@@ -1,7 +1,7 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const db = require('../models');
 const Rota = db.rota;
-const RotaGroup = db.rotagroup;
+const Group = db.group;
 const { Employee } = db.employee;
 
 // Read operations
@@ -12,7 +12,7 @@ exports.getRotas = async (req, res) => {
   // Get the groupId from the query
   const { groupId } = req.params;
 
-  RotaGroup.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
+  Group.findOne({ _id: groupId, 'accessControl.viewers': req.auth.userId })
     .then(async (group) => {
 
       // all the rotas that belong to the requested group
@@ -119,7 +119,7 @@ exports.addRota = async (req, res) => {
     .then(rota => {
       // Add the ID of this rota to the group which it was added under
       // Add the employee to the group which was selected
-      RotaGroup.updateOne({
+      Group.updateOne({
         _id: groupId,
         $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
       }, {
@@ -168,7 +168,7 @@ exports.deleteRota = (req, res) => {
   Rota.findByIdAndDelete(rotaId)
     .then(() => {
       // Remove the rota from the group it belongs to
-      RotaGroup.findByIdAndUpdate(groupId, { $pull: { rotas: rotaId }})
+      Group.findByIdAndUpdate(groupId, { $pull: { rotas: rotaId }})
         .then(() => res.status(200).send({ message: `Successfully deleted rota with ID ${rotaId}.` }))
         .catch(err => {
           return res.status(500).send({

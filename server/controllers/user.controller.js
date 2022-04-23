@@ -40,15 +40,25 @@ const generateToken = (id) => {
   )
 }
 
+const generateUser = (user) => {
+  return {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    token: generateToken(user._id),
+    isAdmin: user.isAdmin
+  }
+}
+
 exports.authenticate = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.auth._id)
+  const user = await User.findById(req.auth._id).select('-password')
 
   if (!user) {
     res.status(401)
     throw new Error('Unauthorized')
   }
 
-  res.json(user)
+  res.json(generateUser(user))
 })
 
 // @desc    Authenticate a user
@@ -71,12 +81,7 @@ exports.login = asyncHandler(async (req, res) => {
   }
 
   if (await bcrypt.compare(password, user.password)) {
-    res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token: generateToken(user._id)
-    })
+    res.json(generateUser(user))
   } else {
     res.status(401)
     throw new Error('Unable to authenticate user')
@@ -111,12 +116,7 @@ exports.signup = asyncHandler(async (req, res) => {
   const user = await User.create({ username, email, password: hashedPassword });
 
   if (user) {
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token: generateToken(user._id)
-    })
+    res.status(201).json(generateUser(user))
   } else {
     res.status(400)
     throw new Error('A problem occurred while signing up the user')

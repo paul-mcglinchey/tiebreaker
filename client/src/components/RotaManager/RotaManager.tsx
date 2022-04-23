@@ -6,7 +6,7 @@ import { NavMenu } from "../Common";
 
 const RotaManager = () => {
 
-  const [groupId, setGroupId] = useState<string>(getItemInStorage("rotaGroupId") || "");
+  const [groupId, setGroupId] = useState<string>(getItemInStorage("groupId") || "");
 
   return (
     <ApplicationContext.Provider value={{ groupId: groupId, setGroupId: setGroupId }}>

@@ -3,7 +3,7 @@ const middleware = require('../middlewares');
 
 var router = require('express').Router({ mergeParams: true });
 
-// Get all employees which the current user has view access to for a specific rotagroup
+// Get all employees which the current user has view access to for a specific group
 router.get(
   '/',
   employees.getEmployees

@@ -4,11 +4,10 @@ mongoose.Promise  = global.Promise
 const db    = {}
 db.mongoose = mongoose
 
-db.client       = require('./client.model.js')
-db.clientgroup  = require('./clientgroup.model.js')
-db.rotagroup    = require('./rotagroup.model')
-db.session      = require('./session.model.js').Session
-db.activitylog  = require('./activitylog.model.js').ActivityLog
+db.group        = require('./group.model')
+db.client       = require('./client.model')
+db.session      = require('./session.model').Session
+db.activitylog  = require('./activitylog.model').ActivityLog
 db.grouplist    = require('./grouplist.model')
 db.employee     = require('./employee.model')
 db.rota         = require('./rota.model')
