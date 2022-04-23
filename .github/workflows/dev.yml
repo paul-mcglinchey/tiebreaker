@@ -24,6 +24,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "stage-tiebreaker-api"
           heroku_email: "aerisemusic@gmail.com"
-          healthcheck: "https://stage-tiebreaker-api.herokuapp.com"
+          healthcheck: "https://stage-tiebreaker-api.herokuapp.com/health"
           delay: 5
           rollbackonhealthcheckfailed: true
