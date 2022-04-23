@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router"
 import { IUser, Status } from "../models"
 import { AuthContext, endpoints } from "../utilities"
 import useIsMounted from "./useIsMounted"
@@ -12,7 +11,6 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
   const { requestBuilder } = useRequestBuilder()
   const { appendStatus } = useStatus()
   const isMounted = useIsMounted()
-  const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -39,7 +37,6 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
       appendStatus(false, message, Status.Error)
     } else {
       updateUser(json)
-      navigate('/dashboard')
     }
 
     setIsLoading(false)
