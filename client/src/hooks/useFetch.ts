@@ -1,87 +1,63 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { IFetch } from "../models/fetch.model";
-import { endpoints } from "../utilities";
 
-const useFetch = (url: string, options: RequestInit, deps: any[] = []): IFetch => {
-  const [response, setResponse] = useState({});
+interface ICache<T> {
+  [key: string]: T
+}
+
+const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCache: boolean = false): IFetch<T> => {
+  const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const cache = useRef<ICache<T>>({});
 
   useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
+    let componentIsMounted = true;
+
+    if (!url) return;
 
     const _fetch = async () => {
-      fetch(url, options)
-        .then(res => {
-          if (!res.ok) {
-            throw res.statusText;
-          }
 
-          return res;
-        })
-        .then(async res => {
-          const reader = res.body?.getReader();
-          const contentLength: number = Number(res.headers.get('Content-Length'));
-          
-          let streamFinished: boolean = false;
-          let receivedLength = 0;
-          let chunks: Uint8Array[] = [];
-          let result = "";
+      if (componentIsMounted) setIsLoading(true);
 
-          if (reader) {
-            while (!streamFinished) {
-              await reader.read()
-              .then(({done, value}) => {
-                if (done) {
-                  streamFinished = true;
-                  return;
-                }
-                if (value) {
-                  chunks.push(value);
-                  receivedLength += value.length;
-  
-                  setProgress(Math.floor((receivedLength / contentLength) * 100))
-                }
-              })
-              .then(() => {
-                let chunksAll = new Uint8Array(receivedLength);
-                let position = 0;
-                for (let chunk of chunks) {
-                  chunksAll.set(chunk, position);
-                  position += chunk.length;
-                }
-                
-                result = JSON.parse(new TextDecoder("utf-8").decode(chunksAll));
-              })
-              .catch(err => {
-                console.error(err);
-              });
+      if (cache.current[url] && useCache) {
+        if (componentIsMounted) {
+          setResponse(cache.current[url])
+          setIsLoading(false);
+        }
+        return;
+      } else {
+        fetch(url, options)
+          .then(res => {
+            if (!res.ok) throw new Error(res.statusText)
+
+            return res.json();
+          })
+          .then(json => {
+            if (componentIsMounted) {
+              setResponse(json as unknown as T);
+              cache.current[url] = json;
             }
-          }
+          })
+          .catch(err => {
+            if (componentIsMounted) setError(err)
+          })
+          .finally(() => {
+            if (componentIsMounted) setIsLoading(false);
+          })
+      }
 
-          return result;
-
-        })
-        .then(json => {
-          setResponse(json);
-        })
-        .catch(err => setError(err))
-        .finally(() => {
-          setTimeout(() => {
-            setIsLoading(false);
-          }, endpoints.origin.includes('localhost') ? 500 : 0);
-        })
     }
 
-    isMounted && _fetch();
+    componentIsMounted && _fetch();
 
-    return () => { isMounted = false };
+    return () => {
+      componentIsMounted = false;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
-  return { response, error, isLoading, progress };
+  return { response, error, isLoading };
 }
 
 export default useFetch;

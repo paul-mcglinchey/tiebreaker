@@ -1,48 +1,25 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
-const SessionSchema = require('./session.model').SessionSchema;
-const ActivityLogSchema = require('./activitylog.model').ActivityLogSchema;
+const { Schema }  = require('mongoose');
+const mongoose    = require('mongoose');
 
-const NameSchema = new Schema({
-  firstName: { type: String, trim: true, required: true },
-  middleNames: { type: [String], required: false },
-  lastName: { type: String, trim: true, required: true }
-});
+const { ActivityLogSchema }       = require('./activitylog.model');
+const { AuditSchema }             = require('./common/audit.schema');
 
-const ContactInfoSchema = new Schema({
-  primaryPhoneNumber: { type: String, trim: true, required: false },
-  primaryEmail: { type: String, trim: true, required: false },
-  emails: [{
-    name: { type: String, required: false },
-    email: { type: String, required: false }
-  }],
-  phoneNumbers: [{
-    name: { type: String, required: false },
-    number: { type: Number, required: false }
-  }]
-});
-
-const AddressSchema = new Schema({
-  firstLine: { type: String, trim: true, required: false },
-  secondLine: { type: String, trim: true, required: false },
-  thirdLine: { type: String, trim: true, required: false },
-  city: { type: String, trim: true, required: false },
-  country: { type: String, required: false },
-  postCode: { type: String, required: false }
-});
+const { NameSchema, AddressSchema, ContactInfoSchema } = require('./common/demographics.schema');
 
 const Client = mongoose.model(
   "Client",
   new Schema({
-    clientName: NameSchema,
+    name: NameSchema,
     address: AddressSchema,
-    birthdate: { type: Date, required: true },
+    birthdate: Date,
     contactInfo: ContactInfoSchema,
-    sessions: [SessionSchema],
-    clientColour: String,
+    sessions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Session'
+    }],
+    colour: String,
     activityLog: [ActivityLogSchema],
-    createdBy: String,
-    updatedBy: String
+    audit: AuditSchema
   }, { timestamps: true })
 );
 

@@ -1,32 +1,47 @@
-module.exports = app => {
-  const clients = require('../controllers/client.controller.js');
-  const middleware = require('../middlewares');
+const clients     = require('../controllers/client.controller.js');
+const middleware  = require('../middlewares');
 
-  var router = require('express').Router();
+var router = require('express').Router({ mergeParams: true });
 
-  // Get all clients
-  router.get('/', clients.findAll);
+// Get all clients
+router.get(
+  '/',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  clients.get
+);
 
-  // Get a client by id
-  router.get('/:clientId', clients.findById);
+// Get a client by id
+router.get(
+  '/:clientId',
+  middleware.clientMiddleware.checkClientIdExists,
+  clients.getById
+);
 
-  // CUD Operations - Requests should have a body
-  router.use(middleware.validation.validateRequest);
+// Create a new client
+router.post(
+  '/',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.validationMiddleware.checkRequestHasBody,
+  clients.create
+);
 
-  // Create a new client
-  router.post('/', middleware.createClient.isGroupNameSet, clients.create);
+// Update a client
+router.put(
+  '/:clientId', 
+  clients.update
+);
 
-  // Update a client
-  router.put('/:clientId', clients.updateClient);
+// Add a session to a client
+router.put(
+  '/:clientId/sessions', 
+  clients.addSession
+);
 
-  // Update a client's colour
-  router.put('/:clientId/colours', clients.updateColour);
+// Delete a client by id
+router.delete(
+  '/:clientId',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  clients.delete
+);
 
-  // Add a session to a client
-  router.put('/:clientId/sessions', clients.addSession);
-
-  // Delete a client by id
-  router.delete('/', clients.delete);
-
-  app.use('/api/clients', router);
-}
+module.exports = router

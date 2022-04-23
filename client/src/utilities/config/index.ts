@@ -1,3 +1,3 @@
 export * from './endpoints';
-export { default as links } from './links';
-export { default as profileColours } from './profileColours'
+export * from './links';
+export { default as colours } from './colours'

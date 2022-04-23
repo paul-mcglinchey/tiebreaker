@@ -1,12 +1,20 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const mongoose    = require('mongoose')
+mongoose.Promise  = global.Promise
 
-const db = {};
-db.mongoose = mongoose;
+const db    = {}
+db.mongoose = mongoose
 
-db.client = require('./client.model.js');
-db.group = require('./group.model.js');
-db.session = require('./session.model.js').Session;
-db.activitylog = require('./activitylog.model.js').ActivityLog;
+db.client       = require('./client.model.js')
+db.clientgroup  = require('./clientgroup.model.js')
+db.rotagroup    = require('./rotagroup.model')
+db.session      = require('./session.model.js').Session
+db.activitylog  = require('./activitylog.model.js').ActivityLog
+db.grouplist    = require('./grouplist.model')
+db.employee     = require('./employee.model')
+db.rota         = require('./rota.model')
+db.grouplist    = require('./grouplist.model')
+db.schedule     = require('./schedule.model')
+db.user         = require('./user.model')
+db.permission   = require('./permission.model')
 
-module.exports = db;
+module.exports = db

@@ -1,19 +1,21 @@
 const { Schema } = require('mongoose');
 const mongoose = require('mongoose');
+const { AuditSchema } = require('./common/audit.schema');
 
 const SessionSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: false },
-  tags: { type: [String], required: false },
-  sessionDate: { type: Date },
-  createdBy: {
-    uuid: { type: String },
-    name: { type: String }
+  title: { 
+    type: String, required: true 
   },
-  updatedBy: {
-    uuid: { type: String },
-    name: { type: String }
-  }
+  description: { 
+    type: String, required: false 
+  },
+  tags: { 
+    type: [String], required: false, default: [] 
+  },
+  date: { 
+    type: Date 
+  },
+  audit: AuditSchema
 }, { timestamps: true });
 
 const Session = mongoose.model(

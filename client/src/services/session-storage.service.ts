@@ -1,28 +1,27 @@
-export const getUserGroupInStorage = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem("userGroup") || "");
-  } catch {
-    return null;
-  }
+export const getItemInStorage = (itemName: string | undefined) => {
+  if (!itemName) return;
+  return sessionStorage.getItem(itemName);
 }
 
-export const getUsersInStorage = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem("users") || "");
-  } catch {
-    return null;
-  }
+export const setItemInStorage = (itemName: string | undefined, data: any) => {
+  if (!itemName || !data) return;
+  sessionStorage.setItem(itemName, data);
 }
 
-export const getUserInStorage = (uuid: string) => {
-  try {
-    const users = JSON.parse(sessionStorage.getItem("users") || "{}");
-    return Object.keys(users).includes(uuid) ? users[uuid] : null;
-  } catch {
-    return null;
-  }
+export const getJsonItemInStorage = (itemName: string | undefined) => {
+  if (!itemName) return;
+  let data = sessionStorage.getItem(itemName);
+
+  if (!data) return;
+  return JSON.parse(data);
 }
 
-export const updateUsersInStorage = (uuid: string, user: any) => {
-  sessionStorage.setItem("users", JSON.stringify({ ...getUsersInStorage(), [uuid]: user }));
+export const setJsonItemInStorage = (itemName: string | undefined, data: any) => {
+  if (!itemName || !data) return;
+  sessionStorage.setItem(itemName, JSON.stringify(data));
+}
+
+export const removeItemInStorage = (itemName: string | undefined) => {
+  if (!itemName) return;
+  sessionStorage.removeItem(itemName);
 }

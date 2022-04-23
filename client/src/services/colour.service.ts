@@ -1,5 +1,5 @@
-import { profileColours } from "../utilities";
+import { colours } from "../utilities";
 
-export const generateColour = (): string | undefined => {
-  return profileColours[Math.floor(Math.random() * profileColours.length)] || profileColours[0] || undefined;
+export const generateColour = (): string => {
+  return colours[Math.floor(Math.random() * colours.length)] || "#f43f5e" ;
 }

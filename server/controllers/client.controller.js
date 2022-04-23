@@ -1,286 +1,158 @@
-const ObjectId = require('mongoose').Types.ObjectId;
-const db = require('../models');
-const Group = db.group;
-const Client = db.client;
-const Session = db.session;
-const ActivityLog = db.activitylog;
-
-// Read operations
+const asyncHandler        = require('express-async-handler');
+const ObjectId            = require('mongoose').Types.ObjectId;
+const db                  = require('../models');
+const ClientGroup         = db.clientgroup;
+const Client              = db.client;
+const Session             = db.session;
 
 // Retrieve all clients from the database
-exports.findAll = async (req, res) => {
+exports.get = asyncHandler(async (req, res) => {
+  const { groupId } = req.params
+  const { sortField, sortDirection, name } = req.query
 
-  let { pageSize, pageNumber, groupName, sortField, sortDirection, clientName } = await req.query;
+  const pageSize = parseInt(req.query.pageSize)
+  const pageNumber = parseInt(req.query.pageNumber)
 
-  pageSize = parseInt(pageSize);
-  pageNumber = parseInt(pageNumber);
+  if (!pageSize || !groupId || !sortField || !sortDirection) {
+    res.status(400);
+    throw new Error(`Request is missing one of the following parameters: pageSize, pageNumber, groupId, sortField, sortDirection.`)
+  }
 
-  Group.findOne({ groupName: groupName })
-    .then(async (group) => {
+  const group = await ClientGroup.findById(groupId)
 
-      // all the clients that belong to the requested group
-      let clientIds = group.clients;
+  if (!group) {
+    res.status(404);
+    throw new Error(`Group with ID ${groupId} not found.`)
+  }
 
-      // the mongoose query to fetch those clients
-      let clientQuery = { _id: { $in: clientIds } };
+  // Get the count of documents which match this query
+  const count = await Client.countDocuments({ _id: { $in: group.clients } });
 
-      const clientCount = await Client
-        .countDocuments(clientQuery)
-        .then(clientCount => clientCount)
-        .catch(err => res.status(500)
-          .send({
-            message: err.message || `A problem occurred fetching the number of clients for group ${groupName}.`
-          }));
-      
-      // create the aggregate object (functions like an IQueryable)
-      const aggregate = Client.aggregate();
+  // apply a match operator to the pipeline to only return clients for the current group
+  // add a new fullName field to filter on
+  const clients = await Client.aggregate()
+    .match({ _id: { $in: group.clients } })
+    .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } })
+    .match(name ? { fullName: { $regex: name, $options: 'i' } } : {})
+    .sort({ [sortField]: (sortDirection === "descending" ? -1 : 1) })
+    .skip(((pageNumber || 1) - 1) * pageSize)
+    .limit(pageSize)
+    .exec()
 
-      // apply a match operator to the pipeline to only return clients for the current group
-      // add a new fullName field to filter on
-      await aggregate
-        .match(clientQuery)
-        .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
-      
-      // if a filter for the fullName was passed in then use it to apply a match operator to the aggregate
-      if (clientName) {
-          await aggregate.match({ fullName: { $regex: clientName, $options: 'i' } });
-      }
-
-      // finally build the other query parameters and return the aggregate as the clients queryable
-      const clients = await aggregate
-        .sort({ [sortField]: (sortDirection == "descending" ? -1 : 1) })
-        .skip(((pageNumber || 1) - 1) * pageSize)
-        .limit(parseInt(pageSize))
-        .then(clients => clients)
-        .catch(err => res.status(500)
-          .send({
-            message: err.message || `A problem occurred fetching the list of clients for group ${groupName}.`
-          }))
-
-      res.status(200).send({
-        totalClients: clientCount,
-        clients: clients
-      });
-    })
-    .catch(err => {
-      res.status(401).send({
-        message:
-          err.message || `A problem occurred finding group "${req.query.userGroup}".`
-      });
-    });
-};
+  return res.status(200).json({
+    count: count,
+    clients: clients
+  });
+});
 
 // Retrieve a specific client by Id
-exports.findById = async (req, res) => {
+exports.getById = asyncHandler(async (req, res) => {
+  let { clientId } = req.params;
 
-  // convert the clientId from a string to an ObjectId for the aggregation pipeline
-  const clientId = new ObjectId(req.params.clientId);
+  if (!clientId) {
+    res.status(400)
+    throw new Error('A client ID must be provided.')
+  }
 
   // create the aggregator so we can add custom fields
   const aggregate = Client.aggregate();
 
-  // apply a match operator and add a fullname field
-  await aggregate
-    .match({ _id: clientId })
-    .addFields({ fullName: { $concat: [ '$clientName.firstName', ' ', '$clientName.lastName' ] } });
-
   const client = await aggregate
-    .then(client => client[0])
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || `A problem occurred fetching client with ID ${clientId}.`
-      })
-    });
+    .match({ _id: new ObjectId(clientId) })
+    .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } })  
+    .exec()
 
-  res.status(200).send({ client });
-}
+  return res.status(200).json(client[0]);
+})
 
-// CUD Operations
 // Create and save a new client
-exports.create = (req, res) => {
-  const {
-    firstName, lastName, middleNames,
-    addressLineOne, addressLineTwo, addressLineThree, city, country, postCode,
-    birthdate,
-    email, phoneNumber, emails, phoneNumbers,
-    clientColour
-  } = req.body;
+exports.create = asyncHandler(async (req, res) => {
+  const { groupId } = req.params;
 
-  // Create a new client
-  const client = new Client({
-    clientName: {
-      firstName: firstName,
-      lastName: lastName,
-      middleNames: middleNames.split(" ")
-    },
-    address: {
-      firstLine: addressLineOne,
-      secondLine: addressLineTwo,
-      thirdLine: addressLineThree,
-      city: city,
-      country: country,
-      postCode: postCode
-    },
-    birthdate: birthdate,
-    contactInfo: {
-      primaryEmail: email,
-      primaryPhoneNumber: phoneNumber,
-      emails: emails,
-      phoneNumbers: phoneNumbers
-    },
-    sessions: [],
-    clientColour: clientColour,
+  const client = await Client.create({
+    ...req.body,
     activityLog: {
       task: "created",
-      actor: req.auth.userUuid
+      actor: req.auth.userId
     },
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
-  });
-
-  // Save client in the database
-  client
-    .save(client)
-    .then(data => {
-      // Add the client to the group which was selected
-      Group.updateOne({ groupName: req.body.groupName }, { $push: { clients: new ObjectId(data._id) } })
-        .then(() => {
-          res.status(200).send({
-            success: `Client created successfully in ${req.body.groupName}.`
-          })
-        })
-        .catch(err => {
-          res.status(401).send({
-            message:
-              err.message || `Could not add client ${data._id} to group ${req.body.userGroup}.`
-          })
-        })
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || `Some error occurred while creating client.`
-      });
-    });
-};
-
-// Update a client
-exports.updateClient = (req, res) => {
-  const { clientId } = req.params;
-
-  var updateBody = req.body.updateBody;
-  updateBody.activityLog.push({
-    task: "updated",
-    actor: req.auth.userUuid
+    audit: {
+      createdBy: req.auth.userId,
+      updatedBy: req.auth.userId
+    }
   })
 
-  Client.findByIdAndUpdate(clientId, updateBody)
-    .then(client => {
-      res.status(200).send(client);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || `Could not update the client with ID ${clientId}.`
-      })
-    });
-}
+  if (!client) throw new Error('Problem occurred creating client')
 
-// Get a client and update their profile colour
-exports.updateColour = (req, res) => {
+  // Update the clientgroup with the newly added client
+  await ClientGroup.findByIdAndUpdate(groupId, { $push: { clients: new ObjectId(client._id) } });
+
+  return res.status(201).json(client);
+});
+
+// Update a client
+exports.update = asyncHandler(async (req, res) => {
   const { clientId } = req.params;
 
-  var clientColour = req.body.clientColour;
+  if (!clientId) {
+    res.status(200)
+    throw new Error('Request is missing a client ID.')
+  }
 
-  Client.findByIdAndUpdate(clientId, { clientColour: clientColour })
-    .then(client => res.status(200).send({ client }))
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || `A problem occurred updating client ${clientId} with colour ${profileColour}.`
-      })
-    });
-}
+  const updateBody = req.body.updateBody;
+  updateBody.activityLog.push({
+    task: "updated",
+    actor: req.auth.userId
+  })
+  
+  const client = Client.findByIdAndUpdate(clientId, updateBody);
+
+  return res.status(200).json(client);
+})
 
 // Add a session to a specific client
-exports.addSession = (req, res) => {
+exports.addSession = asyncHandler(async (req, res) => {
 
   const { clientId } = req.params;
   const { title, description, tags, sessionDate } = req.body;
 
-  const session = new Session({
-    title: title,
-    description: description,
-    tags: tags,
-    sessionDate: sessionDate,
-    createdBy: req.auth.userUuid,
-    updatedBy: req.auth.userUuid
+  if (!clientId || !title || !sessionDate) {
+    res.status(400)
+    throw new Error('Request must have all of the following: client ID, title, session date')
+  }
+
+  const session = await Session.create({
+    title, description, tags, sessionDate,
+    createdBy: req.auth.userId,
+    updatedBy: req.auth.userId
   });
 
-  Client.findByIdAndUpdate(clientId, { $push: { sessions: session } })
-    .then(client => {
+  if (!session._id) throw new Error('Something went wrong creating the session.')
 
-      // update the metadata on the client
-      Client.findByIdAndUpdate(client._id, { 
-          updatedBy: req.auth.userUuid,
-          $push: { activityLog: {
-            task: "added session",
-            actor: req.auth.userUuid
-          }}
-        })
-        .catch(err => {
-          if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-              message: 'Client not found with id ' + clientId
-            });
-          };
-          return res.status(500).send({
-            message: err || `Could not update client with id ${clientId}`
-          });
-      });
+  await Client.findByIdAndUpdate(
+    clientId, { 
+      $push: { sessions: session._id },
+      $push: { activityLog: {
+        task: "added session",
+        actor: req.auth.userId
+      }}
+    });
 
-      res.status(200).send({ updatedClient: client })
-    })
-    .catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: 'Client not found with id ' + clientId
-        });
-      };
-      return res.status(500).send({
-        message: err || `Could not update client with id ${clientId}`
-      });
-    })
-}
+  return res.status(200).json(session)
+})
 
 // Deletes a client by ID
-exports.delete = (req, res) => {
-  // Update the group clients array to remove this client
-  Group.findOneAndUpdate({ groupName: req.body.groupName }, { $pull: { clients: req.body.clientId } })
-    .catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: 'Client not found with id ' + req.query.clientId
-        });
-      };
-      return res.status(500).send({
-        message: 'Could not delete client with id ' + req.query.clientId
-      });
-    });
+exports.delete = asyncHandler(async (req, res) => {
+  const { clientId, groupId } = req.params
 
-  // Delete the client from the clients db
-  Client.findOneAndDelete({ _id: req.body.clientId })
-    .then(() => {
-      res.status(200).send({
-        success: `Successfully deleted client ${req.body.clientId}`
-      })
-    })
-    .catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: 'Client not found with id ' + req.query.clientId
-        });
-      };
-      return res.status(500).send({
-        message: 'Could not delete client with id ' + req.query.clientId
-      });
-    });
-}
+  const group = await ClientGroup.findOne(groupId)
+
+  if (!group) {
+    res.status(400)
+    throw new Error('Group not found')
+  }
+  
+  // Soft delete the client (remove from group)
+  await group.update({ $pull: { clients: clientId }})
+
+  return res.status(200).json({ message: 'Deleted client' });
+})

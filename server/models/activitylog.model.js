@@ -4,7 +4,10 @@ const mongoose = require('mongoose');
 const ActivityLogSchema = new Schema({
   task: { type: String, required: true },
   supplementary: {},
-  actor: String
+  actor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 }, { timestamps: true });
 
 const ActivityLog = mongoose.model(

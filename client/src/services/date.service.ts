@@ -6,7 +6,7 @@ export const parseDateString = (originalValue: string)  => {
   if (typeof originalValue === "string") {
     return parse(originalValue, "yyyy-MM-dd", new Date());
   } else {
-    return new Date();
+    return parse(new Date().toString(), "yyyy-MM-dd", new Date());
   }
 }
 
@@ -18,4 +18,10 @@ export const makeDate = (isoDate: Date, delimiter: string) => {
 export const makeUSDate = (isoDate: Date, delimiter: string) => {
   var date = new Date(isoDate);
   return `${date.getFullYear()}${delimiter}${date.getUTCMonth() + 1}${delimiter}${date.getUTCDate()}`
+}
+
+export const compareDates = (dateOne: Date, dateTwo: Date) => {
+  return {
+    sameDay: (): boolean => dateOne.getUTCDate() === dateTwo.getUTCDate() && dateOne.getUTCFullYear() === dateTwo.getUTCFullYear() && dateOne.getUTCMonth() === dateTwo.getUTCMonth()
+  }
 }

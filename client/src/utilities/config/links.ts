@@ -1,8 +1,10 @@
-const links = [
-  { name: 'Dashboard', href: 'dashboard', current: true },
-  { name: 'Add Clients', href: 'addclients', current: false },
-  { name: 'Groups', href: 'groups', current: false },
-  { name: 'Create Group', href: 'creategroup', current: false }
-]
+export const clientLinks = [
+  { name: 'Dashboard', href: '/clients/dashboard' },
+  { name: 'Groups', href: '/clients/groups' }
+];
 
-export default links;
+export const rotaLinks = [
+  { name: 'Dashboard', href: '/rotas/dashboard' },
+  { name: 'Employees', href: '/rotas/employees' },
+  { name: 'Groups', href: '/rotas/groups' },
+]

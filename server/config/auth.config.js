@@ -13,5 +13,6 @@ pTGird3GEFtRmsw9FsAAv0A6o2C7Mv6VD37VaLW/NFFGONShFBfRZKXFWsba3br2
 QZKVKAYB1iCJh2Ng4H3zYOZ0p+B8UYWekuu4lwjJPYZT1hiei1blxXyP5yccrO0F
 9HxWhkBktIRnJ7u3P88jwFe8MsKKlddCzRyA46+f3QyU2yaY8rnbcFA95A3jRP3+
 0Yl1MwaxRqbweFSRi9Gl3R8CAwEAAQ==
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`,
+  ufApiKey: process.env.UF_API_KEY || 'uf_test_admin_wn9p69b5_f7b6d9ebab4d45e056865ffb241e9c9e'
 };

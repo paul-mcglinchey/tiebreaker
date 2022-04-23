@@ -1,11 +1,19 @@
-const authJwt = require('./authJwt');
-const createGroup = require('./createGroup');
-const createClient = require('./createClient');
-const validation = require('./validation');
+const authMiddleware = require('./auth.middleware');
+const clientMiddleware = require('./client.middleware');
+const groupMiddleware = require('./group.middleware');
+const validationMiddleware = require('./validation.middleware');
+const rotaMiddleware = require('./rota.middleware');
+const scheduleMiddleware = require('./schedule.middleware');
+const employeeMiddleware = require('./employee.middleware');
+const errorMiddleware = require('./error.middleware');
 
 module.exports = {
-  authJwt,
-  createGroup,
-  createClient,
-  validation
+  authMiddleware,
+  clientMiddleware,
+  groupMiddleware,
+  validationMiddleware,
+  rotaMiddleware,
+  scheduleMiddleware,
+  employeeMiddleware,
+  errorMiddleware
 };

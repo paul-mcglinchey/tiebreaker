@@ -1,3 +1,3 @@
 module.exports = {
-  url: process.env.CLIENTS_DB_URL || 'mongodb://localhost:27017'
+  url: process.env.TIEBREAKER_DB_URL || 'mongodb://localhost:27017'
 }
