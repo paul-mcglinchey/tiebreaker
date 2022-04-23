@@ -22,11 +22,11 @@ app.use('/health', (res) => {
   });
 });
 
-const dbConfig = require('./config/db.config');
-const db = require('./models');
+console.log(`Attempting to connect to the tiebreaker database on ${process.env.TIEBREAKER_DB_URL}`)
 
+const db = require('./models');
 db.mongoose
-  .connect((dbConfig.url) + '/' + (process.env.DB_NAME || 'tiebreaker'), {
+  .connect((process.env.TIEBREAKER_DB_URL) + '/' + (process.env.DB_NAME || 'tiebreaker'), {
     useNewUrlParser: true
   })
   .then(() => {
@@ -64,4 +64,4 @@ var currentDateTime = new Date();
 var currentTime = currentDateTime.getUTCHours() + ':' + currentDateTime.getUTCMinutes();
 
 // set port, listen for requests
-app.listen(PORT, () => console.log(`Server running on port ${PORT} in environment ${process.env.NODE_ENV || 'dev'} @ ${currentTime}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT} in environment ${process.env.NODE_ENV} @ ${currentTime}`))

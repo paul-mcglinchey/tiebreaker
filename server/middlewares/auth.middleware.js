@@ -1,7 +1,5 @@
 const asyncHandler  = require('express-async-handler')
 const jwt           = require('jsonwebtoken')
-
-const secrets       = require('../config/auth.config')
 const db            = require('../models')
 const User          = db.user
 
