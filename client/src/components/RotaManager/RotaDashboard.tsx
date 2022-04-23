@@ -4,9 +4,8 @@ import { Fetch } from '..';
 import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from '../../hooks';
 import { GroupType, IGroupsResponse, IRotaGroup, IFetch } from '../../models';
 import { ApplicationContext, endpoints } from '../../utilities';
-import { FetchError } from '../Common';
+import { FetchError, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
-import { GroupToolbar } from '../Toolbar';
 import { AddRotaModal, RotaList } from './Rotas';
 
 const RotaDashboard = () => {

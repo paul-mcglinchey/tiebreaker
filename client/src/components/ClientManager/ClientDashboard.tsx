@@ -2,9 +2,8 @@ import { useContext, useState } from 'react';
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from '../../hooks';
 import { GroupType, IClientGroup, IFetch, IGroupsResponse } from '../../models';
 import { ApplicationContext, endpoints } from '../../utilities';
-import { Fetch, FetchError, Modal } from '../Common';
+import { Fetch, FetchError, Modal, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
-import { GroupToolbar } from '../Toolbar';
 import { ClientForm, ClientList } from './Clients';
 
 const ClientDashboard = () => {

@@ -3,9 +3,8 @@ import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { ApplicationContext, employeeValidationSchema, endpoints } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
-import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../../../Common";
+import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm, Fetch } from "../../../Common";
 import { useEmployeeService, useFetch, useRefresh, useRequestBuilder } from "../../../../hooks";
-import { Fetch } from "../../../Common/Fetch";
 
 const FullEmployeeForm = () => {
 

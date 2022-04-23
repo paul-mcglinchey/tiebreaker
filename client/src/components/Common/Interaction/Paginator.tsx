@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import { SquareIconButton } from ".";
+import { SquareIconButton } from "..";
 
 interface IPaginatorProps {
   pageSize: number,

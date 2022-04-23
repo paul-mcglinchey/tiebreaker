@@ -1,4 +1,4 @@
-import { IToolbarProps } from "./models";
+import { IToolbarProps } from "../../../models";
 import ToolbarCreateButton from "./ToolbarCreateButton";
 
 const Toolbar = ({ children, title, createGroupAction, addRotaAction, addClientAction, addEmployeeAction }: IToolbarProps) => {

@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useRefresh, useRequestBuilder, useStateCallback } from "../../hooks";
 import { ButtonType, IChanges, IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
 import { endpoints } from "../../utilities";
-import { Button } from "../Common";
-import { Toolbar } from "../Toolbar";
-import { AddListItem, ListItem } from "./Common";
+import { Button, Toolbar } from "../Common";
+import { AddListItem, ListItem } from ".";
 
 const AdminPanel = () => {
 
@@ -31,7 +30,7 @@ const AdminPanel = () => {
     return () => {
       componentIsMounted = false;
     }
-  }, [dependency])
+  }, [dependency, requestBuilder, setDefaultGrouplists])
 
   const updateDefaultLists = (lists: IGrouplistResponse) => {
     fetch(endpoints.defaultgrouplists, requestBuilder("PUT", undefined, lists))

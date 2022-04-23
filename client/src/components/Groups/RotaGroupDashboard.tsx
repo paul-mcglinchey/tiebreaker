@@ -2,8 +2,7 @@ import { Fragment, useState } from "react";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../models";
 import { endpoints } from "../../utilities";
-import { Fetch, SpinnerIcon } from "../Common";
-import { GroupToolbar } from "../Toolbar";
+import { Fetch, SpinnerIcon, GroupToolbar } from "../Common";
 import { DataPoint, GroupCard, AddGroupModal, GroupPrompter } from ".";
 const RotaGroupDashboard = () => {
 

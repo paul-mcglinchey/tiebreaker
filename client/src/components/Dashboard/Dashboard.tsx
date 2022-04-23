@@ -2,7 +2,7 @@ import { useFetch, useRequestBuilder } from "../../hooks";
 import { Application, GroupType, IClientGroup, IGroupsResponse, IRotaGroup } from "../../models";
 import { endpoints } from "../../utilities";
 import { NavMenu } from "../Common";
-import { AppCard } from "./Common";
+import { AppCard } from ".";
 
 const Dashboard = () => {
 

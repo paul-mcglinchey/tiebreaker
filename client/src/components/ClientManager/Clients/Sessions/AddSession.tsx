@@ -1,4 +1,4 @@
-import { AddSessionForm } from ".";
+import { AddSessionForm } from "..";
 import { IClient } from "../../../../models";
 
 

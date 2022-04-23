@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { IUser, Status } from "../models"
 import { AuthContext, endpoints } from "../utilities"
 import useIsMounted from "./useIsMounted"
@@ -14,17 +14,17 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const authenticate = async () => {
+  const authenticate = useCallback(async () => {
     isMounted() && setIsLoading(true)
     const res = await fetch(endpoints.authenticate, requestBuilder())
 
     !res.ok && isMounted() && updateUser(undefined)
     isMounted() && setIsLoading(false)
-  }
+  }, [isMounted, requestBuilder, updateUser])
 
   useEffect(() => {
     shouldAuthenticate && authenticate()
-  }, [])
+  }, [shouldAuthenticate, authenticate])
 
   const login = async (user: IUser) => {
     setIsLoading(true)

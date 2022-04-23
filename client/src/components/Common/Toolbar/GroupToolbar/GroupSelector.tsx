@@ -1,9 +1,9 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { useIsMounted } from "../../../hooks";
-import { IGroup } from "../../../models";
-import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../services";
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import { useIsMounted } from "../../../../hooks";
+import { IGroup } from "../../../../models";
+import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../../services";
 
 interface IGroupSelectorProps<TGroup> {
   groupType: string,
@@ -17,7 +17,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }:
   const isMounted = useIsMounted();
   const storageKey = `${groupType}GroupId`;
 
-  const updateGroup = (groupId: string | undefined) => {
+  const updateGroup = useCallback((groupId: string | undefined) => {
     if (!groupId) return;
 
     // Update the group held in storage
@@ -25,7 +25,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }:
 
     // Update the group held in state
     isMounted() && setGroupId(groupId);
-  }
+  }, [isMounted, setGroupId, storageKey])
 
   const getGroupName = (groupId: string | undefined | null): string | undefined => {
     return groups.filter((g: TGroup) => g._id === groupId)[0]?.name;
@@ -37,7 +37,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }:
     let isStoredGroupValid = groups.filter((g: TGroup) => g._id === storedGroupId).length > 0;
 
     isMounted() && !isStoredGroupValid && updateGroup(groups[0]?._id)
-  }, []);
+  }, [groups, isMounted, storageKey, updateGroup]);
 
   return (  
     <div className="flex flex-grow items-center justify-end">

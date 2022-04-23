@@ -1,5 +1,5 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import { IFilter } from "../../../../models";
+import { IFilter } from "../../../models";
 
 interface ISearchBarProps {
   filters: IFilter,

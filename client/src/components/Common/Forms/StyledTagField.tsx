@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { StyledConfirmationMessage, StyledErrorMessage } from ".";
+import { StyledConfirmationMessage, StyledErrorMessage } from "..";
 import { ITag } from "../../../models";
 
 interface ITagFieldProps {

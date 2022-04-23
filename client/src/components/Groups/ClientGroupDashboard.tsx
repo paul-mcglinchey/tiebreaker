@@ -2,8 +2,7 @@ import { Fragment, useState } from "react";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { GroupType, IClientGroup, IFetch, IGroupsResponse } from "../../models";
 import { endpoints } from "../../utilities";
-import { Fetch, SpinnerIcon } from "../Common";
-import { GroupToolbar } from "../Toolbar";
+import { Fetch, SpinnerIcon, GroupToolbar } from "../Common";
 import { AddGroupModal, DataPoint, GroupCard, GroupPrompter } from ".";
 
 const ClientGroupDashboard = () => {

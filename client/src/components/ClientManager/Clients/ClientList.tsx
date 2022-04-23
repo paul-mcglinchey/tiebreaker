@@ -2,8 +2,8 @@ import { Fragment, useContext, useState } from 'react';
 import { ApplicationContext, endpoints } from '../../../utilities';
 import { IClient, IClientsResponse, IFetch, IFilter } from '../../../models';
 import { useFetch, useRequestBuilder } from '../../../hooks';
-import { SearchBar, ClientTableRow } from '.';
-import { Paginator, Table, Fetch, Prompter } from '../../Common';
+import { ClientTableRow } from '.';
+import { Paginator, Table, Fetch, Prompter, SearchBar } from '../../Common';
 import { UserAddIcon } from '@heroicons/react/solid';
 
 const headers = [

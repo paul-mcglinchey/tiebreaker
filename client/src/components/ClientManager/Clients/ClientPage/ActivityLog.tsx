@@ -1,4 +1,4 @@
-import { ActivityLogEntry } from ".";
+import { ActivityLogEntry } from "..";
 import { IClient } from "../../../../models";
 
 const ActivityLog = ({ client }: { client: IClient }) => {

@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 
-import { IconWrapper } from '.';
-import { StyledField, Button } from '../..';
+import { StyledField, Button, IconWrapper } from '..';
 import { signupValidationSchema } from '../../../utilities';
 import { IUser } from '../../../models';
 import { useAuth } from '../../../hooks';

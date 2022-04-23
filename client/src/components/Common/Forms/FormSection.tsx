@@ -1,7 +1,6 @@
 import { IChildrenProps } from "../../../models";
-import { CustomCheckbox } from ".";
 import { combineClassNames } from "../../../services";
-import { SquareIconButton } from "..";
+import { SquareIconButton, CustomCheckbox } from "..";
 import { ChevronUpIcon } from "@heroicons/react/solid";
 
 interface IFormSectionProps extends IChildrenProps {

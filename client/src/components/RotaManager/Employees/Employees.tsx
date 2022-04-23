@@ -4,9 +4,8 @@ import { AddEmployeeModal, EmployeeList } from "../..";
 import { useEmployeeService, useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../../hooks";
 import { GroupType, IFetch, IGroupsResponse, IRotaGroup } from "../../../models";
 import { ApplicationContext, endpoints } from "../../../utilities";
-import { Fetch, FetchError, SpinnerIcon } from "../../Common";
+import { Fetch, FetchError, SpinnerIcon, GroupToolbar } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
-import { GroupToolbar } from "../../Toolbar";
 
 const Employees = () => {
 
@@ -42,7 +41,7 @@ const Employees = () => {
               </>
             ) : (
               error ? (
-                <FetchError />
+                <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
               ) : (
                 <GroupPrompter action={toggleAddGroupOpen} />
               )

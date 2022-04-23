@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import { StyledErrorMessage } from ".";
+import { StyledErrorMessage } from "..";
 import { combineClassNames } from "../../../services";
 
 interface IFieldProps {

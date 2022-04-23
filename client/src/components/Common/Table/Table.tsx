@@ -1,7 +1,6 @@
 import { Fragment } from "react"
 import { ITable } from "../../../models"
-import { SpinnerIcon } from "../icons"
-import { TableHeader, TableInteractiveHeader } from "."
+import { SpinnerIcon, TableHeader, TableInteractiveHeader } from ".."
 
 interface ITableProps extends ITable {
   children: JSX.Element

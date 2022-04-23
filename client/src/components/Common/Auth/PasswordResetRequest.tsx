@@ -1,32 +1,11 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import Userfront from "@userfront/core";
-import { IconWrapper } from '.';
-import { StyledField, Button } from '../..';
-
-Userfront.init("wn9p69b5");
+import { StyledField, Button, IconWrapper } from '..';
 
 const PasswordResetRequest = () => {
 
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-
   const handleSubmit = (values: { email: string }) => {
-
-    setError('');
-
-    Userfront.sendResetLink(
-      values.email
-    )
-      .then((res) => {
-        if (res.result) {
-          setMessage("Request sent");
-        }
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
+    console.log(values)
   }
 
   return (
@@ -58,16 +37,6 @@ const PasswordResetRequest = () => {
             </Form>
           )}
         </Formik>
-        {error && (
-          <div className="mt-10 flex border-2 border-red-500 text-red-500 p-2 justify-center rounded">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="mt-10 flex border-2 border-green-500 text-green-500 p-2 justify-center rounded">
-            {message}
-          </div>
-        )}
       </div>
     </IconWrapper>
   )

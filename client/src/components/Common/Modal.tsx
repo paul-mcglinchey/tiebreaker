@@ -1,9 +1,8 @@
 import { Transition } from "@headlessui/react";
 import { ButtonType, IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
-import { Button } from ".";
+import { Button, CustomCheckbox } from ".";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { CustomCheckbox } from "./Forms";
 
 interface IModalProps {
   title: string,

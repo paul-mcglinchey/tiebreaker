@@ -1,6 +1,6 @@
 import { XIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { combineClassNames } from '../../../services';
 import { Status } from '../../../models/types/status.type';
 import { IStatus } from '../../../models';
@@ -17,14 +17,14 @@ const Notification = ({ status, removeStatus }: INotificationProps) => {
   const [open, setOpen] = useState(true);
   const isMounted = useIsMounted();
 
-  const close = () => {
+  const close = useCallback(() => {
     isMounted() && setOpen(false);
     setTimeout(() => removeStatus(status._id), 1000);
-  }
+  }, [isMounted, removeStatus, status._id])
 
   useEffect(() => {
     setTimeout(() => close(), 3000)
-  }, [])
+  }, [close])
 
   return (
     <Transition
