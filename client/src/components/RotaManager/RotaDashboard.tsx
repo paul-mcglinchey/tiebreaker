@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 
 import { Fetch } from '..';
 import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from '../../hooks';
-import { GroupType, IGroupsResponse, IRotaGroup, IFetch } from '../../models';
+import { IGroupsResponse, IFetch } from '../../models';
 import { ApplicationContext, endpoints } from '../../utilities';
 import { FetchError, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
@@ -20,18 +20,18 @@ const RotaDashboard = () => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const groupService = useGroupService(GroupType.ROTA, refresh);
+  const groupService = useGroupService(refresh);
   const rotaService = useRotaService(refresh);
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.groups(GroupType.ROTA).groups, requestBuilder(), [dependency], false)}
-      render={({ response, error, isLoading }: IFetch<IGroupsResponse<IRotaGroup>>) => (
+      fetchOutput={useFetch(endpoints.groups, requestBuilder(), [dependency], false)}
+      render={({ response, error, isLoading }: IFetch<IGroupsResponse>) => (
         <>
           {!error ? (
             response && response.count > 0 ? (
               <>
-                <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
+                <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} showSelector setGroupId={setGroupId} />
                 <RotaList dependency={dependency} refresh={refresh} />
               </>
             ) : (

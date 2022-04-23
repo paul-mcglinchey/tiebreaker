@@ -7,7 +7,6 @@ export * from './session.model';
 export * from './activity-log.model';
 export * from './sortable.model';
 export * from './filter.model';
-export * from './client-group-model';
 export * from './tag.model';
 export * from './session.model';
 export * from './employee.model';
@@ -15,7 +14,6 @@ export * from './fetch.model';
 export * from './auth.model'
 export * from './rota.model';
 export * from './schedule.model';
-export * from './rota-group.model';
 export * from './groups-response.model';
 export * from './clients-response.model';
 export * from './rotas-response.model';
@@ -27,6 +25,7 @@ export * from './grouplist-response.model';
 export * from './changes.model';
 export * from './table.model';
 export * from './user.model';
+export * from './permission.model'
 
 export * from './props';
 export * from './types';

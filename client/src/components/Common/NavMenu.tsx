@@ -99,7 +99,7 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                to="adminpanel"
+                                to="/adminpanel"
                                 className={combineClassNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-purple-700')}
                               >
                                 Admin Panel

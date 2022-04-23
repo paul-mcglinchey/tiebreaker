@@ -1,24 +1,22 @@
 import { useRequestBuilder, useSessionStorage } from "../../../../hooks";
-import { GroupType, IFetch, IGroup, IGroupsResponse, IToolbarProps } from "../../../../models";
+import { IFetch, IGroupsResponse, IToolbarProps } from "../../../../models";
 import { endpoints } from "../../../../utilities";
 import { Fetch } from "../../../Common";
 import { Toolbar, GroupSelector } from "../..";
 import { Dispatch, SetStateAction } from "react";
 
 interface IGroupToolbarProps extends IToolbarProps {
-  groupType: GroupType,
   showSelector?: boolean,
   setGroupId?: Dispatch<SetStateAction<string>>,
 }
 
-const GroupToolbar = <TGroup extends IGroup>({
+const GroupToolbar = ({
   title,
   addEmployeeAction,
   addClientAction,
   addRotaAction,
   createGroupAction,
   showSelector,
-  groupType,
   setGroupId
 }: IGroupToolbarProps) => {
 
@@ -26,14 +24,14 @@ const GroupToolbar = <TGroup extends IGroup>({
 
   return (
     <Fetch
-      fetchOutput={useSessionStorage(endpoints.groups(groupType).groups, requestBuilder(), [], true)}
-      render={({ response, error }: IFetch<IGroupsResponse<TGroup>>) => (
+      fetchOutput={useSessionStorage(endpoints.groups, requestBuilder(), [], true)}
+      render={({ response, error }: IFetch<IGroupsResponse>) => (
         <>
           {!error && response && (
             <Toolbar title={title} addRotaAction={addRotaAction} addClientAction={addClientAction} addEmployeeAction={addEmployeeAction} createGroupAction={createGroupAction}>
               <>
                 {showSelector && setGroupId && (
-                  <GroupSelector groupType={groupType} setGroupId={setGroupId} groups={response.groups} />
+                  <GroupSelector setGroupId={setGroupId} groups={response.groups} />
                 )}
               </>
             </Toolbar>

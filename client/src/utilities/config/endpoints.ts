@@ -1,5 +1,3 @@
-import { GroupType } from "../../models";
-
 const BASE_API_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/api/';
 
 export const endpoints = {
@@ -9,24 +7,20 @@ export const endpoints = {
     "signup"        : BASE_API_URL + `users/signup`,
     "authenticate"  : BASE_API_URL + `users/authenticate`,
 
-    "clients"   : (groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients`,
-    "client"    : (clientId: string, groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}`, 
-    "sessions"  : (clientId: string, groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}/sessions`,
-    "session"   : (clientId: string, groupId: string, sessionId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}/sessions/${sessionId}`,
+    "groups"    : BASE_API_URL + 'groups',
+    "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`,    
+
+    "clients"   : (groupId: string) => BASE_API_URL + `groups/${groupId}/clients`,
+    "client"    : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}`, 
+    "sessions"  : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions`,
+    "session"   : (clientId: string, groupId: string, sessionId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions/${sessionId}`,
     
-    "rotas"     : (groupId: string) => BASE_API_URL + `rotagroups/${groupId}/rotas`,
-    "rota"      : (rotaId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}`,
-    "schedules" : (rotaId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}/schedules`,
-    "schedule"  : (rotaId: string, groupId: string, startDate: string) => BASE_API_URL + `rotagroups/${groupId}/rotas/${rotaId}/schedules/${startDate}`,
-    "employees" : (groupId: string) => BASE_API_URL + `rotagroups/${groupId}/employees`,
-    "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `rotagroups/${groupId}/employees/${employeeId}`,
-    
-    groups      : (groupType: GroupType) => {
-        return {
-            group   : (groupId: string) => BASE_API_URL + `${groupType}groups/${groupId}`,
-            groups  : BASE_API_URL + `${groupType}groups`
-        }
-    },
+    "rotas"     : (groupId: string) => BASE_API_URL + `groups/${groupId}/rotas`,
+    "rota"      : (rotaId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}`,
+    "schedules" : (rotaId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}/schedules`,
+    "schedule"  : (rotaId: string, groupId: string, startDate: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}/schedules/${startDate}`,
+    "employees" : (groupId: string) => BASE_API_URL + `groups/${groupId}/employees`,
+    "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/employees/${employeeId}`,
     
     "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,
     "currentuser"   : BASE_API_URL + "users/current",

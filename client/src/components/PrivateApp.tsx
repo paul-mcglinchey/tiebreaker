@@ -5,7 +5,7 @@ import { AdminPanel } from "./AdminPanel"
 import { ClientDashboard, ClientManager, ClientPage } from "./ClientManager"
 import { Authenticate } from "./Common"
 import { Dashboard } from "./Dashboard"
-import { ClientGroupDashboard, RotaGroupDashboard } from "./Groups"
+import { Groups } from "./Groups"
 import { Employees, RotaDashboard, RotaManager, RotaPage } from "./RotaManager"
 
 
@@ -26,7 +26,10 @@ const PrivateApp = () => {
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/dashboard" element={
                     <Dashboard />
-                  } />
+                  }/>
+                  <Route path="/groups" element={
+                    <Groups />
+                  }/>
 
                   {/* Client manager specific routes */}
                   <Route path="/clients/*" element={
@@ -34,7 +37,6 @@ const PrivateApp = () => {
                   }>
                     <Route path="dashboard" element={<ClientDashboard />} />
                     <Route path=":clientId/*" element={<ClientPage />} />
-                    <Route path="groups" element={<ClientGroupDashboard />} />
                   </Route>
 
                   {/* Rota manager specific routes */}
@@ -45,7 +47,6 @@ const PrivateApp = () => {
                     <Route path=":rotaId/*" element={<RotaPage />} />
                     <Route path="employees" element={<Employees />} />
                     <Route path="employees/:isAddEmployeeOpen" element={<Employees />} />
-                    <Route path="groups" element={<RotaGroupDashboard />} />
                   </Route>
 
                   {/* Admin Routes */}

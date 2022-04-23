@@ -1,6 +1,8 @@
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require('express-async-handler')
+const db = require('../models')
+const Group = db.group
 
-const checkAccess = (Group, accessRequired) => {
+const checkAccess = (accessRequired) => {
   return asyncHandler(async (req, res, next) => {
     const group = await Group.findById(req.params.groupId);
 
@@ -35,36 +37,32 @@ const checkIfQueryHasGroupId = asyncHandler(async (req, res, next) => {
 })
 
 // This middleware can be used to check if the name of a group has been used already or not
-const checkIfGroupNameExists = (Group) => {
-  return asyncHandler(async (req, res, next) => {
-    const { name } = req.body;
+const checkIfGroupNameExists = asyncHandler(async (req, res, next) => {
+  const { name } = req.body;
 
-    if (!name) next();
+  if (!name) next();
+  
+  const group = await Group.findOne({ name: name });
+  
+  if (group) {
+    res.status(400)
+    throw new Error('That group name is already in use.')
+  }
 
-    const group = await Group.findOne({ name: name });
+  next();
+})
 
-    if (group) {
-      res.status(400)
-      throw new Error('That group name is already in use.')
-    }
+const checkIfGroupExists = asyncHandler(async (req, res, next) => {
+  // check that the group exists
+  const group = Group.findById(req.params.groupId);
 
-    next();
-  })
-}
+  if (!group) {
+    res.status(404)
+    throw new Error('Resource not found.')
+  }
 
-const checkIfGroupExists = (Group) => {
-  return asyncHandler(async (req, res, next) => {
-    // check that the group exists
-    const group = Group.findById(req.params.groupId);
-
-    if (!group) {
-      res.status(404)
-      throw new Error('Resource not found.')
-    }
-
-    next()
-  })
-}
+  next()
+})
 
 const groupMiddleware = {
   checkAccess,

@@ -27,9 +27,9 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCac
         }
         return;
       } else {
-        fetch(url, options)
+        await fetch(url, options)
           .then(res => {
-            if (!res.ok) throw new Error(res.statusText)
+            if (res.status === 404) throw new Error(`${res.status} ${res.statusText}`)
 
             return res.json();
           })

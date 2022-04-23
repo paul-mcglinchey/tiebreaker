@@ -1,6 +1,6 @@
 const asyncHandler      = require('express-async-handler')
 const db                = require('../models')
-const RotaGroup         = db.rotagroup
+const Group             = db.group
 const { Employee }      = db.employee
 
 const checkUserAccessToGroup = (accessRequired) => {
@@ -8,7 +8,7 @@ const checkUserAccessToGroup = (accessRequired) => {
 
     const { groupId } = req.body;
 
-    RotaGroup.findById(groupId)
+    Group.findById(groupId)
       .then((data) => {
         if (data.accessControl) {
           if (data.accessControl[accessRequired].includes(req.auth.userId)) {

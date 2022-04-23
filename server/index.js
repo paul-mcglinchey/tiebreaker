@@ -46,8 +46,7 @@ app.use(middleware.authMiddleware.protect);
 // routes
 require('./routes/grouplist.routes')(app);
 
-app.use('/api/clientgroups', require('./routes/clientgroup.routes'))
-app.use('/api/rotagroups', require('./routes/rotagroup.routes'))
+app.use('/api/groups', require('./routes/group.routes'))
 
 app.use(middleware.errorMiddleware.errorHandler);
 

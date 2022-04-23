@@ -5,17 +5,16 @@ import { useIsMounted } from "../../../../hooks";
 import { IGroup } from "../../../../models";
 import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../../services";
 
-interface IGroupSelectorProps<TGroup> {
-  groupType: string,
-  group?: TGroup,
+interface IGroupSelectorProps {
+  group?: IGroup,
   setGroupId: Dispatch<SetStateAction<string>>
-  groups: TGroup[] 
+  groups: IGroup[] 
 }
 
-const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }: IGroupSelectorProps<TGroup>) => {
+const GroupSelector = ({ setGroupId, groups }: IGroupSelectorProps) => {
 
   const isMounted = useIsMounted();
-  const storageKey = `${groupType}GroupId`;
+  const storageKey = 'groupId';
 
   const updateGroup = useCallback((groupId: string | undefined) => {
     if (!groupId) return;
@@ -28,13 +27,13 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }:
   }, [isMounted, setGroupId, storageKey])
 
   const getGroupName = (groupId: string | undefined | null): string | undefined => {
-    return groups.filter((g: TGroup) => g._id === groupId)[0]?.name;
+    return groups.filter((g: IGroup) => g._id === groupId)[0]?.name;
   }
 
   useEffect(() => {
     let storedGroupId = getItemInStorage(storageKey);
 
-    let isStoredGroupValid = groups.filter((g: TGroup) => g._id === storedGroupId).length > 0;
+    let isStoredGroupValid = groups.filter((g: IGroup) => g._id === storedGroupId).length > 0;
 
     isMounted() && !isStoredGroupValid && updateGroup(groups[0]?._id)
   }, [groups, isMounted, storageKey, updateGroup]);
@@ -65,7 +64,7 @@ const GroupSelector = <TGroup extends IGroup>({ groupType, setGroupId, groups }:
                   Groups
                 </span>
               </div>
-              {groups.map((g: TGroup) => (
+              {groups.map((g: IGroup) => (
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button

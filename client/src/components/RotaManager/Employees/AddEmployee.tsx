@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { GroupType } from "../../../models";
 import { ApplicationContext } from "../../../utilities";
 import { GroupToolbar } from "../../Common";
 import { FullEmployeeForm } from "./Forms";
@@ -10,7 +9,7 @@ const AddEmployee = () => {
 
   return (
     <div>
-      <GroupToolbar title="Add employee" groupType={GroupType.ROTA} showSelector setGroupId={setGroupId} />
+      <GroupToolbar title="Add employee" showSelector setGroupId={setGroupId} />
       <FullEmployeeForm />
     </div>
   )

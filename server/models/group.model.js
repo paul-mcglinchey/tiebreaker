@@ -4,8 +4,8 @@ const { Schema } = require('mongoose');
 const { UsersSchema } = require('./common/users.schema');
 const { AuditSchema } = require('./common/audit.schema');
 
-const RotaGroup = mongoose.model(
-  "RotaGroup",
+const Group = mongoose.model(
+  "Group",
   new Schema({
     name: { 
       type: String, required: true 
@@ -13,6 +13,10 @@ const RotaGroup = mongoose.model(
     description: {
       type: String, required: false 
     },
+    clients: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Client'
+    }],
     employees: [{
       type: Schema.Types.ObjectId,
       ref: 'Employee'
@@ -33,4 +37,4 @@ const RotaGroup = mongoose.model(
   }, { timestamps: true })
 )
 
-module.exports = RotaGroup;
+module.exports = Group;

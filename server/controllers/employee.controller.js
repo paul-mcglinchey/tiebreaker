@@ -1,7 +1,7 @@
 const ObjectId        = require('mongoose').Types.ObjectId;
 const asyncHandler    = require('express-async-handler')
 const db              = require('../models');
-const RotaGroup       = db.rotagroup;
+const Group       = db.group;
 const Rota            = db.rota;
 const { Employee }    = db.employee;
 
@@ -11,7 +11,7 @@ const { Employee }    = db.employee;
 exports.getEmployees = asyncHandler(async (req, res) => {
   const { groupId } = req.params
 
-  const group = await RotaGroup.findById(groupId)
+  const group = await Group.findById(groupId)
 
   if (!group) {
     res.status(400)
@@ -31,7 +31,7 @@ exports.getEmployees = asyncHandler(async (req, res) => {
 exports.addEmployee = asyncHandler(async (req, res) => {
   const { groupId } = req.params;
 
-  const group = RotaGroup.findById(groupId)
+  const group = Group.findById(groupId)
 
   if (!group) {
     res.status(400)
@@ -52,7 +52,7 @@ exports.addEmployee = asyncHandler(async (req, res) => {
   }
 
   // Add the employee to the rota group
-  await RotaGroup.findByIdAndUpdate(groupId, { $push: { employees: new ObjectId(employee._id )}})
+  await Group.findByIdAndUpdate(groupId, { $push: { employees: new ObjectId(employee._id )}})
 
   res.status(201).json(employee)
 })
@@ -63,7 +63,7 @@ exports.deleteEmployee = asyncHandler(async (req, res) => {
 
   // Do a soft delete of the employee i.e remove it from the group it belongs to and any rotas which it's included in
   // This way a history can be maintained within the schedules
-  await RotaGroup.findByIdAndUpdate(groupId, { $pull: { employees: employeeId }})
+  await Group.findByIdAndUpdate(groupId, { $pull: { employees: employeeId }})
   
   res.json(employeeId)
 })
