@@ -1,6 +1,5 @@
 export const clientLinks = [
   { name: 'Dashboard', href: '/clients/dashboard' },
-  { name: 'Add Clients', href: '/clients/addclients' },
   { name: 'Groups', href: '/clients/groups' }
 ];
 

@@ -1,12 +1,9 @@
 import {
   Routes,
-  Route,
-  Navigate
+  Route
 } from 'react-router-dom';
 
-import { Login, NotificationContainer, PasswordReset, PasswordResetRequest, Signup, PrivateApp, Authenticate } from './components';
-import { useAuth } from './hooks';
-import { IAuth } from './models';
+import { Login, NotificationContainer, PasswordReset, PasswordResetRequest, Signup, PrivateApp } from './components';
 
 export default function App() {
 
@@ -15,22 +12,7 @@ export default function App() {
       <NotificationContainer />
       <div className="font-sans subpixel-antialiased">
         <Routes>
-          <Route path="/*" element={
-            <Authenticate
-              authenticateOutput={useAuth()}
-              render={({ getAccess, isLoading }: IAuth) => (
-                <>
-                  {!isLoading && (
-                    getAccess() ? (
-                      <PrivateApp />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  )}
-                </>
-              )}
-            />
-          } />
+          <Route path="/*" element={<PrivateApp />} />
 
           {/* Unprotected routes */}
           <Route path="login" element={<Login />} />
