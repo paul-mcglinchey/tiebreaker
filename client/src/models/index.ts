@@ -12,6 +12,7 @@ export * from './tag.model';
 export * from './session.model';
 export * from './employee.model';
 export * from './fetch.model';
+export * from './auth.model'
 export * from './rota.model';
 export * from './schedule.model';
 export * from './rota-group.model';

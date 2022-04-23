@@ -5,27 +5,19 @@ import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import { SmartLink, ThumbIcon, WideIcon } from '..';
-import { clientLinks, rotaLinks } from '../../utilities';
-import { combineClassNames } from '../../services';
-import { Application, IProps } from '../../models';
 import { useAuth } from '../../hooks';
+import { combineClassNames } from '../../services';
 
-const NavMenu = ({ currentApplication }: IProps) => {
+interface INavMenuProps {
+  links?: {
+    name: string,
+    href: string
+  }[]
+}
+
+const NavMenu = ({ links = [] }: INavMenuProps) => {
 
   const { user, logout } = useAuth();
-
-  let links: { name: string, href: string }[] = [];
-
-  switch (currentApplication) {
-    case Application.ClientManager:
-      links = clientLinks;
-      break;
-    case Application.RotaManager:
-      links = rotaLinks;
-      break;
-    default:
-      break;
-  }
 
   return (
     <div className="flex flex-col mb-4">

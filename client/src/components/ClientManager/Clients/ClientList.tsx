@@ -57,7 +57,7 @@ const ClientList = ({ toggleAddClientOpen, dependency }: IClientListProps) => {
         [pageSize, pageNumber, filters, sortField, sortDirection, groupId, dependency]
       )}
       render={({ response, isLoading }: IFetch<IClientsResponse>) => (
-        <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
+        <div className="rounded-lg flex flex-col space-y-0 pb-2">
           {response && response.count > 0 ? (
             <Fragment>
               <div className="flex flex-col flex-grow space-y-4">

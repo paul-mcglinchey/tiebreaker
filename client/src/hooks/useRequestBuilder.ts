@@ -1,8 +1,8 @@
-import useAuth from "./useAuth";
+import useAuthContext from "./useAuthContext";
 
 const useRequestBuilder = () => {
 
-  const authToken = useAuth().getToken();
+  const authToken = useAuthContext().getToken();
 
   const requestBuilder = (method: string = "GET", bearerToken: string | undefined = undefined, body: any | undefined = undefined): RequestInit  => {
 

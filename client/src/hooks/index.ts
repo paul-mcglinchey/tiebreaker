@@ -9,6 +9,7 @@ export { default as useStateCallback } from './useStateCallback';
 export { default as useIsMounted } from './useIsMounted';
 export { default as useSessionStorage } from './useSessionStorage';
 export { default as useRequestBuilder } from './useRequestBuilder';
+export { default as useAuthContext } from './useAuthContext'
 
 // Services
 export { default as useClientService } from './useClientService'

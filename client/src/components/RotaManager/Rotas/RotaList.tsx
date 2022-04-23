@@ -40,24 +40,28 @@ const RotaList = ({ refresh, dependency }: IRotaListProps) => {
         render={({ response, isLoading }: IFetch<IRotasResponse>) => (
           <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
             {response && response.count > 0 ? (
-              <div className="flex flex-col flex-grow space-y-4">
-                <Table
-                  sortField={sortField}
-                  setSortField={setSortField}
-                  sortDirection={sortDirection}
-                  setSortDirection={setSortDirection}
-                  headers={headers}
-                  isLoading={isLoading}
-                >
-                  <>
-                    {response.rotas.map((r: IRota, index: number) => (
-                      <RotaTableRow rota={r} key={index} />
-                    ))}
-                  </>
-                </Table>
-              </div>
+              <>
+                <div className="flex flex-col flex-grow space-y-4">
+                  <Table
+                    sortField={sortField}
+                    setSortField={setSortField}
+                    sortDirection={sortDirection}
+                    setSortDirection={setSortDirection}
+                    headers={headers}
+                    isLoading={isLoading}
+                  >
+                    <>
+                      {response.rotas.map((r: IRota, index: number) => (
+                        <RotaTableRow rota={r} key={index} />
+                      ))}
+                    </>
+                  </Table>
+                </div>
+              </>
             ) : (
-              <Prompter title="Add a rota to get started" Icon={TableIcon} action={toggleAddRotaOpen} />
+              !isLoading && (
+                <Prompter title="Add a rota to get started" Icon={TableIcon} action={toggleAddRotaOpen} />
+              )
             )}
           </div>
         )}

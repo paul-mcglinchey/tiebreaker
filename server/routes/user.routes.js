@@ -18,7 +18,8 @@ module.exports = app => {
   router.use(middleware.protect)
 
   router.get(
-    '/authenticate'
+    '/authenticate',
+    user.authenticate
   )
 
   router.get(

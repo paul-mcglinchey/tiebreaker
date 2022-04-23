@@ -30,15 +30,26 @@ exports.getCurrent = (req, res) => {
 }
 
 // Generate JWT
-const generateToken = (user) => {
+const generateToken = (id) => {
   return jwt.sign(
-    {user}, 
+    {id}, 
     process.env.JWT_SECRET, 
     {
       expiresIn: '30d'
     }
   )
 }
+
+exports.authenticate = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.auth._id)
+
+  if (!user) {
+    res.status(401)
+    throw new Error('Unauthorized')
+  }
+
+  res.json(user)
+})
 
 // @desc    Authenticate a user
 // @route   POST /api/users/login
@@ -54,12 +65,17 @@ exports.login = asyncHandler(async (req, res) => {
   // Check for a user based on either the email or username
   const user = await User.findOne({ $or: [{ username: username }, { email: email }] })
 
-  if (user && await bcrypt.compare(password, user.password)) {
+  if (!user) {
+    res.status(400)
+    throw new Error('User doesn\'t exist')
+  }
+
+  if (await bcrypt.compare(password, user.password)) {
     res.json({
       _id: user._id,
       username: user.username,
       email: user.email,
-      token: generateToken({ userId: user._id, clientGroups: user.clientGroups, rotaGroups: user.rotaGroups })
+      token: generateToken(user._id)
     })
   } else {
     res.status(401)
