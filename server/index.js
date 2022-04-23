@@ -10,12 +10,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get('/', (res) => {
-  res.send('Welcome to the tiebreaker clients API')
+app.get('/', (req, res) => {
+  res.json('Welcome to the tiebreaker clients API')
 })
 
-app.use('/health', (res) => {
-  res.status(200).json({
+app.get('/health', (req, res) => {
+  res.json({
     appName: 'tiebreaker-clients-api',
     version: process.env.npm_package_version,
     status: 'OK',
