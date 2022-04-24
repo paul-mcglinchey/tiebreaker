@@ -6,6 +6,7 @@ const rotaMiddleware = require('./rota.middleware');
 const scheduleMiddleware = require('./schedule.middleware');
 const employeeMiddleware = require('./employee.middleware');
 const errorMiddleware = require('./error.middleware');
+const listcollectionMiddleware = require('./listcollection.middleware')
 
 module.exports = {
   authMiddleware,
@@ -15,5 +16,6 @@ module.exports = {
   rotaMiddleware,
   scheduleMiddleware,
   employeeMiddleware,
-  errorMiddleware
+  errorMiddleware,
+  listcollectionMiddleware
 };

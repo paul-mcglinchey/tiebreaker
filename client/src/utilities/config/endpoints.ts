@@ -10,10 +10,10 @@ export const endpoints = {
     "groups"    : BASE_API_URL + 'groups',
     "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`,    
 
-    "clients"   : (groupId: string) => BASE_API_URL + `groups/${groupId}/clients`,
-    "client"    : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}`, 
-    "sessions"  : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions`,
-    "session"   : (clientId: string, groupId: string, sessionId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions/${sessionId}`,
+    "clients"   : (groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients`,
+    "client"    : (clientId: string, groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}`, 
+    "sessions"  : (clientId: string, groupId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}/sessions`,
+    "session"   : (clientId: string, groupId: string, sessionId: string) => BASE_API_URL + `clientgroups/${groupId}/clients/${clientId}/sessions/${sessionId}`,
     
     "rotas"     : (groupId: string) => BASE_API_URL + `groups/${groupId}/rotas`,
     "rota"      : (rotaId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}`,
@@ -25,6 +25,6 @@ export const endpoints = {
     "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,
     "currentuser"   : BASE_API_URL + "users/current",
     
-    "grouplist"         : (listId: string) => BASE_API_URL + `grouplists/${listId}`,
-    "defaultgrouplists" : BASE_API_URL + "grouplists/default"
+    "systemlistcollection"  : (listcollectionId: string) => BASE_API_URL + `listcollections/system/${listcollectionId}`,
+    "systemlistcollections" : BASE_API_URL + "listcollections/system"
 }

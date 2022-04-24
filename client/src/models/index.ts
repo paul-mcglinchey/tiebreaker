@@ -1,3 +1,4 @@
+export * from './audit.model'
 export * from './status.model';
 export * from './client.model';
 export * from './name.model';
@@ -20,8 +21,7 @@ export * from './rotas-response.model';
 export * from './user-response.model';
 export * from './employee-response.model';
 export * from './group.model';
-export * from './groups-endpoint.model';
-export * from './grouplist-response.model';
+export * from './listcollection-response.model';
 export * from './changes.model';
 export * from './table.model';
 export * from './user.model';

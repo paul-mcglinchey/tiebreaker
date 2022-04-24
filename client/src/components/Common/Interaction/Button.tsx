@@ -30,7 +30,7 @@ const getButtonClasses = (buttonType: ButtonType): string => {
 
 const Button = ({
   status = [],
-  content = 'Submit',
+  content,
   type = "submit",
   buttonType = ButtonType.Submission,
   action = () => { },
@@ -42,7 +42,8 @@ const Button = ({
     <button className={
       combineClassNames(
         getButtonClasses(buttonType),
-        "px-3 py-1 transition-all font-bold rounded flex space-x-2 items-center justify-center tracking-wider"
+        content ? "px-3" : "px-1",
+        "py-1 transition-all font-bold rounded flex items-center justify-center tracking-wider"
       )}
       onClick={action}
       type={type}
@@ -51,7 +52,7 @@ const Button = ({
         <SpinnerIcon className="w-5 h-5 text-white" />
       )}
       {Icon && (
-        <div className={`self-center ${iconSide === "left" ? "order-first mr-2" : "order-last ml-2"}`}>
+        <div className={`self-center ${content && (iconSide === "left" ? "order-first mr-2" : "order-last ml-2")}`}>
           <Icon className="w-5 h-5" />
         </div>
       )}

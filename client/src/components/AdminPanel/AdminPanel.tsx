@@ -1,97 +1,154 @@
-import { useEffect, useState } from "react";
-import { useRefresh, useRequestBuilder, useStateCallback } from "../../hooks";
-import { ButtonType, IChanges, IDefaultGrouplistResponse, IGroupList, IGrouplistResponse, IGroupListValue } from "../../models";
+import { PlusIcon } from "@heroicons/react/solid";
+import { Field, FieldArray, Form, Formik } from "formik";
+import { Persist } from 'formik-persist'
+import { useFetch, useRefresh, useRequestBuilder, useStatus } from "../../hooks";
+import { ButtonType, IFetch, IList, IListCollection, IListValue, Status } from "../../models";
+import { generateColour } from "../../services";
 import { endpoints } from "../../utilities";
-import { Button, Toolbar } from "../Common";
-import { AddListItem, ListItem } from ".";
+import { Button, DeleteDialog, Fetch, NavMenu, SpinnerIcon, Toolbar } from "../Common";
+import { ListItem } from ".";
+import { useState } from "react";
 
 const AdminPanel = () => {
-
-  const [defaultGrouplists, setDefaultGrouplists] = useStateCallback<IGrouplistResponse>({} as IGrouplistResponse);
-  const [changes, setChanges] = useState<IChanges>({ deletions: 0, edits: 0, additions: 0 })
   const { dependency, refresh } = useRefresh();
-
+  const { appendStatus } = useStatus()
   const { requestBuilder } = useRequestBuilder();
 
-  useEffect(() => {
-    let componentIsMounted = true;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const toggleDeleteDialogOpen = () => setDeleteDialogOpen(!deleteDialogOpen)
 
-    const _fetch = () => {
-      fetch(endpoints.defaultgrouplists, requestBuilder())
-        .then(res => res.json())
-        .then((json: IDefaultGrouplistResponse) => {
-          componentIsMounted && setDefaultGrouplists(json.defaultLists);
-        })
-        .catch(err => console.error(err));
-    }
+  const init = async () => {
+    const res = await fetch(endpoints.systemlistcollections, requestBuilder('POST', undefined, { lists: [] }))
+    if (!res.ok) return appendStatus(false, 'Something went wrong...', Status.Error)
 
-    componentIsMounted && _fetch();
+    refresh()
+  }
 
-    return () => {
-      componentIsMounted = false;
-    }
-  }, [dependency, requestBuilder, setDefaultGrouplists])
+  const update = async (listcollectionId: string | undefined, values: IListCollection) => {
+    if (!listcollectionId) return appendStatus(false, 'Something went wrong...', Status.Error)
+    const res = await fetch(endpoints.systemlistcollection(listcollectionId), requestBuilder('PUT', undefined, values))
 
-  const updateDefaultLists = (lists: IGrouplistResponse) => {
-    fetch(endpoints.defaultgrouplists, requestBuilder("PUT", undefined, lists))
-      .then(res => res.json())
-      .then(json => console.log(json))
-      .catch(err => console.error(err));
+    if (!res.ok) return appendStatus(false, 'A problem occurred updating the list collection', Status.Error)
 
-
-    setChanges({ deletions: 0, edits: 0, additions: 0 });
-    refresh();
+    return appendStatus(false, 'Updated list collection', Status.Success)
   }
 
   return (
-    <div>
-      <Toolbar title="Admin panel" />
-      <div>
-        <div className="flex flex-col space-y-2 text-gray-200">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-2xl font-semibold tracking-wide text-blue-400">Default Lists</h3>
-            </div>
-            <div className="flex space-x-4 items-center">
-              <div>
-                {changes.deletions > 0 && <span className="text-red-500 text-sm font-semibold tracking-wide">{changes.deletions} deletions</span>}
-                {changes.edits > 0 && <span className="text-orange-500 text-sm font-semibold tracking-wide">{changes.edits} edits</span>}
-              </div>
-              <Button content="Save changes" buttonType={ButtonType.Secondary} type="button" action={() => updateDefaultLists(defaultGrouplists)} />
-            </div>
-          </div>
-          <div className="text-gray-200">
-            {defaultGrouplists && (
-              defaultGrouplists.lists && defaultGrouplists.lists.length > 0 ? (
-                <>
-                  {defaultGrouplists.lists.map((list: IGroupList, key: number) => (
-                    <div key={key} className="border-2 border-blue-600 bg-gray-900 rounded p-2">
-                      <div className="flex justify-between border-b-2 border-blue-600 pb-2 mb-2 items-center">
-                        <h5 className="font-bold tracking-wide text-lg px-2">{list.description}</h5>
-                        <div className="tracking-wide">
-                          Internal list name: {list.name}
+    <>
+      <NavMenu />
+      <div className="px-2 sm:px-6 lg:px-8 text-gray-300">
+        <Fetch
+          fetchOutput={useFetch(endpoints.systemlistcollections, requestBuilder(), [dependency])}
+          render={({ response, isLoading }: IFetch<IListCollection>) => (
+            <>
+              {!isLoading && response ? (
+                <Formik
+                  initialValues={response}
+                  onSubmit={(values) => {
+                    console.log(values)
+                    update(response._id, values)
+                  }}
+                >
+                  {({ dirty, values, setFieldValue, touched }) => (
+                    <Form>
+                      <div>
+                        <Toolbar title="Admin panel" />
+                        {isLoading && (
+                          <SpinnerIcon className="w-6 h-6 text-gray-200" />
+                        )}
+                      </div>
+                      <div className="flex flex-col space-y-4 text-gray-200">
+                        <div>
+                          <FieldArray
+                            name="lists"
+                            render={arrayHelpers => (
+                              <div>
+                                <div className="flex justify-between items-center border-b-2 border-gray-600/60 pb-2 mb-4">
+                                  <div>
+                                    <h3 className="text-2xl font-semibold tracking-wide text-blue-500">System List Collection</h3>
+                                    <span className="text-sm text-gray-400">Last updated {new Date(response.updatedAt || '').toLocaleDateString()}</span>
+                                  </div>
+                                  <div className="flex space-x-4 items-center">
+                                    <Button
+                                      content="Add list"
+                                      buttonType={ButtonType.Tertiary}
+                                      type="button"
+                                      Icon={PlusIcon}
+                                      action={() => arrayHelpers.push({ name: '', description: '', values: [] })}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="flex flex-col space-y-4">
+                                  {values.lists.map((list: IList, index: number) => (
+                                    <div key={index} className="bg-gray-800 rounded p-4 flex flex-col space-y-4">
+                                      <div className="flex justify-between items-center pb-2 border-b border-gray-200/20">
+                                        <div className="flex flex-grow flex-col space-y-1">
+                                          <Field name={`lists.${index}.description`} placeholder="Descriptive name" className="bg-transparent focus:outline-none font-semibold text-xl" />
+                                          <Field name={`lists.${index}.name`} placeholder="Internal field name" className="bg-transparent focus:outline-none font-light text-md tracking-wider text-gray-400" />
+                                        </div>
+                                        <div className="flex">
+                                          <Button type="button" buttonType={ButtonType.Cancel} content="Delete" action={() => toggleDeleteDialogOpen()} />
+                                          <DeleteDialog dialogOpen={deleteDialogOpen} toggleDialogOpen={toggleDeleteDialogOpen} itemType="system list" deleteAction={() => arrayHelpers.remove(index)} />
+                                        </div>
+                                      </div>
+                                      <FieldArray
+                                        name={`lists.${index}.values`}
+                                        render={arrayHelpers => (
+                                          <div className="space-y-4">
+                                            <div className="flex flex-col space-y-2">
+                                              {list.values.map((value: IListValue, vindex: number) => (
+                                                <ListItem
+                                                  key={vindex}
+                                                  name={`lists.${index}.values.${vindex}`}
+                                                  setFieldValue={setFieldValue}
+                                                  remove={() => arrayHelpers.remove(vindex)}
+                                                  index={vindex}
+                                                  colour={value.colour}
+                                                />
+                                              ))}
+                                            </div>
+                                            <div>
+                                              <div className="flex justify-end">
+                                                <Button content="Add item" buttonType={ButtonType.Tertiary} type="button" action={() => arrayHelpers.push({ short: '', long: '', colour: generateColour() })} />
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          />
+                        </div>
+                        <div className="flex justify-end">
+                          {console.log(touched)}
+                          {dirty && (
+                            <Button content="Save changes" buttonType={ButtonType.Primary} />
+                          )}
                         </div>
                       </div>
-                      <div className="flex flex-col space-y-4">
-                        {list.values.map((value: IGroupListValue, key: number) => (
-                          <ListItem value={value} listId={list._id} key={key} setDefaultGrouplists={setDefaultGrouplists} setChanges={setChanges} />
-                        ))}
-                        <AddListItem setDefaultGrouplists={setDefaultGrouplists} updateDefaultLists={updateDefaultLists} listId={list._id} />
-                      </div>
-                      <div>
-                        <div></div>
-                      </div>
-                    </div>
-                  ))}
-                </>
+                      <Persist name="systemListCollection" />
+                    </Form>
+                  )}
+                </Formik>
               ) : (
-                <div>No lists to show</div>
-              )
-            )}
-          </div>
-        </div>
+                isLoading ? (
+                  <SpinnerIcon className="w-8 h-8 text-gray-300" />
+                ) : (
+                  <div className="flex justify-center">
+                    <button onClick={() => init()} className="font-medium text-2xl hover:opacity-70 hover:text-blue-400 transition-all">
+                      The system list collection doesn't exist yet, click here to create it
+                    </button>
+                  </div>
+                )
+              )}
+            </>
+          )}
+        />
       </div>
-    </div>
+    </>
   )
 }
 

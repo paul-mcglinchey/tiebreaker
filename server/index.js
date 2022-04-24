@@ -44,15 +44,10 @@ require('./routes/user.routes')(app);
 app.use(middleware.authMiddleware.protect);
 
 // routes
-require('./routes/grouplist.routes')(app);
-
+app.use('/api/listcollections', require('./routes/listcollection.routes'))
 app.use('/api/groups', require('./routes/group.routes'))
 
 app.use(middleware.errorMiddleware.errorHandler);
-
-// Seed Default List Definitions
-const grouplistController = require('./controllers/grouplist.controller');
-grouplistController.createDefaultLists();
 
 // Seed permissions
 const permissionController = require('./controllers/permission.controller')

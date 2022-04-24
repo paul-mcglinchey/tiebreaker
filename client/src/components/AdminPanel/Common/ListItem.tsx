@@ -1,29 +1,29 @@
 import { XIcon } from "@heroicons/react/solid";
 import React, { useRef } from "react";
-import { IChanges, IconButtonSize, IGroupList, IGrouplistResponse, IGroupListValue } from "../../../models";
+import { IChanges, IconButtonSize, IList, IListCollection, IListValue } from "../../../models";
 import { ColourPicker, SquareIconButton } from "../../Common";
 import ListItemInput from "./ListItemInput";
 
 interface IGrouplistItemProps {
-  value: IGroupListValue,
+  value: IListValue,
   listId: string,
-  setDefaultGrouplists: (state: React.SetStateAction<IGrouplistResponse>, cb?: (state: IGrouplistResponse) => void) => void,
+  setSystemListCollection: (state: React.SetStateAction<IListCollection>, cb?: (state: IListCollection | undefined) => void) => void,
   setChanges: React.Dispatch<React.SetStateAction<IChanges>>
 }
 
-const ListItem = ({ value, listId, setDefaultGrouplists, setChanges }: IGrouplistItemProps) => {
+const ListItem = ({ value, listId, setSystemListCollection, setChanges }: IGrouplistItemProps) => {
   
   const firstTrigger = useRef(true);
 
   const updateListItem = (listValueValue: string, listValueName: string) => {
     
-    setDefaultGrouplists(defaultGrouplists => ({
-      ...defaultGrouplists, 
-      lists: defaultGrouplists.lists.map((tList: IGroupList) => {
+    setSystemListCollection(systemListCollection => ({
+      ...systemListCollection, 
+      lists: systemListCollection.lists.map((tList: IList) => {
         return tList._id === listId
           ? { 
             ...tList, 
-            values: tList.values.map((tListValue: IGroupListValue) => {
+            values: tList.values.map((tListValue: IListValue) => {
               return tListValue._id === value._id 
                 ? { ...value, [listValueName]: listValueValue }
                 : tListValue
@@ -40,13 +40,13 @@ const ListItem = ({ value, listId, setDefaultGrouplists, setChanges }: IGrouplis
   }
 
   const removeListItem = () => {
-    setDefaultGrouplists(defaultGrouplists => ({
-      ...defaultGrouplists,
-      lists: defaultGrouplists.lists.map((tList: IGroupList) => {
+    setSystemListCollection(systemListCollection => ({
+      ...systemListCollection,
+      lists: systemListCollection.lists.map((tList: IList) => {
         return tList._id === listId
           ? {
             ...tList,
-            values: tList.values.filter((tValue: IGroupListValue) => tValue._id !== value._id)
+            values: tList.values.filter((tValue: IListValue) => tValue._id !== value._id)
           }
           : tList
       })
