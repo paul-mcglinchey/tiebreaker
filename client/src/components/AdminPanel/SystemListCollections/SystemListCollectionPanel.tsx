@@ -1,33 +1,40 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { FieldArray, Form, Formik } from "formik"
 import { Persist } from 'formik-persist'
-import { memo, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { useFetch, useRequestBuilder, useListCollectionService, useRefresh } from "../../../hooks"
 import { ButtonType, IFetch, IList, IListCollection, IListValue } from "../../../models"
 import { generateColour } from "../../../services"
 import { endpoints } from "../../../utilities"
-import { Button, DeleteDialog, Fetch } from "../../Common"
+import { Button, DeleteDialog, Fetch, FetchError, SpinnerIcon } from "../../Common"
 import { EditableSubPanelTitle, ListItem, Panel, SubPanel, SubPanelContent } from ".."
 
 const SystemListCollectionPanel = () => {
 
   const { requestBuilder } = useRequestBuilder()
   const { dependency, refresh } = useRefresh()
-  const listCollectionService = useListCollectionService(refresh)
+  const { init, update } = useListCollectionService(refresh)
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const toggleDeleteDialogOpen = () => setDeleteDialogOpen(!deleteDialogOpen)
 
+  useEffect(() => {
+    return () => {
+      console.log('unmounting');
+      
+    }
+  })
+
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.systemlistcollections, requestBuilder(), [dependency], false)}
-      render={({ response, isLoading }: IFetch<IListCollection>) => (
+      render={({ response, isLoading, error }: IFetch<IListCollection>) => (
         <>
-          {!isLoading && response && (
+          {!isLoading && response ? (
             <Formik
               initialValues={response}
               onSubmit={(values) => {
-                listCollectionService.update(response._id, values)
+                update(response._id, values)
               }}
             >
               {({ values, setFieldValue }) => (
@@ -92,6 +99,20 @@ const SystemListCollectionPanel = () => {
                 </Form>
               )}
             </Formik>
+          ) : (
+            <Panel title="System List Collection" hideSave>
+              {isLoading ? (
+                <SpinnerIcon className="w-6 h-6" />
+              ) : (
+                error ? (
+                  <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
+                ) : (
+                  <div className="flex justify-center p-10">
+                    <button className="font-bold text-xl tracking-wider hover:text-gray-600 transition-colors" type="button" onClick={() => init()}>System list collection has not been created yet, click here to create it</button>
+                  </div>
+                )
+              )}
+            </Panel>
           )}
         </>
       )

@@ -9,8 +9,6 @@ const NotificationContainer = () => {
 
   const notifications = getNotifications() || []
 
-  console.log(notifications)
-
   return (
     <div className="fixed z-50 w-screen sm:w-auto right-0 space-y-4 overflow-hidden">
         {notifications.map((n: INotification, index: number) => (
