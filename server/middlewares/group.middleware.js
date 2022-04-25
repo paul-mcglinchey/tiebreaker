@@ -6,24 +6,7 @@ const Permission = db.permission
 
 const checkAccess = (accessRequired) => {
   return asyncHandler(async (req, res, next) => {
-    const group = await Group.findById(req.params.groupId);
-
-    if (!group) {
-      res.status(404)
-      throw new Error('Resource not found.')
-    }
-
-    const permissionsRequired = await Permission.find({ name: accessRequired })
-    const userPermissions = group.users.filter(u => u.user.equals(req.auth._id))[0].permissions
-
-    console.log(userPermissions)
-
-    permissionsRequired.forEach(pr => {
-      if (!userPermissions.includes(pr._id)) {
-        res.status(403)
-        throw new Error('Forbidden')
-      }
-    })
+    console.log(accessRequired)
 
     next()
   })

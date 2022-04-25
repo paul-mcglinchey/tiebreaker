@@ -64,7 +64,6 @@ router.delete(
   '/:rotaId',
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.rotaMiddleware.checkRotaIdExists,
-  middleware.rotaMiddleware.checkUserAccessToRota('owners'),
   rotas.deleteRota
 )
 

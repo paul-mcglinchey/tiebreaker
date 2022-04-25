@@ -9,23 +9,22 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
   const { requestBuilder } = useRequestBuilder()
   const navigate = useNavigate();
 
-  const addRota = (values: IRota, groupId: string) => {
+  const addRota = async (values: IRota, groupId: string) => {
     if (!groupId) return addNotification('Group must be set', Notification.Error);
 
-    fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          addNotification('Successfully added rota', Notification.Success);
-        } else {
-          addNotification('A problem occurred adding rota', Notification.Error);
-        }
-      })
-      .catch(() => {
-        addNotification('A problem ocurred adding rota', Notification.Error);
-      })
-      .finally(() => {
-        navigate('/rotas/dashboard', { replace: true });
-      })
+    const res = await fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
+    const json = await res.json()
+
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully created rota`, Notification.Success);
+      return refresh()
+    }
+
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
+
+    return addNotification(`A problem occurred creating the rota`, Notification.Error)
   }
 
   const updateRota = (values: IRota, rotaId: string | undefined, groupId: string | undefined) => {    
@@ -45,20 +44,22 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
       .finally(() => refresh())
   }
 
-  const deleteRota = (rotaId: string | undefined, groupId: string | undefined) => {
+  const deleteRota = async (rotaId: string | undefined, groupId: string | undefined) => {
     if (!rotaId || !groupId) return addNotification(`Something went wrong...`, Notification.Error);
 
-    fetch(endpoints.rota(rotaId, groupId), requestBuilder("DELETE"))
-      .then(res => {
-        if (res.ok) {
-          addNotification(`Successfully deleted rota`, Notification.Success);
-        } else {
-          addNotification(`A problem ocurred deleting the rota`, Notification.Error);
-        }
-      })
-      .catch(() => {
-        addNotification(`A problem occurred deleting the rota`, Notification.Error);
-      })
+    const res = await fetch(endpoints.rota(rotaId, groupId), requestBuilder("DELETE"))
+    const json = await res.json()
+
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully deleted rota`, Notification.Success);
+      return navigate('/rotas/dashboard')
+    }
+
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
+
+    return addNotification(`A problem occurred deleting the rota`, Notification.Error)
   }
 
   const getWeek = (weekModifier: number): { firstDay: Date, lastDay: Date } => {
