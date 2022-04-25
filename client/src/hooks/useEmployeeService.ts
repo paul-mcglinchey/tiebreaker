@@ -1,18 +1,18 @@
-import { IEmployee, IUseEmployeeService, Status } from "../models";
+import { IEmployee, IUseEmployeeService, Notification } from "../models";
 import { generateColour } from "../services"
 import { endpoints } from "../utilities";
 import useRequestBuilder from "./useRequestBuilder";
-import useStatus from "./useStatus";
+import useNotification from "./useNotification";
 
 const useEmployeeService = (refresh: () => void = () => {}): IUseEmployeeService => {
   
-  const { appendStatus, updateIsLoading } = useStatus()
+  const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
 
   const addEmployee = async (values: IEmployee, groupId: string | undefined) => {
-    updateIsLoading(true);
+    
 
-    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error);
+    if (!groupId) return addNotification('Group must be set', Notification.Error);
 
     // generates a new random colour to be used for profile display
     values.colour = generateColour();
@@ -20,34 +20,34 @@ const useEmployeeService = (refresh: () => void = () => {}): IUseEmployeeService
     fetch(endpoints.employees(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, 'Successfully added employee', Status.Success);
+          addNotification('Successfully added employee', Notification.Success);
         } else {
-          appendStatus(false, 'A problem occurred adding employee', Status.Error);
+          addNotification('A problem occurred adding employee', Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, 'A problem ocurred adding employee', Status.Error);
+        addNotification('A problem ocurred adding employee', Notification.Error);
       })
       .finally(() => {
-        updateIsLoading(false);
+        
         refresh();
       })
   }
 
   const deleteEmployee = async (employeeId: string | undefined, groupId: string | undefined) => {
 
-    if (!employeeId || !groupId) return appendStatus(false, 'Something went wrong...', Status.Error);
+    if (!employeeId || !groupId) return addNotification('Something went wrong...', Notification.Error);
 
     fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, 'Successfully deleted employee', Status.Success);
+          addNotification('Successfully deleted employee', Notification.Success);
         } else {
-          appendStatus(false, 'A problem occurred deleting employee', Status.Error);
+          addNotification('A problem occurred deleting employee', Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, 'A problem ocurred deleting employee', Status.Error);
+        addNotification('A problem ocurred deleting employee', Notification.Error);
       })
       .finally(() => {
         refresh();

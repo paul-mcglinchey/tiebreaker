@@ -9,8 +9,8 @@ exports.createSystem = asyncHandler(async (req, res) => {
     lists,
     system: true,
     audit: {
-      createdBy: req.auth.userId,
-      updatedBy: req.auth.userId
+      createdBy: req.auth._id,
+      updatedBy: req.auth._id
     }
   })
 

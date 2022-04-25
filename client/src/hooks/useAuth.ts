@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from "react"
-import { IUser, Status } from "../models"
+import { IUser, Notification } from "../models"
 import { AuthContext, endpoints } from "../utilities"
 import useIsMounted from "./useIsMounted"
 import useRequestBuilder from "./useRequestBuilder"
-import useStatus from "./useStatus"
+import useNotification from "./useNotification"
 
 const useAuth = (shouldAuthenticate: boolean = false) => {
   const auth = useContext(AuthContext)
   const { updateUser } = auth
   const { requestBuilder } = useRequestBuilder()
-  const { appendStatus } = useStatus()
+  const { addNotification } = useNotification()
   const isMounted = useIsMounted()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -34,7 +34,7 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
 
     if (!res.ok) {
       const message = res.status < 500 && json.message ? json.message : 'Something went wrong...'
-      appendStatus(false, message, Status.Error)
+      addNotification(message, Notification.Error)
     } else {
       updateUser(json)
     }
@@ -50,7 +50,7 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
 
     if (!res.ok) {
       const message = res.status < 500 && json.message ? json.message : 'Something went wrong...'
-      appendStatus(false, message, Status.Error)
+      addNotification(message, Notification.Error)
     } else {
       updateUser(json)
     }

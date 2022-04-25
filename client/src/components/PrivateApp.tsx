@@ -1,3 +1,4 @@
+import { memo } from "react"
 import { Navigate, Route, Routes } from "react-router"
 import { useAuth } from "../hooks"
 import { IAuth } from "../models"
@@ -10,15 +11,11 @@ import { Employees, RotaDashboard, RotaManager, RotaPage } from "./RotaManager"
 
 
 const PrivateApp = () => {
-  const AdminRoute = ({ children }: any) => {
-    return children || <Navigate to="/" />
-  }
-
   return (
     <>
       <Authenticate
         authenticateOutput={useAuth(true)}
-        render={({ getAccess, isLoading }: IAuth) => (
+        render={({ getAccess, isLoading, isAdmin }: IAuth) => (
           <>
             {!isLoading && (
               getAccess() ? (
@@ -26,10 +23,10 @@ const PrivateApp = () => {
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/dashboard" element={
                     <Dashboard />
-                  }/>
+                  } />
                   <Route path="/groups" element={
                     <Groups />
-                  }/>
+                  } />
 
                   {/* Client manager specific routes */}
                   <Route path="/clients/*" element={
@@ -51,9 +48,11 @@ const PrivateApp = () => {
 
                   {/* Admin Routes */}
                   <Route path="adminpanel" element={
-                    <AdminRoute>
+                    isAdmin() ? (
                       <AdminPanel />
-                    </AdminRoute>
+                    ) : (
+                      <Navigate to="/" />
+                    )
                   } />
                 </Routes>
               ) : (
@@ -67,4 +66,4 @@ const PrivateApp = () => {
   )
 }
 
-export default PrivateApp
+export default memo(PrivateApp)

@@ -9,5 +9,4 @@ export const clientLinks = [
 export const rotaLinks = [
   { name: 'Dashboard', href: '/rotas/dashboard' },
   { name: 'Employees', href: '/rotas/employees' },
-  { name: 'Groups', href: '/rotas/groups' },
 ]

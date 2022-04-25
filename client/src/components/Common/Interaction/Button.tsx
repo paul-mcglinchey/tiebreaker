@@ -1,9 +1,8 @@
 import { combineClassNames } from '../../../services';
-import { ButtonType, IStatus } from '../../../models';
-import { SpinnerIcon } from '..';
+import { ButtonType, INotification } from '../../../models';
 
 export interface IButtonProps {
-  status?: IStatus[],
+  status?: INotification[],
   content?: string,
   buttonType?: ButtonType,
   type?: "button" | "submit" | "reset",
@@ -29,7 +28,6 @@ const getButtonClasses = (buttonType: ButtonType): string => {
 }
 
 const Button = ({
-  status = [],
   content,
   type = "submit",
   buttonType = ButtonType.Submission,
@@ -48,9 +46,6 @@ const Button = ({
       onClick={action}
       type={type}
     >
-      {status && status[status.length - 1]?.isLoading && (
-        <SpinnerIcon className="w-5 h-5 text-white" />
-      )}
       {Icon && (
         <div className={`self-center ${content && (iconSide === "left" ? "order-first mr-2" : "order-last ml-2")}`}>
           <Icon className="w-5 h-5" />

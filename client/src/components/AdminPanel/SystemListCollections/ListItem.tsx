@@ -1,8 +1,8 @@
 import { TrashIcon } from "@heroicons/react/solid"
 import { Field } from "formik"
-import { ButtonType } from "../../models"
-import { generateColour } from "../../services"
-import { Button, ColourPicker } from "../Common"
+import { ButtonType } from "../../../models"
+import { generateColour } from "../../../services"
+import { Button, ColourPicker } from "../../Common"
 
 interface IListItemProps {
   name: string

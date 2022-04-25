@@ -14,5 +14,6 @@ db.listcollection = require('./listcollection.model')
 db.schedule       = require('./schedule.model')
 db.user           = require('./user.model')
 db.permission     = require('./permission.model')
+db.application    = require('./application.model')
 
 module.exports = db

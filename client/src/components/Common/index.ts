@@ -38,7 +38,7 @@ export { default as SmartLink } from './Interaction/SmartLink'
 export { default as SearchBar } from './Interaction/SearchBar'
 
 export { default as NotificationContainer } from './Notifications/NotificationContainer'
-export { default as Notification } from './Notifications/Notification'
+export { default as NotificationCard } from './Notifications/NotificationCard'
 
 export { default as Table } from './Table/Table'
 export { default as TableHeader } from './Table/TableHeader'

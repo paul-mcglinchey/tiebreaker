@@ -45,13 +45,15 @@ app.use(middleware.authMiddleware.protect);
 
 // routes
 app.use('/api/listcollections', require('./routes/listcollection.routes'))
+app.use('/api/applications', require('./routes/application.routes'))
+app.use('/api/permissions', require('./routes/permission.routes'))
 app.use('/api/groups', require('./routes/group.routes'))
 
 app.use(middleware.errorMiddleware.errorHandler);
 
 // Seed permissions
-const permissionController = require('./controllers/permission.controller')
-permissionController.createPermissions();
+// const permissionController = require('./controllers/permission.controller')
+// permissionController.createPermissions();
 
 // get the current time to display on restarts of the server
 var currentDateTime = new Date();

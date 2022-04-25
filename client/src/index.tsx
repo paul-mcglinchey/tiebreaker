@@ -4,16 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider, StatusProvider } from './utilities';
+import { AuthProvider, NotificationProvider } from './utilities';
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <StatusProvider>
+      <NotificationProvider>
         <AuthProvider>
           <App />
         </AuthProvider>
-      </StatusProvider>
+      </NotificationProvider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root')

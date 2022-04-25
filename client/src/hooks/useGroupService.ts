@@ -1,73 +1,73 @@
-import { IGroup, IGroupService, Status } from "../models";
+import { IGroup, IGroupService, Notification } from "../models";
 import { removeItemInStorage } from "../services"
 import { endpoints } from "../utilities";
-import { useRequestBuilder, useStatus } from '.';
+import { useRequestBuilder, useNotification } from '.';
 
 const useGroupService = (refresh: () => void = () => {}): IGroupService => {
-  const { appendStatus, updateIsLoading } = useStatus()
+  const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
 
   const addGroup = (values: IGroup) => {
-    updateIsLoading(true);
+    
 
     fetch(endpoints.groups, requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully created ${values.name}`, Status.Success);
+          addNotification(`Successfully created ${values.name}`, Notification.Success);
         } else if (res.status === 400) {
-          appendStatus(false, 'Group already exists', Status.Error);
+          addNotification('Group already exists', Notification.Error);
         } else {
-          appendStatus(false, `A problem occurred creating ${values.name}`, Status.Error);
+          addNotification(`A problem occurred creating ${values.name}`, Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, `A problem occurred creating the group`, Status.Error);
+        addNotification(`A problem occurred creating the group`, Notification.Error);
       })
       .finally(() => {
-        updateIsLoading(false)
+        
         removeItemInStorage(endpoints.groups)
         refresh();
       })
   }
 
   const updateGroup = (values: IGroup, groupId: string | undefined) => {
-    updateIsLoading(true);
+    
 
-    if (!groupId) return appendStatus(false, `Group ID must be set before updating`, Status.Error);
+    if (!groupId) return addNotification(`Group ID must be set before updating`, Notification.Error);
 
     fetch(endpoints.group(groupId), requestBuilder('PUT', undefined, values))
       .then(res => {
-        if (res.ok) appendStatus(false, `Successfully updated group`, Status.Success);
-        if (res.status === 400) appendStatus(false, `Bad request`, Status.Error);
-        if (!res.ok && res.status !== 400) appendStatus(false, `A problem occurred updating the group`, Status.Error);
+        if (res.ok) addNotification(`Successfully updated group`, Notification.Success);
+        if (res.status === 400) addNotification(`Bad request`, Notification.Error);
+        if (!res.ok && res.status !== 400) addNotification(`A problem occurred updating the group`, Notification.Error);
       })
       .catch(() => {
-        appendStatus(false, `A problem occurred updating the group`, Status.Error);
+        addNotification(`A problem occurred updating the group`, Notification.Error);
       })
       .finally(() => {
-        updateIsLoading(false)
+        
         refresh();
       })
   }
 
   const deleteGroup = async (groupId: string | undefined) => {
-    if (!groupId) return appendStatus(false, `Group ID must be set before deleting`, Status.Error);
+    if (!groupId) return addNotification(`Group ID must be set before deleting`, Notification.Error);
     
-    updateIsLoading(true);
+    
 
     fetch(endpoints.group(groupId), requestBuilder("DELETE"))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully deleted group`, Status.Success);
+          addNotification(`Successfully deleted group`, Notification.Success);
         } else {
-          appendStatus(false, `A problem ocurred deleting group`, Status.Error);
+          addNotification(`A problem ocurred deleting group`, Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, '', Status.None);
+        addNotification('', Notification.None);
       })
       .finally(() => {
-        updateIsLoading(false)
+        
         removeItemInStorage(endpoints.groups)
         refresh();
       })

@@ -1,5 +1,5 @@
 export * from './audit.model'
-export * from './status.model';
+export * from './notification.model';
 export * from './client.model';
 export * from './name.model';
 export * from './address.model';

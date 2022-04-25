@@ -49,11 +49,6 @@ exports.get = asyncHandler(async (req, res) => {
 exports.getById = asyncHandler(async (req, res) => {
   let { clientId } = req.params;
 
-  if (!clientId) {
-    res.status(400)
-    throw new Error('A client ID must be provided.')
-  }
-
   // create the aggregator so we can add custom fields
   const aggregate = Client.aggregate();
 
@@ -73,11 +68,11 @@ exports.create = asyncHandler(async (req, res) => {
     ...req.body,
     activityLog: {
       task: "created",
-      actor: req.auth.userId
+      actor: req.auth._id
     },
     audit: {
-      createdBy: req.auth.userId,
-      updatedBy: req.auth.userId
+      createdBy: req.auth._id,
+      updatedBy: req.auth._id
     }
   })
 
@@ -93,15 +88,10 @@ exports.create = asyncHandler(async (req, res) => {
 exports.update = asyncHandler(async (req, res) => {
   const { clientId } = req.params;
 
-  if (!clientId) {
-    res.status(200)
-    throw new Error('Request is missing a client ID.')
-  }
-
   const updateBody = req.body.updateBody;
   updateBody.activityLog.push({
     task: "updated",
-    actor: req.auth.userId
+    actor: req.auth._id
   })
   
   const client = Client.findByIdAndUpdate(clientId, updateBody);
@@ -122,8 +112,8 @@ exports.addSession = asyncHandler(async (req, res) => {
 
   const session = await Session.create({
     title, description, tags, sessionDate,
-    createdBy: req.auth.userId,
-    updatedBy: req.auth.userId
+    createdBy: req.auth._id,
+    updatedBy: req.auth._id
   });
 
   if (!session._id) throw new Error('Something went wrong creating the session.')
@@ -133,7 +123,7 @@ exports.addSession = asyncHandler(async (req, res) => {
       $push: { sessions: session._id },
       $push: { activityLog: {
         task: "added session",
-        actor: req.auth.userId
+        actor: req.auth._id
       }}
     });
 

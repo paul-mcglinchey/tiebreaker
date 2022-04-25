@@ -1,5 +1,7 @@
+import { memo } from "react";
+
 const Fetch = ({ render, fetchOutput }: any) => {
   return render(fetchOutput);
 }
 
-export default Fetch;
+export default memo(Fetch);

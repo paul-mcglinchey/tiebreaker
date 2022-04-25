@@ -1,27 +1,27 @@
-const grouplist = require('../controllers/listcollection.controller.js');
+const listcollection = require('../controllers/listcollection.controller.js');
 const middleware = require('../middlewares');
 
 var router = require('express').Router();
 
-// Get the default grouplist
+// Get the default listcollection
 router.get(
   '/system', 
   middleware.authMiddleware.checkUserHasAdminRole, 
-  grouplist.getSystem
+  listcollection.getSystem
 );
 
 router.post(
   '/system',
   middleware.authMiddleware.checkUserHasAdminRole,
   middleware.listcollectionMiddleware.checkIfSystemListCollectionExists,
-  grouplist.createSystem
+  listcollection.createSystem
 )
 
 router.put(
-  '/system/:listcollectionId', 
+  '/system/:listcollectionId',
   middleware.authMiddleware.checkUserHasAdminRole,
   middleware.listcollectionMiddleware.checkQueryHasListCollectionId,
-  grouplist.updateSystem
+  listcollection.updateSystem
 );
 
 module.exports = router

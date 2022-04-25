@@ -1,4 +1,5 @@
 const ObjectId = require('mongoose').Types.ObjectId;
+const asyncHandler = require('express-async-handler')
 const db = require('../models');
 const Rota = db.rota;
 const Schedule = db.schedule;
@@ -9,7 +10,7 @@ exports.getScheduleByDate = (req, res) => {
 
   const { rotaId, startDate } = req.params;
 
-  Rota.findOne({ _id: rotaId, 'accessControl.viewers': req.auth.userId })
+  Rota.findOne({ _id: rotaId, 'accessControl.viewers': req.auth._id })
     .then((rota) => {
 
       const scheduleIds = rota.schedules;
@@ -34,12 +35,12 @@ exports.getScheduleByDate = (req, res) => {
             // Create a new schedule
             const schedule = new Schedule({
               accessControl: {
-                viewers: [req.auth.userId], editors: [req.auth.userId], owners: [req.auth.userId]
+                viewers: [req.auth._id], editors: [req.auth._id], owners: [req.auth._id]
               },
               startDate: new Date(startDate),
               employeeSchedules: employeeSchedules,
-              createdBy: req.auth.userId,
-              updatedBy: req.auth.userId
+              createdBy: req.auth._id,
+              updatedBy: req.auth._id
             });
 
             // Save schedule in the database
@@ -49,7 +50,7 @@ exports.getScheduleByDate = (req, res) => {
                 // Add the schedule to the rota which was selected
                 Rota.updateOne({
                   _id: rotaId,
-                  $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
+                  $or: [{ 'accessControl.editors': req.auth._id }, { 'accessControl.owners': req.auth._id }]
                 }, {
                   $push: { schedules: new ObjectId(schedule._id) }
                 })
@@ -134,29 +135,24 @@ exports.joinEmployees = (res, schedule) => {
 }
 
 // Update a schedule
-exports.updateSchedule = (req, res) => {
-  const { rotaId, startDate } = req.params;
+exports.updateSchedule = asyncHandler(async (req, res) => {
+  const { rotaId, startDate } = req.params
 
-  Rota.findOne({ _id: rotaId, 'accessControl.editors': req.auth.userId })
-    .then(rota => {
+  const rota = await Rota.findById(rotaId)
 
-      const scheduleIds = rota.schedules;
-      Schedule.updateOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) }, req.body)
-        .then(update => {
-          return res.status(200).send({ message: `Matched ${update.matchedCount} schedules, updated ${update.modifiedCount} schedules for rota with ID ${rotaId}.` })
-        })
-        .catch(err => {
-          return res.status(500).send({
-            message: err.message || `A problem occurred updating schedule for rota with ID ${rotaId}.`
-          })
-        })
-    })
-    .catch(err => {
-      return res.status(500).send({
-        message: err.message || `A problem occurred finding rota with ID ${rotaId}.`
-      })
-    })
-}
+  const schedule = await Schedule.findOneAndUpdate({ _id: { $in: rota.schedules }, startDate: new Date(startDate)}, {
+    ...req.body,
+    audit: {
+      updatedBy: req.auth._id
+    }
+  })
+  
+  const test = await Schedule.findOne({ _id: { $in: rota.schedules.map(sId => new ObjectId(sId)) }, startDate: new Date(startDate)})
+
+  console.log(test)
+
+  return res.json(schedule)
+})
 
 // Create and save a new schedule
 exports.addSchedule = (req, res) => {
@@ -168,8 +164,8 @@ exports.addSchedule = (req, res) => {
   const schedule = new Schedule({
     startDate: startDate,
     employeeSchedules: employeeSchedules,
-    createdBy: req.auth.userId,
-    updatedBy: req.auth.userId
+    createdBy: req.auth._id,
+    updatedBy: req.auth._id
   });
 
   // Save schedule in the database
@@ -179,7 +175,7 @@ exports.addSchedule = (req, res) => {
       // Add the schedule to the rota which was selected
       Rota.updateOne({
         _id: rotaId,
-        $or: [{ 'accessControl.editors': req.auth.userId }, { 'accessControl.owners': req.auth.userId }]
+        $or: [{ 'accessControl.editors': req.auth._id }, { 'accessControl.owners': req.auth._id }]
       }, {
         $push: { schedules: new ObjectId(schedule._id) }
       })

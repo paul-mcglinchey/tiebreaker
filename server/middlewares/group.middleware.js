@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler')
+const ObjectId = require('mongoose').Types.ObjectId
 const db = require('../models')
 const Group = db.group
+const Permission = db.permission
 
 const checkAccess = (accessRequired) => {
   return asyncHandler(async (req, res, next) => {
@@ -11,15 +13,17 @@ const checkAccess = (accessRequired) => {
       throw new Error('Resource not found.')
     }
 
-    if (!group.accessControl) {
-      res.status(401)
-      throw new Error('Unauthorized.')
-    }
+    const permissionsRequired = await Permission.find({ name: accessRequired })
+    const userPermissions = group.users.filter(u => u.user.equals(req.auth._id))[0].permissions
 
-    if (!group.accessControl[accessRequired].includes(req.auth.userId)) {
-      res.status(403)
-      throw new Error('Forbidden.')
-    }
+    console.log(userPermissions)
+
+    permissionsRequired.forEach(pr => {
+      if (!userPermissions.includes(pr._id)) {
+        res.status(403)
+        throw new Error('Forbidden')
+      }
+    })
 
     next()
   })
@@ -46,7 +50,7 @@ const checkIfGroupNameExists = asyncHandler(async (req, res, next) => {
   
   if (group) {
     res.status(400)
-    throw new Error('That group name is already in use.')
+    throw new Error('That group name is already in use')
   }
 
   next();
@@ -58,7 +62,7 @@ const checkIfGroupExists = asyncHandler(async (req, res, next) => {
 
   if (!group) {
     res.status(404)
-    throw new Error('Resource not found.')
+    throw new Error('Resource not found')
   }
 
   next()

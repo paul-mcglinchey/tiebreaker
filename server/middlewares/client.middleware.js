@@ -1,10 +1,15 @@
+const asyncHandler = require('express-async-handler')
 const db = require('../models');
 const Client = db.client;
 
-const checkClientIdExists = (req, res, next) => {
-  if (!(req.params.clientId || req.query.clientId)) return res.status(400).send({ message: 'ClientID must be set.' });
+const checkIfQueryHasClientId = asyncHandler(async (req, res, next) => {
+  if (!req.params.clientId) {
+    res.status(400)
+    throw new Error('ClientID must be set.')
+  }
+
   next();
-}
+})
 
 const checkUserAccessToClient = (accessRequired) => {
   return (req, res, next) => {
@@ -16,11 +21,11 @@ const checkUserAccessToClient = (accessRequired) => {
     Client.findById(clientId)
       .then((data) => {
         if (data.accessControl) {
-          if (data.accessControl[accessRequired].includes(req.auth.userId)) {
+          if (data.accessControl[accessRequired].includes(req.auth._id)) {
             next();
           } else {
             return res.status(403).send({
-              message: `User with ID ${req.auth.userId} not properly authorized to perform that action on client with ID ${clientId}.`
+              message: `User with ID ${req.auth._id} not properly authorized to perform that action on client with ID ${clientId}.`
             });
           }
         }
@@ -32,7 +37,7 @@ const checkUserAccessToClient = (accessRequired) => {
 }
 
 const clientMiddlware = {
-  checkClientIdExists,
+  checkIfQueryHasClientId,
   checkUserAccessToClient
 };
 

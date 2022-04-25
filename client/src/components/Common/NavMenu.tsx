@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
 
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
@@ -171,4 +171,4 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
   )
 }
 
-export default NavMenu;
+export default memo(NavMenu);

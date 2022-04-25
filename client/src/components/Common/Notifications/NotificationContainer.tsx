@@ -1,18 +1,23 @@
-import { useStatus } from "../../../hooks";
-import { IStatus } from "../../../models";
-import Notification from "./Notification";
+import { memo } from "react";
+import { useNotification } from "../../../hooks";
+import { INotification } from "../../../models";
+import { NotificationCard } from "..";
 
 const NotificationContainer = () => {
 
-  const { status, removeStatus } = useStatus();
+  const { getNotifications, removeNotification } = useNotification();
+
+  const notifications = getNotifications() || []
+
+  console.log(notifications)
 
   return (
-    <div className="absolute z-50 w-screen sm:w-auto top-0 right-0 space-y-4 overflow-hidden">
-        {status.map((s: IStatus, index: number) => (
-          <Notification status={s} removeStatus={removeStatus} key={index} />
+    <div className="fixed z-50 w-screen sm:w-auto right-0 space-y-4 overflow-hidden">
+        {notifications.map((n: INotification, index: number) => (
+          <NotificationCard notification={n} removeNotification={removeNotification} key={index} />
         ))}
     </div>
   )
 }
 
-export default NotificationContainer;
+export default memo(NotificationContainer);

@@ -42,8 +42,8 @@ exports.addEmployee = asyncHandler(async (req, res) => {
   const employee = await Employee.create({
     ...req.body,
     audit: {
-      createdBy: req.auth.userId,
-      updatedBy: req.auth.userId
+      createdBy: req.auth._id,
+      updatedBy: req.auth._id
     }
   });
 

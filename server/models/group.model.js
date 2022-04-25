@@ -13,6 +13,10 @@ const Group = mongoose.model(
     description: {
       type: String, required: false 
     },
+    applications: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Application'
+    }],
     clients: [{
       type: Schema.Types.ObjectId,
       ref: 'Client'
@@ -25,14 +29,13 @@ const Group = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'Rota'
     }],
-    listDefinitions: [{
+    listcollections: [{
       type: Schema.Types.ObjectId,
-      ref: 'GroupList'
+      ref: 'ListCollection'
     }],
     colour: { 
       type: String, required: false 
     },
-    users: [UsersSchema],
     audit: AuditSchema
   }, { timestamps: true })
 )

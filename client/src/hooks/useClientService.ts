@@ -1,91 +1,79 @@
-import { IClient, ISession, Status, IClientService } from "../models"
+import { IClient, ISession, Notification, IClientService } from "../models"
 import { endpoints } from "../utilities"
 import useRequestBuilder from "./useRequestBuilder"
-import useStatus from "./useStatus"
+import useNotification from "./useNotification"
 
 const useClientService = (refresh: () => void = () => {}): IClientService => {
 
   const { requestBuilder } = useRequestBuilder()
-  const { appendStatus, updateIsLoading } = useStatus()
+  const { addNotification } = useNotification()
 
   const addClient = (values: IClient, groupId: string | undefined) => {
-    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error)
-    
-    updateIsLoading(true);
+    if (!groupId) return addNotification('Group must be set', Notification.Error)
 
     fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully added client`, Status.Success)
+          addNotification(`Successfully added client`, Notification.Success)
         } else {
-          appendStatus(false, `A problem occurred adding client`, Status.Error)
+          addNotification(`A problem occurred adding client`, Notification.Error)
         }
       })
       .catch(err => {
         console.error(err)
-        appendStatus(false, `A problem occurred adding the client`, Status.Error)
+        addNotification(`A problem occurred adding the client`, Notification.Error)
       })
       .finally(() => {
-        updateIsLoading(false)
         refresh()
       })
   }
 
   const updateClient = (values: IClient, clientId: string | undefined, groupId: string | undefined) => {
-    if (!clientId || !groupId) return appendStatus(false, `Group and client must be set`, Status.Error);
-    
-    updateIsLoading(true);
+    if (!clientId || !groupId) return addNotification(`Group and client must be set`, Notification.Error);
 
     fetch(endpoints.client(clientId, groupId), requestBuilder('PUT', undefined, values))
       .then(res => {
-        if (res.ok) appendStatus(false, `Successfully updated client`, Status.Success);
-        if (res.status === 400) appendStatus(false, `Bad request`, Status.Error);
-        if (!res.ok && res.status !== 400) appendStatus(false, `A problem occurred updating the client`, Status.Error);
+        if (res.ok) addNotification(`Successfully updated client`, Notification.Success);
+        if (res.status === 400) addNotification(`Bad request`, Notification.Error);
+        if (!res.ok && res.status !== 400) addNotification(`A problem occurred updating the client`, Notification.Error);
       })
       .catch(err => {
         console.error(err);
-        appendStatus(false, `A problem occurred updating the client`, Status.Error);
+        addNotification(`A problem occurred updating the client`, Notification.Error);
       })
-      .finally(() => updateIsLoading(false))
   }
 
   const deleteClient = (clientId: string | undefined, groupId: string | undefined) => {
-    if (!clientId || !groupId) return appendStatus(false, `Group and client must be set`, Status.Error);
-    
-    updateIsLoading(true);
+    if (!clientId || !groupId) return addNotification(`Group and client must be set`, Notification.Error);
 
     fetch(endpoints.client(clientId, groupId), requestBuilder("DELETE"))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully deleted client`, Status.Success);
+          addNotification(`Successfully deleted client`, Notification.Success);
         } else {
-          appendStatus(false, `A problem occurred deleting client`, Status.Error);
+          addNotification(`A problem occurred deleting client`, Notification.Error);
         }
       })
       .catch(err => {
         console.error(err);
-        appendStatus(false, 'A problem occurred deleting client', Status.None);
+        addNotification('A problem occurred deleting client', Notification.None);
       })
-      .finally(() => updateIsLoading(false))
   }
 
   const addSession = (values: ISession, clientId: string | undefined, groupId: string | undefined) => {
-    if (!clientId || !groupId) return appendStatus(false, `Request is missing a group or client ID`, Status.Error);
-    
-    updateIsLoading(true);
+    if (!clientId || !groupId) return addNotification(`Request is missing a group or client ID`, Notification.Error);
 
     fetch((endpoints.sessions(clientId, groupId)), requestBuilder('PUT', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully added session`, Status.Success);
+          addNotification(`Successfully added session`, Notification.Success);
         } else {
-          appendStatus(false, `A problem occurred adding the session`, Status.Error);
+          addNotification(`A problem occurred adding the session`, Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, `A problem occurred adding the session`, Status.Error);
+        addNotification(`A problem occurred adding the session`, Notification.Error);
       })
-      .finally(() => updateIsLoading(false))
   }
 
   return { addClient, deleteClient, updateClient, addSession }
