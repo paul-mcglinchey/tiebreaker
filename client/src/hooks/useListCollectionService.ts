@@ -8,18 +8,18 @@ const useListCollectionService = (refresh: () => void = () => {}) => {
   const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
 
-  const init = () => {
-    fetch(endpoints.systemlistcollections, requestBuilder('POST', undefined, { lists: [] }))
-      .then(res => {
-        if (res.ok) {
-          addNotification('Successfully initialized system list collection', Notification.Success);
-        } else {
-          addNotification('A problem occurred initializing system list collection', Notification.Error);
-        } 
-      })
-      .catch(() => {
-        addNotification('A problem ocurred initializing system list collection', Notification.Error);
-      })
+  const init = async () => {
+    const res = await fetch(endpoints.systemlistcollections, requestBuilder('POST', undefined, { lists: [] }))
+    const json = await res.json()
+
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully initialized system list collection`, Notification.Success)
+      return refresh()
+    }
+
+    if (res.status < 500) return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+
+    return addNotification(`${res.status}: A problem occurred initializing system list collection`, Notification.Error)
   }
 
   const update = (listcollectionId: string | undefined, values: IListCollection) => {
