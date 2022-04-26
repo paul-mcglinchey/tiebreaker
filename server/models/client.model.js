@@ -19,7 +19,11 @@ const Client = mongoose.model(
     }],
     colour: String,
     activityLog: [ActivityLogSchema],
-    audit: AuditSchema
+    audit: AuditSchema,
+    deleted: {
+      type: Boolean,
+      default: false
+    }
   }, { timestamps: true })
 );
 

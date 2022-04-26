@@ -36,3 +36,12 @@ export interface IEmployee {
   }[],
   colour?: string
 }
+
+export interface IEmployeeResponse {
+  employee: IEmployee
+}
+
+export interface IEmployeesResponse {
+  count: number,
+  employees: IEmployee[]
+}

@@ -35,18 +35,14 @@ const Login = () => {
                   <StyledField name="password" type="password" label="Password" errors={errors.password} touched={touched.password} />
                 </div>
                 <div className="flex justify-between">
-                  <Link to='/signup'>
-                    <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-300 filter drop-shadow-none shadow-none transition-all">
-                      Sign Up
-                    </button>
+                  <Link to='/signup' className="px-4 py-2 font-bold text-gray-500 hover:text-gray-300 filter drop-shadow-none shadow-none transition-all">
+                    Sign Up
                   </Link>
-                  <Button content="Login"/>
+                  <Button content="Login" />
                 </div>
                 <div className="flex justify-center">
-                  <Link to='/passwordresetrequest'>
-                    <button type="button" className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2 mt-10">
-                      Forgot password?
-                    </button>
+                  <Link to='/passwordresetrequest' className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2 mt-10">
+                    Forgot password?  
                   </Link>
                 </div>
               </div>

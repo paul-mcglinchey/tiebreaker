@@ -1,21 +1,18 @@
 import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
-import { useRotaService } from "../../../../hooks";
-import { useContext } from "react";
-import { ApplicationContext } from "../../../../utilities";
+import { useGroupService, useRotaService } from "../../../../hooks";
 
 interface IEditRotaProps {
   modalOpen: boolean,
   toggleModalOpen: () => void,
   rota?: IRota
-  refresh?: () => void
 }
 
-const EditRotaModal = ({ modalOpen, toggleModalOpen, rota, refresh }: IEditRotaProps) => {
+const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => {
 
-  const rotaService = useRotaService(refresh)
-  const { groupId } = useContext(ApplicationContext)
+  const rotaService = useRotaService()
+  const { groupId } = useGroupService()
 
   return (
     <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>

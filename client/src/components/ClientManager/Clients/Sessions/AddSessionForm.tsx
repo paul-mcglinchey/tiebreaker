@@ -1,11 +1,10 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../../../utilities/schema';
 import { Button } from '../../../Common';
 import { CustomDate, StyledField, StyledTagField } from '../../..';
 import { IClient, ITag } from '../../../../models';
-import { useClientService } from '../../../../hooks';
-import { ApplicationContext } from '../../../../utilities';
+import { useClientService, useGroupService } from '../../../../hooks';
 
 const currentDate = new Date();
 const currentDateAsString = currentDate.toISOString().split('T')[0];
@@ -19,7 +18,7 @@ const AddSessionForm = ({ client }: IAddSessionProps) => {
   const [tags, setTags] = useState<ITag[]>([])
 
   const clientService = useClientService()
-  const { groupId } = useContext(ApplicationContext)
+  const { groupId } = useGroupService()
 
   return (
     <div className="flex flex-1">

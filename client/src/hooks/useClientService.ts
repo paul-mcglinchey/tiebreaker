@@ -1,34 +1,32 @@
 import { IClient, ISession, Notification, IClientService } from "../models"
 import { endpoints } from "../utilities"
-import useRequestBuilder from "./useRequestBuilder"
-import useNotification from "./useNotification"
+import { useRequestBuilder, useNotification, useAsyncHandler } from "."
 
 const useClientService = (refresh: () => void = () => {}): IClientService => {
 
   const { requestBuilder } = useRequestBuilder()
   const { addNotification } = useNotification()
+  const { asyncHandler } = useAsyncHandler()
 
-  const addClient = (values: IClient, groupId: string | undefined) => {
+  const addClient = asyncHandler(async (values: IClient, groupId: string | undefined) => {
     if (!groupId) return addNotification('Group must be set', Notification.Error)
 
-    fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          addNotification(`Successfully added client`, Notification.Success)
-        } else {
-          addNotification(`A problem occurred adding client`, Notification.Error)
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        addNotification(`A problem occurred adding the client`, Notification.Error)
-      })
-      .finally(() => {
-        refresh()
-      })
-  }
+    const res = await fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, values))
+    const json = await res.json()
 
-  const updateClient = (values: IClient, clientId: string | undefined, groupId: string | undefined) => {
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully created client`, Notification.Success)
+      return refresh()
+    }
+
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
+
+    return addNotification(`A problem occurred creating the client`, Notification.Error)
+  })
+
+  const updateClient = asyncHandler(async (values: IClient, clientId: string | undefined, groupId: string | undefined) => {
     if (!clientId || !groupId) return addNotification(`Group and client must be set`, Notification.Error);
 
     fetch(endpoints.client(clientId, groupId), requestBuilder('PUT', undefined, values))
@@ -41,7 +39,7 @@ const useClientService = (refresh: () => void = () => {}): IClientService => {
         console.error(err);
         addNotification(`A problem occurred updating the client`, Notification.Error);
       })
-  }
+  })
 
   const deleteClient = (clientId: string | undefined, groupId: string | undefined) => {
     if (!clientId || !groupId) return addNotification(`Group and client must be set`, Notification.Error);

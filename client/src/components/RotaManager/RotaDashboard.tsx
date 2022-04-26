@@ -1,53 +1,39 @@
-import { useContext, useState } from 'react';
-
-import { Fetch } from '..';
-import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from '../../hooks';
-import { IGroupsResponse, IFetch } from '../../models';
-import { ApplicationContext, endpoints } from '../../utilities';
+import { memo, useState } from 'react';
+import { useGroupService, useRotaService } from '../../hooks';
 import { FetchError, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
 import { AddRotaModal, RotaList } from './Rotas';
 
 const RotaDashboard = () => {
-
-  const { dependency, refresh } = useRefresh();
-  const { setGroupId } = useContext(ApplicationContext);
-  const { requestBuilder } = useRequestBuilder();
-
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const groupService = useGroupService(refresh);
-  const rotaService = useRotaService(refresh);
+  const { getCount, isLoading, error, addGroup } = useGroupService();
+  const { addRota, refresh } = useRotaService();
 
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.groups, requestBuilder(), [dependency], false)}
-      render={({ response, error, isLoading }: IFetch<IGroupsResponse>) => (
-        <>
-          {!error ? (
-            response && response.count > 0 ? (
-              <>
-                <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} showSelector setGroupId={setGroupId} />
-                <RotaList dependency={dependency} refresh={refresh} />
-              </>
-            ) : (
-              !isLoading && (
-                <GroupPrompter action={toggleAddGroupOpen} />
-              )
-            )
-          ) : (
-            <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
-          )}
-          <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} groupService={groupService} />
-          <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} rotaService={rotaService} />
-        </>
+    <>
+      {!error ? (
+        getCount() > 0 ? (
+          <>
+            <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} showSelector />
+            <RotaList />
+          </>
+        ) : (
+          !isLoading && (
+            <GroupPrompter action={toggleAddGroupOpen} />
+          )
+        )
+      ) : (
+        <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
       )}
-    />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
+      <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} addRota={addRota} />
+    </>
   )
 }
 
-export default RotaDashboard;
+export default memo(RotaDashboard)

@@ -1,12 +1,11 @@
 import { ViewGridAddIcon } from '@heroicons/react/outline';
-import { useRequestBuilder, useSessionStorage } from '../../../../hooks';
-import { IClient, IFetch, IUserResponse } from '../../../../models';
-import { endpoints } from '../../../../utilities';
-import { Fetch, InlineLink, TableRow, TableRowItem } from '../../../Common';
+import { useUserService } from '../../../../hooks';
+import { IClient } from '../../../../models';
+import { InlineLink, TableRow, TableRowItem } from '../../../Common';
 
 const ClientRow = ({ client }: { client: IClient }) => {
 
-  const { requestBuilder } = useRequestBuilder()
+  const { getUser } = useUserService()
 
   return (
     <TableRow>
@@ -22,12 +21,7 @@ const ClientRow = ({ client }: { client: IClient }) => {
             {new Date(client.updatedAt || "").toLocaleDateString()}
           </span>
           <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
-            <Fetch 
-              fetchOutput={useSessionStorage(endpoints.user(client.updatedBy || ""), requestBuilder())}
-              render={({ response }: IFetch<IUserResponse>) => (
-                <div>{response?.username || '--'}</div>
-              )}
-            />
+            <div>{getUser(client.audit?.updatedBy)?.username || '--'}</div>
           </span>
         </div>
       </TableRowItem>

@@ -10,3 +10,8 @@ export interface IGroup {
   listDefinitions?: string
   colour?: string
 }
+
+export interface IGroupsResponse {
+  count: number,
+  groups: IGroup[]
+}

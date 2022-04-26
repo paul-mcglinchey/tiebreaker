@@ -10,6 +10,7 @@ export { default as useIsMounted } from './useIsMounted';
 export { default as useSessionStorage } from './useSessionStorage';
 export { default as useRequestBuilder } from './useRequestBuilder';
 export { default as useAuthContext } from './useAuthContext'
+export { default as useAsyncHandler } from './useAsyncHandler'
 
 // Services
 export { default as useClientService } from './useClientService'
@@ -18,3 +19,5 @@ export { default as useGroupService } from './useGroupService'
 export { default as useRotaService } from './useRotaService'
 export { default as usePermissionService } from './usePermissionService'
 export { default as useListCollectionService } from './useListCollectionService'
+export { default as useResolutionService } from './useResolutionService'
+export { default as useUserService } from './useUserService'

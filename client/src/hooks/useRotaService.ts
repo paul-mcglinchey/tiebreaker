@@ -1,15 +1,19 @@
 import { IRota, IRotaService, ISchedule, Notification } from "../models"
-import { endpoints } from "../utilities";
+import { endpoints, RotaContext } from "../utilities";
 import { useRequestBuilder, useNotification } from ".";
 import { useNavigate } from "react-router";
+import useAsyncHandler from "./useAsyncHandler";
+import { useContext } from "react";
 
-const useRotaService = (refresh: () => void = () => {}): IRotaService => {
+const useRotaService = (): IRotaService => {
   
   const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
+  const { asyncHandler } = useAsyncHandler()
+  const { refresh, dependency } = useContext(RotaContext)
   const navigate = useNavigate();
 
-  const addRota = async (values: IRota, groupId: string) => {
+  const addRota = asyncHandler(async (values: IRota, groupId: string | undefined) => {
     if (!groupId) return addNotification('Group must be set', Notification.Error);
 
     const res = await fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
@@ -25,7 +29,7 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
     }
 
     return addNotification(`A problem occurred creating the rota`, Notification.Error)
-  }
+  })
 
   const updateRota = (values: IRota, rotaId: string | undefined, groupId: string | undefined) => {    
     if (!rotaId || !groupId) return addNotification('Something went wrong...', Notification.Error);
@@ -97,7 +101,7 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
       .finally(() => refresh())
   }
 
-  return { addRota, updateRota, deleteRota, getWeek, updateSchedule }
+  return { addRota, updateRota, deleteRota, getWeek, updateSchedule, refresh, dependency }
 }
 
 export default useRotaService

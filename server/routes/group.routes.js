@@ -1,4 +1,5 @@
 const group           = require('../controllers/group.controller.js');
+const user            = require('../controllers/user.controller')
 const middleware      = require('../middlewares');
 
 const router    = require('express').Router({ mergeParams: true });
@@ -8,6 +9,12 @@ router.get(
   '/',
   group.get
 );
+
+// Get all users for a group
+router.get(
+  '/:groupId/users',
+  user.getGroupUsers
+)
 
 // Create a new group
 router.post(

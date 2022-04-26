@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { FieldArray, Form, Formik } from "formik"
 import { Persist } from 'formik-persist'
-import { memo, useEffect, useState } from "react"
+import { memo, useState } from "react"
 import { useFetch, useRequestBuilder, useListCollectionService, useRefresh } from "../../../hooks"
 import { ButtonType, IFetch, IList, IListCollection, IListValue } from "../../../models"
 import { generateColour } from "../../../services"
@@ -18,19 +18,12 @@ const SystemListCollectionPanel = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const toggleDeleteDialogOpen = () => setDeleteDialogOpen(!deleteDialogOpen)
 
-  useEffect(() => {
-    return () => {
-      console.log('unmounting');
-      
-    }
-  })
-
   return (
     <Fetch
       fetchOutput={useFetch(endpoints.systemlistcollections, requestBuilder(), [dependency], false)}
       render={({ response, isLoading, error }: IFetch<IListCollection>) => (
         <>
-          {!isLoading && response ? (
+          {!isLoading && response && response.lists ? (
             <Formik
               initialValues={response}
               onSubmit={(values) => {

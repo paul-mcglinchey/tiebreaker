@@ -1,11 +1,11 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 import {
   useParams
 } from "react-router";
 import { Fetch } from "../../..";
-import { useFetch, useRefresh, useRequestBuilder, useRotaService } from "../../../../hooks";
+import { useFetch, useGroupService, useRequestBuilder, useRotaService } from "../../../../hooks";
 import { IFetch, IScheduleResponse } from "../../../../models";
-import { ApplicationContext, endpoints } from "../../../../utilities";
+import { endpoints } from "../../../../utilities";
 import { RotaHeader, Schedule } from "..";
 import { Formik } from "formik";
 
@@ -13,15 +13,14 @@ const RotaPage = () => {
 
   const rotaId = useParams()["rotaId"] || ""
   const { requestBuilder } = useRequestBuilder()
-  const { groupId } = useContext(ApplicationContext)
+  const { groupId } = useGroupService()
 
-  const { dependency, refresh } = useRefresh()
-  const rotaService = useRotaService(refresh)
+  const { getWeek, updateSchedule, dependency } = useRotaService()
 
   const [editing, setEditing] = useState<boolean>(false)
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
 
-  const currentWeek = rotaService.getWeek(currentWeekModifier)
+  const currentWeek = getWeek(currentWeekModifier)
   const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""
 
   return (
@@ -38,7 +37,7 @@ const RotaPage = () => {
                 initialValues={response.schedule}
                 onSubmit={(values, { resetForm }) => {
                   resetForm({ values: response.schedule });
-                  rotaService.updateSchedule(values, rotaId, groupId);
+                  updateSchedule(values, rotaId, groupId);
                 }}
               >
                 {({ handleSubmit, values, dirty }) => (
@@ -47,7 +46,6 @@ const RotaPage = () => {
                       handleSubmit={handleSubmit}
                       dirty={dirty}
                       rota={response.rota}
-                      rotaService={rotaService}
                       editing={editing}
                       setEditing={setEditing}
                     />

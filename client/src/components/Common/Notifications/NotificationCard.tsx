@@ -41,7 +41,7 @@ const NotificationCard = ({ notification, removeNotification }: INotificationCar
         notification.type === Notification.Success ? "border-green-500" : notification.type === Notification.Error ? "border-red-500" : "border-gray-200"
       )}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between space-x-2 items-center">
         <span className="font-bold">{notification.message}</span>
         <button onClick={() => close()} className="flex items-center">
           <XIcon className="w-5 h-5 text-gray-500" />

@@ -1,9 +1,9 @@
 import { Formik, Form } from 'formik';
-import { useContext, useState } from 'react';
-import { useFetch, useRequestBuilder } from '../../../../hooks';
+import { useState } from 'react';
+import { useFetch, useGroupService, useRequestBuilder } from '../../../../hooks';
 
 import { DayOfWeek, IEmployee, IEmployeesResponse, IFetch, IRota } from '../../../../models';
-import { ApplicationContext, endpoints, rotaValidationSchema } from '../../../../utilities';
+import { endpoints, rotaValidationSchema } from '../../../../utilities';
 import { Button, StyledField, SpinnerIcon, Selector, Fetch, FormSection, InlineLink } from '../../../Common';
 import { StaffSelector } from '.';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
@@ -16,7 +16,7 @@ interface IRotaFormProps {
 
 const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
   const { requestBuilder } = useRequestBuilder();
 
   const [startDay, setStartDay] = useState({ value: DayOfWeek.Monday, label: DayOfWeek[DayOfWeek.Monday] });

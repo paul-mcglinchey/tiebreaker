@@ -17,6 +17,10 @@ const Group = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'Application'
     }],
+    users: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }],
     clients: [{
       type: Schema.Types.ObjectId,
       ref: 'Client'

@@ -12,7 +12,7 @@ const ListCollection = db.listcollection
 exports.get = asyncHandler(async (req, res) => {
 
   // the mongoose query to fetch the groups for the current user
-  const groupQuery = { "users.user": new ObjectId(req.auth._id) }
+  const groupQuery = { users: new ObjectId(req.auth._id) }
 
   const count = await Group.countDocuments(groupQuery)
   const groups = await Group.find(groupQuery)

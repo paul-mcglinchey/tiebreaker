@@ -23,6 +23,7 @@ export const endpoints = {
     "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/employees/${employeeId}`,
     
     "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,
+    "groupusers"    : (groupId: string) => BASE_API_URL + `groups/${groupId}/users`,
     "currentuser"   : BASE_API_URL + "users/current",
     
     "systemlistcollection"  : (listcollectionId: string) => BASE_API_URL + `listcollections/system/${listcollectionId}`,

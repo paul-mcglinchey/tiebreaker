@@ -15,13 +15,8 @@ export * from './fetch.model';
 export * from './auth.model'
 export * from './rota.model';
 export * from './schedule.model';
-export * from './groups-response.model';
-export * from './clients-response.model';
-export * from './rotas-response.model';
-export * from './user-response.model';
-export * from './employee-response.model';
 export * from './group.model';
-export * from './listcollection-response.model';
+export * from './listcollection.model';
 export * from './changes.model';
 export * from './table.model';
 export * from './user.model';

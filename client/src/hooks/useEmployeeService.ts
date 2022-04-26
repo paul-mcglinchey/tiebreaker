@@ -1,62 +1,53 @@
-import { IEmployee, IUseEmployeeService, Notification } from "../models";
+import { IEmployee, IEmployeeService, Notification } from "../models";
 import { generateColour } from "../services"
 import { endpoints } from "../utilities";
 import useRequestBuilder from "./useRequestBuilder";
 import useNotification from "./useNotification";
+import useAsyncHandler from "./useAsyncHandler";
 
-const useEmployeeService = (refresh: () => void = () => {}): IUseEmployeeService => {
+const useEmployeeService = (refresh: () => void = () => {}): IEmployeeService => {
   
   const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
+  const { asyncHandler } = useAsyncHandler()
 
-  const addEmployee = async (values: IEmployee, groupId: string | undefined) => {
-    
-
+  const addEmployee = asyncHandler(async (values: IEmployee, groupId: string | undefined) => {
     if (!groupId) return addNotification('Group must be set', Notification.Error);
 
-    // generates a new random colour to be used for profile display
-    values.colour = generateColour();
+    const res = await fetch(endpoints.employees(groupId), requestBuilder('POST', undefined, { ...values, colour: generateColour() }))
+    const json = await res.json()
 
-    fetch(endpoints.employees(groupId), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          addNotification('Successfully added employee', Notification.Success);
-        } else {
-          addNotification('A problem occurred adding employee', Notification.Error);
-        }
-      })
-      .catch(() => {
-        addNotification('A problem ocurred adding employee', Notification.Error);
-      })
-      .finally(() => {
-        
-        refresh();
-      })
-  }
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully created employee`, Notification.Success)
+      return refresh()
+    }
 
-  const deleteEmployee = async (employeeId: string | undefined, groupId: string | undefined) => {
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
 
+    return addNotification(`${res.status}: A problem occurred creating employee`, Notification.Error)
+  })
+
+  const deleteEmployee = asyncHandler(async (employeeId: string | undefined, groupId: string | undefined) => {
     if (!employeeId || !groupId) return addNotification('Something went wrong...', Notification.Error);
 
-    fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
-      .then(res => {
-        if (res.ok) {
-          addNotification('Successfully deleted employee', Notification.Success);
-        } else {
-          addNotification('A problem occurred deleting employee', Notification.Error);
-        }
-      })
-      .catch(() => {
-        addNotification('A problem ocurred deleting employee', Notification.Error);
-      })
-      .finally(() => {
-        refresh();
-      })
-  }
+    const res = await fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
+    const json = await res.json()
 
-  const employeeService = { addEmployee, deleteEmployee }
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully deleted employee`, Notification.Success)
+      return refresh()
+    }
+
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
+
+    return addNotification(`${res.status}: A problem occurred deleting employee`, Notification.Error)
+  })
   
-  return { employeeService, addEmployee, deleteEmployee }
+  return { addEmployee, deleteEmployee }
 }
 
 export default useEmployeeService

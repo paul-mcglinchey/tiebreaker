@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { SelectorIcon } from "@heroicons/react/solid";
 import { generateColour } from "../../../../services";
 import { CustomDate, StyledField, Button } from "../../..";
-import { ApplicationContext, clientValidationSchema } from "../../../../utilities";
+import { clientValidationSchema } from "../../../../utilities";
 import { AddressForm, FormSection } from "../../../Common";
 import { IClient } from "../../../../models";
-import { useClientService } from "../../../../hooks";
+import { useClientService, useGroupService } from "../../../../hooks";
 
 interface IClientFormProps {
   client?: IClient,
@@ -16,7 +16,7 @@ interface IClientFormProps {
 
 const ClientForm = ({ client, refresh }: IClientFormProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
   const clientService = useClientService(refresh);
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);

@@ -1,24 +1,28 @@
 import { useContext, useEffect, useState } from "react"
-import { IUser, Notification } from "../models"
+import { IUser } from "../models"
 import { AuthContext, endpoints } from "../utilities"
-import useIsMounted from "./useIsMounted"
-import useRequestBuilder from "./useRequestBuilder"
-import useNotification from "./useNotification"
+import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
+import { useNavigate } from "react-router"
 
 const useAuth = (shouldAuthenticate: boolean = false) => {
   const auth = useContext(AuthContext)
   const { updateUser } = auth
   const { requestBuilder } = useRequestBuilder()
-  const { addNotification } = useNotification()
-  const isMounted = useIsMounted()
+  const { asyncHandler } = useAsyncHandler()
+  const { handleResolution } = useResolutionService()
+  const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const authenticate = async () => {
+  const authenticate = asyncHandler(async () => {
+    setIsLoading(true)
+
     const res = await fetch(endpoints.authenticate, requestBuilder())
 
-    !res.ok && isMounted() && updateUser(undefined)
-  }
+    setIsLoading(false)
+
+    if (!res.ok) updateUser(undefined)
+  })
 
   useEffect(() => {
     shouldAuthenticate && authenticate()
@@ -26,37 +30,27 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldAuthenticate])
 
-  const login = async (user: IUser) => {
+  const login = asyncHandler(async (user: IUser) => {
     setIsLoading(true)
 
     const res = await fetch(endpoints.login, requestBuilder('POST', undefined, user))
     const json = await res.json()
-
-    if (!res.ok) {
-      const message = res.status < 500 && json.message ? json.message : 'Something went wrong...'
-      addNotification(message, Notification.Error)
-    } else {
-      updateUser(json)
-    }
-
+    
     setIsLoading(false)
-  }
 
-  const signup = async (user: IUser) => {
+    handleResolution(res, json, undefined, undefined, [() => updateUser(json), () => navigate('/dashboard', { replace: true })], undefined, false)
+  })
+
+  const signup = asyncHandler(async (user: IUser) => {
     setIsLoading(true)
 
     const res = await fetch(endpoints.signup, requestBuilder('POST', undefined, user))
     const json = await res.json()
 
-    if (!res.ok) {
-      const message = res.status < 500 && json.message ? json.message : 'Something went wrong...'
-      addNotification(message, Notification.Error)
-    } else {
-      updateUser(json)
-    }
-
     setIsLoading(false)
-  }
+
+    handleResolution(res, json, undefined, undefined, [() => updateUser(json), () => navigate('/dashboard', { replace: true })], undefined, false)
+  })
 
   const logout = () => {
     updateUser(undefined)

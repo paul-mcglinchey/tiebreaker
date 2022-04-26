@@ -37,8 +37,8 @@ db.mongoose
     process.exit();
   });
 
-// Unprotected routes
-require('./routes/user.routes')(app);
+// Unprotected routes -- split up the user router into protected and unprotected
+app.use('/api/users', require('./routes/user.routes'))
 
 // Auth
 app.use(middleware.authMiddleware.protect);
