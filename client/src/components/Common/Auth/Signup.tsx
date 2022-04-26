@@ -39,8 +39,8 @@ const Signup = () => {
                   <Button content="Sign up" />
                 </div>
                 <div className="flex justify-center">
-                  <Link to='/login'>
-                    <button type="button" className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2 mt-10">
+                  <Link to='/login' className='mt-10'>
+                    <button type="button" className="font-bold text-gray-500 hover:text-gray-300 transition-all px-4 py-2">
                       Already a user?
                     </button>
                   </Link>

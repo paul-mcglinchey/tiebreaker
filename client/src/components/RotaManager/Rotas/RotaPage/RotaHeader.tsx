@@ -1,23 +1,23 @@
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
-import { ButtonType, IRota, IRotaService } from "../../../../models";
-import React, { useContext, useState } from "react";
+import { ButtonType, IRota } from "../../../../models";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Button, DeleteDialog, Dropdown } from "../../../Common";
 import { EditRotaModal } from "..";
-import { ApplicationContext } from "../../../../utilities";
+import { useGroupService, useRotaService } from "../../../../hooks";
 
 interface IRotaHeaderProps {
   handleSubmit: () => void
   rota: IRota,
-  rotaService: IRotaService,
   editing: boolean,
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>
+  setEditing: Dispatch<SetStateAction<boolean>>
   dirty: boolean
 }
 
-const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirty }: IRotaHeaderProps) => {
+const RotaHeader = ({ handleSubmit, rota, editing, setEditing, dirty }: IRotaHeaderProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
+  const { updateRota, deleteRota } = useRotaService()
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
@@ -31,7 +31,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
   }
 
   const updateLockedStatus = () => {
-    rotaService.updateRota({ locked: !rota.locked }, rota._id, groupId);
+    updateRota({ locked: !rota.locked }, rota._id, groupId);
   }
 
   return (
@@ -61,7 +61,7 @@ const RotaHeader = ({ handleSubmit, rota, rotaService, editing, setEditing, dirt
         ]} />
       </div>
       <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
-      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => rotaService.deleteRota(rota._id, groupId)} />
+      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => deleteRota(rota._id, groupId)} />
     </div>
   )
 }

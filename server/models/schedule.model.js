@@ -16,8 +16,8 @@ const ScheduleSchema = new Schema({
     employee: EmployeeSchema,
     shifts: [{
       date: { type: Date, required: true },
-      startHour: { type: Number, required: true },
-      endHour: { type: String, required: true },
+      startHour: { type: String },
+      endHour: { type: String },
       notes: String,
       isSick: { type: Boolean, required: false, default: false },
       onHoliday: { type: Boolean, required: false, default: false }

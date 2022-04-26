@@ -4,16 +4,15 @@ const db = require('../models')
 
 const Group = db.group
 const Client = db.client
-const Employee = db.employee
+const Employee = db.employee.Employee
 const Rota = db.rota
-const GroupList = db.grouplist
-const Permission = db.permission
+const ListCollection = db.listcollection
 
 // Get all groups
 exports.get = asyncHandler(async (req, res) => {
 
   // the mongoose query to fetch the groups for the current user
-  let groupQuery = { 'accessControl.viewers': req.auth.userId }
+  const groupQuery = { users: new ObjectId(req.auth._id) }
 
   const count = await Group.countDocuments(groupQuery)
   const groups = await Group.find(groupQuery)
@@ -30,19 +29,12 @@ exports.create = asyncHandler(async (req, res) => {
   const { name, description, colour } = req.body
 
   // get the ID of the default list set to create the group with
-  const defaultListsId = await GroupList.findOne({ default: true }, { _id: 1 })
-
-  // get all permissions
-  const permissions = await Permission.find()
-  const permissionIds = permissions.map(p => p._id)
+  const systemListCollectionId = await ListCollection.findOne({ default: true }, { _id: 1 })
 
   const group = await Group.create({
     name, description, colour,
-    listDefinitions: [defaultListsId],
-    users: [{
-      user: new ObjectId(req.auth.userId),
-      permissions: permissionIds
-    }]
+    users: [req.auth._id],
+    listcollections: [systemListCollectionId],
   })
 
   return res.status(201).json(group)
@@ -74,5 +66,5 @@ exports.delete = asyncHandler(async (req, res) => {
   await Employee.deleteMany({ _id: group.employees })
   await Rota.deleteMany({ _id: group.rotas })
 
-  return res.json({ groupId: group._id, message: 'Deleted group' })
+  return res.json({ _id: group._id, message: 'Deleted group' })
 })

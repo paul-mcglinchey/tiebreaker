@@ -23,8 +23,12 @@ export const endpoints = {
     "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/employees/${employeeId}`,
     
     "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,
+    "groupusers"    : (groupId: string) => BASE_API_URL + `groups/${groupId}/users`,
     "currentuser"   : BASE_API_URL + "users/current",
     
-    "grouplist"         : (listId: string) => BASE_API_URL + `grouplists/${listId}`,
-    "defaultgrouplists" : BASE_API_URL + "grouplists/default"
+    "systemlistcollection"  : (listcollectionId: string) => BASE_API_URL + `listcollections/system/${listcollectionId}`,
+    "systemlistcollections" : BASE_API_URL + "listcollections/system",
+
+    "permission"            : (permissionId: string) => BASE_API_URL + `permissions/${permissionId}`,
+    "permissions"           : BASE_API_URL + "permissions"
 }

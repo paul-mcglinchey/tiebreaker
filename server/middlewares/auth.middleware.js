@@ -32,10 +32,12 @@ const protect = asyncHandler(async (req, res, next) => {
 })
 
 const checkUserHasAdminRole = (req, res, next) => {
-  if (req.auth.authorization[req.auth.tenantId].roles.includes('admin')) return next();
+  if (!req.auth.isAdmin) {
+    res.status(403)
+    throw new Error('Forbidden')
+  };
   
-  // User doesn't have access to this endpoint
-  return res.sendStatus(403);
+  next()
 }
 
 const authJwt = {

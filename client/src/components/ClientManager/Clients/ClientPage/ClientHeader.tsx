@@ -1,10 +1,9 @@
 import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/solid";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SquareIconButton } from "../../..";
-import { useClientService } from "../../../../hooks";
+import { useClientService, useGroupService } from "../../../../hooks";
 import { IClient } from "../../../../models";
-import { ApplicationContext } from "../../../../utilities";
 import { DeleteDialog, Dropdown } from "../../../Common";
 
 const ClientHeader = ({ client }: { client: IClient }) => {
@@ -15,7 +14,7 @@ const ClientHeader = ({ client }: { client: IClient }) => {
   const [deleteClientOpen, setDeleteClientOpen] = useState(false);
   const toggleDeleteClientOpen = () => setDeleteClientOpen(!deleteClientOpen);
   
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
   const clientService = useClientService();
 
   const deleteClient = () => {

@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { TrashIcon, DotsVerticalIcon, PencilIcon } from '@heroicons/react/solid';
 import { SquareIconButton } from '../..';
-import { IGroup, IGroupService } from '../../../models';
+import { IGroup } from '../../../models';
 import { DeleteDialog } from '../../Common';
 import { EditGroupModal } from '..';
+import { useGroupService } from '../../../hooks';
 
 interface IGroupProps {
   g: IGroup,
-  groupService: IGroupService,
   render: (isCardFlipped: boolean) => JSX.Element
 }
 
-const GroupCard = ({ g, groupService, render }: IGroupProps) => {
+const GroupCard = ({ g, render }: IGroupProps) => {
 
   const [cardFlipped, setCardFlipped] = useState(false);
   const [deleteGroupOpen, setDeleteGroupOpen] = useState(false);
@@ -20,6 +20,8 @@ const GroupCard = ({ g, groupService, render }: IGroupProps) => {
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
   const toggleEditGroupOpen = () => setEditGroupOpen(!editGroupOpen);
   const toggleDeleteGroupOpen = () => setDeleteGroupOpen(!deleteGroupOpen);
+
+  const { updateGroup, deleteGroup } = useGroupService()
 
   return (
     <>
@@ -44,8 +46,8 @@ const GroupCard = ({ g, groupService, render }: IGroupProps) => {
           </div>
         </div>
       </div>
-      <EditGroupModal editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} groupService={groupService} g={g} />
-      <DeleteDialog dialogOpen={deleteGroupOpen} toggleDialogOpen={toggleDeleteGroupOpen} itemType="group" deleteAction={() => groupService.deleteGroup(g._id)} />
+      <EditGroupModal editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} updateGroup={updateGroup} g={g} />
+      <DeleteDialog dialogOpen={deleteGroupOpen} toggleDialogOpen={toggleDeleteGroupOpen} itemType="group" deleteAction={() => deleteGroup(g._id)} />
     </>
   )
 }

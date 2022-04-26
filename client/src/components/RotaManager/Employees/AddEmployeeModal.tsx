@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/solid"
-import { useContext, useState } from "react"
+import { useState } from "react"
+import { useGroupService } from "../../../hooks"
 import { IEmployeeService } from "../../../models"
-import { ApplicationContext } from "../../../utilities"
 import { Button, Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
@@ -13,7 +13,7 @@ interface IAddEmployeeModalProps {
 
 const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen, employeeService }: IAddEmployeeModalProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
 
   const [addMultiple, setAddMultiple] = useState(false);
   const toggleAddMultiple = () => setAddMultiple(!addMultiple);

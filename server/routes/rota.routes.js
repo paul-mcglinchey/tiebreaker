@@ -10,14 +10,14 @@ router.use(middleware.groupMiddleware.checkIfQueryHasGroupId);
 // Get all rotas which the current user has view access to
 router.get(
   '/',
-  rotas.getRotas
+  rotas.get
 );
 
 // Get rota by ID
 router.get(
   '/:rotaId',
   middleware.rotaMiddleware.checkRotaIdExists,
-  rotas.getRotaById
+  rotas.getById
 );
 
 // Gets all schedules for a rota
@@ -56,7 +56,6 @@ router.put(
   '/:rotaId/schedules/:startDate',
   middleware.rotaMiddleware.checkRotaIdExists,
   middleware.scheduleMiddleware.checkQueryHasDate,
-  middleware.rotaMiddleware.checkUserAccessToRota('editors'),
   schedules.updateSchedule
 )
 
@@ -65,7 +64,6 @@ router.delete(
   '/:rotaId',
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.rotaMiddleware.checkRotaIdExists,
-  middleware.rotaMiddleware.checkUserAccessToRota('owners'),
   rotas.deleteRota
 )
 

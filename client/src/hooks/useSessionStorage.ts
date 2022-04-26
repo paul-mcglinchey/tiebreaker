@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IFetch } from "../models";
-import { getJsonItemInStorage, setJsonItemInStorage } from "../services";
+import { getJsonItemInStorage, removeItemInStorage, setJsonItemInStorage } from "../services";
 import useIsMounted from "./useIsMounted";
 
 const useSessionStorage = <T>(url: string, options: RequestInit, deps: any[] = [], resetCache: boolean = false): IFetch<T> => {
@@ -8,6 +8,10 @@ const useSessionStorage = <T>(url: string, options: RequestInit, deps: any[] = [
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const isMounted = useIsMounted();
+
+  const clear = () => {
+    isMounted() && removeItemInStorage(url)
+  }
 
   useEffect(() => {
     const data = getJsonItemInStorage(url);
@@ -47,7 +51,7 @@ const useSessionStorage = <T>(url: string, options: RequestInit, deps: any[] = [
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
-  return { response, error, isLoading }
+  return { response, error, isLoading, clear }
 }
 
 export default useSessionStorage;

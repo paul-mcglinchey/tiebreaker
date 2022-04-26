@@ -1,14 +1,14 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { ApplicationContext, employeeValidationSchema, endpoints } from "../../../../utilities";
+import { employeeValidationSchema, endpoints } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm, Fetch } from "../../../Common";
-import { useEmployeeService, useFetch, useRefresh, useRequestBuilder } from "../../../../hooks";
+import { useEmployeeService, useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../../../hooks";
 
 const FullEmployeeForm = () => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
   const { requestBuilder } = useRequestBuilder();
 
   const [showAddress, setShowAddress] = useState(false);

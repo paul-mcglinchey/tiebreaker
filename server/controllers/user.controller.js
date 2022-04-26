@@ -1,7 +1,9 @@
 const asyncHandler        = require('express-async-handler')
 const jwt                 = require('jsonwebtoken')
 const bcrypt              = require('bcryptjs')
-const User                = require('../models/user.model')
+const db                  = require('../models')
+const User                = db.user
+const Group               = db.group
 
 exports.getById = asyncHandler(async (req, res) => {
   const { userId } = req.params;
@@ -20,6 +22,22 @@ exports.getById = asyncHandler(async (req, res) => {
   }
 
   res.json(user)
+})
+
+exports.getGroupUsers = asyncHandler(async (req, res) => {
+  const { groupId } = req.params
+
+  const group = await Group.findById(groupId)
+
+  if (!group) {
+    res.status(400)
+    throw new Error('Group not found')
+  }
+
+  const count = await User.countDocuments({ _id: { $in: group.users }})
+  const users = await User.find({ _id: { $in: group.users }}).select('-password')
+
+  return res.json({ count, users })
 })
 
 // @desc    Get current user data
@@ -58,7 +76,7 @@ exports.authenticate = asyncHandler(async (req, res) => {
     throw new Error('Unauthorized')
   }
 
-  res.json(generateUser(user))
+  res.json(user)
 })
 
 // @desc    Authenticate a user

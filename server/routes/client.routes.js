@@ -3,44 +3,46 @@ const middleware  = require('../middlewares');
 
 var router = require('express').Router({ mergeParams: true });
 
+router.use(middleware.groupMiddleware.checkIfQueryHasGroupId)
+
 // Get all clients
 router.get(
   '/',
-  middleware.groupMiddleware.checkIfQueryHasGroupId,
   clients.get
 );
 
 // Get a client by id
 router.get(
   '/:clientId',
-  middleware.clientMiddleware.checkClientIdExists,
+  middleware.clientMiddleware.checkIfQueryHasClientId,
   clients.getById
 );
 
 // Create a new client
 router.post(
   '/',
-  middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.validationMiddleware.checkRequestHasBody,
   clients.create
 );
 
 // Update a client
 router.put(
-  '/:clientId', 
+  '/:clientId',
+  middleware.clientMiddleware.checkIfQueryHasClientId,
   clients.update
 );
 
 // Add a session to a client
 router.put(
-  '/:clientId/sessions', 
+  '/:clientId/sessions',
+  middleware.clientMiddleware.checkIfQueryHasClientId,
   clients.addSession
 );
 
 // Delete a client by id
 router.delete(
   '/:clientId',
-  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.clientMiddleware.checkIfQueryHasClientId,
   clients.delete
 );
 

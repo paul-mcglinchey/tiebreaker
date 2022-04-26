@@ -1,4 +1,6 @@
-const mongoose      = require('mongoose')
+const mongoose      = require('mongoose');
+const { AuditSchema } = require('./common/audit.schema');
+const { InviteSchema } = require('./common/invite.schema');
 const Schema        = mongoose.Schema
 
 const userSchema = mongoose.Schema({
@@ -13,7 +15,28 @@ const userSchema = mongoose.Schema({
   },
   isAdmin: {
     type: Boolean, default: false
-  }
+  },
+  permissions: [{
+    groupId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Group'
+    },
+    permissions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Permission'
+    }],
+    rotas: {
+      rotaId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Rota'
+      },
+      permissions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Permission'
+      }]
+    }
+  }],
+  invites: [InviteSchema]
 }, { timeStamps: true });
 
 module.exports = mongoose.model('User', userSchema);

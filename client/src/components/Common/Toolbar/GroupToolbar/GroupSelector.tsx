@@ -1,44 +1,39 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
-import { useIsMounted } from "../../../../hooks";
+import { memo, useEffect } from "react";
+import { useGroupService, useIsMounted } from "../../../../hooks";
 import { IGroup } from "../../../../models";
 import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../../services";
 
-interface IGroupSelectorProps {
-  group?: IGroup,
-  setGroupId: Dispatch<SetStateAction<string>>
-  groups: IGroup[] 
-}
-
-const GroupSelector = ({ setGroupId, groups }: IGroupSelectorProps) => {
+const GroupSelector = () => {
 
   const isMounted = useIsMounted();
+  const { getGroups, updateGroupId } = useGroupService()
   const storageKey = 'groupId';
 
-  const updateGroup = useCallback((groupId: string | undefined) => {
+  const updateGroup = (groupId: string | undefined) => {
     if (!groupId) return;
 
     // Update the group held in storage
     setItemInStorage(storageKey, groupId);
 
     // Update the group held in state
-    isMounted() && setGroupId(groupId);
-  }, [isMounted, setGroupId, storageKey])
+    isMounted() && updateGroupId(groupId);
+  }
 
   const getGroupName = (groupId: string | undefined | null): string | undefined => {
-    return groups.filter((g: IGroup) => g._id === groupId)[0]?.name;
+    return getGroups().filter((g: IGroup) => g._id === groupId)[0]?.name;
   }
 
   useEffect(() => {
     let storedGroupId = getItemInStorage(storageKey);
 
-    let isStoredGroupValid = groups.filter((g: IGroup) => g._id === storedGroupId).length > 0;
+    let isStoredGroupValid = getGroups().filter((g: IGroup) => g._id === storedGroupId).length > 0;
 
-    isMounted() && !isStoredGroupValid && updateGroup(groups[0]?._id)
-  }, [groups, isMounted, storageKey, updateGroup]);
+    isMounted() && !isStoredGroupValid && updateGroup(getGroups()[0]?._id)
+  }, [updateGroupId, getGroups, isMounted, storageKey, updateGroup]);
 
-  return (  
+  return (
     <div className="flex flex-grow items-center justify-end">
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
@@ -64,7 +59,7 @@ const GroupSelector = ({ setGroupId, groups }: IGroupSelectorProps) => {
                   Groups
                 </span>
               </div>
-              {groups.map((g: IGroup) => (
+              {getGroups().map((g: IGroup) => (
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button
@@ -87,4 +82,4 @@ const GroupSelector = ({ setGroupId, groups }: IGroupSelectorProps) => {
   )
 }
 
-export default GroupSelector;
+export default memo(GroupSelector)

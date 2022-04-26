@@ -1,4 +1,5 @@
-const mongoose      = require('mongoose')
+const mongoose      = require('mongoose');
+const { AuditSchema } = require('./common/audit.schema');
 
 const permissionSchema = mongoose.Schema({
   name: { 
@@ -9,7 +10,8 @@ const permissionSchema = mongoose.Schema({
   },
   language: { 
     type: String, required: true, default: 'en-US' 
-  }
+  },
+  audit: AuditSchema
 }, { timeStamps: true });
 
 module.exports = mongoose.model('Permission', permissionSchema);

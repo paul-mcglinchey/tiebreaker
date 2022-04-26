@@ -3,7 +3,7 @@ import {
   Route
 } from 'react-router-dom';
 
-import { Login, NotificationContainer, PasswordReset, PasswordResetRequest, Signup, PrivateApp } from './components';
+import { Login, PasswordReset, PasswordResetRequest, Signup, PrivateApp, NotificationContainer } from './components';
 
 export default function App() {
 

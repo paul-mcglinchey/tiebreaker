@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import { Link, PathMatch } from 'react-router-dom';
 
 import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
@@ -17,7 +17,7 @@ interface INavMenuProps {
 
 const NavMenu = ({ links = [] }: INavMenuProps) => {
 
-  const { user, logout } = useAuth();
+  const { getUser, logout } = useAuth();
 
   return (
     <div className="flex flex-col mb-4">
@@ -73,7 +73,7 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
 
                   {/* Profile dropdown */}
                   <div className="font-semibold tracking-wide text-white hidden md:block">
-                    {}
+                    {getUser()?.username}
                   </div>
                   <Menu as="div" className="ml-3 relative">
                     <div>
@@ -93,9 +93,9 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                     >
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                         <div className="px-4 py-2 font-semibold tracking-wide block md:hidden">
-                          {user?.username}
+                          {getUser()?.username}
                         </div>
-                        {user?.isAdmin && (
+                        {getUser()?.isAdmin && (
                           <Menu.Item>
                             {({ active }) => (
                               <Link
@@ -171,4 +171,4 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
   )
 }
 
-export default NavMenu;
+export default memo(NavMenu);

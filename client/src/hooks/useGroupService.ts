@@ -1,79 +1,74 @@
-import { IGroup, IGroupService, Status } from "../models";
-import { removeItemInStorage } from "../services"
-import { endpoints } from "../utilities";
-import { useRequestBuilder, useStatus } from '.';
+import { IGroup, IGroupService } from "../models";
+import { endpoints, GroupContext } from "../utilities";
+import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.';
+import { useContext } from "react";
 
-const useGroupService = (refresh: () => void = () => {}): IGroupService => {
-  const { appendStatus, updateIsLoading } = useStatus()
+const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()
+  const { asyncHandler } = useAsyncHandler()
+  const { handleResolution } = useResolutionService()
+  const { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh } = useContext(GroupContext)
 
-  const addGroup = (values: IGroup) => {
-    updateIsLoading(true);
+  const addGroup = asyncHandler(async (values: IGroup) => {
+    const res = await fetch(endpoints.groups, requestBuilder('POST', undefined, values))
+    const json = await res.json()
 
-    fetch(endpoints.groups, requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          appendStatus(false, `Successfully created ${values.name}`, Status.Success);
-        } else if (res.status === 400) {
-          appendStatus(false, 'Group already exists', Status.Error);
-        } else {
-          appendStatus(false, `A problem occurred creating ${values.name}`, Status.Error);
-        }
-      })
-      .catch(() => {
-        appendStatus(false, `A problem occurred creating the group`, Status.Error);
-      })
-      .finally(() => {
-        updateIsLoading(false)
-        removeItemInStorage(endpoints.groups)
-        refresh();
-      })
-  }
+    handleResolution(res, json, 'create', 'group', [() => refresh()])
+  })
 
-  const updateGroup = (values: IGroup, groupId: string | undefined) => {
-    updateIsLoading(true);
+  const updateGroup = asyncHandler(async (values: IGroup, groupId: string | undefined) => {
+    if (!groupId) throw new Error('Group ID not set')
 
-    if (!groupId) return appendStatus(false, `Group ID must be set before updating`, Status.Error);
+    const res = await fetch(endpoints.group(groupId), requestBuilder('PUT', undefined, values))
+    const json = await res.json()
 
-    fetch(endpoints.group(groupId), requestBuilder('PUT', undefined, values))
-      .then(res => {
-        if (res.ok) appendStatus(false, `Successfully updated group`, Status.Success);
-        if (res.status === 400) appendStatus(false, `Bad request`, Status.Error);
-        if (!res.ok && res.status !== 400) appendStatus(false, `A problem occurred updating the group`, Status.Error);
-      })
-      .catch(() => {
-        appendStatus(false, `A problem occurred updating the group`, Status.Error);
-      })
-      .finally(() => {
-        updateIsLoading(false)
-        refresh();
-      })
-  }
+    handleResolution(res, json, 'update', 'group', [() => refresh()])
+  })
 
-  const deleteGroup = async (groupId: string | undefined) => {
-    if (!groupId) return appendStatus(false, `Group ID must be set before deleting`, Status.Error);
+  const deleteGroup = asyncHandler(async (groupId: string | undefined) => {
+    if (!groupId) throw new Error('Group ID not set')
     
-    updateIsLoading(true);
+    const res = await fetch(endpoints.group(groupId), requestBuilder("DELETE"))
+    const json = await res.json()
 
-    fetch(endpoints.group(groupId), requestBuilder("DELETE"))
-      .then(res => {
-        if (res.ok) {
-          appendStatus(false, `Successfully deleted group`, Status.Success);
-        } else {
-          appendStatus(false, `A problem ocurred deleting group`, Status.Error);
-        }
-      })
-      .catch(() => {
-        appendStatus(false, '', Status.None);
-      })
-      .finally(() => {
-        updateIsLoading(false)
-        removeItemInStorage(endpoints.groups)
-        refresh();
-      })
+    handleResolution(res, json, 'delete', 'group', [() => refresh()])
+  })
+
+  const getTotalEmployees = (groups: IGroup[]): number => {
+    const distinctEmployees: string[] = [];
+
+    groups.forEach((group: IGroup) => {
+      group.employees?.forEach((employeeId: string) => {
+        if (!distinctEmployees.includes(employeeId)) distinctEmployees.push(employeeId);
+      });
+    });
+
+    return distinctEmployees.length;
   }
 
-  return { addGroup, updateGroup, deleteGroup }
+  const getTotalRotas = (groups: IGroup[]): number => {
+    const distinctRotas: string[] = [];
+
+    groups.forEach((group: IGroup) => {
+      group.rotas?.forEach((rotaId: string) => {
+        if (!distinctRotas.includes(rotaId)) distinctRotas.push(rotaId);
+      });
+    });
+
+    return distinctRotas.length;
+  }
+
+  const getTotalClients = (groups: IGroup[]): number => {
+    let totalClients: number = 0;
+
+    groups.forEach((group: IGroup) => {
+      totalClients += group.clients?.length || 0;
+    })
+
+    return totalClients;
+  }
+
+  return { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh, addGroup, updateGroup, deleteGroup, getTotalClients, getTotalEmployees, getTotalRotas }
 }
 
 export default useGroupService

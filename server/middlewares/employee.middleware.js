@@ -11,11 +11,11 @@ const checkUserAccessToGroup = (accessRequired) => {
     Group.findById(groupId)
       .then((data) => {
         if (data.accessControl) {
-          if (data.accessControl[accessRequired].includes(req.auth.userId)) {
+          if (data.accessControl[accessRequired].includes(req.auth._id)) {
             next();
           } else {
             return res.status(403).send({
-              message: `User with ID ${req.auth.userId} not properly authorized to perform that action on group with ID ${groupId}`
+              message: `User with ID ${req.auth._id} not properly authorized to perform that action on group with ID ${groupId}`
             });
           }
         }

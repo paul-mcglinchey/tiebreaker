@@ -1,6 +1,6 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
+import { useGroupService } from "../../../../hooks"
 import { IEmployee, IEmployeeService } from "../../../../models"
-import { ApplicationContext } from "../../../../utilities"
 import { DeleteDialog, InlineButton, TableRow, TableRowItem } from "../../../Common"
 
 interface IEmployeeTableRowProps {
@@ -10,7 +10,7 @@ interface IEmployeeTableRowProps {
 
 const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
 
   const [deleteEmployeeOpen, setDeleteEmployeeOpen] = useState(false)
   const toggleDeleteEmployeeOpen = () => setDeleteEmployeeOpen(!deleteEmployeeOpen)

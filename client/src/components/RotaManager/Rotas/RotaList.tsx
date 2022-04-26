@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { memo, useState } from 'react';
 import { Fetch, RotaForm } from '../..';
-import { useFetch, useRequestBuilder, useRotaService } from '../../../hooks';
-import { ApplicationContext, endpoints } from '../../../utilities';
+import { useFetch, useGroupService, useRequestBuilder, useRotaService } from '../../../hooks';
+import { endpoints } from '../../../utilities';
 import { IFetch, IRota, IRotasResponse } from '../../../models';
 import { Modal, Prompter, Table } from '../../Common';
 import { TableIcon } from '@heroicons/react/solid';
@@ -11,18 +11,13 @@ const headers = [
   { name: "Rota name", value: "name", interactive: true },
   { name: "Created by", value: "createdBy", interactive: true },
   { name: "Employees", value: "employees", interactive: true },
-  { name: "Status", value: "locked", interactive: true },
+  { name: "Notification", value: "locked", interactive: true },
   { name: "Options", value: "", interactive: false },
 ]
 
-interface IRotaListProps {
-  refresh: () => void
-  dependency: boolean
-}
+const RotaList = () => {
 
-const RotaList = ({ refresh, dependency }: IRotaListProps) => {
-
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
   const { requestBuilder } = useRequestBuilder();
 
   const [sortField, setSortField] = useState(headers[1]!.value);
@@ -31,7 +26,7 @@ const RotaList = ({ refresh, dependency }: IRotaListProps) => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const rotaService = useRotaService(refresh);
+  const { addRota, dependency } = useRotaService();
 
   return (
     <>
@@ -67,10 +62,10 @@ const RotaList = ({ refresh, dependency }: IRotaListProps) => {
         )}
       />
       <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>
-        <RotaForm handleSubmit={(values) => rotaService.addRota(values, groupId)} />
+        <RotaForm handleSubmit={(values) => addRota(values, groupId)} />
       </Modal>
     </>
   )
 }
 
-export default RotaList;
+export default memo(RotaList);

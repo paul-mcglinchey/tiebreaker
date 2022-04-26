@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { IToolbarProps } from "../../../models";
 import ToolbarCreateButton from "./ToolbarCreateButton";
 
@@ -26,4 +27,4 @@ const Toolbar = ({ children, title, createGroupAction, addRotaAction, addClientA
   )
 }
 
-export default Toolbar;
+export default memo(Toolbar);

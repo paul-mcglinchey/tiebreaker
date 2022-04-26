@@ -1,76 +1,69 @@
-import { IRota, IRotaService, ISchedule, Status } from "../models"
-import { endpoints } from "../utilities";
-import { useRequestBuilder, useStatus } from ".";
+import { IRota, IRotaService, ISchedule, Notification } from "../models"
+import { endpoints, RotaContext } from "../utilities";
+import { useRequestBuilder, useNotification } from ".";
 import { useNavigate } from "react-router";
+import useAsyncHandler from "./useAsyncHandler";
+import { useContext } from "react";
 
-const useRotaService = (refresh: () => void = () => {}): IRotaService => {
+const useRotaService = (): IRotaService => {
   
-  const { appendStatus, updateIsLoading } = useStatus()
+  const { addNotification } = useNotification()
   const { requestBuilder } = useRequestBuilder()
+  const { asyncHandler } = useAsyncHandler()
+  const { refresh, dependency } = useContext(RotaContext)
   const navigate = useNavigate();
 
-  const addRota = (values: IRota, groupId: string) => {
-    updateIsLoading(true);
+  const addRota = asyncHandler(async (values: IRota, groupId: string | undefined) => {
+    if (!groupId) return addNotification('Group must be set', Notification.Error);
 
-    if (!groupId) return appendStatus(false, 'Group must be set', Status.Error);
+    const res = await fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
+    const json = await res.json()
 
-    fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
-      .then(res => {
-        if (res.ok) {
-          appendStatus(false, 'Successfully added rota', Status.Success);
-        } else {
-          appendStatus(false, 'A problem occurred adding rota', Status.Error);
-        }
-      })
-      .catch(() => {
-        appendStatus(false, 'A problem ocurred adding rota', Status.Error);
-      })
-      .finally(() => {
-        updateIsLoading(false);
-        navigate('/rotas/dashboard', { replace: true });
-      })
-  }
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully created rota`, Notification.Success);
+      return refresh()
+    }
 
-  const updateRota = (values: IRota, rotaId: string | undefined, groupId: string | undefined) => {
-    
-    if (!rotaId || !groupId) return appendStatus(false, 'Something went wrong...', Status.Error);
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
 
-    updateIsLoading(true);
+    return addNotification(`A problem occurred creating the rota`, Notification.Error)
+  })
+
+  const updateRota = (values: IRota, rotaId: string | undefined, groupId: string | undefined) => {    
+    if (!rotaId || !groupId) return addNotification('Something went wrong...', Notification.Error);
 
     fetch(endpoints.rota(rotaId, groupId), requestBuilder('PUT', undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, 'Successfully updated rota', Status.Success);
+          addNotification('Successfully updated rota', Notification.Success);
         } else {
-          appendStatus(false, 'A problem occurred updating rota', Status.Error);
+          addNotification('A problem occurred updating rota', Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, 'A problem ocurred updating rota', Status.Error);
+        addNotification('A problem ocurred updating rota', Notification.Error);
       })
-      .finally(() => {
-        updateIsLoading(false);
-        refresh();
-      })
+      .finally(() => refresh())
   }
 
-  const deleteRota = (rotaId: string | undefined, groupId: string | undefined) => {
-    updateIsLoading(true);
+  const deleteRota = async (rotaId: string | undefined, groupId: string | undefined) => {
+    if (!rotaId || !groupId) return addNotification(`Something went wrong...`, Notification.Error);
 
-    if (!rotaId || !groupId) return appendStatus(false, `Something went wrong...`, Status.Error);
+    const res = await fetch(endpoints.rota(rotaId, groupId), requestBuilder("DELETE"))
+    const json = await res.json()
 
-    fetch(endpoints.rota(rotaId, groupId), requestBuilder("DELETE"))
-      .then(res => {
-        if (res.ok) {
-          appendStatus(false, `Successfully deleted rota`, Status.Success);
-        } else {
-          appendStatus(false, `A problem ocurred deleting the rota`, Status.Error);
-        }
-      })
-      .catch(() => {
-        appendStatus(false, `A problem occurred deleting the rota`, Status.Error);
-      })
-      .finally(() => updateIsLoading(false))
+    if (res.ok) {
+      addNotification(`${res.status}: Successfully deleted rota`, Notification.Success);
+      return navigate('/rotas/dashboard')
+    }
+
+    if (res.status < 500) {
+      return addNotification(`${res.status}: ${json.message || res.statusText}`, Notification.Error)
+    }
+
+    return addNotification(`A problem occurred deleting the rota`, Notification.Error)
   }
 
   const getWeek = (weekModifier: number): { firstDay: Date, lastDay: Date } => {
@@ -91,29 +84,24 @@ const useRotaService = (refresh: () => void = () => {}): IRotaService => {
   }
 
   const updateSchedule = (values: ISchedule, rotaId: string | undefined, groupId: string | undefined) => {
-    updateIsLoading(true);
-    
     let startDate = new Date(values.startDate || "").toISOString().split('T')[0];
-    if (!rotaId || !groupId || !startDate) return appendStatus(false, 'Something went wrong...', Status.Error);
+    if (!rotaId || !groupId || !startDate) return addNotification('Something went wrong...', Notification.Error);
 
     fetch(endpoints.schedule(rotaId, groupId, startDate), requestBuilder("PUT", undefined, values))
       .then(res => {
         if (res.ok) {
-          appendStatus(false, `Successfully updated schedule`, Status.Success);
+          addNotification(`Successfully updated schedule`, Notification.Success);
         } else {
-          appendStatus(false, `A problem ocurred updating the schedule`, Status.Error);
+          addNotification(`A problem ocurred updating the schedule`, Notification.Error);
         }
       })
       .catch(() => {
-        appendStatus(false, `A problem occurred updating the schedule`, Status.Error);
+        addNotification(`A problem occurred updating the schedule`, Notification.Error);
       })
-      .finally(() => {
-        updateIsLoading(false);
-        refresh();
-      })
+      .finally(() => refresh())
   }
 
-  return { addRota, updateRota, deleteRota, getWeek, updateSchedule }
+  return { addRota, updateRota, deleteRota, getWeek, updateSchedule, refresh, dependency }
 }
 
 export default useRotaService

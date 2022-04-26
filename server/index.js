@@ -37,26 +37,23 @@ db.mongoose
     process.exit();
   });
 
-// Unprotected routes
-require('./routes/user.routes')(app);
+// Unprotected routes -- split up the user router into protected and unprotected
+app.use('/api/users', require('./routes/user.routes'))
 
 // Auth
 app.use(middleware.authMiddleware.protect);
 
 // routes
-require('./routes/grouplist.routes')(app);
-
+app.use('/api/listcollections', require('./routes/listcollection.routes'))
+app.use('/api/applications', require('./routes/application.routes'))
+app.use('/api/permissions', require('./routes/permission.routes'))
 app.use('/api/groups', require('./routes/group.routes'))
 
 app.use(middleware.errorMiddleware.errorHandler);
 
-// Seed Default List Definitions
-const grouplistController = require('./controllers/grouplist.controller');
-grouplistController.createDefaultLists();
-
 // Seed permissions
-const permissionController = require('./controllers/permission.controller')
-permissionController.createPermissions();
+// const permissionController = require('./controllers/permission.controller')
+// permissionController.createPermissions();
 
 // get the current time to display on restarts of the server
 var currentDateTime = new Date();

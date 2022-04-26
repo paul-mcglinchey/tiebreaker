@@ -1,25 +1,24 @@
-import { IRota, IRotaService } from "../../../../models";
+import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
-import { useContext } from "react";
-import { ApplicationContext } from "../../../../utilities";
+import { useGroupService } from "../../../../hooks";
 
 interface IAddRotaProps {
   addRotaOpen: boolean,
   toggleAddRotaOpen: () => void,
-  rotaService: IRotaService
+  addRota: (values: IRota, groupId: string | undefined) => void
 }
 
-const EditRotaModal = ({ addRotaOpen, toggleAddRotaOpen, rotaService }: IAddRotaProps) => {
+const EditRotaModal = ({ addRotaOpen, toggleAddRotaOpen, addRota }: IAddRotaProps) => {
 
-  const { groupId } = useContext(ApplicationContext);
+  const { groupId } = useGroupService()
 
   return (
     <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>
       <RotaForm
         submitButton={<Button content='Add rota' />} 
         handleSubmit={(values: IRota) => {
-          rotaService.addRota(values, groupId);
+          addRota(values, groupId);
           toggleAddRotaOpen();
         }}/>
     </Modal>

@@ -1,11 +1,14 @@
-const authMiddleware = require('./auth.middleware');
-const clientMiddleware = require('./client.middleware');
-const groupMiddleware = require('./group.middleware');
-const validationMiddleware = require('./validation.middleware');
-const rotaMiddleware = require('./rota.middleware');
-const scheduleMiddleware = require('./schedule.middleware');
-const employeeMiddleware = require('./employee.middleware');
-const errorMiddleware = require('./error.middleware');
+const authMiddleware = require('./auth.middleware')
+const clientMiddleware = require('./client.middleware')
+const groupMiddleware = require('./group.middleware')
+const validationMiddleware = require('./validation.middleware')
+const rotaMiddleware = require('./rota.middleware')
+const scheduleMiddleware = require('./schedule.middleware')
+const employeeMiddleware = require('./employee.middleware')
+const errorMiddleware = require('./error.middleware')
+const listcollectionMiddleware = require('./listcollection.middleware')
+const applicationMiddleware = require('./application.middleware')
+const permissionMiddleware = require('./permission.middleware')
 
 module.exports = {
   authMiddleware,
@@ -15,5 +18,8 @@ module.exports = {
   rotaMiddleware,
   scheduleMiddleware,
   employeeMiddleware,
-  errorMiddleware
+  errorMiddleware,
+  listcollectionMiddleware,
+  applicationMiddleware,
+  permissionMiddleware
 };

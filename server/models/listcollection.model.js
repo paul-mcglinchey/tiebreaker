@@ -3,8 +3,8 @@ const mongoose    = require('mongoose');
 
 const { AuditSchema } = require('./common/audit.schema');
 
-const GroupList = mongoose.model(
-  "GroupList",
+const ListCollection = mongoose.model(
+  "ListCollection",
   new Schema({
     lists: [{
       name: { type: String, required: true },
@@ -16,8 +16,8 @@ const GroupList = mongoose.model(
       }]
     }],
     audit: AuditSchema,
-    default: { type: Boolean, required: false, default: false }
+    system: { type: Boolean, required: false, default: false }
   }, { timestamps: true })
 );
 
-module.exports = GroupList;
+module.exports = ListCollection;
