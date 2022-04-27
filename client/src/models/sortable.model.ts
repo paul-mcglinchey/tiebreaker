@@ -1,6 +1,8 @@
+import { SortDirection } from "./types";
+
 export interface ISortable {
-  sortField: string,
+  sortField: string | undefined,
   setSortField: (sortField: string) => void,
-  sortDirection: string,
-  setSortDirection: (sortDirection: string) => void
+  sortDirection: SortDirection,
+  setSortDirection: (sortDirection: SortDirection) => void
 }

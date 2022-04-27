@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router"
 import { useAuth } from "../hooks"
 import { IAuth } from "../models"
-import { GroupProvider, RotaProvider, UserProvider } from "../utilities"
+import { EmployeeProvider, GroupProvider, RotaProvider, UserProvider } from "../utilities"
 import { AdminPanel } from "./AdminPanel"
 import { ClientDashboard, ClientManager, ClientPage } from "./ClientManager"
 import { Authenticate } from "./Common"
@@ -41,7 +41,9 @@ const PrivateApp = () => {
                       {/* Rota manager specific routes */}
                       <Route path="/rotas/*" element={
                         <RotaProvider>
-                          <RotaManager />
+                          <EmployeeProvider>
+                            <RotaManager />
+                          </EmployeeProvider>
                         </RotaProvider>
                       }>
                         <Route path="dashboard" element={<RotaDashboard />} />

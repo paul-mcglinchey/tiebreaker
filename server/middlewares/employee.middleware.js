@@ -1,7 +1,7 @@
 const asyncHandler      = require('express-async-handler')
 const db                = require('../models')
 const Group             = db.group
-const { Employee }      = db.employee
+const Employee          = db.employee
 
 const checkUserAccessToGroup = (accessRequired) => {
   return (req, res, next) => {
@@ -39,7 +39,7 @@ const checkIfQueryHasEmployeeId = asyncHandler(async (req, res, next) => {
 
 const checkIfEmployeeExists = asyncHandler(async (req, res, next) => {
   // check that the group exists
-  const employee = Employee.findById(req.params.employeeId);
+  const employee = await Employee.findById(req.params.employeeId);
 
   if (!employee) {
     res.status(404)

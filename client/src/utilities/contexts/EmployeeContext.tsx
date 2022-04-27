@@ -1,13 +1,11 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IRota, IRotaContext, IRotasResponse, SortDirection } from "../../models";
+import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse, SortDirection, IEmployeeContext } from "../../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { endpoints } from "../config";
 
-export const RotaContext = createContext<IRotaContext>({
-  getRotas: () => [],
+export const EmployeeContext = createContext<IEmployeeContext>({
+  getEmployees: () => [],
   getCount: () => 0,
-  rotaId: undefined,
-  updateRotaId: () => {},
   sortField: undefined,
   updateSortField: () => {},
   sortDirection: SortDirection.Desc,
@@ -18,9 +16,8 @@ export const RotaContext = createContext<IRotaContext>({
   dependency: false
 });
 
-export const RotaProvider = ({ children }: IChildrenProps) => {
-  const [rotaId, setRotaId] = useState<string | undefined>(undefined)
-  const [rotas, setRotas] = useState<IRota[]>([])
+export const EmployeeProvider = ({ children }: IChildrenProps) => {
+  const [Employees, setEmployees] = useState<IEmployee[]>([])
   const [count, setCount] = useState<number>(0)
 
   const [sortField, setSortField] = useState<string | undefined>(undefined)
@@ -29,20 +26,18 @@ export const RotaProvider = ({ children }: IChildrenProps) => {
   const { groupId, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IRotasResponse> = useFetch(endpoints.rotas(groupId), requestBuilder(), [dependency, sortField, sortDirection, groupId])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId), requestBuilder(), [dependency, sortField, sortDirection, groupId])
 
   useEffect(() => {
     if (response) {
-      setRotas(response.rotas)
+      setEmployees(response.employees)
       setCount(response.count)
     }
   }, [response])
 
   const contextValue = {
-    getRotas: useCallback(() => rotas, [rotas]),
+    getEmployees: useCallback(() => Employees, [Employees]),
     getCount: useCallback(() => count, [count]),
-    rotaId,
-    updateRotaId: useCallback((rotaId: string | undefined) => setRotaId(rotaId), []),  
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),
     sortDirection,
@@ -54,8 +49,8 @@ export const RotaProvider = ({ children }: IChildrenProps) => {
   }
 
   return (
-    <RotaContext.Provider value={contextValue}>
+    <EmployeeContext.Provider value={contextValue}>
       {children}
-    </RotaContext.Provider>
+    </EmployeeContext.Provider>
   )
 } 

@@ -1,6 +1,10 @@
-import { IRota, ISchedule } from "..";
+import { IRota } from "..";
+import { IRotaContext } from "../contexts";
 
-export interface IRotaService {
+export interface IRotaService extends IRotaContext {
+  getRota       : (
+    rotaId: string | undefined
+  ) => IRota | undefined
   addRota       : (
     values: IRota, 
     groupId: string | undefined
@@ -13,15 +17,5 @@ export interface IRotaService {
   deleteRota    : (
     rotaId: string | undefined, 
     groupId: string | undefined
-  ) => void,
-  getWeek       : (
-    weekModifier: number
-  ) => { firstDay: Date, lastDay: Date },
-  updateSchedule: (
-    values: ISchedule, 
-    rotaId: string | undefined, 
-    groupId: string | undefined
-  ) => void,
-  refresh: () => void
-  dependency: boolean
+  ) => void
 }

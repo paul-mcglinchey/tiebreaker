@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const db = require('../models');
 const Rota = db.rota;
 
-const checkRotaIdExists = asyncHandler(async (req, res, next) => {
+const checkIfQueryHasRotaId = asyncHandler(async (req, res, next) => {
   if (!req.params.rotaId) {
     res.status(400)
     throw new Error('Request requires a rota ID')
@@ -35,7 +35,7 @@ const checkUserAccessToRota = (accessRequired) => {
 }
 
 const rotaMiddleware = {
-  checkRotaIdExists,
+  checkIfQueryHasRotaId,
   checkUserAccessToRota
 };
 

@@ -1,4 +1,4 @@
-import { IEmployee } from "./employee.model";
+import { IAudit } from "./audit.model";
 import { IRota } from "./rota.model";
 
 export interface IScheduleShift {
@@ -8,22 +8,23 @@ export interface IScheduleShift {
   notes: string
 }
 export interface IEmployeeSchedule {
-  employee: IEmployee,
+  employeeId: string,
   shifts: IScheduleShift[]
 }
 
 export interface ISchedule {
-  accessControl?: {
-    viewers: string[],
-    editors: string[],
-    owners: string[],
-  },
   startDate?: Date,
   locked?: boolean,
   employeeSchedules: IEmployeeSchedule[]
+  audit?: IAudit
 }
 
 export interface IScheduleResponse {
   rota: IRota
   schedule: ISchedule
+}
+
+export interface ISchedulesResponse {
+  count: number
+  schedules: ISchedule[]
 }

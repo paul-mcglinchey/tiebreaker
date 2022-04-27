@@ -1,94 +1,28 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId
 const asyncHandler = require('express-async-handler')
-const db = require('../models');
-const Rota = db.rota;
-const Schedule = db.schedule;
-const { Employee } = db.employee;
+const db = require('../models')
+const Rota = db.rota
+const Schedule = db.schedule
+const Employee = db.employee
 
 // Retrieve all schedules for a rota
-exports.getScheduleByDate = (req, res) => {
+exports.get = asyncHandler(async (req, res) => {
+  const { rotaId } = req.params;
 
-  const { rotaId, startDate } = req.params;
+  const rota = await Rota.findById(rotaId)
 
-  Rota.findOne({ _id: rotaId, 'accessControl.viewers': req.auth._id })
-    .then((rota) => {
+  if (!rota) {
+    res.status(400)
+    throw new Error('Rota not found')
+  }
 
-      const scheduleIds = rota.schedules;
+  const query = { _id: { $in: rota.schedules }}
 
-      Schedule.findOne({ _id: { $in: scheduleIds }, startDate: new Date(startDate) })
-        .then(schedule => {
-          if (!schedule) {
-            // Check if the schedule being requested is in the past
-            let currentDate = new Date();
+  const count = await Schedule.countDocuments(query)
+  const schedules = await Schedule.find(query)
 
-            console.log(new Date(startDate), new Date(currentDate.setDate(currentDate.getDate() - 7)))
-            if (new Date(startDate) < currentDate.setDate(currentDate.getDate() - 7)) return res.status(200).send({ message: `No schedule found with start date ${startDate}.` })
-
-            // Automatically create a new schedule for this week if it doesn't exist
-            const employeeSchedules = rota.employeeIds.map(e => {
-              return {
-                employeeId: e,
-                shifts: []
-              }
-            });
-
-            // Create a new schedule
-            const schedule = new Schedule({
-              accessControl: {
-                viewers: [req.auth._id], editors: [req.auth._id], owners: [req.auth._id]
-              },
-              startDate: new Date(startDate),
-              employeeSchedules: employeeSchedules,
-              createdBy: req.auth._id,
-              updatedBy: req.auth._id
-            });
-
-            // Save schedule in the database
-            schedule
-              .save(schedule)
-              .then(schedule => {
-                // Add the schedule to the rota which was selected
-                Rota.updateOne({
-                  _id: rotaId,
-                  $or: [{ 'accessControl.editors': req.auth._id }, { 'accessControl.owners': req.auth._id }]
-                }, {
-                  $push: { schedules: new ObjectId(schedule._id) }
-                })
-                  .then(() => {
-                    this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ rota, schedule }))
-                  })
-                  .catch(err => {
-                    return res.status(500).send({
-                      message:
-                        err.message || `A problem occurred adding schedule to rota with ID ${rotaId}.`
-                    })
-                  })
-              })
-              .catch(err => {
-                return res.status(500).send({
-                  message:
-                    err.message || `Some error occurred while creating the schedule.`
-                });
-              });
-          } else {
-            this.updateEmployees(res, rota, schedule).then(schedule => {
-              // Joining the employee data to the schedules, this will keep the employees up to date even when the schedule is in the past
-              this.joinEmployees(res, schedule).then(schedule => res.status(200).send({ rota, schedule }))
-            });
-          }
-        })
-        .catch(err => {
-          return res.status(500).send({
-            message: err.message || `A problem occurred fetching the schedule from rota with ID ${rotaId}.`
-          })
-        })
-    })
-    .catch(err => {
-      return res.status(500).send({
-        message: err.message || `A problem occurred finding rota with ID ${rotaId}.`
-      });
-    });
-};
+  res.json({ count, schedules })
+})
 
 exports.updateEmployees = (res, rota, schedule) => {
   let current = new Date();
@@ -134,8 +68,28 @@ exports.joinEmployees = (res, schedule) => {
     })
 }
 
+// Create and save a new schedule
+exports.create = asyncHandler(async (req, res) => {
+  const { rotaId } = req.params;
+
+  // Create a new schedule
+  const schedule = await Schedule.create({
+    ...req.body,
+    audit: {
+      createdBy: req.auth._id,
+      updatedBy: req.auth._id
+    }
+  });
+
+  if (!schedule) throw new Error('Problem occurred creating schedule')
+
+  await Rota.findByIdAndUpdate(rotaId, { $push: { schedules: new ObjectId(schedule._id) }})
+
+  res.status(201).json(schedule)
+})
+
 // Update a schedule
-exports.updateSchedule = asyncHandler(async (req, res) => {
+exports.update = asyncHandler(async (req, res) => {
   const { rotaId, startDate } = req.params
 
   const rota = await Rota.findById(rotaId)
@@ -149,52 +103,5 @@ exports.updateSchedule = asyncHandler(async (req, res) => {
   
   const test = await Schedule.findOne({ _id: { $in: rota.schedules.map(sId => new ObjectId(sId)) }, startDate: new Date(startDate)})
 
-  console.log(test)
-
   return res.json(schedule)
 })
-
-// Create and save a new schedule
-exports.addSchedule = (req, res) => {
-
-  const { rotaId } = req.params;
-  const { startDate, employeeSchedules } = req.body;
-
-  // Create a new schedule
-  const schedule = new Schedule({
-    startDate: startDate,
-    employeeSchedules: employeeSchedules,
-    createdBy: req.auth._id,
-    updatedBy: req.auth._id
-  });
-
-  // Save schedule in the database
-  schedule
-    .save(schedule)
-    .then(schedule => {
-      // Add the schedule to the rota which was selected
-      Rota.updateOne({
-        _id: rotaId,
-        $or: [{ 'accessControl.editors': req.auth._id }, { 'accessControl.owners': req.auth._id }]
-      }, {
-        $push: { schedules: new ObjectId(schedule._id) }
-      })
-        .then(() => {
-          return res.status(200).send({
-            success: `Schedule created successfully in rota with ID ${rotaId}.`
-          })
-        })
-        .catch(err => {
-          return res.status(500).send({
-            message:
-              err.message || `A problem occurred adding schedule to rota with ID ${rotaId}.`
-          })
-        })
-    })
-    .catch(err => {
-      return res.status(500).send({
-        message:
-          err.message || `Some error occurred while creating the schedule.`
-      });
-    });
-};

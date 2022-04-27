@@ -11,7 +11,7 @@ const RotaDashboard = () => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const { getCount, isLoading, error, addGroup } = useGroupService();
+  const { getCount, isLoading, error } = useGroupService();
   const { addRota, refresh } = useRotaService();
 
   return (
@@ -30,7 +30,7 @@ const RotaDashboard = () => {
       ) : (
         <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
       <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} addRota={addRota} />
     </>
   )

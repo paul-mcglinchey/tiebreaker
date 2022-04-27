@@ -1,6 +1,7 @@
-const { Schema } = require('mongoose');
-const mongoose = require('mongoose');
-const { AuditSchema } = require('./common/audit.schema');
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const { AuditSchema } = require('./common/audit.schema')
 
 const SessionSchema = new Schema({
   title: { 
@@ -22,4 +23,4 @@ const Session = mongoose.model(
   "Session", SessionSchema
 );
 
-module.exports = { SessionSchema, Session };
+module.exports = { SessionSchema, Session }

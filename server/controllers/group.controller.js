@@ -4,7 +4,7 @@ const db = require('../models')
 
 const Group = db.group
 const Client = db.client
-const Employee = db.employee.Employee
+const Employee = db.employee
 const Rota = db.rota
 const ListCollection = db.listcollection
 
@@ -25,16 +25,14 @@ exports.get = asyncHandler(async (req, res) => {
 
 // Create group
 exports.create = asyncHandler(async (req, res) => {
-  // destructure the body
-  const { name, description, colour } = req.body
-
   // get the ID of the default list set to create the group with
   const systemListCollectionId = await ListCollection.findOne({ default: true }, { _id: 1 })
 
   const group = await Group.create({
-    name, description, colour,
-    users: [req.auth._id],
+    ...req.body,
+    entities: { users: [req.auth._id] },
     listcollections: [systemListCollectionId],
+    audit: { createdBy: req.auth._id, updatedBy: req.auth._id }
   })
 
   return res.status(201).json(group)

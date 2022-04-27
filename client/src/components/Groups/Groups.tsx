@@ -9,7 +9,7 @@ const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
-  const { addGroup, getCount, getGroups, isLoading } = useGroupService();
+  const { getCount, getGroups, isLoading } = useGroupService();
 
   return (
     <>
@@ -31,13 +31,13 @@ const Groups = () => {
                         <div className="flex space-x-8">
                           {isCardFlipped ? (
                             <>
-                              <DataPoint value={g.users?.length || 0} label="user" />
+                              <DataPoint value={g.entities?.users?.length || 0} label="user" />
                             </>
                           ) : (
                             <>
-                              <DataPoint value={g.clients?.length} label="client" />
-                              <DataPoint value={g.employees?.length} label="employee" />
-                              <DataPoint value={g.rotas?.length} label="rota" />
+                              <DataPoint value={g.entities?.clients?.length} label="client" />
+                              <DataPoint value={g.entities?.employees?.length} label="employee" />
+                              <DataPoint value={g.entities?.rotas?.length} label="rota" />
                             </>
                           )}
                         </div>
@@ -50,7 +50,7 @@ const Groups = () => {
               )
             )}
       </div>
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
     </>
   )
 }

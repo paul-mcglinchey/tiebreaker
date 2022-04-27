@@ -1,12 +1,16 @@
+interface IGroupEntities {
+  users?: string[]
+  rotas?: string[]
+  clients?: string[]
+  employees?: string[]
+} 
 export interface IGroup {
   _id?: string
   name?: string
   description?: string
   applications?: string[]
-  users?: string[]
-  clients?: string[]
-  rotas?: string[]
-  employees?: string[]
+  entities?: IGroupEntities
+  deletedEntities?: IGroupEntities
   listDefinitions?: string
   colour?: string
 }

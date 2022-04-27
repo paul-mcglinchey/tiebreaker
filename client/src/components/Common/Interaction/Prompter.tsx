@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { useDelayedRendering } from '../../../hooks';
+import Button from './Button';
 
 interface IconProps {
   childComp?: React.ReactNode
@@ -8,11 +9,12 @@ interface IconProps {
 
 interface IPrompterProps {
   title: string,
+  subtitle?: string,
   action: () => void,
-  Icon: React.FC<IconProps>
+  Icon?: React.FC<IconProps>
 }
 
-const Prompter = ({ Icon, title, action }: IPrompterProps) => {
+const Prompter = ({ Icon, title, subtitle, action }: IPrompterProps) => {
 
   const show = useDelayedRendering(100);
 
@@ -25,20 +27,23 @@ const Prompter = ({ Icon, title, action }: IPrompterProps) => {
       leave="transition ease-in duration-75"
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
-      className="flex justify-center"
+      className="flex mt-24 justify-center rounded-md text-gray-200"
     >
-      <button onClick={() => action()} className="flex justify-center mt-32">
-        <div className="flex bg-gray-800 text-3xl sm:text-5xl text-white font-extrabold p-4 rounded-lg transform hover:scale-105 transition-all text-center">
-          <div className="flex tracking-wide">
-            <div>
-              {title}
-            </div>
-            <span className="inline-block align-middle">
-              <Icon className="h-10 w-10 lg:h-12 lg:w-12 ml-2 md:ml-4 mb-2 hover:fill-current transition-all" />
-            </span>
-          </div>
+      <div className="flex flex-col border-2 border-blue-500 p-4 rounded-lg">
+        <div>
+          <h3 className='whitespace-nowrap text-gray-100 font-extrabold tracking-wide text-xl mb-2'>
+            {title}
+          </h3>
+          {subtitle && (
+            <p className='tracking-wide'>
+              {subtitle}
+            </p>
+          )}
         </div>
-      </button>
+        <div className="flex justify-end mt-20">
+          <Button action={() => action} Icon={Icon} content='Lets go!' />
+        </div>
+      </div>
     </Transition>
   )
 }

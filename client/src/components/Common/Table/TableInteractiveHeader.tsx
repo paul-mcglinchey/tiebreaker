@@ -1,5 +1,5 @@
 import { MenuIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/outline';
-import { IChildrenProps, ISortable } from '../../../models';
+import { IChildrenProps, ISortable, SortDirection } from '../../../models';
 import { SquareIconButton } from '..';
 
 interface IInteractiveHeaderProps extends ISortable, IChildrenProps {
@@ -28,7 +28,7 @@ const TableInteractiveHeader = ({
   }
 
   const toggleSortDirection = () => {
-    setSortDirection(sortDirection === "descending" ? "ascending" : "descending");
+    setSortDirection(sortDirection === SortDirection.Desc ? SortDirection.Asc : SortDirection.Desc);
   }
 
   return (

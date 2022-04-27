@@ -8,19 +8,17 @@ import { Login, PasswordReset, PasswordResetRequest, Signup, PrivateApp, Notific
 export default function App() {
 
   return (
-    <>
+    <div className="font-sans subpixel-antialiased">
       <NotificationContainer />
-      <div className="font-sans subpixel-antialiased">
-        <Routes>
-          <Route path="/*" element={<PrivateApp />} />
+      <Routes>
+        <Route path="/*" element={<PrivateApp />} />
 
-          {/* Unprotected routes */}
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
-          <Route path="passwordresetrequest" element={<PasswordResetRequest />} />
-          <Route path="passwordreset" element={<PasswordReset />} />
-        </Routes>
-      </div>
-    </>
+        {/* Unprotected routes */}
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="passwordresetrequest" element={<PasswordResetRequest />} />
+        <Route path="passwordreset" element={<PasswordReset />} />
+      </Routes>
+    </div>
   );
 }

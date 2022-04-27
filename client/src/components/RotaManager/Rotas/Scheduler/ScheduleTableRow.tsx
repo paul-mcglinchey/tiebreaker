@@ -1,9 +1,10 @@
 import { FieldArray } from "formik";
 import { Fragment } from "react";
+import { useEmployeeService } from "../../../../hooks";
 import { IEmployeeSchedule, ISchedule, IScheduleShift } from "../../../../models";
-import EmployeeCell from "./EmployeeCell";
+import EmployeeCell from "./ScheduleTableRowItem";
 
-interface IEmployeeRowProps {
+interface IScheduleTableRowProps {
   employeeSchedule: IEmployeeSchedule,
   dayCycle: number[],
   employeeIndex: number,
@@ -11,9 +12,10 @@ interface IEmployeeRowProps {
   editing: boolean
 }
 
-const EmployeeRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editing }: IEmployeeRowProps) => {
+const ScheduleTableRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editing }: IScheduleTableRowProps) => {
 
-  const { name, contactInfo } = employeeSchedule.employee;
+  const { getEmployee } = useEmployeeService()
+  const employee = getEmployee(employeeSchedule.employeeId)
 
   const getHours = (startHour: string, endHour: string) => {
 
@@ -55,10 +57,10 @@ const EmployeeRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editin
     <tr className="bg-gray-900 border-gray-700">
       <th className="flex flex-col space-y-1 text-left px-6 py-6 tracking-wider">
         <div>
-          {name.firstName} {name.lastName}
+          {employee?.name.firstName || '--'} {employee?.name.lastName}
         </div>
         <div className="text-sm font-light">
-          {contactInfo.primaryEmail}
+          {employee?.contactInfo.primaryEmail || '--'}
         </div>
       </th>
       <FieldArray
@@ -87,4 +89,4 @@ const EmployeeRow = ({ employeeSchedule, dayCycle, employeeIndex, values, editin
   )
 }
 
-export default EmployeeRow;
+export default ScheduleTableRow;

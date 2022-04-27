@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 const db = require('../models');
 const Rota = db.rota;
 const Group = db.group;
-const { Employee } = db.employee;
+const Employee = db.employee;
 
 exports.get = asyncHandler(async (req, res) => {
   const { groupId } = req.params;
@@ -15,10 +15,11 @@ exports.get = asyncHandler(async (req, res) => {
     throw new Error('Group not found')
   }
 
-  const count = await Rota.countDocuments({ _id: { $in: group.rotas }})
+  const query = { _id: { $in: group.entities.rotas }}
+  const count = await Rota.countDocuments(query)
   const rotas = await Rota
     .aggregate()
-    .match({ _id: { $in: group.rotas }})
+    .match(query)
     .exec()
 
   return res.json({ count, rotas })
@@ -34,12 +35,12 @@ exports.getById = asyncHandler(async (req, res) => {
     throw new Error('Rota doesn\'t exist')
   }
 
-  const employees = await Employee.find({ _id: { $in: rota.employeeIds }})
+  const employees = await Employee.find({ _id: { $in: rota.entities.employees }})
 
   return res.json({ ...rota, employees })
 })
 
-exports.addRota = asyncHandler(async (req, res) => {
+exports.create = asyncHandler(async (req, res) => {
   const { groupId } = req.params;
 
   // create a new rota instance
@@ -54,29 +55,33 @@ exports.addRota = asyncHandler(async (req, res) => {
   if (!rota) throw new Error('Problem occurred creating rota')
 
   // Update the group
-  await Group.findByIdAndUpdate(groupId, { $push: { rotas: new ObjectId(rota._id)}})
+  await Group.findByIdAndUpdate(groupId, { $push: { 'entities.rotas': new ObjectId(rota._id)}, audit: { updatedBy: req.auth._id }})
 
   return res.status(201).json(rota)
 })
 
-exports.updateRota = asyncHandler(async (req, res) => {
+exports.update = asyncHandler(async (req, res) => {
   const { rotaId } = req.params;
 
   const rota = await Rota.findByIdAndUpdate(rotaId, { 
     ...req.body,
     audit: {
       updateBy: req.auth._id
-    } 
+    }
   })
 
   return res.json(rota)
 })
 
-exports.deleteRota = asyncHandler(async (req, res) => {
+exports.delete = asyncHandler(async (req, res) => {
   const { groupId, rotaId } = req.params;
 
-  // Soft delete the rota, remove it from the group
-  await Group.findByIdAndUpdate(groupId, { $pull: { rotas: rotaId }})
+  // Do a soft delete of the employee (mark as deleted and move it from the group entities to deletedEntities)
+  const rota = await Rota.findByIdAndUpdate(rotaId, { deleted: true, audit: { updatedBy: req.auth._id } })
 
-  return res.json({ message: 'Deleted rota' })
+  if (!rota) throw new Error('A problem occurred deleting the rota')
+
+  await Group.findByIdAndUpdate(groupId, { $pull: { 'entities.rotas': rota._id }, $push: { 'deletedEntities.rotas': rota._id }})
+
+  return res.json({ _id: rota._id, message: 'Deleted rota' })
 })

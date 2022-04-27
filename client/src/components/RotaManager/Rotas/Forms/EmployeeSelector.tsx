@@ -2,7 +2,7 @@ import { FieldArray } from "formik";
 import { IEmployee } from "../../../../models";
 import { combineClassNames } from "../../../../services";
 
-interface IStaffSelectorProps {
+interface IEmployeeSelectorProps {
   name: string,
   items: IEmployee[],
   formValues: string[],
@@ -19,7 +19,7 @@ const toggleValue = (values: string[], value: string): string[] => {
   return values;
 }
 
-const StaffSelector = ({ name, items, formValues, setFieldValue }: IStaffSelectorProps) => {
+const EmployeeSelector = ({ name, items, formValues, setFieldValue }: IEmployeeSelectorProps) => {
 
   return (
     <FieldArray
@@ -47,4 +47,4 @@ const StaffSelector = ({ name, items, formValues, setFieldValue }: IStaffSelecto
   )
 }
 
-export default StaffSelector;
+export default EmployeeSelector;

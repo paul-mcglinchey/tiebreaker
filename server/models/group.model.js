@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
-const { UsersSchema } = require('./common/users.schema');
+const { UsersSchema } = require('./common/groupentity.schema');
 const { AuditSchema } = require('./common/audit.schema');
+const GroupEntitySchema = require('./common/groupentity.schema');
 
 const Group = mongoose.model(
   "Group",
@@ -17,22 +18,8 @@ const Group = mongoose.model(
       type: Schema.Types.ObjectId,
       ref: 'Application'
     }],
-    users: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    }],
-    clients: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Client'
-    }],
-    employees: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Employee'
-    }],
-    rotas: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Rota'
-    }],
+    entities: GroupEntitySchema,
+    deletedEntities: GroupEntitySchema,
     listcollections: [{
       type: Schema.Types.ObjectId,
       ref: 'ListCollection'

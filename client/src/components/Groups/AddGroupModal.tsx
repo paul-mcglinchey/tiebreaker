@@ -1,14 +1,15 @@
-import { IGroup } from "../../models";
+import { useGroupService } from "../../hooks";
 import { Modal } from "../Common";
 import GroupForm from "./GroupForm";
 
 interface IAddGroupModalProps {
   addGroupOpen: boolean,
-  toggleAddGroupOpen: () => void,
-  addGroup: (values: IGroup) => void
+  toggleAddGroupOpen: () => void
 }
 
-const AddGroupModal = ({ addGroupOpen, toggleAddGroupOpen, addGroup }: IAddGroupModalProps) => {
+const AddGroupModal = ({ addGroupOpen, toggleAddGroupOpen }: IAddGroupModalProps) => {
+
+  const { addGroup } = useGroupService()
 
   return (
     <Modal title="Add group" modalOpen={addGroupOpen} toggleModalOpen={toggleAddGroupOpen}>

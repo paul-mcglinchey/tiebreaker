@@ -1,4 +1,4 @@
-import { createContext, useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import { IChildrenProps, INotification, Notification } from "../../models";
 import { v4 as uuid } from 'uuid'
 
@@ -17,12 +17,11 @@ export const NotificationContext = createContext<INotificationContext>({
 export const NotificationProvider = ({ children }: IChildrenProps) => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
 
-  const getNotifications = () => notifications
   const addNotification = (message: string, type: Notification) => setNotifications(prev => [...prev, { _id: uuid(), message: message, type: type }])
   const removeNotification = (notificationId: string) => setNotifications(prev => prev.filter((s: INotification) => s._id !== notificationId))
 
   const contextValue = {
-    getNotifications: useMemo(() => getNotifications, [getNotifications, notifications]),
+    getNotifications: useCallback(() => notifications, [notifications]),
     addNotification: useCallback((message: string, type: Notification) => addNotification(message, type), []),
     removeNotification: useCallback((notificationId: string) => removeNotification(notificationId), []),
   }

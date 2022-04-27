@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { IEmployeeSchedule, ISchedule } from "../../../../models"
-import { ScheduleShiftInput } from "./Common";
+import { ScheduleShiftInput } from "..";
 
-interface IEmployeeCellProps {
+interface IScheduleTableRowItemProps {
   employeeSchedule: IEmployeeSchedule,
   values: ISchedule,
   day: number,
@@ -11,7 +11,7 @@ interface IEmployeeCellProps {
   editing: boolean
 }
 
-const EmployeeCell = ({ values, day, employeeIndex, index, editing }: IEmployeeCellProps) => {
+const ScheduleTableRowItem = ({ values, day, employeeIndex, index, editing }: IScheduleTableRowItemProps) => {
 
   const currentDate = useMemo(() => new Date(values.startDate || ""), [values.startDate]);
   currentDate.setDate(new Date(values.startDate || "").getDate() + day);
@@ -56,4 +56,4 @@ const EmployeeCell = ({ values, day, employeeIndex, index, editing }: IEmployeeC
   )
 }
 
-export default EmployeeCell;
+export default ScheduleTableRowItem;

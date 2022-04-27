@@ -15,7 +15,7 @@ exports.get = asyncHandler(async (req, res) => {
 
   if (!pageSize || !groupId || !sortField || !sortDirection) {
     res.status(400);
-    throw new Error(`Request is missing one of the following parameters: pageSize, pageNumber, groupId, sortField, sortDirection.`)
+    throw new Error(`Request is missing one of the following parameters: pageSize, groupId, sortField, sortDirection.`)
   }
 
   const group = await Group.findById(groupId)
@@ -24,7 +24,7 @@ exports.get = asyncHandler(async (req, res) => {
     throw new Error(`Group with ID ${groupId} not found.`)
   }
   
-  const query = { _id: { $in: group.clients }, deleted: false }
+  const query = { _id: { $in: group.entities.clients }, deleted: false }
   // Get the count of documents which match this query
   const count = await Client.countDocuments(query);
 
@@ -49,13 +49,16 @@ exports.get = asyncHandler(async (req, res) => {
 exports.getById = asyncHandler(async (req, res) => {
   let { clientId } = req.params;
 
-  // create the aggregator so we can add custom fields
-  const aggregate = Client.aggregate();
-
-  const client = await aggregate
+  const client = await Client
+    .aggregate()
     .match({ _id: new ObjectId(clientId) })
     .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } })  
     .exec()
+
+  if (client.length === 0 ) {
+    res.status(400)
+    throw new Error('Client not found')
+  }
 
   return res.status(200).json(client[0]);
 })
@@ -79,7 +82,7 @@ exports.create = asyncHandler(async (req, res) => {
   if (!client) throw new Error('Problem occurred creating client')
 
   // Update the group with the newly added client
-  await Group.findByIdAndUpdate(groupId, { $push: { clients: new ObjectId(client._id) } });
+  await Group.findByIdAndUpdate(groupId, { $push: { 'entities.clients': new ObjectId(client._id) } });
 
   return res.status(201).json(client);
 });
@@ -87,36 +90,28 @@ exports.create = asyncHandler(async (req, res) => {
 // Update a client
 exports.update = asyncHandler(async (req, res) => {
   const { clientId } = req.params;
-
-  const updateBody = req.body.updateBody;
-  updateBody.activityLog.push({
-    task: "updated",
-    actor: req.auth._id
-  })
   
-  const client = Client.findByIdAndUpdate(clientId, updateBody);
+  const client = Client.findByIdAndUpdate(clientId, {
+    ...req.body,
+    $push: { activityLog: { task: "updated", actor: req.auth._id }}
+  });
 
   return res.status(200).json(client);
 })
 
 // Add a session to a specific client
 exports.addSession = asyncHandler(async (req, res) => {
-
   const { clientId } = req.params;
-  const { title, description, tags, sessionDate } = req.body;
-
-  if (!clientId || !title || !sessionDate) {
-    res.status(400)
-    throw new Error('Request must have all of the following: client ID, title, session date')
-  }
 
   const session = await Session.create({
-    title, description, tags, sessionDate,
-    createdBy: req.auth._id,
-    updatedBy: req.auth._id
+    ...req.body,
+    audit: {
+      createdBy: req.auth._id,
+      updatedBy: req.auth._id
+    }
   });
 
-  if (!session._id) throw new Error('Something went wrong creating the session.')
+  if (!session._id) throw new Error('A problem occurred creating the session')
 
   await Client.findByIdAndUpdate(
     clientId, { 
@@ -124,15 +119,16 @@ exports.addSession = asyncHandler(async (req, res) => {
       $push: { activityLog: {
         task: "added session",
         actor: req.auth._id
-      }}
+      }},
+      audit: { updatedBy: req.auth._id }
     });
 
-  return res.status(200).json(session)
+  return res.status(201).json(session)
 })
 
 // Deletes a client by ID
 exports.delete = asyncHandler(async (req, res) => {
-  const { clientId } = req.params
+  const { groupId, clientId } = req.params
   
   const client = await Client.findById(clientId)
 
@@ -141,8 +137,9 @@ exports.delete = asyncHandler(async (req, res) => {
     throw new Error('Client not found')
   }
   
-  // Soft delete the client (mark as deleted)
+  // Soft delete the client (mark as deleted and move the id from entities to deleted entities)
   await client.update({ deleted: true })
+  await Group.findByIdAndUpdate(groupId, { $pull: { 'entities.clients': client._id }, $push: { 'deletedEntities.clients': client._id }})
 
   return res.status(200).json({ _id: client._id, message: 'Deleted client' });
 })

@@ -19,10 +19,10 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
       </TableRowItem>
       <TableRowItem>
         <div className="text-sm font-medium text-white">
-          {(rota.employeeIds?.length || 0) > 0 ? (
+          {(rota.employees?.length || 0) > 0 ? (
             <InlineLink to={`/rotas/employees`} color="text-amber-400">
               <span className="self-center pt-0.5">Employees</span>
-              <span className="text-lg">{rota.employeeIds?.length}</span>
+              <span className="text-lg">{rota.employees?.length}</span>
             </InlineLink>
           ) : (
             <InlineLink to={`/rotas/employees/true`} color="text-blue-500">

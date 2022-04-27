@@ -34,8 +34,9 @@ exports.getGroupUsers = asyncHandler(async (req, res) => {
     throw new Error('Group not found')
   }
 
-  const count = await User.countDocuments({ _id: { $in: group.users }})
-  const users = await User.find({ _id: { $in: group.users }}).select('-password')
+  const query = { _id: { $in: group.entities.users }}
+  const count = await User.countDocuments(query)
+  const users = await User.find(query).select('-password')
 
   return res.json({ count, users })
 })
