@@ -6,7 +6,7 @@ interface IEmployeeSelectorProps {
   name: string,
   items: IEmployee[],
   formValues: string[],
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+  setFieldValue: (value: string[]) => void
 }
 
 const toggleValue = (values: string[], value: string): string[] => {
@@ -15,12 +15,11 @@ const toggleValue = (values: string[], value: string): string[] => {
   } else {
     values.push(value)
   }
-
+  
   return values;
 }
 
 const EmployeeSelector = ({ name, items, formValues, setFieldValue }: IEmployeeSelectorProps) => {
-
   return (
     <FieldArray
       name={name}
@@ -34,7 +33,8 @@ const EmployeeSelector = ({ name, items, formValues, setFieldValue }: IEmployeeS
                 "flex flex-grow p-4 transition-colors justify-between items-center rounded",
                 item._id && formValues.includes(item._id) ? 'bg-blue-500 text-gray-800' : 'bg-gray-800'
               )}
-              onClick={() => setFieldValue(name, item._id && toggleValue(formValues, item._id))}>
+              onClick={() => item._id && setFieldValue(toggleValue(formValues, item._id))}
+            >
               <div className="flex flex-col text-left space-y-2 leading-loose">
                 <div className="font-bold tracking-wider text-lg uppercase">{item.name.firstName} {item.name.lastName}</div>
                 <div className="text-sm">{item.contactInfo.primaryEmail}</div>

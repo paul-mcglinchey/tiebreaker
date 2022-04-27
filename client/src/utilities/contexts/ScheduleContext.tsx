@@ -13,7 +13,7 @@ export const ScheduleContext = createContext<IScheduleContext>({
 });
 
 export const ScheduleProvider = ({ children }: IChildrenProps) => {
-  const [Schedules, setSchedules] = useState<ISchedule[]>([])
+  const [schedules, setSchedules] = useState<ISchedule[]>([])
   const [count, setCount] = useState<number>(0)
 
   const { groupId, refresh: groupRefresh } = useGroupService()
@@ -24,6 +24,7 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
   const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", groupId), requestBuilder(), [rotaDependency, dependency, rotaId, groupId])
 
   useEffect(() => {
+    console.log(response)
     if (response) {
       setSchedules(response.schedules)
       setCount(response.count)
@@ -31,7 +32,7 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
   }, [response])
 
   const contextValue = {
-    getSchedules: useCallback(() => Schedules, [Schedules]),
+    getSchedules: useCallback(() => schedules, [schedules]),
     getCount: useCallback(() => count, [count]),
     isLoading,
     error,

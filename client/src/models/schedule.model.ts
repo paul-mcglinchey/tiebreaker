@@ -8,11 +8,12 @@ export interface IScheduleShift {
   notes: string
 }
 export interface IEmployeeSchedule {
-  employeeId: string,
+  employeeId: string | undefined,
   shifts: IScheduleShift[]
 }
 
 export interface ISchedule {
+  _id?: string,
   startDate?: Date,
   locked?: boolean,
   employeeSchedules: IEmployeeSchedule[]

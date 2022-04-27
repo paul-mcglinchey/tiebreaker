@@ -2,6 +2,7 @@ import { IEmployee, SortDirection } from ".."
 
 export interface IEmployeeContext {
   getEmployees: () => IEmployee[]
+  getAllEmployees: () => IEmployee[]
   getCount: () => number
   sortField: string | undefined
   updateSortField: (sortField: string) => void

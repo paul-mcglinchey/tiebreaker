@@ -1,5 +1,6 @@
 export { default as AddRotaModal } from './Common/AddRotaModal'
 export { default as EditRotaModal } from './Common/EditRotaModal'
+export { default as EditRotaEmployeesModal } from './Common/EditRotaEmployeesModal'
 
 export { default as EmployeeSelector } from './Forms/EmployeeSelector'
 export { default as RotaForm } from './Forms/RotaForm'

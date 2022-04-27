@@ -5,6 +5,7 @@ import { endpoints } from "../config";
 
 export const EmployeeContext = createContext<IEmployeeContext>({
   getEmployees: () => [],
+  getAllEmployees: () => [],
   getCount: () => 0,
   sortField: undefined,
   updateSortField: () => {},
@@ -17,7 +18,7 @@ export const EmployeeContext = createContext<IEmployeeContext>({
 });
 
 export const EmployeeProvider = ({ children }: IChildrenProps) => {
-  const [Employees, setEmployees] = useState<IEmployee[]>([])
+  const [employees, setEmployees] = useState<IEmployee[]>([])
   const [count, setCount] = useState<number>(0)
 
   const [sortField, setSortField] = useState<string | undefined>(undefined)
@@ -36,8 +37,9 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   }, [response])
 
   const contextValue = {
-    getEmployees: useCallback(() => Employees, [Employees]),
-    getCount: useCallback(() => count, [count]),
+    getEmployees: useCallback(() => employees.filter((e: IEmployee) => !e.deleted), [employees]),
+    getAllEmployees: useCallback(() => employees, [employees]),
+    getCount: useCallback(() => count, []),
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),
     sortDirection,

@@ -26,7 +26,8 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
     })
   }
 
-  const { getCount, getEmployees, isLoading } = useEmployeeService()
+  const { getEmployees, isLoading } = useEmployeeService()
+  const employees = getEmployees()
 
   return (
     <Formik
@@ -56,14 +57,14 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
           </div>
           <div className="flex flex-col space-y-4">
             {!isLoading ? (
-              <FormSection title="Employees" state={values.employees.length > 0} setState={() => setFieldValue("employeeIds", values.employees?.length > 0 ? [] : getEmployees().map((e: IEmployee) => e._id))}>
+              <FormSection title="Employees" state={values.employees.length > 0} setState={() => setFieldValue("employees", values.employees?.length > 0 ? [] : employees.map((e: IEmployee) => e._id))}>
                 <div className="flex flex-col space-y-4 flex-grow rounded">
-                  {getCount() > 0 && (
+                  {employees.length > 0 && (
                     <EmployeeSelector
                       name="employeeIds"
                       items={getEmployees()}
                       formValues={values.employees || []}
-                      setFieldValue={setFieldValue}
+                      setFieldValue={(e) => setFieldValue('employees', e)}
                     />
                   )}
                 </div>

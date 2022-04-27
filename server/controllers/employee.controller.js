@@ -16,7 +16,7 @@ exports.getEmployees = asyncHandler(async (req, res) => {
     throw new Error('Group not found')
   }
 
-  const query = { _id: { $in: group.entities.employees }}
+  const query = { $or: [{ _id: { $in: group.entities.employees }}, { _id: { $in: group.deletedEntities.employees }}]}
   const count = await Employee.countDocuments(query)
   const employees = await Employee
     .aggregate()

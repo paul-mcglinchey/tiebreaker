@@ -16,7 +16,8 @@ interface IEmployeeListProps {
 
 const EmployeeList = ({ toggleAddEmployeeOpen }: IEmployeeListProps) => {
 
-  const { getCount, getEmployees, isLoading, sortField, updateSortField, sortDirection, updateSortDirection } = useEmployeeService()
+  const { getEmployees, isLoading, sortField, updateSortField, sortDirection, updateSortDirection } = useEmployeeService()
+  const employees = getEmployees()
 
   useEffect(() => {
     updateSortField(headers[1]!.value)
@@ -25,7 +26,7 @@ const EmployeeList = ({ toggleAddEmployeeOpen }: IEmployeeListProps) => {
   return (
     <>
       <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-        {getCount() > 0 ? (
+        {employees.length > 0 ? (
           <div className="flex flex-col flex-grow space-y-4">
             <Table
               sortField={sortField}
@@ -36,7 +37,7 @@ const EmployeeList = ({ toggleAddEmployeeOpen }: IEmployeeListProps) => {
               isLoading={isLoading}
             >
               <>
-                {getEmployees().map((employee: IEmployee, index: number) => (
+                {employees.map((employee: IEmployee, index: number) => (
                   <EmployeeTableRow employee={employee} key={index} />
                 ))}
               </>
