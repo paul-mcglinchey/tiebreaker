@@ -1,18 +1,18 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
-import { Form } from "formik";
+import { Form, FormikContextType, useFormikContext } from "formik";
 import { Fragment } from "react";
 import { ButtonType, DayOfWeek, IEmployeeSchedule, ISchedule } from "../../../../models";
 import { Button } from "../../../Common";
-import EmployeeRow from "./EmployeeRow";
+import { ScheduleTableRow } from '..'
 
 interface IScheduleTableProps {
   currentWeek: { firstDay: Date, lastDay: Date }
-  values: ISchedule
   editing: boolean
 }
 
-const ScheduleTable = ({ currentWeek, values, editing }: IScheduleTableProps) => {
+const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
 
+  const { values }: FormikContextType<ISchedule> = useFormikContext()
   const dayCycle: number[] = [0, 1, 2, 3, 4, 5, 6];
 
   return (
@@ -60,8 +60,9 @@ const ScheduleTable = ({ currentWeek, values, editing }: IScheduleTableProps) =>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
+            {console.log(values)}
             {values.employeeSchedules.map((employeeSchedule: IEmployeeSchedule, index: number) => (
-              <EmployeeRow key={index} employeeIndex={index} employeeSchedule={employeeSchedule} values={values} dayCycle={dayCycle} editing={editing} />
+              <ScheduleTableRow key={index} employeeIndex={index} employeeSchedule={employeeSchedule} values={values} dayCycle={dayCycle} editing={editing} />
             ))}
           </tbody>
         </table>

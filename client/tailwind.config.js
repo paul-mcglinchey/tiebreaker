@@ -1,10 +1,15 @@
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    fontFamily: {
+      'sans': ['Lato', 'sans-serif']
+    },
     extend: {
       colors: {
         gray: colors.zinc,

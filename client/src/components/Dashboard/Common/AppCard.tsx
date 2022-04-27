@@ -30,17 +30,17 @@ const AppCard = ({ title, subtitle, href, datapoints, colours }: IAppCardProps) 
           : "from-orange-500 to-red-500"
       )}>
         <div>
-          <h1 className="text-4xl text-left font-semibold tracking-wide">{title}</h1>
-          <hr className="mt-4 border-b-2 border-gray-200" />
+          <h1 className="text-4xl text-left font-black tracking-wide">{title}</h1>
+          <hr className="mt-4 border-b-2" />
         </div>
-        <div className="flex flex-col space-y-4 text-gray-300">
+        <div className="flex flex-col space-y-4 font-bold">
           <div>
             {subtitle}
           </div>
           <div className="flex space-x-4">
             {datapoints && datapoints.map((datapoint: { title: string, value: number }, i: number) => (
               <div key={i}>
-                <span className="text-2xl font-bold">{datapoint.value}</span>
+                <span className="text-2xl font-extrabold mr-1">{datapoint.value}</span>
                 <span> {datapoint.title}{(datapoint.value > 1 || datapoint.value === 0) && 's'}</span>
               </div>
             ))}

@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useParams } from "react-router";
 import { AddEmployeeModal, EmployeeList } from "../..";
-import { useEmployeeService, useGroupService, useRefresh } from "../../../hooks";
+import { useEmployeeService, useGroupService } from "../../../hooks";
 import { FetchError, SpinnerIcon, GroupToolbar } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
 
 const Employees = () => {
-
   const { isAddEmployeeOpen } = useParams();
-
-  const { dependency, refresh } = useRefresh();
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
@@ -17,8 +14,8 @@ const Employees = () => {
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(isAddEmployeeOpen ? true : false);
   const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
-  const { getCount, isLoading, error, addGroup } = useGroupService();
-  const employeeService = useEmployeeService(refresh);
+  const { getCount, isLoading, error } = useGroupService();
+  const { refresh } = useEmployeeService();
 
   return (
     <>
@@ -30,7 +27,7 @@ const Employees = () => {
         getCount() > 0 ? (
           <>
             <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} showSelector />
-            <EmployeeList dependency={dependency} employeeService={employeeService} toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
+            <EmployeeList toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
           </>
         ) : (
           error ? (
@@ -41,8 +38,8 @@ const Employees = () => {
         )
       )}
       <>
-        <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
-        <AddEmployeeModal addEmployeeOpen={addEmployeeOpen} toggleAddEmployeeOpen={toggleAddEmployeeOpen} employeeService={employeeService} />
+        <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
+        <AddEmployeeModal addEmployeeOpen={addEmployeeOpen} toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
       </>
     </>
   )

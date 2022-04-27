@@ -2,8 +2,6 @@ const { Schema }  = require('mongoose');
 const mongoose    = require('mongoose');
 
 const { AuditSchema }           = require('./common/audit.schema');
-const { UsersSchema }           = require('./common/users.schema');
-const { EmployeeSchema }        = require('./employee.model');
 
 const Rota = mongoose.model(
   "Rota",
@@ -23,20 +21,17 @@ const Rota = mongoose.model(
     schedules: [{
       type: Schema.Types.ObjectId, ref: 'Schedule'
     }],
-    employeeIds: [{
+    employees: [{
       type: Schema.Types.ObjectId, ref: 'Employee'
     }],
-    employees: { 
-      type: [EmployeeSchema], required: false, default: [] 
-    },
     locked: { 
       type: Boolean, required: false, default: false 
     },
     colour: { 
       type: String, required: false 
     },
-    users: [UsersSchema],
-    audit: AuditSchema
+    audit: AuditSchema,
+    deleted: { type: Boolean, default: false }
   }, { timestamps: true })
 );
 

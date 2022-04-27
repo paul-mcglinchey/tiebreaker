@@ -38,7 +38,7 @@ const useGroupService = (): IGroupService => {
     const distinctEmployees: string[] = [];
 
     groups.forEach((group: IGroup) => {
-      group.employees?.forEach((employeeId: string) => {
+      group.entities?.employees?.forEach((employeeId: string) => {
         if (!distinctEmployees.includes(employeeId)) distinctEmployees.push(employeeId);
       });
     });
@@ -50,7 +50,7 @@ const useGroupService = (): IGroupService => {
     const distinctRotas: string[] = [];
 
     groups.forEach((group: IGroup) => {
-      group.rotas?.forEach((rotaId: string) => {
+      group.entities?.rotas?.forEach((rotaId: string) => {
         if (!distinctRotas.includes(rotaId)) distinctRotas.push(rotaId);
       });
     });
@@ -62,7 +62,7 @@ const useGroupService = (): IGroupService => {
     let totalClients: number = 0;
 
     groups.forEach((group: IGroup) => {
-      totalClients += group.clients?.length || 0;
+      totalClients += group.entities?.clients?.length || 0;
     })
 
     return totalClients;

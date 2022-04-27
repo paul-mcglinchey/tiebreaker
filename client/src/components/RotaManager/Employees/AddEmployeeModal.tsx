@@ -1,19 +1,18 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { useState } from "react"
-import { useGroupService } from "../../../hooks"
-import { IEmployeeService } from "../../../models"
+import { useEmployeeService, useGroupService } from "../../../hooks"
 import { Button, Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
 interface IAddEmployeeModalProps {
   addEmployeeOpen: boolean,
-  toggleAddEmployeeOpen: () => void,
-  employeeService: IEmployeeService
+  toggleAddEmployeeOpen: () => void
 }
 
-const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen, employeeService }: IAddEmployeeModalProps) => {
+const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen }: IAddEmployeeModalProps) => {
 
   const { groupId } = useGroupService()
+  const { addEmployee } = useEmployeeService()
 
   const [addMultiple, setAddMultiple] = useState(false);
   const toggleAddMultiple = () => setAddMultiple(!addMultiple);
@@ -22,7 +21,7 @@ const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen, employeeServ
     <Modal title="Add employee" modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen}>
       <CompactEmployeeForm
         handleSubmit={(values) => {
-          employeeService.addEmployee(values, groupId);
+          addEmployee(values, groupId);
           !addMultiple && toggleAddEmployeeOpen();
         }}
         submissionBar={(

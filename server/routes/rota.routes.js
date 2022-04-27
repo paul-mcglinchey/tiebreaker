@@ -1,5 +1,4 @@
 const rotas       = require('../controllers/rota.controller.js');
-const schedules   = require('../controllers/schedule.controller.js');
 const middleware  = require('../middlewares');
 
 var router = require('express').Router({ mergeParams: true });
@@ -16,55 +15,32 @@ router.get(
 // Get rota by ID
 router.get(
   '/:rotaId',
-  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.rotaMiddleware.checkIfQueryHasRotaId,
   rotas.getById
-);
-
-// Gets all schedules for a rota
-router.get(
-  '/:rotaId/schedules/:startDate',
-  middleware.rotaMiddleware.checkRotaIdExists,
-  middleware.scheduleMiddleware.checkQueryHasDate,
-  schedules.getScheduleByDate
 );
 
 // Add a new rota
 router.post(
   '/',
   middleware.validationMiddleware.checkRequestHasBody,
-  rotas.addRota
+  rotas.create
 );
-
-// Add a new schedule
-router.post(
-  '/:rotaId/schedules',
-  middleware.rotaMiddleware.checkRotaIdExists,
-  middleware.validationMiddleware.checkRequestHasBody,
-  schedules.addSchedule
-)
 
 // Update a rota
 router.put(
   '/:rotaId',
-  middleware.rotaMiddleware.checkRotaIdExists,
+  middleware.rotaMiddleware.checkIfQueryHasRotaId,
   middleware.validationMiddleware.checkRequestHasBody,
-  rotas.updateRota
+  rotas.update
 );
-
-// Update a schedule belonging to a rota
-router.put(
-  '/:rotaId/schedules/:startDate',
-  middleware.rotaMiddleware.checkRotaIdExists,
-  middleware.scheduleMiddleware.checkQueryHasDate,
-  schedules.updateSchedule
-)
 
 // Delete a rota
 router.delete(
   '/:rotaId',
-  middleware.groupMiddleware.checkIfQueryHasGroupId,
-  middleware.rotaMiddleware.checkRotaIdExists,
-  rotas.deleteRota
+  middleware.rotaMiddleware.checkIfQueryHasRotaId,
+  rotas.delete
 )
+
+router.use('/:rotaId/schedules', require('./schedule.routes'))
 
 module.exports = router

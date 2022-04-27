@@ -1,14 +1,14 @@
 const asyncHandler = require('express-async-handler')
 
-const checkQueryHasDate = asyncHandler(async (req, res, next) => {
-  if (!req.params.startDate) {
+const checkIfQueryHasScheduleId = asyncHandler(async (req, res, next) => {
+  if (!req.params.scheduleId) {
     res.status(400)
-    throw new Error('Request requires a schedule start date')
+    throw new Error('Request requires schedule ID')
   }
 
   next();
 })
 
 module.exports = {
-  checkQueryHasDate
+  checkIfQueryHasScheduleId
 }

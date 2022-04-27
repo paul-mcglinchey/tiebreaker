@@ -4,7 +4,7 @@ import { Transition } from "@headlessui/react";
 import { employeeValidationSchema, endpoints } from "../../../../utilities";
 import { EmployeeRole, IEmployee, IEmployeesResponse, IFetch } from "../../../../models";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm, Fetch } from "../../../Common";
-import { useEmployeeService, useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../../../hooks";
+import { useEmployeeService, useFetch, useGroupService, useRequestBuilder } from "../../../../hooks";
 
 const FullEmployeeForm = () => {
 
@@ -43,8 +43,7 @@ const FullEmployeeForm = () => {
     });
   }
 
-  const { refresh, dependency } = useRefresh();
-  const employeeService = useEmployeeService(refresh);
+  const { dependency, addEmployee } = useEmployeeService();
 
   return (
     <Fetch
@@ -81,7 +80,7 @@ const FullEmployeeForm = () => {
           }}
           validationSchema={employeeValidationSchema}
           onSubmit={(values) => {
-            employeeService.addEmployee(values, groupId);
+            addEmployee(values, groupId);
           }}
         >
           {({ errors, touched }) => (

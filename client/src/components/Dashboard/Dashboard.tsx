@@ -10,13 +10,13 @@ const Dashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
   const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen)
 
-  const { getGroups, getCount, isLoading, getTotalClients, getTotalEmployees, getTotalRotas, addGroup } = useGroupService()
+  const { getGroups, getCount, isLoading, getTotalClients, getTotalEmployees, getTotalRotas } = useGroupService()
 
   return (
     <>
       <NavMenu links={dashboardLinks} />
       {getCount() > 0 ? (
-        <div className="flex flex-col md:flex-row justify-start text-gray-200 mt-10 font-semibold tracking-wide gap-8 px-2 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-start mt-10 tracking-wide gap-8 px-2 sm:px-6 lg:px-8">
           <AppCard
             title={Application.ClientManager}
             href="/clients/dashboard"
@@ -53,7 +53,7 @@ const Dashboard = () => {
           <GroupPrompter action={toggleAddGroupOpen} />
         )
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
     </>
   )
 }

@@ -11,7 +11,7 @@ const ClientDashboard = () => {
   const [addClientOpen, setAddClientOpen] = useState(false)
   const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen)
 
-  const { getCount, addGroup, isLoading, error, refresh } = useGroupService()
+  const { getCount, isLoading, error, refresh } = useGroupService()
 
   return (
     <>
@@ -31,7 +31,7 @@ const ClientDashboard = () => {
           )
         )
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} addGroup={addGroup} />
+      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
       <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
         <ClientForm refresh={refresh} />
       </Modal>

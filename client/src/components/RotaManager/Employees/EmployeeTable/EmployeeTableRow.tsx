@@ -1,16 +1,16 @@
 import { useState } from "react"
-import { useGroupService } from "../../../../hooks"
-import { IEmployee, IEmployeeService } from "../../../../models"
+import { useEmployeeService, useGroupService } from "../../../../hooks"
+import { IEmployee } from "../../../../models"
 import { DeleteDialog, InlineButton, TableRow, TableRowItem } from "../../../Common"
 
 interface IEmployeeTableRowProps {
   employee: IEmployee
-  employeeService: IEmployeeService
 }
 
-const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps) => {
+const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
 
   const { groupId } = useGroupService()
+  const { deleteEmployee } = useEmployeeService()
 
   const [deleteEmployeeOpen, setDeleteEmployeeOpen] = useState(false)
   const toggleDeleteEmployeeOpen = () => setDeleteEmployeeOpen(!deleteEmployeeOpen)
@@ -33,7 +33,7 @@ const EmployeeTableRow = ({ employee, employeeService }: IEmployeeTableRowProps)
               dialogOpen={deleteEmployeeOpen}
               toggleDialogOpen={toggleDeleteEmployeeOpen}
               itemType="employee"
-              deleteAction={() => employeeService.deleteEmployee(employee._id, groupId)}
+              deleteAction={() => deleteEmployee(employee._id, groupId)}
             />
           </div>
         </TableRowItem>

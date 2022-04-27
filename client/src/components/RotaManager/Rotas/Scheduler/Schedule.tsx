@@ -1,19 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
-import { ScheduleTable } from "../../..";
 import { ISchedule } from "../../../../models";
-import { ScheduleSwitcher } from "./Common";
+import { ScheduleTable, ScheduleSwitcher } from "..";
+import { FormikContextType, useFormikContext } from "formik";
 
 interface IScheduleProps {
-  handleSubmit: () => void
   currentWeek: { firstDay: Date, lastDay: Date },
-  dirty: boolean
-  values: ISchedule
   editing: boolean
   currentWeekModifier: number
   setCurrentWeekModifier: Dispatch<SetStateAction<number>>
 }
 
-const Schedule = ({ handleSubmit, currentWeek, values, dirty, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
+const Schedule = ({ currentWeek, editing, currentWeekModifier, setCurrentWeekModifier }: IScheduleProps) => {
+
+  const { dirty, handleSubmit }: FormikContextType<ISchedule> = useFormikContext()
 
   const cycleBack = () => updateScheduleWeek(currentWeekModifier - 1);
   const cycleForwards = () => updateScheduleWeek(currentWeekModifier + 1);
@@ -34,7 +33,6 @@ const Schedule = ({ handleSubmit, currentWeek, values, dirty, editing, currentWe
       />
       <ScheduleTable
         currentWeek={currentWeek}
-        values={values}
         editing={editing}
       />
     </div>

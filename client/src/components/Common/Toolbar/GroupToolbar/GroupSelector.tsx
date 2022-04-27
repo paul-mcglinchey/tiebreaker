@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useGroupService, useIsMounted } from "../../../../hooks";
 import { IGroup } from "../../../../models";
 import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../../services";
@@ -11,15 +11,15 @@ const GroupSelector = () => {
   const { getGroups, updateGroupId } = useGroupService()
   const storageKey = 'groupId';
 
-  const updateGroup = (groupId: string | undefined) => {
+  const updateGroup = useCallback((groupId: string | undefined) => {
     if (!groupId) return;
 
     // Update the group held in storage
     setItemInStorage(storageKey, groupId);
 
     // Update the group held in state
-    isMounted() && updateGroupId(groupId);
-  }
+    updateGroupId(groupId);
+  }, [updateGroupId])
 
   const getGroupName = (groupId: string | undefined | null): string | undefined => {
     return getGroups().filter((g: IGroup) => g._id === groupId)[0]?.name;
@@ -30,8 +30,8 @@ const GroupSelector = () => {
 
     let isStoredGroupValid = getGroups().filter((g: IGroup) => g._id === storedGroupId).length > 0;
 
-    isMounted() && !isStoredGroupValid && updateGroup(getGroups()[0]?._id)
-  }, [updateGroupId, getGroups, isMounted, storageKey, updateGroup]);
+    !isStoredGroupValid && updateGroup(getGroups()[0]?._id)
+  }, [getGroups, isMounted, storageKey, updateGroup]);
 
   return (
     <div className="flex flex-grow items-center justify-end">

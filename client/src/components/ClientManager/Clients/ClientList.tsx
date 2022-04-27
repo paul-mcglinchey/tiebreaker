@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { endpoints } from '../../../utilities';
-import { IClient, IClientsResponse, IFetch, IFilter } from '../../../models';
+import { IClient, IClientsResponse, IFetch, IFilter, SortDirection } from '../../../models';
 import { useFetch, useGroupService, useRequestBuilder } from '../../../hooks';
 import { ClientTableRow } from '.';
 import { Paginator, Table, Fetch, Prompter, SearchBar } from '../../Common';
@@ -26,7 +26,7 @@ const ClientList = ({ toggleAddClientOpen }: IClientListProps) => {
   const [pageSize, setPageSize] = useState(10);
 
   const [sortField, setSortField] = useState(headers[1]!.value);
-  const [sortDirection, setSortDirection] = useState("descending");
+  const [sortDirection, setSortDirection] = useState(SortDirection.Desc);
 
   const [filters, setFilters] = useState<IFilter>({
     'name': { value: null, label: 'Name' }
