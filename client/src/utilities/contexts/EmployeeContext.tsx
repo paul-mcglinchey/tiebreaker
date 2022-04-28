@@ -39,7 +39,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   const contextValue = {
     getEmployees: useCallback(() => employees.filter((e: IEmployee) => !e.deleted), [employees]),
     getAllEmployees: useCallback(() => employees, [employees]),
-    getCount: useCallback(() => count, []),
+    getCount: useCallback(() => count, [count]),
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),
     sortDirection,
