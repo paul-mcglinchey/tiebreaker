@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useGroupService } from '../../hooks';
-import { FetchError, Modal, GroupToolbar, SpinnerIcon } from '../Common';
+import { FetchError, GroupToolbar, SpinnerIcon } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
-import { ClientForm, ClientList } from './Clients';
+import { AddClientModal, ClientList } from './Clients';
 
 const ClientDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
@@ -32,9 +32,7 @@ const ClientDashboard = () => {
         )
       )}
       <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
-      <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
-        <ClientForm refresh={refresh} />
-      </Modal>
+      <AddClientModal addClientOpen={addClientOpen} toggleAddClientOpen={toggleAddClientOpen} />
     </>
   )
 }

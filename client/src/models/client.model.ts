@@ -11,6 +11,7 @@ export interface IClient extends IHasName, IHasAddress, IHasContactInfo {
   colour?: string,
   activityLog?: IActivityLog[],
   fullName?: string,
+  deleted?: boolean
 }
 
 export interface IClientsResponse {

@@ -8,8 +8,14 @@ router.use(middleware.groupMiddleware.checkIfQueryHasGroupId)
 // Get all clients
 router.get(
   '/',
-  clients.get
+  clients.get(false)
 );
+
+// Get all clients including deleted clients
+router.get(
+  '/deleted',
+  clients.get(true)
+)
 
 // Get a client by id
 router.get(

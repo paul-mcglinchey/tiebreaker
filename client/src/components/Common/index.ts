@@ -36,6 +36,7 @@ export { default as ColourPicker } from './Interaction/ColourPicker'
 export { default as Button } from './Interaction/Button'
 export { default as SmartLink } from './Interaction/SmartLink'
 export { default as SearchBar } from './Interaction/SearchBar'
+export { default as Checkbox } from './Interaction/Checkbox'
 
 export { default as NotificationContainer } from './Notifications/NotificationContainer'
 export { default as NotificationCard } from './Notifications/NotificationCard'

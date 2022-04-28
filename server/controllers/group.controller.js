@@ -31,7 +31,6 @@ exports.create = asyncHandler(async (req, res) => {
   const group = await Group.create({
     ...req.body,
     entities: { users: [req.auth._id] },
-    deletedEntities: { employees: [], clients: [], rotas: [] },
     listcollections: [systemListCollectionId],
     audit: { createdBy: req.auth._id, updatedBy: req.auth._id }
   })

@@ -1,23 +1,21 @@
 import { Transition } from "@headlessui/react";
 import { ButtonType, IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
-import { Button, CustomCheckbox } from ".";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Button } from ".";
+import { useEffect } from "react";
 
 interface IModalProps {
   title: string,
   modalOpen: boolean,
   toggleModalOpen: () => void
   widthClass?: string
-  keepOpen?: boolean,
-  setKeepOpen?: Dispatch<SetStateAction<boolean>>
 }
 
-const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, keepOpen = false, setKeepOpen }: IChildrenProps & IModalProps) => {
+const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChildrenProps & IModalProps) => {
 
   useEffect(() => {
     let body = document.querySelector("body");
-    
+
     if (body) {
       body.style.overflow = modalOpen
         ? "hidden"
@@ -27,7 +25,7 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, keepOp
 
   return (
     <Transition
-      show={keepOpen || modalOpen}
+      show={modalOpen}
       enter="transition ease-out duration-100"
       enterFrom="transform opacity-0"
       enterTo="transform opacity-100"
@@ -49,11 +47,6 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass, keepOp
         </div>
         {children}
       </div>
-      {setKeepOpen && (
-        <div className="w-12 h-6">
-          <CustomCheckbox state={keepOpen} setState={setKeepOpen} />
-        </div>
-      )}
     </Transition>
   )
 }

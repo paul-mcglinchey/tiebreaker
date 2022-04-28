@@ -5,7 +5,7 @@ import { useEmployeeService, useGroupService } from "../../../hooks";
 import { FetchError, SpinnerIcon, GroupToolbar } from "../../Common";
 import { AddGroupModal, GroupPrompter } from "../../Groups";
 
-const Employees = () => {
+const EmployeeDashboard = () => {
   const { isAddEmployeeOpen } = useParams();
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
@@ -45,4 +45,4 @@ const Employees = () => {
   )
 }
 
-export default Employees;
+export default EmployeeDashboard;

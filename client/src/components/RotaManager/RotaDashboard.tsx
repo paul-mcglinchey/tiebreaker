@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { useGroupService, useRotaService } from '../../hooks';
+import { useGroupService } from '../../hooks';
 import { FetchError, GroupToolbar } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
 import { AddRotaModal, RotaList } from './Rotas';
@@ -11,8 +11,7 @@ const RotaDashboard = () => {
   const [addRotaOpen, setAddRotaOpen] = useState(false);
   const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
-  const { getCount, isLoading, error } = useGroupService();
-  const { addRota, refresh } = useRotaService();
+  const { getCount, isLoading, error, refresh } = useGroupService();
 
   return (
     <>
@@ -31,7 +30,7 @@ const RotaDashboard = () => {
         <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
       )}
       <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
-      <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} addRota={addRota} />
+      <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} />
     </>
   )
 }

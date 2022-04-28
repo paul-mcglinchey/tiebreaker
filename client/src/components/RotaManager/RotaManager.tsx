@@ -1,5 +1,5 @@
 import { Outlet } from "react-router"
-import { rotaLinks } from "../../utilities";
+import { EmployeeProvider, rotaLinks, RotaProvider } from "../../utilities";
 import { NavMenu } from "../Common";
 
 const RotaManager = () => {
@@ -7,7 +7,11 @@ const RotaManager = () => {
     <>
       <NavMenu links={rotaLinks} />
       <div className="px-2 sm:px-6 lg:px-8">
-        <Outlet />
+        <RotaProvider>
+          <EmployeeProvider>
+            <Outlet />
+          </EmployeeProvider>
+        </RotaProvider>
       </div>
     </>
   )

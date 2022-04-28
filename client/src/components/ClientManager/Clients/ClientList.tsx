@@ -1,9 +1,8 @@
-import { Fragment, useState } from 'react';
-import { endpoints } from '../../../utilities';
-import { IClient, IClientsResponse, IFetch, IFilter, SortDirection } from '../../../models';
-import { useFetch, useGroupService, useRequestBuilder } from '../../../hooks';
+import { Fragment } from 'react';
+import { IClient } from '../../../models';
+import { useClientService } from '../../../hooks';
 import { ClientTableRow } from '.';
-import { Paginator, Table, Fetch, Prompter, SearchBar } from '../../Common';
+import { Paginator, Table, Prompter, SearchBar } from '../../Common';
 import { UserAddIcon } from '@heroicons/react/solid';
 
 const headers = [
@@ -19,77 +18,42 @@ interface IClientListProps {
 
 const ClientList = ({ toggleAddClientOpen }: IClientListProps) => {
 
-  const { groupId } = useGroupService();
-  const { requestBuilder } = useRequestBuilder();
-
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-
-  const [sortField, setSortField] = useState(headers[1]!.value);
-  const [sortDirection, setSortDirection] = useState(SortDirection.Desc);
-
-  const [filters, setFilters] = useState<IFilter>({
-    'name': { value: null, label: 'Name' }
-  });
-
-  const buildQueryString = () => {
-
-    var queryString = "";
-
-    queryString += `pageNumber=${pageNumber}&pageSize=${pageSize}&`;
-    queryString += `sortField=${sortField}&sortDirection=${sortDirection}`
-
-    for (var key in filters) {
-      if (filters[key]!.value) {
-        queryString += `&${key}=${filters[key]!.value}`
-      }
-    }
-
-    return queryString;
-  }
+  const { getClients, getCount, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, updatePageNumber, pageSize, updatePageSize } = useClientService()
+  const clients = getClients()
 
   return (
-    <Fetch
-      fetchOutput={useFetch(
-        groupId && `${endpoints.clients(groupId)}?${buildQueryString()}`, 
-        requestBuilder(), 
-        [pageSize, pageNumber, filters, sortField, sortDirection, groupId]
+    <div className="rounded-lg flex flex-col space-y-0 pb-2">
+      {getCount() > 0 ? (
+        <Fragment>
+          <div className="flex flex-col flex-grow space-y-4">
+            <SearchBar
+              filters={filters}
+              setFilters={setFilters}
+              searchField='name'
+            />
+            <Table
+              sortField={sortField}
+              setSortField={setSortField}
+              sortDirection={sortDirection}
+              setSortDirection={setSortDirection}
+              headers={headers}
+              isLoading={isLoading}
+            >
+              <>
+                {clients.map((c: IClient, index: number) => (
+                  <ClientTableRow client={c} key={index} />
+                ))}
+              </>
+            </Table>
+          </div>
+          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={updatePageNumber} setPageSize={updatePageSize} totalClients={getCount()} />
+        </Fragment>
+      ) : (
+        !isLoading && (
+          <Prompter title="Add a client to get started" Icon={UserAddIcon} action={toggleAddClientOpen} />
+        )
       )}
-      render={({ response, isLoading }: IFetch<IClientsResponse>) => (
-        <div className="rounded-lg flex flex-col space-y-0 pb-2">
-          {response && response.count > 0 ? (
-            <Fragment>
-              <div className="flex flex-col flex-grow space-y-4">
-                <SearchBar
-                  filters={filters}
-                  setFilters={setFilters}
-                  searchField='name'
-                />
-                <Table
-                  sortField={sortField}
-                  setSortField={setSortField}
-                  sortDirection={sortDirection}
-                  setSortDirection={setSortDirection}
-                  headers={headers}
-                  isLoading={isLoading}
-                >
-                  <>
-                    {response.clients.map((c: IClient, index: number) => (
-                      <ClientTableRow client={c} key={index} />
-                    ))}
-                  </>
-                </Table>
-              </div>
-              <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalClients={response.count} />
-            </Fragment>
-          ) : (
-            !isLoading && (
-              <Prompter title="Add a client to get started" Icon={UserAddIcon} action={toggleAddClientOpen} />
-            )
-          )}
-        </div>
-      )}
-    />
+    </div>
   )
 }
 

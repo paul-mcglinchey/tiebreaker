@@ -8,13 +8,19 @@ router.use(middleware.groupMiddleware.checkIfQueryHasGroupId)
 // Get all employees which the current user has view access to for a specific group
 router.get(
   '/',
-  employees.getEmployees
+  employees.get(false)
 );
+
+// Get all employees including deleted employees
+router.get(
+  '/deleted',
+  employees.get(true)
+)
 
 // Add a new employee
 router.post(
   '/',
-  employees.addEmployee
+  employees.create
 );
 
 // Delete an employee (soft)
@@ -23,7 +29,7 @@ router.delete(
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.employeeMiddleware.checkIfQueryHasEmployeeId,
   middleware.employeeMiddleware.checkIfEmployeeExists,
-  employees.deleteEmployee
+  employees.delete
 )
 
 module.exports = router

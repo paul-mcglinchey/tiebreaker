@@ -3,9 +3,12 @@ import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse, SortDirection, I
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { endpoints } from "../config";
 
+interface IEmployeeProviderProps extends IChildrenProps {
+  includeDeleted?: boolean
+}
+
 export const EmployeeContext = createContext<IEmployeeContext>({
   getEmployees: () => [],
-  getAllEmployees: () => [],
   getCount: () => 0,
   sortField: undefined,
   updateSortField: () => {},
@@ -17,7 +20,7 @@ export const EmployeeContext = createContext<IEmployeeContext>({
   dependency: false
 });
 
-export const EmployeeProvider = ({ children }: IChildrenProps) => {
+export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployeeProviderProps) => {
   const [employees, setEmployees] = useState<IEmployee[]>([])
   const [count, setCount] = useState<number>(0)
 
@@ -27,7 +30,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   const { groupId, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId), requestBuilder(), [dependency, sortField, sortDirection, groupId])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId, includeDeleted), requestBuilder(), [dependency, sortField, sortDirection, groupId])
 
   useEffect(() => {
     if (response) {
@@ -37,8 +40,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   }, [response])
 
   const contextValue = {
-    getEmployees: useCallback(() => employees.filter((e: IEmployee) => !e.deleted), [employees]),
-    getAllEmployees: useCallback(() => employees, [employees]),
+    getEmployees: useCallback(() => employees, [employees]),
     getCount: useCallback(() => count, [count]),
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),
