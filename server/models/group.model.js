@@ -19,7 +19,6 @@ const Group = mongoose.model(
       ref: 'Application'
     }],
     entities: GroupEntitySchema,
-    deletedEntities: GroupEntitySchema,
     listcollections: [{
       type: Schema.Types.ObjectId,
       ref: 'ListCollection'

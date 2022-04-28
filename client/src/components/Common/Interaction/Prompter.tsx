@@ -41,7 +41,7 @@ const Prompter = ({ Icon, title, subtitle, action }: IPrompterProps) => {
           )}
         </div>
         <div className="flex justify-end mt-20">
-          <Button action={() => action} Icon={Icon} content='Lets go!' />
+          <Button action={() => action()} Icon={Icon} content='Lets go!' />
         </div>
       </div>
     </Transition>
