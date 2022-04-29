@@ -8,6 +8,7 @@ export interface IGroupService {
   isLoading: boolean
   error: any | undefined
   refresh: () => void
+  getGroup: (groupId: string | undefined) => IGroup | undefined
   addGroup: (values: IGroup) => void
   updateGroup: (values: IGroup, groupId: string | undefined) => void
   deleteGroup: (groupId: string | undefined) => void

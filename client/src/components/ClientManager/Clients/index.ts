@@ -10,8 +10,10 @@ export { default as EditClient } from './ClientPage/EditClient'
 export { default as ClientTableRow } from './ClientTable/ClientTableRow'
 
 export { default as ClientForm } from './Forms/ClientForm'
+export { default as CompactClientForm } from './Forms/CompactClientForm'
 
 export { default as AddSession } from './Sessions/AddSession';
 export { default as AddSessionForm } from './Sessions/AddSessionForm';
 
+export { default as AddClientModal } from './AddClientModal'
 export { default as ClientList } from './ClientList'

@@ -1,13 +1,17 @@
 import { IClient, ISession, IClientService } from "../models"
-import { endpoints } from "../utilities"
+import { ClientContext, endpoints } from "../utilities"
 import { useRequestBuilder, useAsyncHandler } from "."
 import useResolutionService from "./useResolutionService"
+import { useContext } from "react"
 
-const useClientService = (refresh: () => void = () => {}): IClientService => {
+const useClientService = (): IClientService => {
 
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
+
+  const clientContext = useContext(ClientContext)
+  const { refresh } = clientContext
 
   const addClient = asyncHandler(async (values: IClient, groupId: string | undefined) => {
     if (!groupId) throw new Error()
@@ -45,7 +49,7 @@ const useClientService = (refresh: () => void = () => {}): IClientService => {
     handleResolution(res, json, 'create', 'session')
   })
 
-  return { addClient, deleteClient, updateClient, addSession }
+  return { ...clientContext, addClient, deleteClient, updateClient, addSession }
 }
 
 export default useClientService

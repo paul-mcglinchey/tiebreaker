@@ -1,27 +1,20 @@
-export const getItemInStorage = (itemName: string | undefined) => {
-  if (!itemName) return;
-  return sessionStorage.getItem(itemName);
+export const getItemInStorage = (itemName: string): string | undefined => {
+  return sessionStorage.getItem(itemName) || undefined;
 }
 
-export const setItemInStorage = (itemName: string | undefined, data: any) => {
-  if (!itemName || !data) return;
+export const setItemInStorage = (itemName: string, data: any) => {
   sessionStorage.setItem(itemName, data);
 }
 
-export const getJsonItemInStorage = (itemName: string | undefined) => {
-  if (!itemName) return;
+export const getJsonItemInStorage = (itemName: string): string | undefined => {
   let data = sessionStorage.getItem(itemName);
-
-  if (!data) return;
-  return JSON.parse(data);
+  return JSON.parse(data || "");
 }
 
-export const setJsonItemInStorage = (itemName: string | undefined, data: any) => {
-  if (!itemName || !data) return;
+export const setJsonItemInStorage = (itemName: string, data: any) => {
   sessionStorage.setItem(itemName, JSON.stringify(data));
 }
 
-export const removeItemInStorage = (itemName: string | undefined) => {
-  if (!itemName) return;
+export const removeItemInStorage = (itemName: string) => {
   sessionStorage.removeItem(itemName);
 }

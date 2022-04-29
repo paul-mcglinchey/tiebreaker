@@ -16,7 +16,7 @@ interface IFieldProps {
 
 const StyledField = ({ name, label, errors, touched, autoComplete, component, type, as, compact }: IFieldProps) => {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-grow flex-col w-full">
       {!compact && (
         <div className="flex justify-between">
           <label className="block font-bold text-gray-500 mb-1 uppercase">

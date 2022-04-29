@@ -15,7 +15,7 @@ const useEmployeeService = (): IEmployeeService => {
   const employeeContext = useContext(EmployeeContext)
   const { getEmployees, refresh } = employeeContext
 
-  const getEmployee = (employeeId: string): IEmployee | undefined => {
+  const getEmployee = (employeeId: string | undefined): IEmployee | undefined => {
     return getEmployees().find((employee: IEmployee) => employee._id === employeeId)
   }
 

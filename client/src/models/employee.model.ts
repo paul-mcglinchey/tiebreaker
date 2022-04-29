@@ -35,6 +35,7 @@ export interface IEmployee {
     isPaid?: boolean
   }[],
   colour?: string
+  deleted?: boolean
 }
 
 export interface IEmployeeResponse {

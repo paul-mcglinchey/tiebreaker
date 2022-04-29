@@ -1,41 +1,38 @@
 import { UserAddIcon } from "@heroicons/react/solid";
 import { Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RotaHeader, Schedule } from ".."
 import { useEmployeeService, useRotaService, useScheduleService } from "../../../../hooks";
+import { IEmployee } from "../../../../models";
 import { Prompter } from "../../../Common";
 
 const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
 
-  const { getRota } = useRotaService()
+  const { getRota, getRotaEmployees } = useRotaService()
   const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading } = useScheduleService()
-  const { getCount: getEmployeeCount } = useEmployeeService()
+  const { } = useEmployeeService()
 
   const currentWeek = getWeek(currentWeekModifier)
   const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""
 
   const rota = getRota(rotaId)
-  const schedule = getSchedule(new Date(startDate))
+  const rotaEmployees = getRotaEmployees(rota)
 
-  useEffect(() => {
-    return () => {
-      console.log('unmounting')
-    };
-  }, [])
+  const schedule = getSchedule(new Date(startDate))
 
   return (
     <>
       {!isLoading && (
         <Formik
-          initialValues={schedule || {
-            startDate: new Date(startDate),
-            employeeSchedules: rota?.employees?.map((employeeId: string) => ({ employeeId: employeeId, shifts: [] })) || [],
-            locked: false
+          initialValues={{
+            startDate: schedule?.startDate || new Date(startDate),
+            employeeSchedules: schedule?.employeeSchedules || rotaEmployees.map((employee: IEmployee) => ({ employeeId: employee._id, shifts: [] })),
+            locked: schedule?.locked || false
           }}
           onSubmit={(values) => {
-            schedule ? updateSchedule(values, rotaId) : createSchedule(values, rotaId)
+            schedule ? updateSchedule(values, rotaId, schedule._id) : createSchedule(values, rotaId)
           }}
         >
           {() => (
@@ -47,7 +44,7 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
                   setEditing={setEditing}
                 />
               )}
-              {getEmployeeCount() > 0 ? (
+              {(rota?.employees?.length || 0) > 0 ? (
                 <Schedule
                   editing={editing}
                   currentWeek={currentWeek}

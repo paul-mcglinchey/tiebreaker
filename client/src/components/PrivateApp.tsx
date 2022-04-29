@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router"
 import { useAuth } from "../hooks"
 import { IAuth } from "../models"
-import { EmployeeProvider, GroupProvider, RotaProvider, UserProvider } from "../utilities"
+import { GroupProvider, UserProvider } from "../utilities"
 import { AdminPanel } from "./AdminPanel"
 import { ClientDashboard, ClientManager, ClientPage } from "./ClientManager"
 import { Authenticate } from "./Common"
 import { Dashboard } from "./Dashboard"
 import { Groups } from "./Groups"
-import { Employees, RotaDashboard, RotaManager, RotaPage } from "./RotaManager"
+import { EmployeeDashboard, RotaDashboard, RotaManager, RotaPage } from "./RotaManager"
 
 
 const PrivateApp = () => {
@@ -40,16 +40,12 @@ const PrivateApp = () => {
 
                       {/* Rota manager specific routes */}
                       <Route path="/rotas/*" element={
-                        <RotaProvider>
-                          <EmployeeProvider>
-                            <RotaManager />
-                          </EmployeeProvider>
-                        </RotaProvider>
+                        <RotaManager />
                       }>
                         <Route path="dashboard" element={<RotaDashboard />} />
                         <Route path=":rotaId/*" element={<RotaPage />} />
-                        <Route path="employees" element={<Employees />} />
-                        <Route path="employees/:isAddEmployeeOpen" element={<Employees />} />
+                        <Route path="employees" element={<EmployeeDashboard />} />
+                        <Route path="employees/:isAddEmployeeOpen" element={<EmployeeDashboard />} />
                       </Route>
 
                       {/* Admin Routes */}

@@ -1,17 +1,17 @@
 import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
-import { useGroupService } from "../../../../hooks";
+import { useGroupService, useRotaService } from "../../../../hooks";
 
 interface IAddRotaProps {
-  addRotaOpen: boolean,
-  toggleAddRotaOpen: () => void,
-  addRota: (values: IRota, groupId: string | undefined) => void
+  addRotaOpen: boolean
+  toggleAddRotaOpen: () => void
 }
 
-const EditRotaModal = ({ addRotaOpen, toggleAddRotaOpen, addRota }: IAddRotaProps) => {
+const EditRotaModal = ({ addRotaOpen, toggleAddRotaOpen }: IAddRotaProps) => {
 
   const { groupId } = useGroupService()
+  const { addRota } = useRotaService()
 
   return (
     <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>

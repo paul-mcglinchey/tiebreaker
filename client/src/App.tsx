@@ -8,7 +8,7 @@ import { Login, PasswordReset, PasswordResetRequest, Signup, PrivateApp, Notific
 export default function App() {
 
   return (
-    <div className="font-sans subpixel-antialiased">
+    <div className="font-sans antialiased">
       <NotificationContainer />
       <Routes>
         <Route path="/*" element={<PrivateApp />} />

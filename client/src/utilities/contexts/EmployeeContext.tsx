@@ -3,6 +3,10 @@ import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse, SortDirection, I
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../../hooks";
 import { endpoints } from "../config";
 
+interface IEmployeeProviderProps extends IChildrenProps {
+  includeDeleted?: boolean
+}
+
 export const EmployeeContext = createContext<IEmployeeContext>({
   getEmployees: () => [],
   getCount: () => 0,
@@ -16,8 +20,8 @@ export const EmployeeContext = createContext<IEmployeeContext>({
   dependency: false
 });
 
-export const EmployeeProvider = ({ children }: IChildrenProps) => {
-  const [Employees, setEmployees] = useState<IEmployee[]>([])
+export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployeeProviderProps) => {
+  const [employees, setEmployees] = useState<IEmployee[]>([])
   const [count, setCount] = useState<number>(0)
 
   const [sortField, setSortField] = useState<string | undefined>(undefined)
@@ -26,7 +30,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   const { groupId, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId), requestBuilder(), [dependency, sortField, sortDirection, groupId])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId, includeDeleted), requestBuilder(), [dependency, sortField, sortDirection, groupId])
 
   useEffect(() => {
     if (response) {
@@ -36,7 +40,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
   }, [response])
 
   const contextValue = {
-    getEmployees: useCallback(() => Employees, [Employees]),
+    getEmployees: useCallback(() => employees, [employees]),
     getCount: useCallback(() => count, [count]),
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),

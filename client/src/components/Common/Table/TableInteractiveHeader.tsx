@@ -32,14 +32,14 @@ const TableInteractiveHeader = ({
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
+    <button className="flex items-center justify-between space-x-4" onClick={() => handleSorting()}>
+      <span className='whitespace-nowrap text-xs font-bold uppercase'>
         {children}
-      </div>
+      </span>
       <div>
-        <SquareIconButton className="w-4 h-4" Icon={getButton()} action={handleSorting} />
+        <SquareIconButton className="w-4 h-4 -mb-1" Icon={getButton()} />
       </div>
-    </div>
+    </button>
   )
 }
 

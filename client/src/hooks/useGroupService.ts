@@ -9,6 +9,10 @@ const useGroupService = (): IGroupService => {
   const { handleResolution } = useResolutionService()
   const { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh } = useContext(GroupContext)
 
+  const getGroup = (groupId: string | undefined): IGroup | undefined => {
+    return getGroups().find((group: IGroup) => group._id === groupId)
+  }
+
   const addGroup = asyncHandler(async (values: IGroup) => {
     const res = await fetch(endpoints.groups, requestBuilder('POST', undefined, values))
     const json = await res.json()
@@ -68,7 +72,7 @@ const useGroupService = (): IGroupService => {
     return totalClients;
   }
 
-  return { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh, addGroup, updateGroup, deleteGroup, getTotalClients, getTotalEmployees, getTotalRotas }
+  return { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh, getGroup, addGroup, updateGroup, deleteGroup, getTotalClients, getTotalEmployees, getTotalRotas }
 }
 
 export default useGroupService

@@ -10,19 +10,19 @@ export const endpoints = {
     "groups"    : BASE_API_URL + 'groups',
     "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`,    
 
-    "clients"   : (groupId: string) => BASE_API_URL + `groups/${groupId}/clients`,
+    "clients"   : (groupId: string, includeDeleted?: boolean) => BASE_API_URL + `groups/${groupId}/clients${includeDeleted ? '/deleted' : ''}`,
     "client"    : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}`, 
     
     "sessions"  : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions`,
     "session"   : (clientId: string, groupId: string, sessionId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}/sessions/${sessionId}`,
     
-    "rotas"     : (groupId: string) => BASE_API_URL + `groups/${groupId}/rotas`,
+    "rotas"     : (groupId: string, includeDeleted?: boolean) => BASE_API_URL + `groups/${groupId}/rotas${includeDeleted ? '/deleted' : ''}`,
     "rota"      : (rotaId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}`,
     
     "schedules" : (rotaId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}/schedules`,
     "schedule"  : (rotaId: string, groupId: string, scheduleId: string) => BASE_API_URL + `groups/${groupId}/rotas/${rotaId}/schedules/${scheduleId}`,
 
-    "employees" : (groupId: string) => BASE_API_URL + `groups/${groupId}/employees`,
+    "employees" : (groupId: string, includeDeleted?: boolean) => BASE_API_URL + `groups/${groupId}/employees${includeDeleted ? '/deleted' : ''}`,
     "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/employees/${employeeId}`,
     
     "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,

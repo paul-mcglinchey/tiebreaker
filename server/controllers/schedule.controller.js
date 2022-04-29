@@ -90,18 +90,16 @@ exports.create = asyncHandler(async (req, res) => {
 
 // Update a schedule
 exports.update = asyncHandler(async (req, res) => {
-  const { rotaId, startDate } = req.params
+  const { scheduleId } = req.params
 
-  const rota = await Rota.findById(rotaId)
-
-  const schedule = await Schedule.findOneAndUpdate({ _id: { $in: rota.schedules }, startDate: new Date(startDate)}, {
+  const schedule = await Schedule.findByIdAndUpdate(scheduleId, {
     ...req.body,
     audit: {
       updatedBy: req.auth._id
     }
   })
-  
-  const test = await Schedule.findOne({ _id: { $in: rota.schedules.map(sId => new ObjectId(sId)) }, startDate: new Date(startDate)})
+
+  if (schedule) throw new Error('Problem occurred updating schedule')
 
   return res.json(schedule)
 })

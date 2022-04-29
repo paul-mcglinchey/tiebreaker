@@ -1,15 +1,15 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
-import { IEmployee } from "../../../../models";
-import { employeeValidationSchema } from "../../../../utilities";
+import { IClient } from "../../../../models";
+import { clientValidationSchema } from "../../../../utilities";
 import { Button, StyledField } from "../../../Common";
 
-interface ICompactEmployeeFormProps {
-  handleSubmit: (values: IEmployee) => void
+interface ICompactClientFormProps {
+  handleSubmit: (values: IClient) => void
   submissionBar: JSX.Element | undefined
 }
 
-const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFormProps) => {
+const CompactClientForm = ({ handleSubmit, submissionBar }: ICompactClientFormProps) => {
 
   return (
     <Formik
@@ -22,14 +22,14 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
           primaryEmail: ''
         }
       }}
-      validationSchema={employeeValidationSchema}
+      validationSchema={clientValidationSchema}
       onSubmit={(values, actions) => {
         handleSubmit(values);
         actions.resetForm();
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex grow md:flex-1 flex-col space-y-8 text-gray-200">
+        <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
           <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4 items-center">
             <StyledField compact name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
@@ -37,7 +37,7 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
           </div>
           {submissionBar ? submissionBar : (
             <div className="self-end">
-              <Button content="Add employee" Icon={PlusIcon} />
+              <Button content="Add Client" Icon={PlusIcon} />
             </div>
           )}
         </Form>
@@ -46,4 +46,4 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
   )
 }
 
-export default CompactEmployeeForm;
+export default CompactClientForm;

@@ -17,14 +17,14 @@ const useScheduleService = (): IScheduleService => {
   const { getSchedules, refresh } = scheduleContext
 
   const getSchedule = (startDate: Date): ISchedule | undefined => {
+    console.log(startDate, getSchedules().map((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')))
     return getSchedules().find((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')[0] === startDate.toISOString().split('T')[0])
   }
 
-  const updateSchedule = asyncHandler(async (values: ISchedule, rotaId: string | undefined) => {
-    let startDate = new Date(values.startDate || "").toISOString().split('T')[0];
-    if (!rotaId || !groupId || !startDate) throw new Error()
+  const updateSchedule = asyncHandler(async (values: ISchedule, scheduleId: string | undefined,  rotaId: string | undefined) => {
+    if (!rotaId || !groupId || !scheduleId) throw new Error()
 
-    const res = await fetch(endpoints.schedule(rotaId, groupId, startDate), requestBuilder("PUT", undefined, values))
+    const res = await fetch(endpoints.schedule(rotaId, groupId, scheduleId), requestBuilder("PUT", undefined, values))
     const json = res.json()
 
     handleResolution(res, json, 'update', 'schedule', [() => refresh()])

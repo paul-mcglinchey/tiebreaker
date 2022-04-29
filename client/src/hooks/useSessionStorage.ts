@@ -19,7 +19,7 @@ const useSessionStorage = <T>(url: string, options: RequestInit, deps: any[] = [
     const _fetch = async () => {
       if (data && !resetCache) {
         if (isMounted()) {
-          setResponse(data);
+          setResponse(data as unknown as T);
           setIsLoading(false);
         }
       } else {

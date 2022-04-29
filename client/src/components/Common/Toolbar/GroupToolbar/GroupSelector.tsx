@@ -1,44 +1,29 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { memo, useCallback, useEffect } from "react";
-import { useGroupService, useIsMounted } from "../../../../hooks";
+import { useGroupService } from "../../../../hooks";
 import { IGroup } from "../../../../models";
-import { combineClassNames, getItemInStorage, setItemInStorage } from "../../../../services";
+import { combineClassNames, getItemInLocalStorage, setItemInLocalStorage } from "../../../../services";
 
 const GroupSelector = () => {
+  const { getGroups, getGroup, updateGroupId } = useGroupService()
+  const group: IGroup | undefined = getGroup(getItemInLocalStorage('group-id')) || getGroups()[0]
 
-  const isMounted = useIsMounted();
-  const { getGroups, updateGroupId } = useGroupService()
-  const storageKey = 'groupId';
-
-  const updateGroup = useCallback((groupId: string | undefined) => {
-    if (!groupId) return;
-
-    // Update the group held in storage
-    setItemInStorage(storageKey, groupId);
-
-    // Update the group held in state
+  const updateGroup = useCallback((groupId: string) => {
+    setItemInLocalStorage('group-id', groupId);
     updateGroupId(groupId);
   }, [updateGroupId])
 
-  const getGroupName = (groupId: string | undefined | null): string | undefined => {
-    return getGroups().filter((g: IGroup) => g._id === groupId)[0]?.name;
-  }
-
   useEffect(() => {
-    let storedGroupId = getItemInStorage(storageKey);
-
-    let isStoredGroupValid = getGroups().filter((g: IGroup) => g._id === storedGroupId).length > 0;
-
-    !isStoredGroupValid && updateGroup(getGroups()[0]?._id)
-  }, [getGroups, isMounted, storageKey, updateGroup]);
+    group && group._id && updateGroup(group?._id)
+  }, [group])
 
   return (
     <div className="flex flex-grow items-center justify-end">
       <Menu as="div" className="relative inline-block text-left w-full">
         <Menu.Button className="inline-flex justify-center items-center w-full rounded-md px-5 md:px-4 py-3 md:py-2 bg-gray-800 hover:text-blue-400 transition-colors text-sm font-medium focus:outline-none focus:text-blue-500">
           <div>
-            {getGroupName(getItemInStorage(storageKey)) || 'Groups'}
+            {group?.name || 'Groups'}
           </div>
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
@@ -63,10 +48,10 @@ const GroupSelector = () => {
                 <Menu.Item key={g._id}>
                   {({ active }) => (
                     <button
-                      onClick={() => updateGroup(g._id)}
+                      onClick={() => g._id && updateGroup(g._id)}
                       className={combineClassNames(
                         active ? 'text-gray-400' : '',
-                        'block px-4 py-2 text-sm font-medium'
+                        'flex w-full px-4 py-2 text-sm font-medium'
                       )}
                     >
                       {g.name}

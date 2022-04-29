@@ -65,9 +65,7 @@ exports.update = asyncHandler(async (req, res) => {
 
   const rota = await Rota.findByIdAndUpdate(rotaId, { 
     ...req.body,
-    audit: {
-      updateBy: req.auth._id
-    }
+    'audit.updatedBy': req.auth._id
   })
 
   return res.json(rota)

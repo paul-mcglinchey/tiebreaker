@@ -1,6 +1,6 @@
-import { IClient, ISession } from "..";
+import { IClient, ISession, IClientContext } from "..";
 
-export interface IClientService {
+export interface IClientService extends IClientContext {
   addClient:    (
     values: IClient, 
     groupId: string | undefined
