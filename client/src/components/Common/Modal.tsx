@@ -33,7 +33,7 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChi
       leaveFrom="transform opacity-100"
       leaveTo="transform opacity-0"
       className={combineClassNames(
-        "fixed bottom-0 left-0 z-10 bg-gray-700/50 flex justify-center",
+        "fixed bottom-0 left-0 z-10 bg-gray-700/50 flex flex-col justify-center",
         "w-screen h-screen overflow-auto"
       )}
     >
@@ -46,7 +46,7 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChi
         leaveTo="transform translate-y-full"
         className={combineClassNames(
           "relative bg-gray-900 p-6 flex-grow",
-          "flex flex-col rounded-lg transform mt-24 h-full",
+          "flex flex-col rounded-lg transform mt-24",
           widthClass || 'w-full md:w-2/3'
         )}
       >
