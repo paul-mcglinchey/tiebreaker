@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useEmployeeService } from "../../../../hooks";
 import { IEmployee } from "../../../../models";
 import { combineClassNames } from "../../../../services";
 import { ListSelector } from "../../../Common";
 
 interface IEmployeeListSelectorProps {
-  employeeIds: (string | undefined)[],
+  employees: IEmployee[],
   formValues: string[],
   setFieldValue: (value: (string | undefined)[]) => void
   fieldName?: string,
@@ -19,23 +20,30 @@ const EmployeeListItem = ({ e }: { e: IEmployee | undefined }) => {
   ) : <></>
 }
 
-const EmployeeListSelector = ({ employeeIds, formValues, setFieldValue, fieldName = 'employees' }: IEmployeeListSelectorProps) => {
+const EmployeeListSelector = ({ employees, formValues, setFieldValue, fieldName = 'employees' }: IEmployeeListSelectorProps) => {
 
   const { getEmployee } = useEmployeeService()
+  const [employeeFilter, setEmployeeFilter] = useState<string | undefined>()
 
   return (
-    <ListSelector<string | undefined>
-      fieldName={fieldName}
-      values={employeeIds}
-      formValues={formValues}
-      setFieldValue={(e) => setFieldValue(e)}
-      itemStyles={(selected) => combineClassNames(selected ? 'bg-green-400 text-gray-800' : 'bg-gray-800', 'flex p-4 rounded transition-all')}
-      render={(employeeId) => (
-        <div>
-          <EmployeeListItem e={getEmployee(employeeId)} />
-        </div>
-      )}
-    />
+    <>
+      <input name="filter" value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)} />
+      <ListSelector<string | undefined>
+        fieldName={fieldName}
+        values={employees.filter(e => e._id && employeeFilter ? e.fullName?.toLowerCase().includes(employeeFilter.toLowerCase()) : true).map(e => e._id).slice(0, 5)}
+        formValues={formValues}
+        setFieldValue={(e) => setFieldValue(e)}
+        itemStyles={(selected) => combineClassNames(selected ? 'bg-green-400 text-gray-800' : 'bg-gray-800', 'flex p-4 rounded transition-all')}
+        render={(employeeId) => (
+          <div>
+            <EmployeeListItem e={getEmployee(employeeId)} />
+          </div>
+        )}
+      />
+      <div className="flex justify-end tracking-wider font-semibold">
+        Showing 5 of {employees.length}
+      </div>
+    </>
   )
 }
 

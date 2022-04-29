@@ -8,10 +8,12 @@ interface IDialogProps {
   dialogOpen: boolean,
   toggleDialogOpen: () => void,
   title: string,
+  positiveMessage?: string
+  negativeMessage?: string
   action: () => void
 }
 
-const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) => {
+const Dialog = ({ dialogOpen, toggleDialogOpen, title, positiveMessage, negativeMessage, action }: IDialogProps) => {
 
   useEffect(() => {
     let body = document.querySelector("body");
@@ -38,7 +40,7 @@ const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) =
         leave="duration-200"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-        className="absolute w-screen h-screen inset-0 z-10 flex md:block overflow-y-hidden bg-gray-400/10"
+        className="absolute w-screen h-screen inset-0 z-10 flex md:block overflow-y-hidden bg-gray-400/30"
       >
         <Transition.Child
           enter="transition ease-out duration-200"
@@ -56,9 +58,13 @@ const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) =
           <div className="grow md:grow-0">
             <p className="text-2xl text-gray-200 font-bold tracking-wide whitespace-pre-line leading-10">{title}</p>
           </div>
-          <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 py-24 md:py-0 md:pt-8">
-            <Button type="button" buttonType={ButtonType.Confirm} action={() => toggleDialogOpen()} content="No, I don't want to lose this" XL />
-            <Button type="button" buttonType={ButtonType.Cancel} action={() => handlePositiveAction()} content="Yes, I'm fine with deleting this" XL />
+          <div className="flex flex-col space-y-8 py-24 md:py-0 md:pt-8">
+            <div className="flex justify-center">
+              <Button type="button" buttonType={ButtonType.Cancel} action={() => handlePositiveAction()} content={positiveMessage || "Yes, I'm fine with deleting this"} XL/>
+            </div>
+            <div className="flex justify-center">
+              <Button type="button" buttonType={ButtonType.Confirm} action={() => toggleDialogOpen()} content={negativeMessage || "No, I don't want to delete this"} XL />
+            </div>
           </div>
         </Transition.Child>
       </Transition>

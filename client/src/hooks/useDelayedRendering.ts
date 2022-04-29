@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useDelayedRendering = (delay: number): boolean => {
+const useDelayedRendering = (delay: number, deps: any[] = []): boolean => {
   
   const [show, setShow] = useState(false);
 
@@ -15,7 +15,7 @@ const useDelayedRendering = (delay: number): boolean => {
       componentIsMounted = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, deps);
 
   return show;
 }

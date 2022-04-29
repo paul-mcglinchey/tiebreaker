@@ -2,7 +2,7 @@ import { Transition } from "@headlessui/react";
 import { ButtonType, IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
 import { Button } from ".";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface IModalProps {
   title: string,
@@ -13,14 +13,20 @@ interface IModalProps {
 
 const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChildrenProps & IModalProps) => {
 
+  const [show, setShow] = useState(false)
+
   useEffect(() => {
     let body = document.querySelector("body");
 
-    setTimeout(() => {
-        if (body) {
-          body.style.overflow = modalOpen ? "hidden" : "auto"
-        }
-    }, modalOpen ? 0 : 400)
+    if (body) {
+      body.style.overflow = modalOpen ? "hidden" : "auto"
+    }
+
+    setTimeout(() => setShow(true), 300)
+
+    return (() => {
+      setShow(false)
+    })
   }, [modalOpen])
 
   return (
@@ -33,8 +39,9 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChi
       leaveFrom="transform opacity-100"
       leaveTo="transform opacity-0"
       className={combineClassNames(
-        "fixed bottom-0 left-0 z-10 bg-gray-700/50 flex flex-col justify-center",
-        "w-screen h-screen overflow-auto"
+        "fixed md:absolute inset-0 z-10 bg-gray-700/50 flex flex-col pb-24",
+        "w-screen h-screen",
+        (show && modalOpen) ? "overflow-auto" : "overflow-hidden"
       )}
     >
       <Transition.Child
@@ -45,8 +52,8 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChi
         leaveFrom="transform translate-y-0"
         leaveTo="transform translate-y-full"
         className={combineClassNames(
-          "relative bg-gray-900 p-6 flex-grow",
-          "flex flex-col rounded-lg transform mt-24",
+          "relative bg-gray-900 p-6 grow md:grow-0",
+          "flex flex-col rounded-t-xl md:rounded-lg transform mt-24 md:mt-12 md:translate-x-1/4",
           widthClass || 'w-full md:w-2/3'
         )}
       >

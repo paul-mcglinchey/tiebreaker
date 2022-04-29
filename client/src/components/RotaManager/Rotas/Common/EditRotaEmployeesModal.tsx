@@ -29,7 +29,7 @@ const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaE
       >
         {({ values, setFieldValue }) => (
           <Form>
-            <EmployeeListSelector employeeIds={getEmployees().filter(e => e._id).map(e => e._id)} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
+            <EmployeeListSelector employees={getEmployees()} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
             <div className="flex justify-end mt-10">
               <Button type="submit" content='Update' />
             </div>

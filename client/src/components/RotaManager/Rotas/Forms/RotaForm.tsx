@@ -48,7 +48,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
       {({ values, errors, touched, setFieldValue }) => (
         <Form className="flex flex-1 flex-col space-y-6 text-gray-200">
           <div className="flex flex-col space-y-3">
-            <div className="flex flex-col md:flex-row space-y-4 md:space-x-4 md:space-y-4">
+            <div className="flex flex-col md:flex-row space-y-4 md:space-x-4 md:space-y-0">
               <StyledField name="name" label="Name" errors={errors.name} touched={touched.name} />
               <Selector options={getDaysOfWeekOptions()} option={startDay} setValue={(e) => setStartDay(e)} label="Start Day" />
               <StyledField type="number" name="closingHour" label="Closing hour" errors={errors.closingHour} touched={touched.closingHour} />
@@ -58,7 +58,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
           <div className="flex flex-col space-y-4">
             <FormSection title="Employees" state={values.employees.length > 0} setState={() => setFieldValue("employees", values.employees?.length > 0 ? [] : employees.map(e => e._id))}>
               <div className="flex flex-col space-y-4 flex-grow rounded">
-                <EmployeeListSelector employeeIds={getEmployees().filter(e => e._id).map(e => e._id)} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
+                <EmployeeListSelector employees={getEmployees()} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
               </div>
             </FormSection>
           </div>
