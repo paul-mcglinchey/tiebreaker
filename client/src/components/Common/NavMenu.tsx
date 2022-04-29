@@ -21,7 +21,7 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
 
   return (
     <Disclosure as="nav" className="bg-gray-800 mb-4">
-      {({ open }) => (
+      {({ open, close }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-16">
@@ -148,6 +148,7 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                 <SmartLink
                   key={item.name}
                   to={item.href}
+                  onClick={() => close()}
                   className={(match: PathMatch<string> | null): string =>
                     combineClassNames(
                       match

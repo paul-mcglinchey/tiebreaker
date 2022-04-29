@@ -1,6 +1,4 @@
-import { render } from "@testing-library/react"
 import { FieldArray } from "formik"
-import { Children } from "react"
 import { combineClassNames } from "../../../services"
 
 interface IListSelectorProps<TValue> {
@@ -9,9 +7,10 @@ interface IListSelectorProps<TValue> {
   formValues: TValue[],
   setFieldValue: (value: TValue[]) => void
   render: (value: TValue) => JSX.Element
+  itemStyles?: (selected: boolean) => string
 }
 
-const ListSelector = <TValue extends unknown>({ fieldName, values, formValues, setFieldValue, render }: IListSelectorProps<TValue>) => {
+const ListSelector = <TValue extends unknown>({ fieldName, values, formValues, setFieldValue, render, itemStyles }: IListSelectorProps<TValue>) => {
 
   const toggleValue = (value: TValue): TValue[] => {
     if (formValues.includes(value)) {
@@ -32,7 +31,8 @@ const ListSelector = <TValue extends unknown>({ fieldName, values, formValues, s
             <button 
               type="button" 
               key={index} 
-              className={combineClassNames(
+              className={
+                (itemStyles && itemStyles(formValues.includes(value))) || combineClassNames(
                 "flex flex-grow p-4 transition-colors justify-between items-center rounded",
                  formValues.includes(value) ? 'bg-blue-500 text-gray-800' : 'bg-gray-800'
               )}

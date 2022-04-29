@@ -22,6 +22,7 @@ export { default as StyledNumericField } from './Forms/StyledNumericField'
 export { default as CustomCheckbox } from './Forms/CustomCheckbox'
 export { default as StyledTagField } from './Forms/StyledTagField'
 export { default as AddressForm } from './Forms/AddressForm'
+export { default as ListSelector } from './Forms/ListSelector'
 
 export { default as WideIcon } from './Icons/WideIcon'
 export { default as SpinnerIcon } from './Icons/SpinnerIcon'

@@ -10,6 +10,7 @@ export interface IButtonProps {
   hideText?: boolean,
   Icon?: any,
   iconSide?: "left" | "right"
+  XL?: boolean
 }
 
 const getButtonClasses = (buttonType: ButtonType): string => {
@@ -34,14 +35,16 @@ const Button = ({
   action = () => { },
   hideText,
   Icon,
-  iconSide = "right"
+  iconSide = "right",
+  XL = false
 }: IButtonProps) => {
   return (
     <button className={
       combineClassNames(
         getButtonClasses(buttonType),
         content ? "px-3" : "px-1",
-        "py-1 transition-all font-bold rounded flex items-center justify-center tracking-wider"
+        "py-1 transition-all font-bold rounded flex items-center justify-center tracking-wider",
+        XL && "text-xl"
       )}
       onClick={action}
       type={type}

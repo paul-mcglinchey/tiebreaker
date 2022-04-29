@@ -22,13 +22,13 @@ const Groups = () => {
               </div>
             ) : (
               getCount() > 0 ? (
-                <div className="flex flex-wrap -m-2 mb-2">
+                <div className="flex grow flex-col md:flex-row flex-wrap -m-2 mb-2">
                   {getGroups().map((g: IGroup) => (
                     <GroupCard
                       g={g}
                       key={g._id}
                       render={isCardFlipped => (
-                        <div className="flex space-x-8">
+                        <div className="flex flex-col grow md:flex-row space-y-2 md:space-x-8">
                           {isCardFlipped ? (
                             <>
                               <DataPoint value={g.entities?.users?.length || 0} label="user" />

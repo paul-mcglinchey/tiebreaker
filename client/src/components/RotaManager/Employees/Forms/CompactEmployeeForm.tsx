@@ -29,8 +29,8 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex flex-1 flex-col space-y-8 text-gray-200">
-          <div className="flex space-x-4 items-center">
+        <Form className="flex grow md:flex-1 flex-col space-y-8 text-gray-200">
+          <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4 items-center">
             <StyledField compact name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
             <StyledField compact name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />

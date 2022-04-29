@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useGroupService } from "../../../../hooks";
 import { IGroup } from "../../../../models";
 import { combineClassNames, getItemInLocalStorage, setItemInLocalStorage } from "../../../../services";
@@ -13,6 +13,10 @@ const GroupSelector = () => {
     setItemInLocalStorage('group-id', groupId);
     updateGroupId(groupId);
   }, [updateGroupId])
+
+  useEffect(() => {
+    group && group._id && updateGroup(group?._id)
+  }, [group])
 
   return (
     <div className="flex flex-grow items-center justify-end">

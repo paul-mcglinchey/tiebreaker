@@ -1,6 +1,6 @@
 import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
-import { EmployeeSelector } from "..";
+import { EmployeeListSelector } from "..";
 import { useEmployeeService, useGroupService, useRotaService } from "../../../../hooks";
 import { Form, Formik } from "formik";
 
@@ -29,7 +29,7 @@ const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaE
       >
         {({ values, setFieldValue }) => (
           <Form>
-            <EmployeeSelector name='employees' items={getEmployees()} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
+            <EmployeeListSelector employeeIds={getEmployees().filter(e => e._id).map(e => e._id)} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
             <div className="flex justify-end mt-10">
               <Button type="submit" content='Update' />
             </div>
