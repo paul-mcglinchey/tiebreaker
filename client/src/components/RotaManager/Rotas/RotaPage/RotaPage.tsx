@@ -11,7 +11,7 @@ const RotaPage = () => {
   
   useEffect(() => {
     updateRotaId(rotaId)
-  }, [])
+  }, [rotaId, updateRotaId])
 
   return (
     <ScheduleProvider>

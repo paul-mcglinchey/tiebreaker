@@ -27,6 +27,7 @@ export { default as ListSelector } from './Forms/ListSelector'
 export { default as WideIcon } from './Icons/WideIcon'
 export { default as SpinnerIcon } from './Icons/SpinnerIcon'
 export { default as ThumbIcon } from './Icons/ThumbIcon'
+export { default as SquareIcon } from './Icons/SquareIcon'
 
 export { default as InlineButton } from './Interaction/InlineButton'
 export { default as InlineLink } from './Interaction/InlineLink'

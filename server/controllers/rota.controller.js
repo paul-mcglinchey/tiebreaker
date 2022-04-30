@@ -6,9 +6,7 @@ const Group = db.group;
 const Employee = db.employee;
 
 exports.get = asyncHandler(async (req, res) => {
-  const { groupId } = req.params;
-
-  const group = await Group.findById(groupId)
+  const group = await Group.findById(req.params.groupId)
 
   if (!group) {
     res.status(400)
@@ -26,9 +24,7 @@ exports.get = asyncHandler(async (req, res) => {
 })
 
 exports.getById = asyncHandler(async (req, res) => {
-  const { rotaId } = req.params;
-
-  const rota = await Rota.findById(rotaId)
+  const rota = await Rota.findById(req.params.rotaId)
 
   if (!rota) {
     res.status(400)

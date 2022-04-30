@@ -1,6 +1,6 @@
 import { MenuIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/outline';
 import { IChildrenProps, ISortable, SortDirection } from '../../../models';
-import { SquareIconButton } from '..';
+import { SquareIcon } from '..';
 
 interface IInteractiveHeaderProps extends ISortable, IChildrenProps {
   value: string
@@ -15,7 +15,7 @@ const TableInteractiveHeader = ({
   value 
 }: IInteractiveHeaderProps) => {
 
-  const getButton = () => {
+  const getIcon = () => {
     if (sortField === value) {
       return sortDirection === "descending" ? ArrowDownIcon : ArrowUpIcon;
     } else {
@@ -36,9 +36,7 @@ const TableInteractiveHeader = ({
       <span className='whitespace-nowrap text-xs font-bold uppercase'>
         {children}
       </span>
-      <div>
-        <SquareIconButton className="w-4 h-4 -mb-1" Icon={getButton()} />
-      </div>
+      <SquareIcon Icon={getIcon()} size="sm" />
     </button>
   )
 }

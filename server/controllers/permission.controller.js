@@ -24,13 +24,9 @@ exports.create = asyncHandler(async (req, res) => {
 })
 
 exports.update = asyncHandler(async (req, res) => {
-  const { permissionId } = req.params
-
-  const permission = await Permission.findByIdAndUpdate(permissionId, {
+  const permission = await Permission.findByIdAndUpdate(req.params.permissionId, {
     ...req.body,
-    audit: {
-      updatedBy: req.auth._id
-    }
+    'audit.updatedBy': req.auth._id
   })
 
   if (!permission) throw new Error('Problem occurred updating permission')
@@ -39,25 +35,9 @@ exports.update = asyncHandler(async (req, res) => {
 })
 
 exports.delete = asyncHandler(async (req, res) => {
-  const { permissionId } = req.params
-
-  const permission = await Permission.findByIdAndDelete(permissionId)
+  const permission = await Permission.findByIdAndDelete(req.params.permissionId)
 
   if (!permission) throw new Error('Problem occurred deleting permission')
 
   return res.json({ _id: permission._id, message: 'Deleted permission' })
-})
-
-exports.createPermissions = asyncHandler(async () => {
-  const permissions = [
-    { name: 'view', description: 'Grants view access to a resource' },
-    { name: 'edit', description: 'Grants edit access to a resource' },
-    { name: 'delete', description: 'Grants delete access to a resource' },
-  ]
-
-  const existingPermissions = await Permission.find({}, { 'name': 1, 'description': 1, _id: 0})
-
-  const missingPermissions = permissions.filter((p) => existingPermissions.includes(p))
-
-  await Permission.insertMany(missingPermissions)
 })

@@ -10,7 +10,6 @@ const ListCollection = db.listcollection
 
 // Get all groups
 exports.get = asyncHandler(async (req, res) => {
-
   // the mongoose query to fetch the groups for the current user
   const groupQuery = { users: new ObjectId(req.auth._id) }
 
@@ -40,25 +39,17 @@ exports.create = asyncHandler(async (req, res) => {
 
 // Update group
 exports.update = asyncHandler(async (req, res) => {
-  const { groupId } = req.params
-
-  const group = await Group.findByIdAndUpdate(groupId, req.body)
+  const group = await Group.findByIdAndUpdate(groupId, {
+    ...req.body,
+    'audit.updateBy': req.auth._id
+  })
 
   return res.status(200).json(group)
 })
 
 // Delete group
 exports.delete = asyncHandler(async (req, res) => {
-  const { groupId } = req.params
-
-  const group = await Group.findById(groupId)
-
-  if (!group) {
-    res.status(400)
-    throw new Error('Group not found')
-  }
-
-  await Group.findByIdAndDelete(groupId)
+  const group = await Group.findByIdAndDelete(req.params.groupId)
 
   await Client.deleteMany({ _id: group.clients })
   await Employee.deleteMany({ _id: group.employees })

@@ -2,7 +2,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IGroup, IGroupsResponse } from "../../models";
 import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../../hooks";
 import { endpoints } from "../config";
-import { getItemInStorage } from "../../services";
+import { getItemInLocalStorage } from "../../services";
 
 interface IGroupContext {
   groupId: string
@@ -25,7 +25,7 @@ export const GroupContext = createContext<IGroupContext>({
 });
 
 export const GroupProvider = ({ children }: IChildrenProps) => {
-  const [groupId, setGroupId] = useState<string>(getItemInStorage('groupId') || "")
+  const [groupId, setGroupId] = useState<string>(getItemInLocalStorage('group-id') || "")
   const [groups, setGroups] = useState<IGroup[]>([])
   const [count, setCount] = useState<number>(0)
   const isMounted = useIsMounted()

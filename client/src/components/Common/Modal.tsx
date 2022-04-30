@@ -3,6 +3,7 @@ import { ButtonType, IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
 import { Button } from ".";
 import { useEffect, useState } from "react";
+import { useIsMounted } from "../../hooks";
 
 interface IModalProps {
   title: string,
@@ -14,6 +15,7 @@ interface IModalProps {
 const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChildrenProps & IModalProps) => {
 
   const [show, setShow] = useState(false)
+  const isMounted = useIsMounted()
 
   useEffect(() => {
     let body = document.querySelector("body");
@@ -22,12 +24,12 @@ const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChi
       body.style.overflow = modalOpen ? "hidden" : "auto"
     }
 
-    setTimeout(() => setShow(true), 300)
+    setTimeout(() => isMounted() && setShow(true), 300)
 
     return (() => {
-      setShow(false)
+      isMounted() && setShow(false)
     })
-  }, [modalOpen])
+  }, [modalOpen, isMounted])
 
   return (
     <Transition
