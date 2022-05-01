@@ -1,22 +1,19 @@
-import { Field } from "formik";
+import { FieldHookConfig, useField } from "formik";
 import { StyledErrorMessage } from "..";
 import { combineClassNames } from "../../../services";
 
-interface IFieldProps {
-  name: string,
-  label: string,
-  errors: any,
-  touched: any,
-  autoComplete?: string,
-  component?: React.ReactNode,
-  type?: string,
-  as?: string,
+interface ITestFieldProps {
+  label: string
   compact?: boolean
+  errors: any,
+  touched: any
 }
 
-const StyledField = ({ name, label, errors, touched, autoComplete, component, type, as, compact }: IFieldProps) => {
+const StyledField = ({ label, errors, touched, placeholder, type = "text", compact = false, ...props }: ITestFieldProps & FieldHookConfig<string>) => {
+  const [field] = useField(props)
+
   return (
-    <div className={combineClassNames("flex flex-col", type === "number" ? "grow-0" : "grow")}>
+    <div className={combineClassNames("flex flex-col grow w-full md:w-auto", type === "number" ? "md:grow-0" : "md:grow")}>
       {!compact && (
         <div className="flex justify-between">
           <label className="block font-bold text-gray-500 mb-1 uppercase">
@@ -29,17 +26,13 @@ const StyledField = ({ name, label, errors, touched, autoComplete, component, ty
           </div>
         </div>
       )}
-      <Field
-        className={combineClassNames(
-          `w-full h-10 appearance-none focus:outline-none border-2 focus:border-blue-500 text-gray-300 bg-gray-800 rounded py-2 px-4 leading-tight`,
-          compact && errors && touched ? 'border-red-500' : 'border-transparent'
+      <input className={combineClassNames(
+          `w-full h-10 caret-gray-200 focus:outline-none border-transparent autofill:text-fill-gray-200 autofill:shadow-fill-gray-800 autofill:rounded autofill:outline-none focus:border-blue-500 text-gray-300 bg-gray-800 rounded py-2 px-4 leading-tight`,
+          compact && errors && touched && 'border-red-500'
         )}
-        placeholder={compact && label}
-        name={name}
-        autoComplete={autoComplete}
-        component={component}
-        type={type}
-        as={as}
+        {...field}
+        placeholder={placeholder || label}
+        type={type} 
       />
     </div>
   )

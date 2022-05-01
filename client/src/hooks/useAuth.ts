@@ -18,10 +18,11 @@ const useAuth = (shouldAuthenticate: boolean = false) => {
     setIsLoading(true)
 
     const res = await fetch(endpoints.authenticate, requestBuilder())
+    const json: IUser | undefined = await res.json()
 
     setIsLoading(false)
 
-    if (!res.ok) updateUser(undefined)
+    res.ok && json !== undefined ? updateUser(json) : updateUser(undefined)
   })
 
   useEffect(() => {

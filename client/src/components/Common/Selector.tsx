@@ -34,7 +34,7 @@ const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
               <Menu.Item key={i}>
                 <button
                   type="button"
-                  className="flex-grow p-2 text-left text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold"
+                  className="flex-grow p-2 text-left text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold focus:bg-blue-500"
                   onClick={() => setValue(o)}
                 >
                   {o.label}

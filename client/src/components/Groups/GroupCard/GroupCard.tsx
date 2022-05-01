@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TrashIcon, DotsVerticalIcon, PencilIcon } from '@heroicons/react/solid';
 import { SquareIconButton } from '../..';
 import { IGroup } from '../../../models';
-import { DeleteDialog } from '../../Common';
+import { Dialog } from '../../Common';
 import { EditGroupModal } from '..';
 import { useGroupService } from '../../../hooks';
 
@@ -19,7 +19,6 @@ const GroupCard = ({ g, render }: IGroupProps) => {
 
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
   const toggleEditGroupOpen = () => setEditGroupOpen(!editGroupOpen);
-  const toggleDeleteGroupOpen = () => setDeleteGroupOpen(!deleteGroupOpen);
 
   const { updateGroup, deleteGroup } = useGroupService()
 
@@ -47,7 +46,14 @@ const GroupCard = ({ g, render }: IGroupProps) => {
         </div>
       </div>
       <EditGroupModal editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} updateGroup={updateGroup} g={g} />
-      <DeleteDialog dialogOpen={deleteGroupOpen} toggleDialogOpen={toggleDeleteGroupOpen} itemType="group" deleteAction={() => deleteGroup(g._id)} />
+      <Dialog 
+        isOpen={deleteGroupOpen} 
+        close={() => setDeleteGroupOpen(false)}
+        positiveAction={() => deleteGroup(g._id)} 
+        title="Delete group"
+        description="This action will delete the group for all users"
+        content="If you choose to continue you and all other users of this group will no longer have access to it or any of it's application data"
+      />
     </>
   )
 }

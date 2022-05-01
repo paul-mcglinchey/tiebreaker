@@ -77,7 +77,7 @@ exports.authenticate = asyncHandler(async (req, res) => {
     throw new Error('Unauthorized')
   }
 
-  res.json(user)
+  res.json(generateUser(user))
 })
 
 // @desc    Authenticate a user

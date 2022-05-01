@@ -12,7 +12,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        gray: colors.zinc,
+        gray: colors.neutral,
         red: colors.rose,
         green: colors.emerald,
         blue: colors.sky,
@@ -38,19 +38,19 @@ module.exports = {
       },
       transitionProperty: {
         'fill': 'fill'
+      },
+      maxWidth: {
+        '2/3': '66.67%',
+        '1/3': '33.33%',
+        '1/5': '20%',
+        '3/10': '30%',
+        '7/10': '70%',
+        '4/10': '40%',
+        '1/2': '50%',
+        '6/10': '60%',
+        'login': '24rem'
       }
     },
-    maxWidth: {
-      '2/3': '66.67%',
-      '1/3': '33.33%',
-      '1/5': '20%',
-      '3/10': '30%',
-      '7/10': '70%',
-      '4/10': '40%',
-      '1/2': '50%',
-      '6/10': '60%',
-      'login': '24rem'
-    }
   },
   variants: {
     extend: {
@@ -59,5 +59,10 @@ module.exports = {
       fill: ['hover']
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require("tailwindcss-autofill"),
+    require("tailwindcss-shadow-fill"),
+    require("tailwindcss-text-fill"),
+  ],
 }

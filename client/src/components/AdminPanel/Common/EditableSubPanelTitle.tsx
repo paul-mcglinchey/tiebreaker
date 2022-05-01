@@ -13,10 +13,11 @@ export const EditableSubPanelTitle = ({ name, placeholder, subtitle }: IEditable
       name={name} 
       placeholder={placeholder}
       className={combineClassNames(
-        subtitle 
+        "autofill:shadow-fill-gray-800 autofill:text-fill-gray-400 caret-gray-200",
+        subtitle
         ? "bg-transparent focus:outline-none font-light text-md tracking-wider text-gray-400" 
         : "bg-transparent focus:outline-none font-semibold text-xl"
-      )} 
+      )}
     />
   )
 }

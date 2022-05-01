@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useEmployeeService, useGroupService } from "../../../../hooks"
 import { IEmployee } from "../../../../models"
-import { DeleteDialog, InlineButton, TableRow, TableRowItem } from "../../../Common"
+import { InlineButton, Dialog, TableRow, TableRowItem } from "../../../Common"
 
 interface IEmployeeTableRowProps {
   employee: IEmployee
@@ -13,7 +13,6 @@ const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
   const { deleteEmployee } = useEmployeeService()
 
   const [deleteEmployeeOpen, setDeleteEmployeeOpen] = useState(false)
-  const toggleDeleteEmployeeOpen = () => setDeleteEmployeeOpen(!deleteEmployeeOpen)
 
   return (
     <>
@@ -26,14 +25,16 @@ const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
         </TableRowItem>
         <TableRowItem>
           <div className="flex flex-grow justify-end">
-            <InlineButton action={() => toggleDeleteEmployeeOpen()} color="text-red-500">
+            <InlineButton action={() => setDeleteEmployeeOpen(true)} color="text-red-500">
               <div>Delete</div>
             </InlineButton>
-            <DeleteDialog
-              dialogOpen={deleteEmployeeOpen}
-              toggleDialogOpen={toggleDeleteEmployeeOpen}
-              itemType="employee"
-              deleteAction={() => deleteEmployee(employee._id, groupId)}
+            <Dialog 
+              isOpen={deleteEmployeeOpen} 
+              close={() => setDeleteEmployeeOpen(false)} 
+              positiveAction={() => deleteEmployee(employee._id, groupId)}
+              title="Delete employee"
+              description="This action will delete the employee from the current group"
+              content="If you choose to continue you'll no longer have access to this employee in future schedules - this won't affect schedules created in the past."
             />
           </div>
         </TableRowItem>

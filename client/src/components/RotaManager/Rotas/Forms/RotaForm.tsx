@@ -6,7 +6,7 @@ import { DayOfWeek, IRota } from '../../../../models';
 import { rotaValidationSchema } from '../../../../utilities';
 import { Button, StyledField, Selector, FormSection, InlineLink } from '../../../Common';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
-import { EmployeeListSelector } from '../../..';
+import { EmployeeMultiSelector } from '../../..';
 
 interface IRotaFormProps {
   rota?: IRota | undefined,
@@ -58,7 +58,7 @@ const RotaForm = ({ rota, handleSubmit, submitButton }: IRotaFormProps) => {
           <div className="flex flex-col space-y-4">
             <FormSection title="Employees" state={values.employees.length > 0} setState={() => setFieldValue("employees", values.employees?.length > 0 ? [] : employees.map(e => e._id))}>
               <div className="flex flex-col space-y-4 flex-grow rounded">
-                <EmployeeListSelector employees={getEmployees()} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
+                <EmployeeMultiSelector formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
               </div>
             </FormSection>
           </div>
