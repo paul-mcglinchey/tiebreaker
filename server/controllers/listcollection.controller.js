@@ -26,12 +26,10 @@ exports.getSystem = asyncHandler(async (req, res) => {
 })
 
 exports.updateSystem = asyncHandler(async (req, res) => {
-  const { listcollectionId } = req.params
-
-  const updateBody = req.body
-  updateBody.updatedBy = req.auth._id
-
-  const listcollection = await ListCollection.findByIdAndUpdate(listcollectionId, updateBody)
+  const listcollection = await ListCollection.findByIdAndUpdate(req.params.listcollectionId, {
+    ...req.body,
+    'audit.updateBy': req.auth._id
+  })
 
   return res.json(listcollection)
 })

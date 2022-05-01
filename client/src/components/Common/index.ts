@@ -6,7 +6,6 @@ export { default as PasswordResetRequest} from './Auth/PasswordResetRequest'
 export { default as Signup } from './Auth/Signup'
 
 export { default as Dialog } from './Dialog/Dialog';
-export { default as DeleteDialog } from './Dialog/DeleteDialog';
 
 export { default as Dropdown } from './Dropdown/Dropdown'
 
@@ -22,11 +21,12 @@ export { default as StyledNumericField } from './Forms/StyledNumericField'
 export { default as CustomCheckbox } from './Forms/CustomCheckbox'
 export { default as StyledTagField } from './Forms/StyledTagField'
 export { default as AddressForm } from './Forms/AddressForm'
-export { default as ListSelector } from './Forms/ListSelector'
+export { default as MultiSelector } from './Forms/MultiSelector'
 
 export { default as WideIcon } from './Icons/WideIcon'
 export { default as SpinnerIcon } from './Icons/SpinnerIcon'
 export { default as ThumbIcon } from './Icons/ThumbIcon'
+export { default as SquareIcon } from './Icons/SquareIcon'
 
 export { default as InlineButton } from './Interaction/InlineButton'
 export { default as InlineLink } from './Interaction/InlineLink'

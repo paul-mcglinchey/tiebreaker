@@ -2,7 +2,7 @@ import { UserAddIcon } from "@heroicons/react/solid";
 import { Formik } from "formik";
 import { useState } from "react";
 import { RotaHeader, Schedule } from ".."
-import { useEmployeeService, useRotaService, useScheduleService } from "../../../../hooks";
+import { useRotaService, useScheduleService } from "../../../../hooks";
 import { IEmployee } from "../../../../models";
 import { Prompter } from "../../../Common";
 
@@ -12,7 +12,6 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
 
   const { getRota, getRotaEmployees } = useRotaService()
   const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading } = useScheduleService()
-  const { } = useEmployeeService()
 
   const currentWeek = getWeek(currentWeekModifier)
   const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""

@@ -22,7 +22,7 @@ const ListItemField = ({ name, placeholder }: IListItemFieldProps) => {
     <Field
       name={name}
       placeholder={placeholder}
-      className="bg-gray-900 rounded px-3 py-2"
+      className="bg-gray-900 rounded px-3 py-2 autofill:shadow-fill-gray-800"
     />
   )
 }

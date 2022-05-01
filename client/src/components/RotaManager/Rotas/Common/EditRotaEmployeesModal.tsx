@@ -1,8 +1,9 @@
 import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
-import { EmployeeListSelector } from "..";
-import { useEmployeeService, useGroupService, useRotaService } from "../../../../hooks";
+import { EmployeeMultiSelector } from "..";
+import { useGroupService, useRotaService } from "../../../../hooks";
 import { Form, Formik } from "formik";
+import { useEffect } from "react";
 
 interface IEditRotaEmployeesProps {
   modalOpen: boolean,
@@ -13,8 +14,18 @@ interface IEditRotaEmployeesProps {
 const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaEmployeesProps) => {
 
   const { updateRota } = useRotaService()
-  const { getEmployees } = useEmployeeService()
   const { groupId } = useGroupService()
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeydown)
+  }, [])
+
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'k') {
+      e.preventDefault()
+      document.getElementById('filter')?.focus()
+    }
+  }
 
   return (
     <Modal title="Edit rota employees" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
@@ -29,9 +40,9 @@ const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaE
       >
         {({ values, setFieldValue }) => (
           <Form>
-            <EmployeeListSelector employeeIds={getEmployees().filter(e => e._id).map(e => e._id)} formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
+            <EmployeeMultiSelector formValues={values.employees} setFieldValue={(e) => setFieldValue('employees', e)} />
             <div className="flex justify-end mt-10">
-              <Button type="submit" content='Update' />
+              <Button type="submit" content='Update employees' />
             </div>
           </Form>
         )}

@@ -29,15 +29,6 @@ exports.get = (includeDeleted) => {
 })}
 
 exports.create = asyncHandler(async (req, res) => {
-  const { groupId } = req.params;
-
-  const group = Group.findById(groupId)
-
-  if (!group) {
-    res.status(400)
-    throw new Error('Group not found')
-  }
-
   // Create a new employee
   const employee = await Employee.create({
     ...req.body,
@@ -52,9 +43,21 @@ exports.create = asyncHandler(async (req, res) => {
   }
 
   // Add the employee to the rota group
-  await Group.findByIdAndUpdate(groupId, { $push: { 'entities.employees': new ObjectId(employee._id )}, 'audit.updatedBy': req.auth._id })
+  await Group.findByIdAndUpdate(req.params.groupId, { $push: { 'entities.employees': new ObjectId(employee._id )}, 'audit.updatedBy': req.auth._id })
 
   res.status(201).json(employee)
+})
+
+// Update an employee
+exports.update = asyncHandler(async (req, res) => {
+  const { employeeId } = req.params;
+  
+  const employee = Employee.findByIdAndUpdate(employeeId, {
+    ...req.body,
+    'audit.updatedBy': req.auth._id
+  });
+
+  return res.status(200).json(employee);
 })
 
 exports.delete = asyncHandler(async (req, res) => {

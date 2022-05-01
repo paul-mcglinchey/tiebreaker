@@ -2,7 +2,7 @@ export { default as AddRotaModal } from './Common/AddRotaModal'
 export { default as EditRotaModal } from './Common/EditRotaModal'
 export { default as EditRotaEmployeesModal } from './Common/EditRotaEmployeesModal'
 
-export { default as EmployeeListSelector } from './Forms/EmployeeListSelector'
+export { default as EmployeeMultiSelector } from './Forms/EmployeeMultiSelector'
 export { default as RotaForm } from './Forms/RotaForm'
 
 export { default as RotaPage } from './RotaPage/RotaPage'

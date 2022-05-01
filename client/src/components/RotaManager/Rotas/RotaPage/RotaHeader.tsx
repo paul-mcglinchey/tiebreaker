@@ -2,7 +2,7 @@ import { ChevronLeftIcon, EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, Tra
 import { Link } from "react-router-dom";
 import { ButtonType, IRota } from "../../../../models";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Button, DeleteDialog, Dropdown } from "../../../Common";
+import { Button, Dialog, Dropdown } from "../../../Common";
 import { EditRotaModal } from "..";
 import { useGroupService, useRotaService } from "../../../../hooks";
 import { useFormikContext } from "formik";
@@ -63,7 +63,14 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
         ]} />
       </div>
       <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
-      <DeleteDialog dialogOpen={deletionOpen} toggleDialogOpen={toggleDeletionOpen} itemType="rota" deleteAction={() => deleteRota(rota._id, groupId)} />
+      <Dialog 
+        isOpen={deletionOpen} 
+        close={() => setDeletionOpen(false)} 
+        positiveAction={() => deleteRota(rota._id, groupId)}
+        title="Delete rota"
+        description="This action will delete the rota from the current group"
+        content="If you choose to continue you'll no longer have access to this rota or any of the schedules belonging to it"
+      />
     </div>
   )
 }

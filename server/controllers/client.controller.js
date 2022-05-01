@@ -48,11 +48,9 @@ exports.get = (includeDeleted) => {
 
 // Retrieve a specific client by Id
 exports.getById = asyncHandler(async (req, res) => {
-  let { clientId } = req.params;
-
   const client = await Client
     .aggregate()
-    .match({ _id: new ObjectId(clientId) })
+    .match({ _id: new ObjectId(req.params.clientId) })
     .addFields({ fullName: { $concat: ['$name.firstName', ' ', '$name.lastName'] } })  
     .exec()
 
@@ -66,8 +64,6 @@ exports.getById = asyncHandler(async (req, res) => {
 
 // Create and save a new client
 exports.create = asyncHandler(async (req, res) => {
-  const { groupId } = req.params;
-
   const client = await Client.create({
     ...req.body,
     activityLog: {
@@ -83,7 +79,7 @@ exports.create = asyncHandler(async (req, res) => {
   if (!client) throw new Error('Problem occurred creating client')
 
   // Update the group with the newly added client
-  await Group.findByIdAndUpdate(groupId, { $push: { 'entities.clients': new ObjectId(client._id) } });
+  await Group.findByIdAndUpdate(req.params.groupId, { $push: { 'entities.clients': new ObjectId(client._id) } });
 
   return res.status(201).json(client);
 });

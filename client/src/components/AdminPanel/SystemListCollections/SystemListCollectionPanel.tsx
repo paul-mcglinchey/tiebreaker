@@ -6,7 +6,7 @@ import { useFetch, useRequestBuilder, useListCollectionService, useRefresh } fro
 import { ButtonType, IFetch, IList, IListCollection, IListValue } from "../../../models"
 import { generateColour } from "../../../services"
 import { endpoints } from "../../../utilities"
-import { Button, DeleteDialog, Fetch, FetchError, SpinnerIcon } from "../../Common"
+import { Button, Dialog, Fetch, FetchError, SpinnerIcon } from "../../Common"
 import { EditableSubPanelTitle, ListItem, Panel, SubPanel, SubPanelContent } from ".."
 
 const SystemListCollectionPanel = () => {
@@ -16,7 +16,6 @@ const SystemListCollectionPanel = () => {
   const { init, update } = useListCollectionService(refresh)
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const toggleDeleteDialogOpen = () => setDeleteDialogOpen(!deleteDialogOpen)
 
   return (
     <Fetch
@@ -54,8 +53,15 @@ const SystemListCollectionPanel = () => {
                               Subtitle={<EditableSubPanelTitle name={`lists.${index}.name`} placeholder="Internal field name" subtitle />}
                               HeaderActions={
                                 <>
-                                  <Button type="button" buttonType={ButtonType.Cancel} content="Delete" action={() => toggleDeleteDialogOpen()} />
-                                  <DeleteDialog dialogOpen={deleteDialogOpen} toggleDialogOpen={toggleDeleteDialogOpen} itemType="system list" deleteAction={() => arrayHelpers.remove(index)} />
+                                  <Button type="button" buttonType={ButtonType.Cancel} content="Delete" action={() => setDeleteDialogOpen(true)} />
+                                  <Dialog
+                                    isOpen={deleteDialogOpen}
+                                    close={() => setDeleteDialogOpen(false)}
+                                    positiveAction={() => arrayHelpers.remove(index)}
+                                    title="Delete system list"
+                                    description="This action will delete the system list"
+                                    content="If you choose to continue the system list will be deleted - this could cause application breaking problems."
+                                  />
                                 </>
                               }
                             >

@@ -1,68 +1,89 @@
-import { Transition } from "@headlessui/react";
-import { ButtonType } from "../../../models";
-import { Button } from "..";
-import { useEffect } from "react";
-import { combineClassNames } from "../../../services";
+import { Dialog as HeadlessDialog, Transition } from "@headlessui/react"
+import { Fragment } from "react"
+import { IChildrenProps } from "../../../models"
 
 interface IDialogProps {
-  dialogOpen: boolean,
-  toggleDialogOpen: () => void,
-  title: string,
+  isOpen: boolean
+  close: () => void
+  positiveAction: () => void
+  title: string
+  description: string
+  content: string
+}
+
+interface IDialogButtonProps {
   action: () => void
 }
 
-const Dialog = ({ dialogOpen, toggleDialogOpen, title, action }: IDialogProps) => {
-
-  useEffect(() => {
-    let body = document.querySelector("body");
-
-    if (body) {
-      body.style.overflow = dialogOpen
-        ? "hidden"
-        : "auto"
-    }
-  })
-
-  const handlePositiveAction = () => {
-    action()
-    toggleDialogOpen()
-  }
-
+const DialogButton = ({ action, children }: IDialogButtonProps & IChildrenProps) => {
   return (
-    <>
-      <Transition
-        show={dialogOpen}
-        enter="duration-200"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="duration-200"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-        className="absolute w-screen h-screen inset-0 z-10 flex md:block overflow-y-hidden bg-gray-400/10"
-      >
+    <button
+      type="button"
+      className="focus:outline-none inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-blue-200 bg-gray-700 hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
+      onClick={action}
+    >
+      {children}
+    </button>
+  )
+}
+
+const Dialog = ({ isOpen, close, positiveAction, title, description, content }: IDialogProps) => {
+  return (
+    <Transition appear show={isOpen} as={Fragment}>
+      <HeadlessDialog as="div" className="relative z-10" onClose={close}>
         <Transition.Child
-          enter="transition ease-out duration-200"
-          enterFrom="transform translate-y-full"
-          enterTo="transform translate-y-0"
-          leave="transition ease-in duration-200"
-          leaveFrom="transform translate-y-0"
-          leaveTo="transform translate-y-full"
-          className={combineClassNames(
-            "md:w-1/3 md:mt-0 md:top-1/4 md:p-4 md:rounded-lg md:grow-0 md:translate-x-full",
-            "w-full mt-24 p-6 rounded-t-xl grow",
-            "flex flex-col relative bg-gray-900"
-          )}
+          as={Fragment}
+          enter="ease-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className="grow md:grow-0">
-            <p className="text-2xl text-gray-200 font-bold tracking-wide whitespace-pre-line leading-10">{title}</p>
-          </div>
-          <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 py-24 md:py-0 md:pt-8">
-            <Button type="button" buttonType={ButtonType.Confirm} action={() => toggleDialogOpen()} content="No, I don't want to lose this" XL />
-            <Button type="button" buttonType={ButtonType.Cancel} action={() => handlePositiveAction()} content="Yes, I'm fine with deleting this" XL />
-          </div>
+          <div className="fixed inset-0 bg-black bg-opacity-50" />
         </Transition.Child>
-      </Transition>
-    </>
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-start justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-200"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <HeadlessDialog.Panel className="w-full max-w-prose transform overflow-hidden rounded-2xl bg-gray-800 p-6 mt-16 text-left align-middle shadow-xl transition-all">
+                <HeadlessDialog.Title
+                  as="h3"
+                  className="text-lg font-semibold leading-6 text-gray-200"
+                >
+                  {title}
+                </HeadlessDialog.Title>
+                <HeadlessDialog.Description className="sr-only">
+                  {description}
+                </HeadlessDialog.Description>
+
+                <div className="mt-2">
+                  <p className="text-base text-gray-400 prose">
+                    {content}
+                  </p>
+                </div>
+
+                <div className="mt-8 flex justify-between">
+                  <DialogButton action={close}>
+                    Cancel
+                  </DialogButton>
+                  <DialogButton action={positiveAction}>
+                    Got it, thanks!
+                  </DialogButton>
+                </div>
+              </HeadlessDialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </HeadlessDialog>
+    </Transition>
   )
 }
 

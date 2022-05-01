@@ -20,13 +20,18 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
         <div className="text-sm font-medium text-white">{rota.name}</div>
       </TableRowItem>
       <TableRowItem>
-        <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
-          {getUser(rota.audit?.createdBy)?.username || '--'}
-        </span>
+        <div className="flex items-center space-x-4 min-w-40">
+          <span>
+            {new Date(rota.updatedAt || "").toLocaleDateString()}
+          </span>
+          <span className="font-medium px-2 bg-gray-800 tracking-wide rounded-lg select-none">
+            {getUser(rota.audit?.createdBy)?.username || '--'}
+          </span>
+        </div>
       </TableRowItem>
       <TableRowItem>
         <div className="text-sm font-medium text-white">
-          <Button 
+          <Button
             type="button"
             buttonType={ButtonType.Tertiary}
             content={employees.length > 0 ? `${employees.length} employees` : 'Add employees'}

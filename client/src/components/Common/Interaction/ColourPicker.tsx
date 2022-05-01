@@ -42,12 +42,12 @@ const ColourPicker = ({ colour, setColour, menuSide, hideIcon, square }: IColour
             {colours.map((pc: string, i: number) => (
               <Menu.Item
                 key={i}
-                onClick={() => setColour(pc)}
               >
                 <button
                   type="button"
                   style={{ backgroundColor: pc }}
                   className="w-8 h-8 m-1 rounded hover:opacity-50"
+                  onClick={() => setColour(pc)}
                 />
               </Menu.Item>
             ))}
