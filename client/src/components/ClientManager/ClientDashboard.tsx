@@ -6,10 +6,7 @@ import { AddClientModal, ClientList } from './Clients';
 
 const ClientDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
-  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen)
-
   const [addClientOpen, setAddClientOpen] = useState(false)
-  const toggleAddClientOpen = () => setAddClientOpen(!addClientOpen)
 
   const { getCount, isLoading, error, refresh } = useGroupService()
 
@@ -17,8 +14,8 @@ const ClientDashboard = () => {
     <>
       {!isLoading && getCount() > 0 ? (
         <>
-          <GroupToolbar title="Clients" addClientAction={toggleAddClientOpen} showSelector />
-          <ClientList toggleAddClientOpen={toggleAddClientOpen} />
+          <GroupToolbar title="Clients" addClientAction={() => setAddClientOpen(true)} showSelector />
+          <ClientList setAddClientOpen={setAddClientOpen} />
         </>
       ) : (
         isLoading ? (
@@ -27,12 +24,12 @@ const ClientDashboard = () => {
           error ? (
             <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
           ) : (
-            <GroupPrompter action={toggleAddGroupOpen} />
+            <GroupPrompter action={() => setAddGroupOpen(true)} />
           )
         )
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
-      <AddClientModal addClientOpen={addClientOpen} toggleAddClientOpen={toggleAddClientOpen} />
+      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+      <AddClientModal isOpen={addClientOpen} close={() => setAddClientOpen(false)} />
     </>
   )
 }

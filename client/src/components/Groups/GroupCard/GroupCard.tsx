@@ -18,9 +18,8 @@ const GroupCard = ({ g, render }: IGroupProps) => {
   const [editGroupOpen, setEditGroupOpen] = useState(false);
 
   const toggleCardFlipped = () => setCardFlipped(!cardFlipped);
-  const toggleEditGroupOpen = () => setEditGroupOpen(!editGroupOpen);
 
-  const { updateGroup, deleteGroup } = useGroupService()
+  const { deleteGroup } = useGroupService()
 
   return (
     <>
@@ -29,7 +28,7 @@ const GroupCard = ({ g, render }: IGroupProps) => {
           <div className="flex flex-grow justify-between items-center space-x-4">
             <h1 className="text-3xl font-extrabold tracking-wide mr-10">{g.name}</h1>
             <div className="flex space-x-4">
-              <SquareIconButton Icon={PencilIcon} action={() => toggleEditGroupOpen()} />
+              <SquareIconButton Icon={PencilIcon} action={() => setEditGroupOpen(true)} />
               <SquareIconButton Icon={DotsVerticalIcon} action={() => toggleCardFlipped()} className={`transform transition-all duration-500 ${cardFlipped ? 'rotate-180' : 'rotate-0'}`} />
             </div>
           </div>
@@ -45,7 +44,7 @@ const GroupCard = ({ g, render }: IGroupProps) => {
           </div>
         </div>
       </div>
-      <EditGroupModal editGroupOpen={editGroupOpen} toggleEditGroupOpen={toggleEditGroupOpen} updateGroup={updateGroup} g={g} />
+      <EditGroupModal isOpen={editGroupOpen} close={() => setEditGroupOpen(false)} group={g} />
       <Dialog 
         isOpen={deleteGroupOpen} 
         close={() => setDeleteGroupOpen(false)}

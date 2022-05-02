@@ -1,24 +1,42 @@
-import { ISchedule, IScheduleService } from "../models"
+import { IRota, ISchedule, IScheduleService } from "../models"
 import { endpoints, ScheduleContext } from "../utilities";
 import { useRequestBuilder } from ".";
 import useAsyncHandler from "./useAsyncHandler";
 import { useContext } from "react";
 import useResolutionService from "./useResolutionService";
 import useGroupService from "./useGroupService";
+import useRotaService from "./useRotaService";
 
 const useScheduleService = (): IScheduleService => {
   
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
-  const { groupId } = useGroupService()
   
+  const { groupId } = useGroupService()
+  const { getRotaEmployees } = useRotaService()
+
   const scheduleContext = useContext(ScheduleContext)
   const { getSchedules, refresh } = scheduleContext
 
-  const getSchedule = (startDate: Date): ISchedule | undefined => {
-    console.log(startDate, getSchedules().map((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')))
-    return getSchedules().find((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')[0] === startDate.toISOString().split('T')[0])
+  const getSchedule = (startDate: Date, rota: IRota): ISchedule => {
+    const schedule = getSchedules().find((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')[0] === startDate.toISOString().split('T')[0])
+    const rotaEmployees = getRotaEmployees(rota)
+
+    const startDateIso = new Date(startDate).toISOString().split('T')[0] || ""
+    const currentDateIso = new Date().toISOString().split('T')[0] || ""
+
+    const startDateInPast: boolean = startDateIso < currentDateIso
+
+    if (schedule) {
+      return startDateInPast ? { ...schedule, locked: true } : schedule
+    } else {
+      return {
+        startDate: new Date(startDate),
+        employeeSchedules: rotaEmployees.map(re => ({ employeeId: re._id, shifts: [] })),
+        locked: startDateInPast ? true : false
+      }
+    }
   }
 
   const updateSchedule = asyncHandler(async (values: ISchedule, scheduleId: string | undefined,  rotaId: string | undefined) => {

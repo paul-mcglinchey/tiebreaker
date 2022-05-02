@@ -1,13 +1,12 @@
 import { IAudit } from "./audit.model";
 import { ISchedule } from "./schedule.model";
-import { DayOfWeek } from "./types";
 
 export interface IRota {
   _id?: string,
   name?: string,
   description?: string,
   closingHour?: number,
-  startDay?: DayOfWeek,
+  startDay?: string | undefined,
   schedules?: ISchedule[],
   employees?: string[],
   locked?: boolean,

@@ -10,11 +10,12 @@ import { IClient } from "../../../../models";
 import { useClientService, useGroupService } from "../../../../hooks";
 
 interface IClientFormProps {
-  client?: IClient
+  client?: IClient | undefined
   submissionBar?: JSX.Element
+  additionalSubmissionActions?: (() => void)[]
 }
 
-const ClientForm = ({ client, submissionBar }: IClientFormProps) => {
+const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: IClientFormProps) => {
 
   const { groupId } = useGroupService()
   const clientService = useClientService();
@@ -47,10 +48,12 @@ const ClientForm = ({ client, submissionBar }: IClientFormProps) => {
           emails: []
         },
         birthdate: '',
+        colour: generateColour()
       }}
       validationSchema={clientValidationSchema}
       onSubmit={(values, actions) => {
-        clientService.addClient({ ...values, colour: generateColour() }, groupId);
+        client?._id ? clientService.updateClient(values, client._id, groupId) : clientService.addClient(values, groupId);
+        additionalSubmissionActions?.forEach(asa => asa())
         actions.resetForm();
       }}
     >

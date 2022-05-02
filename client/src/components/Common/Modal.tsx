@@ -1,73 +1,65 @@
-import { Transition } from "@headlessui/react";
-import { ButtonType, IChildrenProps } from "../../models";
+import { Transition, Dialog } from "@headlessui/react";
+import { IChildrenProps } from "../../models";
+import { DialogButton } from "..";
+import { Fragment } from "react";
 import { combineClassNames } from "../../services";
-import { Button } from ".";
-import { useEffect, useState } from "react";
-import { useIsMounted } from "../../hooks";
 
 interface IModalProps {
   title: string,
-  modalOpen: boolean,
-  toggleModalOpen: () => void
-  widthClass?: string
+  description: string,
+  isOpen: boolean,
+  close: () => void
+  level?: 1 | 2 | 3
 }
 
-const Modal = ({ children, title, modalOpen, toggleModalOpen, widthClass }: IChildrenProps & IModalProps) => {
-
-  const [show, setShow] = useState(false)
-  const isMounted = useIsMounted()
-
-  useEffect(() => {
-    let body = document.querySelector("body");
-
-    if (body) {
-      body.style.overflow = modalOpen ? "hidden" : "auto"
-    }
-
-    setTimeout(() => isMounted() && setShow(true), 300)
-
-    return (() => {
-      isMounted() && setShow(false)
-    })
-  }, [modalOpen, isMounted])
-
+const Modal = ({ children, title, description, isOpen, close, level = 1 }: IChildrenProps & IModalProps) => {
   return (
-    <>
-      <Transition
-        show={modalOpen}
-        enter="transition ease-out duration-200"
-        enterFrom="transform opacity-0"
-        enterTo="transform opacity-100"
-        leave="transition ease-in duration-200"
-        leaveFrom="transform opacity-100"
-        leaveTo="transform opacity-0"
-        className={combineClassNames(
-          "fixed md:absolute inset-0 z-10 bg-gray-700/50 flex flex-col md:pb-24",
-          "w-screen h-screen",
-          (show && modalOpen) ? "overflow-auto" : "overflow-hidden"
-        )}
-      >
-        <Transition.Child
-          enter="transition ease-out duration-200"
-          enterFrom="transform translate-y-full"
-          enterTo="transform translate-y-0"
-          leave="transition ease-in duration-200"
-          leaveFrom="transform translate-y-0"
-          leaveTo="transform translate-y-full"
-          className={combineClassNames(
-            "relative bg-gray-900 p-4 pb-12 md:pb-6 md:p-6 grow md:grow-0",
-            "flex flex-col rounded-t-xl md:rounded-lg transform mt-24 md:mt-12 md:translate-x-1/4",
-            widthClass || 'w-full md:w-2/3'
-          )}
-        >
-          <div className="flex justify-between items-center border-b-2 border-gray-400/20 pb-2 mb-8">
-            <h1 className="text-2xl font-bold text-white">{title}</h1>
-            <Button buttonType={ButtonType.Cancel} content='Cancel' action={toggleModalOpen} />
-          </div>
-          {children}
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={close}>
+        <Transition.Child>
+          <div className="fixed inset-0 bg-black bg-opacity-50" />
         </Transition.Child>
-      </Transition>
-    </>
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full md:items-start justify-center p-0 md:p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="transform ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1/4"
+              enterTo="opacity-100 translate-y-0"
+              leave="transform ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-1/4"
+            >
+              <Dialog.Panel className={
+                combineClassNames(
+                  "w-full max-w-7xl transform overflow-hidden rounded-t-2xl md:rounded-2xl bg-gray-800 p-2 py-6 md:p-6 text-left align-middle shadow-xl transition-all",
+                  level === 1 && "mt-16 max-w-7xl", level === 2 && "mt-32 max-w-5xl"
+                )}
+              >
+                <div className="flex justify-between mb-6 items-center">
+                  <Dialog.Title
+                    as="h2"
+                    className="text-2xl font-semibold leading-6 text-gray-200"
+                  >
+                    {title}
+                  </Dialog.Title>
+                  <DialogButton action={close}>
+                    Cancel
+                  </DialogButton>
+                </div>
+                <Dialog.Description
+                  className="sr-only"
+                >
+                  {description}
+                </Dialog.Description>
+
+                {children}
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
   )
 }
 

@@ -1,28 +1,26 @@
 import { IRota } from "../../../../models";
 import { Button, Modal } from "../../../Common";
 import { RotaForm } from "..";
-import { useGroupService, useRotaService } from "../../../../hooks";
 
 interface IEditRotaProps {
-  modalOpen: boolean,
-  toggleModalOpen: () => void,
+  isOpen: boolean,
+  close: () => void,
   rota?: IRota
 }
 
-const EditRotaModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaProps) => {
-
-  const rotaService = useRotaService()
-  const { groupId } = useGroupService()
-
+const EditRotaModal = ({ isOpen, close, rota }: IEditRotaProps) => {
   return (
-    <Modal title="Edit rota" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
+    <Modal 
+      title="Edit rota" 
+      description="This dialog can be used to edit an existing rota" 
+      isOpen={isOpen} 
+      close={() => close()}
+    >
       <RotaForm 
         rota={rota} 
         submitButton={<Button content='Update rota' />} 
-        handleSubmit={(values: IRota) => {
-          rotaService.updateRota(values, rota?._id, groupId);
-          toggleModalOpen();
-        }}/>
+        additionalSubmissionActions={[close]}
+      />
     </Modal>
   ) 
 }

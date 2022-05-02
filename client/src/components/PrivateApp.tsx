@@ -18,7 +18,6 @@ const PrivateApp = () => {
         render={({ getAccess, isLoading, isAdmin }: IAuth) => (
           <>
             <GroupProvider>
-              {console.log(isAdmin())}
               <UserProvider>
                 {!isLoading && (
                   getAccess() ? (

@@ -1,5 +1,5 @@
 import { UserIcon } from "@heroicons/react/solid";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useEmployeeService } from "../../../hooks";
 import { IEmployee } from "../../../models";
 import { Prompter, Table } from "../../Common";
@@ -11,10 +11,10 @@ const headers = [
 ]
 
 interface IEmployeeListProps {
-  toggleAddEmployeeOpen: () => void
+  setAddEmployeesOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const EmployeeList = ({ toggleAddEmployeeOpen }: IEmployeeListProps) => {
+const EmployeeList = ({ setAddEmployeesOpen }: IEmployeeListProps) => {
 
   const { getEmployees, isLoading, sortField, updateSortField, sortDirection, updateSortDirection } = useEmployeeService()
   const employees = getEmployees()
@@ -47,7 +47,7 @@ const EmployeeList = ({ toggleAddEmployeeOpen }: IEmployeeListProps) => {
           <Prompter
             title="Add your employees here"
             Icon={UserIcon}
-            action={toggleAddEmployeeOpen}
+            action={() => setAddEmployeesOpen(true)}
           />
         )}
       </div>

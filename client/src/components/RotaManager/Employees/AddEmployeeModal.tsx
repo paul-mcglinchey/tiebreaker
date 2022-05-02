@@ -5,11 +5,12 @@ import { Button, Checkbox, Modal } from "../../Common"
 import { CompactEmployeeForm } from "./Forms"
 
 interface IAddEmployeeModalProps {
-  addEmployeeOpen: boolean,
-  toggleAddEmployeeOpen: () => void
+  isOpen: boolean,
+  close: () => void
+  level?: 1 | 2 | 3
 }
 
-const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen }: IAddEmployeeModalProps) => {
+const AddEmployeeModal = ({ isOpen, close, level = 1 }: IAddEmployeeModalProps) => {
 
   const { groupId } = useGroupService()
   const { addEmployee } = useEmployeeService()
@@ -18,11 +19,17 @@ const AddEmployeeModal = ({ addEmployeeOpen, toggleAddEmployeeOpen }: IAddEmploy
   const toggleAddMultiple = () => setAddMultiple(!addMultiple);
 
   return (
-    <Modal title="Add employee" modalOpen={addEmployeeOpen} toggleModalOpen={toggleAddEmployeeOpen}>
+    <Modal
+      title="Add employee"
+      description="This dialog can be used to create new employees"
+      isOpen={isOpen}
+      close={close}
+      level={level}
+    >
       <CompactEmployeeForm
         handleSubmit={(values) => {
           addEmployee(values, groupId);
-          !addMultiple && toggleAddEmployeeOpen();
+          !addMultiple && close();
         }}
         submissionBar={(
           <div className="justify-between flex items-center">

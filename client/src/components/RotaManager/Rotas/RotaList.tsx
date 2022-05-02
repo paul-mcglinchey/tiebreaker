@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { useGroupService, useRotaService } from '../../../hooks';
+import { useRotaService } from '../../../hooks';
 import { IRota } from '../../../models';
 import { Modal, Prompter, Table } from '../../Common';
 import { TableIcon } from '@heroicons/react/solid';
@@ -15,12 +15,9 @@ const headers = [
 
 const RotaList = () => {
 
-  const { getCount, getRotas, isLoading, sortField, updateSortField, sortDirection, updateSortDirection, addRota } = useRotaService();
-
-  const { groupId } = useGroupService()
+  const { getCount, getRotas, isLoading, sortField, updateSortField, sortDirection, updateSortDirection } = useRotaService();
 
   const [addRotaOpen, setAddRotaOpen] = useState(false);
-  const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
   useEffect(() => {
     updateSortField(headers[1]!.value)
@@ -50,12 +47,12 @@ const RotaList = () => {
           </>
         ) : (
           !isLoading && (
-            <Prompter title="Add a rota to get started" Icon={TableIcon} action={toggleAddRotaOpen} />
+            <Prompter title="Add a rota to get started" Icon={TableIcon} action={() => setAddRotaOpen(false)} />
           )
         )}
       </div>
-      <Modal title="Add rota" modalOpen={addRotaOpen} toggleModalOpen={toggleAddRotaOpen}>
-        <RotaForm handleSubmit={(values) => addRota(values, groupId)} />
+      <Modal title="Add rota" description="You can use this dialog to create a new rota" isOpen={addRotaOpen} close={() => setAddRotaOpen(false)}>
+        <RotaForm />
       </Modal>
     </>
   )

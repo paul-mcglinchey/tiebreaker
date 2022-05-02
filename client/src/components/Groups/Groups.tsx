@@ -7,7 +7,6 @@ import { GroupCard, DataPoint, GroupPrompter, AddGroupModal } from ".";
 
 const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
-  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
 
   const { getCount, getGroups, isLoading } = useGroupService();
 
@@ -15,7 +14,7 @@ const Groups = () => {
     <>
       <NavMenu links={dashboardLinks} />
       <div className="px-2 sm:px-6 lg:px-8">
-        <GroupToolbar title="Group management" createGroupAction={toggleAddGroupOpen} />
+        <GroupToolbar title="Group management" createGroupAction={() => setAddGroupOpen(true)} />
             {isLoading ? (
               <div className="flex justify-center py-10">
                 <SpinnerIcon className="text-white h-12 w-12" />
@@ -46,11 +45,11 @@ const Groups = () => {
                   ))}
                 </div>
               ) : (
-                <GroupPrompter action={toggleAddGroupOpen} />
+                <GroupPrompter action={() => setAddGroupOpen(true)} />
               )
             )}
       </div>
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
+      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
     </>
   )
 }

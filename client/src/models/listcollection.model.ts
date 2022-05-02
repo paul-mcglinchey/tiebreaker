@@ -3,8 +3,8 @@ import { IAudit } from "."
 export interface IListValue {
   _id?: string, 
   short?: string,
-  long: string,
-  colour: string
+  long?: string,
+  colour?: string
 }
 
 export interface IList {
@@ -15,7 +15,7 @@ export interface IList {
 }
 
 export interface IListCollection {
-  _id: string,
+  _id?: string,
   lists: IList[],
   audit?: IAudit,
   system?: boolean,

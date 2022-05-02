@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Dispatch, Fragment, SetStateAction } from 'react';
 import { IClient } from '../../../models';
 import { useClientService } from '../../../hooks';
 import { ClientTableRow } from '.';
@@ -13,10 +13,10 @@ const headers = [
 ]
 
 interface IClientListProps {
-  toggleAddClientOpen: () => void
+  setAddClientOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const ClientList = ({ toggleAddClientOpen }: IClientListProps) => {
+const ClientList = ({ setAddClientOpen }: IClientListProps) => {
 
   const { getClients, getCount, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, updatePageNumber, pageSize, updatePageSize } = useClientService()
   const clients = getClients()
@@ -50,7 +50,7 @@ const ClientList = ({ toggleAddClientOpen }: IClientListProps) => {
         </Fragment>
       ) : (
         !isLoading && (
-          <Prompter title="Add a client to get started" Icon={UserAddIcon} action={toggleAddClientOpen} />
+          <Prompter title="Add a client to get started" Icon={UserAddIcon} action={() => setAddClientOpen(true)} />
         )
       )}
     </div>

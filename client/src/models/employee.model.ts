@@ -1,4 +1,4 @@
-import { DayOfWeek, EmployeeRole } from "./types";
+import { EmployeeRole } from "./types";
 
 export interface IEmployee {
   _id?: string,
@@ -28,7 +28,7 @@ export interface IEmployee {
   startDate?: string,
   minHours?: string,
   maxHours?: string,
-  unavailableDays?: DayOfWeek[],
+  unavailableDays?: string[],
   holidays?: {
     startDate?: string,
     endDate?: string,

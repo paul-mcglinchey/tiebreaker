@@ -20,10 +20,7 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
   const { handleSubmit, dirty } = useFormikContext()
 
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
-  const toggleDeletionOpen = () => setDeletionOpen(!deletionOpen);
-
   const [editRotaOpen, setEditRotaOpen] = useState<boolean>(false);
-  const toggleEditRotaOpen = () => setEditRotaOpen(!editRotaOpen);
 
   const updateEditingStatus = () => {
     dirty && handleSubmit();
@@ -56,14 +53,14 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
           <LockClosedIcon className="text-gray-400 w-6 h-6" />
         )}
         <Dropdown options={[
-          { label: 'Edit Rota Details', action: () => toggleEditRotaOpen(), Icon: PencilIcon },
+          { label: 'Edit Rota Details', action: () => setEditRotaOpen(true), Icon: PencilIcon },
           { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
           { label: rota.locked ? 'Unlock rota' : 'Lock rota', action: () => updateLockedStatus(), Icon: rota.locked ? LockOpenIcon : LockClosedIcon },
-          { label: 'Delete', action: () => toggleDeletionOpen(), Icon: TrashIcon },
+          { label: 'Delete', action: () => setDeletionOpen(true), Icon: TrashIcon },
         ]} />
       </div>
-      <EditRotaModal modalOpen={editRotaOpen} toggleModalOpen={toggleEditRotaOpen} rota={rota} />
-      <Dialog 
+      <EditRotaModal isOpen={editRotaOpen} close={() => setEditRotaOpen(false)} rota={rota} />
+      <Dialog
         isOpen={deletionOpen} 
         close={() => setDeletionOpen(false)} 
         positiveAction={() => deleteRota(rota._id, groupId)}

@@ -60,7 +60,6 @@ const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700">
-            {console.log(values)}
             {values.employeeSchedules.map((employeeSchedule: IEmployeeSchedule, index: number) => (
               <ScheduleTableRow key={index} employeeIndex={index} employeeSchedule={employeeSchedule} values={values} dayCycle={dayCycle} editing={editing} />
             ))}

@@ -9,10 +9,7 @@ const EmployeeDashboard = () => {
   const { isAddEmployeeOpen } = useParams();
 
   const [addGroupOpen, setAddGroupOpen] = useState(false);
-  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
-
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(isAddEmployeeOpen ? true : false);
-  const toggleAddEmployeeOpen = () => setAddEmployeeOpen(!addEmployeeOpen);
 
   const { getCount, isLoading, error } = useGroupService();
   const { refresh } = useEmployeeService();
@@ -26,20 +23,20 @@ const EmployeeDashboard = () => {
       ) : (
         getCount() > 0 ? (
           <>
-            <GroupToolbar title="Employees" addEmployeeAction={() => toggleAddEmployeeOpen()} showSelector />
-            <EmployeeList toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
+            <GroupToolbar title="Employees" addEmployeeAction={() => setAddEmployeeOpen(true)} showSelector />
+            <EmployeeList setAddEmployeesOpen={setAddEmployeeOpen} />
           </>
         ) : (
           error ? (
             <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
           ) : (
-            <GroupPrompter action={toggleAddGroupOpen} />
+            <GroupPrompter action={() => setAddGroupOpen(true)} />
           )
         )
       )}
       <>
-        <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
-        <AddEmployeeModal addEmployeeOpen={addEmployeeOpen} toggleAddEmployeeOpen={toggleAddEmployeeOpen} />
+        <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+        <AddEmployeeModal isOpen={addEmployeeOpen} close={() => setAddEmployeeOpen(false)} />
       </>
     </>
   )

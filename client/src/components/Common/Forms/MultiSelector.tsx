@@ -37,7 +37,7 @@ const MultiSelector = <TValue extends unknown>({ fieldName, values, totalValuesL
                 className={
                   (itemStyles && itemStyles(formValues.includes(value))) || combineClassNames(
                     "flex flex-grow p-4 transition-colors justify-between items-center rounded",
-                    formValues.includes(value) ? 'bg-blue-500 text-gray-800' : 'bg-gray-800'
+                    formValues.includes(value) ? 'bg-blue-500 text-gray-800' : 'bg-gray-900 text-gray-300'
                   )}
                 onClick={() => setFieldValue(toggleValue(value))}
               >
@@ -45,7 +45,7 @@ const MultiSelector = <TValue extends unknown>({ fieldName, values, totalValuesL
               </button>
             ))}
           </div>
-          <div className="text-right tracking-wide font-semibold">
+          <div className="text-right tracking-wide font-semibold text-gray-300">
             Showing {values.length} of {totalValuesLength}
             {values.length < totalValuesLength && (
               <button type="button" className="tracking-wide font-semibold" onClick={() => toggleShowAll()}> - show all</button>

@@ -1,35 +1,32 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { useState } from "react"
-import { useClientService, useGroupService } from "../../../hooks"
 import { Button, Checkbox, Modal } from "../../Common"
 import { CompactClientForm } from "."
 
 interface IAddClientModalProps {
-  addClientOpen: boolean,
-  toggleAddClientOpen: () => void
+  isOpen: boolean,
+  close: () => void
 }
 
-const AddClientModal = ({ addClientOpen, toggleAddClientOpen }: IAddClientModalProps) => {
-
-  const { groupId } = useGroupService()
-  const { addClient } = useClientService()
-
+const AddClientModal = ({ isOpen, close }: IAddClientModalProps) => {
   const [addMultiple, setAddMultiple] = useState(false);
   const toggleAddMultiple = () => setAddMultiple(!addMultiple);
 
   return (
-    <Modal title="Add client" modalOpen={addClientOpen} toggleModalOpen={toggleAddClientOpen}>
+    <Modal 
+      title="Add client"
+      description="This dialog can be used to create new clients" 
+      isOpen={isOpen} 
+      close={close}
+    >
       <CompactClientForm
-        handleSubmit={(values) => {
-          addClient(values, groupId);
-          !addMultiple && toggleAddClientOpen();
-        }}
         submissionBar={(
           <div className="justify-between flex items-center">
             <Checkbox id="addMultiple" label="Add multiple" onChange={() => toggleAddMultiple()} checked={addMultiple} />
             <Button content="Add client" Icon={PlusIcon} />
           </div>
         )}
+        additionalSubmissionActions={!addMultiple ? [close] : []}
       />
     </Modal>
   )
