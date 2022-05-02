@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { useGroupService } from '../../hooks';
-import { FetchError, GroupToolbar } from '../Common';
+import { FetchError, GroupToolbar, SpinnerLoader } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
 import { AddRotaModal, RotaList } from './Rotas';
 
@@ -12,19 +12,21 @@ const RotaDashboard = () => {
 
   return (
     <>
-      {!error ? (
+      {!error && !isLoading ? (
         getCount() > 0 ? (
           <>
             <GroupToolbar title="Rotas" addRotaAction={() => setAddRotaOpen(true)} showSelector />
             <RotaList />
           </>
         ) : (
-          !isLoading && (
-            <GroupPrompter action={() => setAddGroupOpen(true)} />
-          )
+          <GroupPrompter action={() => setAddGroupOpen(true)} />
         )
       ) : (
-        <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
+        isLoading ? (
+          <SpinnerLoader />
+        ) : (
+          <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
+        )
       )}
       <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
       <AddRotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />

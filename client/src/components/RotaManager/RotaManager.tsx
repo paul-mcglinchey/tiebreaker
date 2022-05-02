@@ -1,7 +1,7 @@
 import { Outlet } from "react-router"
 import { useGroupService } from "../../hooks";
 import { EmployeeProvider, rotaLinks, RotaProvider } from "../../utilities";
-import { NavMenu } from "../Common";
+import { NavMenu, SpinnerLoader } from "../Common";
 
 const RotaManager = () => {
 
@@ -10,9 +10,9 @@ const RotaManager = () => {
   return (
     <>
       <NavMenu links={rotaLinks} />
-      <div className="px-2 sm:px-6 lg:px-8">
+      <div className="px-2 sm:px-6 lg:px-8 text-gray-300">
         {isLoading || !groupId ? (
-          <div>Loading...</div>
+          <SpinnerLoader />
         ) : (
           <RotaProvider>
             <EmployeeProvider>

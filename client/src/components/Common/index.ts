@@ -42,6 +42,8 @@ export { default as SearchBar } from './Interaction/SearchBar'
 export { default as Checkbox } from './Interaction/Checkbox'
 export { default as Switch } from './Interaction/Switch'
 
+export { default as SpinnerLoader } from './Loader/SpinnerLoader'
+
 export { default as NotificationContainer } from './Notifications/NotificationContainer'
 export { default as NotificationCard } from './Notifications/NotificationCard'
 
