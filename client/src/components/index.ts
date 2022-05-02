@@ -1,3 +1,4 @@
+export * from './AdminPanel'
 export * from './Groups';
 export * from './Common';
 export * from './RotaManager';

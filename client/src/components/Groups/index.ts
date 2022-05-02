@@ -1,6 +1,5 @@
-export { default as DataPoint } from './GroupCard/DataPoint'
-export { default as GroupCard } from './GroupCard/GroupCard'
-
+export { default as GroupCard } from './GroupCard'
+export { default as DataPoint } from './DataPoint'
 export { default as Groups } from './Groups'
 export { default as AddGroupModal } from './AddGroupModal'
 export { default as EditGroupModal } from './EditGroupModal'

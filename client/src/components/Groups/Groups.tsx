@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGroupService } from "../../hooks";
 import { IGroup } from "../../models";
-import { dashboardLinks } from "../../utilities";
+import { dashboardLinks } from "../../config";
 import { GroupToolbar, NavMenu, SpinnerIcon } from "../Common";
 import { GroupCard, DataPoint, GroupPrompter, AddGroupModal } from ".";
 

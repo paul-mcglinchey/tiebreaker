@@ -1,8 +1,7 @@
 import { useRequestBuilder } from "."
 import { IPermission, IPermissionService, Notification } from "../models"
-import { endpoints } from "../utilities"
-import useAsyncHandler from "./useAsyncHandler"
-import useNotification from "./useNotification"
+import { endpoints } from "../config"
+import { useAsyncHandler, useNotification } from '../hooks'
 
 const usePermissionService = (refresh: () => void = () => {}): IPermissionService => {
   const { requestBuilder } = useRequestBuilder()

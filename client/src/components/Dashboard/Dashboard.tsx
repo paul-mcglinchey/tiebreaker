@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { useGroupService } from "../../hooks";
 import { Application } from "../../models";
-import { dashboardLinks } from "../../utilities";
+import { dashboardLinks } from "../../config";
 import { NavMenu, SpinnerIcon } from "../Common";
-import { AppCard } from ".";
 import { AddGroupModal, GroupPrompter } from "../Groups";
-import { useState } from "react";
+import { AppCard } from ".";
 
 const Dashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)

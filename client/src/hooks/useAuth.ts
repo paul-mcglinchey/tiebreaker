@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react"
-import { IUser } from "../models"
-import { AuthContext, endpoints } from "../utilities"
-import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
 import { useNavigate } from "react-router"
+import { IUser } from "../models"
+import { AuthContext } from "../contexts"
+import { endpoints } from '../config'
+import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
 
 const useAuth = (shouldAuthenticate: boolean = false) => {
   const auth = useContext(AuthContext)

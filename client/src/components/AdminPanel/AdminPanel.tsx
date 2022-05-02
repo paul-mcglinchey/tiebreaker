@@ -1,6 +1,6 @@
+import { memo } from "react";
 import { NavMenu, Toolbar } from "../Common";
 import { SystemListCollectionPanel, PermissionPanel } from ".";
-import { memo } from "react";
 
 const AdminPanel = () => {
   return (

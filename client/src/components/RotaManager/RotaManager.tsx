@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 import { useGroupService } from "../../hooks";
-import { EmployeeProvider, rotaLinks, RotaProvider } from "../../utilities";
+import { rotaLinks } from "../../config";
+import { EmployeeProvider, RotaProvider } from "../../contexts";
 import { NavMenu, SpinnerLoader } from "../Common";
 
 const RotaManager = () => {

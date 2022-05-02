@@ -1,7 +1,8 @@
-import { IGroup, IGroupService } from "../models";
-import { endpoints, GroupContext } from "../utilities";
-import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.';
-import { useContext } from "react";
+import { useContext } from "react"
+import { IGroup, IGroupService } from "../models"
+import { GroupContext } from "../contexts"
+import { endpoints } from '../config'
+import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
 
 const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()

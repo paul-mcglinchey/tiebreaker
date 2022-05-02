@@ -1,6 +1,6 @@
 import { IGroup } from "../../models";
 import { Button, Modal } from "../Common";
-import { GroupForm } from "..";
+import { GroupForm } from ".";
 
 interface IEditGroupProps {
   isOpen: boolean,

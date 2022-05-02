@@ -1,4 +1,4 @@
-import { Notification } from "./types/notification.type";
+import { Notification } from ".";
 
 export interface INotification {
   _id: string,

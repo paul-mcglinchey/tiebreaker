@@ -1,8 +1,8 @@
+import { Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { IChildrenProps } from "../../models";
-import { DialogButton } from "..";
-import { Fragment } from "react";
 import { combineClassNames } from "../../services";
+import { DialogButton } from ".";
 
 interface IModalProps {
   title: string,

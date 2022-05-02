@@ -1,13 +1,20 @@
 import { Navigate, Route, Routes } from "react-router"
 import { useAuth } from "../hooks"
 import { IAuth } from "../models"
-import { GroupProvider, UserProvider } from "../utilities"
-import { AdminPanel } from "./AdminPanel"
-import { ClientDashboard, ClientManager, ClientPage } from "./ClientManager"
-import { Authenticate } from "./Common"
-import { Dashboard } from "./Dashboard"
-import { Groups } from "./Groups"
-import { EmployeeDashboard, RotaDashboard, RotaManager, RotaPage } from "./RotaManager"
+import { GroupProvider, UserProvider } from "../contexts"
+import {
+  AdminPanel,
+  ClientDashboard, 
+  ClientManager, 
+  ClientPage,
+  Authenticate,
+  Dashboard,
+  Groups,
+  EmployeeDashboard,
+  RotaDashboard,
+  RotaManager,
+  RotaPage
+} from "."
 
 
 const PrivateApp = () => {

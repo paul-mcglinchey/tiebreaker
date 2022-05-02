@@ -1,9 +1,9 @@
-import { Task } from './types/task.type';
+import { Task } from '.'
 
 export interface IActivityLog {
-  task: Task,
-  actor: string,
-  updatedAt: string,
-  createdAt: string,
+  task: Task
+  actor: string
+  updatedAt: string
+  createdAt: string
   _id?: string
 }

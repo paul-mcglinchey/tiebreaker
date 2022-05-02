@@ -1,12 +1,11 @@
-export { default as Panel } from './Common/Panel'
-export { default as SubPanel } from './Common/SubPanel'
-export { default as EditableSubPanelTitle } from './Common/EditableSubPanelTitle'
-export { default as SubPanelContent } from './Common/SubPanelContent'
-
-export { default as ListItem } from './SystemListCollections/ListItem'
-export { default as SystemListCollectionPanel } from './SystemListCollections/SystemListCollectionPanel'
-
-export { default as PermissionPanel } from './Permissions/PermissionPanel'
-export { default as Permission } from './Permissions/Permission'
-
 export { default as AdminPanel } from './AdminPanel'
+export { default as EditableSubPanelTitle } from './EditableSubPanelTitle'
+export { default as ListItem } from './ListItem'
+export { default as Panel } from './Panel'
+export { default as Permission } from './Permission'
+export { default as PermissionPanel } from './PermissionPanel'
+export { default as SubPanel } from './SubPanel'
+export { default as SubPanelContent } from './SubPanelContent'
+export { default as SystemListCollectionPanel } from './SystemListCollectionPanel'
+
+

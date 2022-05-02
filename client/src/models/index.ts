@@ -22,8 +22,32 @@ export * from './table.model';
 export * from './user.model';
 export * from './permission.model'
 
-export * from './props';
-export * from './types';
-export * from './contexts';
-export * from './base';
-export * from './services';
+export * from './client.service.interface'
+export * from './employee.service.interface'
+export * from './group.service.interface'
+export * from './permission.service.interface'
+export * from './rota.service.interface'
+export * from './schedule.service.interface'
+export * from './user.service.interface'
+
+export * from './progress-context.model'
+export * from './auth-context.model'
+export * from './schedule.context.model'
+export * from './rota.context.model'
+export * from './employee.context.model'
+export * from './client.context.model'
+
+export * from './task.type';
+export * from './application.type';
+export * from './notification.type';
+export * from './toolbar.type';
+export * from './employee-role.type';
+export * from './dayofweek.type';
+export * from './button.type';
+export * from './icon-button-size.type';
+export * from './sort-direction.type'
+
+export * from './props.model'
+export * from './children.props.model'
+export * from './interactive-header.props.model'
+export * from './toolbar.props'

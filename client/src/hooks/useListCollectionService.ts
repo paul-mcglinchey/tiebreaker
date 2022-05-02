@@ -1,5 +1,5 @@
 import { IListCollection, Notification } from "../models"
-import { endpoints } from "../utilities"
+import { endpoints } from "../config"
 import { useAsyncHandler, useNotification, useRequestBuilder, useResolutionService } from '.'
 
 const useListCollectionService = (refresh: () => void = () => {}) => {

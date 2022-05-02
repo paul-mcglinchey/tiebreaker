@@ -1,11 +1,8 @@
-import { IRota, ISchedule, IScheduleService } from "../models"
-import { endpoints, ScheduleContext } from "../utilities";
-import { useRequestBuilder } from ".";
-import useAsyncHandler from "./useAsyncHandler";
 import { useContext } from "react";
-import useResolutionService from "./useResolutionService";
-import useGroupService from "./useGroupService";
-import useRotaService from "./useRotaService";
+import { IRota, ISchedule, IScheduleService } from "../models"
+import { ScheduleContext } from "../contexts";
+import { endpoints } from '../config'
+import { useAsyncHandler, useResolutionService, useGroupService, useRotaService, useRequestBuilder } from "../hooks";
 
 const useScheduleService = (): IScheduleService => {
   

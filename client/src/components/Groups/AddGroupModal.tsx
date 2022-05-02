@@ -1,5 +1,5 @@
 import { Modal } from "../Common";
-import GroupForm from "./GroupForm";
+import { GroupForm } from ".";
 
 interface IAddGroupModalProps {
   isOpen: boolean,

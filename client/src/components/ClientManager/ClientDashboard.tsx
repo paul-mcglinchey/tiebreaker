@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGroupService } from '../../hooks';
 import { FetchError, GroupToolbar, SpinnerIcon } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
-import { AddClientModal, ClientList } from './Clients';
+import { AddClientModal, ClientList } from '.';
 
 const ClientDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)

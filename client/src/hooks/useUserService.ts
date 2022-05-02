@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { IUser, IUserService } from "../models"
-import { UserContext } from "../utilities"
+import { UserContext } from "../contexts"
 
 const useUserService = (): IUserService => {
   const { getUsers, getCount, isLoading, error } = useContext(UserContext)

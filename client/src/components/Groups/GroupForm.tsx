@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import { useGroupService } from "../../hooks";
 import { IGroup } from "../../models";
 import { generateColour } from "../../services";
-import { groupValidationSchema } from "../../utilities";
+import { groupValidationSchema } from "../../schema";
 import { Button, ColourPicker, StyledField } from "../Common";
 
 interface IGroupFormProps {

@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useGroupService } from '../../hooks';
 import { FetchError, GroupToolbar, SpinnerLoader } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
-import { AddRotaModal, RotaList } from './Rotas';
+import { AddRotaModal, RotaList } from '.';
 
 const RotaDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);

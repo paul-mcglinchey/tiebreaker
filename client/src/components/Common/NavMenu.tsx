@@ -1,12 +1,10 @@
 import { Fragment, memo } from 'react';
-import { Link, PathMatch } from 'react-router-dom';
-
-import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-
-import { SmartLink, ThumbIcon, WideIcon } from '..';
-import { useAuth } from '../../hooks';
+import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
+import { Link, PathMatch } from 'react-router-dom';
 import { combineClassNames } from '../../services';
+import { useAuth } from '../../hooks';
+import { SmartLink, ThumbIcon, WideIcon } from '.';
 
 interface INavMenuProps {
   links?: {

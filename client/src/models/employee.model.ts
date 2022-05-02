@@ -1,4 +1,4 @@
-import { EmployeeRole } from "./types";
+import { EmployeeRole } from ".";
 
 export interface IEmployee {
   _id?: string,

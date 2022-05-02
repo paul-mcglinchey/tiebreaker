@@ -1,11 +1,9 @@
+import { useContext } from "react"
 import { IEmployee, IRota, IRotaService } from "../models"
-import { endpoints, RotaContext } from "../utilities";
-import { useRequestBuilder } from ".";
-import { useNavigate } from "react-router";
-import useAsyncHandler from "./useAsyncHandler";
-import { useContext } from "react";
-import useResolutionService from "./useResolutionService";
-import useEmployeeService from "./useEmployeeService";
+import { RotaContext } from "../contexts"
+import { endpoints } from "../config"
+import { useNavigate } from "react-router"
+import { useAsyncHandler, useResolutionService, useEmployeeService, useRequestBuilder } from '.'
 
 const useRotaService = (): IRotaService => {
   
