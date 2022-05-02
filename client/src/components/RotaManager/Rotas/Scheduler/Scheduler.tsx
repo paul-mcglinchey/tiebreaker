@@ -3,14 +3,14 @@ import { Formik } from "formik";
 import { useState } from "react";
 import { RotaHeader, Schedule } from ".."
 import { useRotaService, useScheduleService } from "../../../../hooks";
-import { Prompter } from "../../../Common";
+import { Prompter, SpinnerLoader } from "../../../Common";
 
 const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
 
-  const { getRota } = useRotaService()
-  const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading } = useScheduleService()
+  const { getRota, isLoading: isRotaLoading,  } = useRotaService()
+  const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading: isScheduleLoading } = useScheduleService()
 
   const currentWeek = getWeek(currentWeekModifier)
   const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""
@@ -19,7 +19,7 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
 
   return (
     <>
-      {!isLoading && rota && (
+      {rota && !isRotaLoading && !isScheduleLoading ? (
         <Formik
           enableReinitialize
           initialValues={getSchedule(new Date(startDate), rota)}
@@ -52,6 +52,10 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
             </div>
           )}
         </Formik>
+      ) : (
+        (isRotaLoading || isScheduleLoading) && (
+          <SpinnerLoader />
+        )
       )}
     </>
   )
