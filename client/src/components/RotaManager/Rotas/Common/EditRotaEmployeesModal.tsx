@@ -6,15 +6,15 @@ import { Form, Formik } from "formik";
 import { useEffect } from "react";
 
 interface IEditRotaEmployeesProps {
-  modalOpen: boolean,
-  toggleModalOpen: () => void,
+  isOpen: boolean,
+  close: () => void,
   rota?: IRota
 }
 
-const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaEmployeesProps) => {
+const EditRotaEmployeesModal = ({ isOpen, close, rota }: IEditRotaEmployeesProps) => {
 
-  const { updateRota } = useRotaService()
   const { groupId } = useGroupService()
+  const { updateRota } = useRotaService()
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeydown)
@@ -28,14 +28,19 @@ const EditRotaEmployeesModal = ({ modalOpen, toggleModalOpen, rota }: IEditRotaE
   }
 
   return (
-    <Modal title="Edit rota employees" modalOpen={modalOpen} toggleModalOpen={toggleModalOpen}>
+    <Modal 
+      title="Edit rota employees"
+      description="This dialog can be used to modify the employees belonging to a rota" 
+      isOpen={isOpen} 
+      close={close}
+    >
       <Formik
         initialValues={{
           employees: rota?.employees || []
         }}
         onSubmit={(values) => {
           updateRota(values, rota?._id, groupId)
-          toggleModalOpen()
+          close()
         }}
       >
         {({ values, setFieldValue }) => (

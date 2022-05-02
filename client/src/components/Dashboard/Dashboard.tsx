@@ -8,7 +8,6 @@ import { useState } from "react";
 
 const Dashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
-  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen)
 
   const { getGroups, getCount, isLoading, getTotalClients, getTotalEmployees, getTotalRotas } = useGroupService()
 
@@ -50,10 +49,10 @@ const Dashboard = () => {
         isLoading ? (
           <SpinnerIcon className="w-8 h-8" />
         ) : (
-          <GroupPrompter action={toggleAddGroupOpen} />
+          <GroupPrompter action={() => setAddGroupOpen(true)} />
         )
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
+      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
     </>
   )
 }

@@ -1,23 +1,20 @@
-import { useGroupService } from "../../hooks";
 import { Modal } from "../Common";
 import GroupForm from "./GroupForm";
 
 interface IAddGroupModalProps {
-  addGroupOpen: boolean,
-  toggleAddGroupOpen: () => void
+  isOpen: boolean,
+  close: () => void
 }
 
-const AddGroupModal = ({ addGroupOpen, toggleAddGroupOpen }: IAddGroupModalProps) => {
-
-  const { addGroup } = useGroupService()
-
+const AddGroupModal = ({ isOpen, close }: IAddGroupModalProps) => {
   return (
-    <Modal title="Add group" modalOpen={addGroupOpen} toggleModalOpen={toggleAddGroupOpen}>
+    <Modal 
+      title="Add group"
+      description="This dialog can be used to create a new group"
+      isOpen={isOpen} 
+      close={close}>
       <GroupForm 
-        handleSubmit={(values) => {
-          addGroup(values);
-          toggleAddGroupOpen();
-        }} 
+        additionalSubmissionActions={[close]} 
       />
     </Modal>
   )

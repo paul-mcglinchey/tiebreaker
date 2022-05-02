@@ -22,18 +22,17 @@ const EmployeeSelector = ({ e }: { e: IEmployee | undefined }) => {
 
 const EmployeeMultiSelector = ({ formValues, setFieldValue, fieldName = 'employees' }: IEmployeeMultiSelectorProps) => {
 
-  const [employeeFilter, setEmployeeFilter] = useState<string | undefined>()
+  const [employeeFilter, setEmployeeFilter] = useState<string>()
   const [showAll, setShowAll] = useState<boolean>(false)
   const toggleShowAll = () => setShowAll(!showAll)
 
   const { getEmployee, getEmployees } = useEmployeeService()
-
   const employees = getEmployees()
 
   return (
-    <div className="flex flex-col space-y-4">
-      <div className="flex items-center bg-gray-800 rounded focus-within:outline outline-1 outline-green-500 text-gray-300 h-10 pr-4 space-x-2">
-        <input id="filter" autoComplete="false" className="w-full py-2 px-4 bg-gray-800 focus:outline-0 rounded caret-green-500" placeholder="Filter employees..." value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)} />
+    <div className="flex flex-col space-y-2">
+      <div className="flex items-center bg-gray-900 rounded focus-within:outline outline-1 outline-green-500 text-gray-300 h-10 pr-4 space-x-4">
+        <input id="filter" autoComplete="off" className="w-full py-2 px-4 bg-gray-900 focus:outline-0 rounded caret-green-500" placeholder="Filter employees..." value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)} />
         <span className="hidden md:block p-0.5 px-1 text-sm text-gray-200 bg-blue-500 uppercase tracking-widest font-bold whitespace-pre rounded">CTRL + K</span>
         <SquareIcon Icon={SearchIcon} />
       </div>
@@ -44,7 +43,7 @@ const EmployeeMultiSelector = ({ formValues, setFieldValue, fieldName = 'employe
         toggleShowAll={toggleShowAll}
         formValues={formValues}
         setFieldValue={(e) => setFieldValue(e)}
-        itemStyles={(selected) => combineClassNames(selected ? 'bg-green-400 text-gray-800' : 'bg-gray-800', 'flex p-4 rounded transition-all')}
+        itemStyles={(selected) => combineClassNames(selected ? 'bg-green-400 text-gray-800' : 'text-gray-300 bg-gray-900', 'flex p-4 rounded transition-all')}
         render={(employeeId) => (
           <div>
             <EmployeeSelector e={getEmployee(employeeId)} />

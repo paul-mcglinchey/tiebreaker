@@ -6,10 +6,7 @@ import { AddRotaModal, RotaList } from './Rotas';
 
 const RotaDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
-  const toggleAddGroupOpen = () => setAddGroupOpen(!addGroupOpen);
-
   const [addRotaOpen, setAddRotaOpen] = useState(false);
-  const toggleAddRotaOpen = () => setAddRotaOpen(!addRotaOpen);
 
   const { getCount, isLoading, error, refresh } = useGroupService();
 
@@ -18,19 +15,19 @@ const RotaDashboard = () => {
       {!error ? (
         getCount() > 0 ? (
           <>
-            <GroupToolbar title="Rotas" addRotaAction={toggleAddRotaOpen} showSelector />
+            <GroupToolbar title="Rotas" addRotaAction={() => setAddRotaOpen(true)} showSelector />
             <RotaList />
           </>
         ) : (
           !isLoading && (
-            <GroupPrompter action={toggleAddGroupOpen} />
+            <GroupPrompter action={() => setAddGroupOpen(true)} />
           )
         )
       ) : (
         <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
       )}
-      <AddGroupModal addGroupOpen={addGroupOpen} toggleAddGroupOpen={toggleAddGroupOpen} />
-      <AddRotaModal addRotaOpen={addRotaOpen} toggleAddRotaOpen={toggleAddRotaOpen} />
+      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+      <AddRotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />
     </>
   )
 }

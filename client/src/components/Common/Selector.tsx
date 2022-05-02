@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
+import { combineClassNames } from '../../services';
 
 interface ISelectorProps {
   options: { value: any, label: any }[],
@@ -13,7 +14,7 @@ const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
   return (
     <div className="flex flex-col flex-1">
       <div className="text-gray-500 uppercase font-bold">{label}</div>
-      <Menu as="div" className="rounded p-2 relative my-1 bg-gray-800 flex text-gray-200">
+      <Menu as="div" className="h-10 rounded py-2 px-4 relative my-1 bg-gray-900 flex text-gray-300">
         <Menu.Button className="flex justify-between items-center font-semibold tracking-wide w-full text-left">
           <div className="flex-grow">
             {option && option.label ? option.label : label}
@@ -29,16 +30,21 @@ const Selector = ({ options, option, setValue, label }: ISelectorProps) => {
           leaveFrom="transform opacity-100 scale-y-100"
           leaveTo="transform opacity-0 scale-y-75"
         >
-          <Menu.Items className="z-50 origin-top-right absolute left-0 top-full mt-2 flex flex-col bg-gray-800 rounded shadow-md w-full">
+          <Menu.Items className="z-50 origin-top-right absolute left-0 top-full mt-2 flex flex-col bg-gray-900 rounded shadow-md w-full">
             {options.length > 0 ? options.map((o, i) => (
               <Menu.Item key={i}>
-                <button
-                  type="button"
-                  className="flex-grow p-2 text-left text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold focus:bg-blue-500"
-                  onClick={() => setValue(o)}
-                >
-                  {o.label}
-                </button>
+                {({ active }) => (
+                  <button
+                    type="button"
+                    className={combineClassNames(
+                      "flex-grow py-2 px-4 text-left text-gray-400 hover:text-gray-200 tracking-wide rounded font-bold",
+                      active ? "bg-blue-500" : "bg-gray-900"
+                    )}
+                    onClick={() => setValue(o)}
+                  >
+                    {o.label}
+                  </button>
+                )}
               </Menu.Item>
             )) : (
               <div className="flex p-2 text-left text-gray-400 tracking-wide rounded font-bold">

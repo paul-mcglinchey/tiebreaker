@@ -7,7 +7,6 @@ import { EditRotaEmployeesModal } from '..';
 const RotaTableRow = ({ rota }: { rota: IRota }) => {
 
   const [editRotaEmployeesOpen, setEditRotaEmployeesOpen] = useState(false)
-  const toggleEditRotaEmployeesOpen = () => setEditRotaEmployeesOpen(!editRotaEmployeesOpen)
 
   const { getUser } = useUserService()
   const { getRotaEmployees } = useRotaService()
@@ -35,9 +34,9 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
             type="button"
             buttonType={ButtonType.Tertiary}
             content={employees.length > 0 ? `${employees.length} employees` : 'Add employees'}
-            action={toggleEditRotaEmployeesOpen}
+            action={() => setEditRotaEmployeesOpen(true)}
           />
-          <EditRotaEmployeesModal rota={rota} modalOpen={editRotaEmployeesOpen} toggleModalOpen={toggleEditRotaEmployeesOpen} />
+          <EditRotaEmployeesModal rota={rota} isOpen={editRotaEmployeesOpen} close={() => setEditRotaEmployeesOpen(false)} />
         </div>
       </TableRowItem>
       <TableRowItem>

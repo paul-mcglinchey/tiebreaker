@@ -1,15 +1,18 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
-import { IClient } from "../../../../models";
+import { useClientService, useGroupService } from "../../../../hooks";
 import { clientValidationSchema } from "../../../../utilities";
 import { Button, StyledField } from "../../../Common";
 
 interface ICompactClientFormProps {
-  handleSubmit: (values: IClient) => void
-  submissionBar: JSX.Element | undefined
+  submissionBar?: JSX.Element | undefined
+  additionalSubmissionActions?: (() => void)[]
 }
 
-const CompactClientForm = ({ handleSubmit, submissionBar }: ICompactClientFormProps) => {
+const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: ICompactClientFormProps) => {
+
+  const { addClient } = useClientService()
+  const { groupId } = useGroupService()
 
   return (
     <Formik
@@ -24,7 +27,9 @@ const CompactClientForm = ({ handleSubmit, submissionBar }: ICompactClientFormPr
       }}
       validationSchema={clientValidationSchema}
       onSubmit={(values, actions) => {
-        handleSubmit(values);
+        addClient(values, groupId)
+
+        additionalSubmissionActions?.forEach(asa => asa())
         actions.resetForm();
       }}
     >
