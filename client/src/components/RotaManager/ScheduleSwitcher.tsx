@@ -14,7 +14,7 @@ const ScheduleSwitcher = ({ backwards, forwards, startDate, endDate, modifier }:
     <div className="flex justify-between items-center text-xl font-bold tracking-wide">
       <div className="flex items-center space-x-2">
         <SquareIconButton Icon={ChevronLeftIcon} action={() => backwards()} />
-        <div className="">
+        <div>
           {startDate.toLocaleDateString()}
         </div>
       </div>

@@ -14,13 +14,9 @@ const SquareIconButton = ({ Icon, action, colour = "text-current", className, bu
     return `h-${buttonSize} w-${buttonSize}`
   }
 
-  const getColour = (): string => {
-    return `text-${colour}`
-  }
-
   return (
     <button type="button" onClick={action}>
-      <Icon className={`${getButtonSize()} ${getColour()} ${className && className} transform hover:scale-110 transition-transform`} />
+      <Icon className={`${colour} ${className ? className : ""} ${getButtonSize()} hover:scale-110 transition-transform`} />
     </button>
   )
 }

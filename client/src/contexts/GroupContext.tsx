@@ -25,9 +25,9 @@ export const GroupContext = createContext<IGroupContext>({
 });
 
 export const GroupProvider = ({ children }: IChildrenProps) => {
-  const [groupId, setGroupId] = useState<string>(getItemInLocalStorage('group-id') || "")
   const [groups, setGroups] = useState<IGroup[]>([])
   const [count, setCount] = useState<number>(0)
+  const [groupId, setGroupId] = useState<string>(getItemInLocalStorage('group-id') || groups[0]?._id || "")
   const isMounted = useIsMounted()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh()
@@ -37,8 +37,12 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
     if (isMounted() && response) {
       setGroups(response.groups)
       setCount(response.count)
+
+      if (!groupId) {
+        response.groups[0]?._id && setGroupId(response.groups[0]?._id)
+      }
     }
-  }, [isMounted, response])
+  }, [isMounted, response, groupId])
 
   const contextValue = {
     groupId,

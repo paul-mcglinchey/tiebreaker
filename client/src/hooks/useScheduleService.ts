@@ -20,7 +20,7 @@ const useScheduleService = (): IScheduleService => {
     const schedule = getSchedules().find((schedule: ISchedule) => new Date(schedule.startDate || "").toISOString().split('T')[0] === startDate.toISOString().split('T')[0])
     const rotaEmployees = getRotaEmployees(rota)
 
-    const startDateIso = new Date(startDate).toISOString().split('T')[0] || ""
+    const startDateIso = new Date(startDate.setDate(startDate.getDate() + 7)).toISOString().split('T')[0] || ""
     const currentDateIso = new Date().toISOString().split('T')[0] || ""
 
     const startDateInPast: boolean = startDateIso < currentDateIso
