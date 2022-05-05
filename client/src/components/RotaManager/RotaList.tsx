@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { TableIcon } from '@heroicons/react/solid';
 import { useRotaService } from '../../hooks';
 import { IRota } from '../../models';
-import { Modal, Prompter, Table } from '../Common';
+import { Modal, Prompter, SpinnerLoader, Table } from '../Common';
 import { RotaForm, RotaTableRow } from '.';
 
 const headers = [
@@ -46,7 +46,9 @@ const RotaList = () => {
             </div>
           </>
         ) : (
-          !isLoading && (
+          isLoading ? (
+            <SpinnerLoader />
+          ) : (
             <Prompter title="Add a rota to get started" Icon={TableIcon} action={() => setAddRotaOpen(false)} />
           )
         )}
