@@ -12,7 +12,7 @@ interface IScheduleTableProps {
 
 const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
 
-  const { values }: FormikContextType<ISchedule> = useFormikContext()
+  const { values, dirty }: FormikContextType<ISchedule> = useFormikContext()
   const dayCycle: number[] = [0, 1, 2, 3, 4, 5, 6];
 
   return (
@@ -21,22 +21,24 @@ const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
         <table className="min-w-full">
           <thead className="bg-gray-800">
             <tr>
-              <th className="py-3 px-6">
-                {values.locked ? (
-                  <div>
-                    <LockClosedIcon className="text-red-500 w-5 h-5" />
-                  </div>
-                ) : (
-                  editing && (
-                    <Button buttonType={ButtonType.Tertiary} content='Save' type="submit" />
-                  )
-                )}
+              <th className="px-6 sticky left-0 bg-gray-800">
+                <div className="hidden md:block">
+                  {values.locked ? (
+                    <div>
+                      <LockClosedIcon className="text-red-500 w-5 h-5" />
+                    </div>
+                  ) : (
+                    editing && dirty && (
+                      <Button buttonType={ButtonType.Tertiary} content='Save' type="submit" />
+                    )
+                  )}
+                </div>
               </th>
               {dayCycle.map((day: number, index: number) => (
                 <Fragment key={index}>
                   <th
                     scope="col"
-                    className="py-3 px-6 text-xs font-medium tracking-wider text-gray-400 uppercase"
+                    className="px-3 md:px-6 text-xs font-medium tracking-wider text-gray-400 uppercase"
                     key={day}
                   >
                     <div className="flex justify-center space-x-2 items-center">

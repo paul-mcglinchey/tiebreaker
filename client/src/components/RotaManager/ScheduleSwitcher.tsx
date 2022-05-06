@@ -14,7 +14,7 @@ const ScheduleSwitcher = ({ backwards, forwards, startDate, endDate, modifier }:
     <div className="flex justify-between items-center text-xl font-bold tracking-wide">
       <div className="flex items-center space-x-2">
         <SquareIconButton Icon={ChevronLeftIcon} action={() => backwards()} />
-        <div>
+        <div className="hidden md:block">
           {startDate.toLocaleDateString()}
         </div>
       </div>
@@ -26,7 +26,7 @@ const ScheduleSwitcher = ({ backwards, forwards, startDate, endDate, modifier }:
         )}
       </div>
       <div className="flex items-center space-x-2">
-        <div>
+        <div className="hidden md:block">
           {endDate.toLocaleDateString()}
         </div>
         <SquareIconButton Icon={ChevronRightIcon} action={() => forwards()} />

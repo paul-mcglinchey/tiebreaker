@@ -9,22 +9,38 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
 
-  const { getRota, isLoading: isRotaLoading,  } = useRotaService()
+  const { getRota, isLoading: isRotaLoading, } = useRotaService()
   const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading: isScheduleLoading } = useScheduleService()
 
   const currentWeek = getWeek(currentWeekModifier)
-  const startDate = currentWeek.firstDay.toISOString().split('T')[0] || ""
+  const startDate = currentWeek.firstDay
 
   const rota = getRota(rotaId)
+  const schedule = rota ? getSchedule(startDate, rota, currentWeek.week) : undefined
 
   return (
     <>
-      {rota && !isRotaLoading && !isScheduleLoading ? (
+      {rota && schedule && !isRotaLoading && !isScheduleLoading ? (
         <Formik
           enableReinitialize
-          initialValues={getSchedule(new Date(startDate), rota)}
-          onSubmit={(values) => {
-            values._id ? updateSchedule(values, rotaId, values._id) : createSchedule(values, rotaId)
+          initialValues={{
+            startDate: schedule.startDate || startDate,
+            employeeSchedules: schedule.employeeSchedules.map(es => ({ 
+              employeeId: es.employeeId, shifts: es.shifts.map(s => ({ 
+                date: s.date, startHour: s.startHour || '', endHour: s.endHour || '', notes: s.notes || '' 
+              }))
+            }))
+          }}
+          onSubmit={async (values, actions) => {
+            const updatedSchedule = schedule?._id ? await updateSchedule(values, schedule._id, rotaId) : await createSchedule(values, rotaId)
+            actions.resetForm({ values: { 
+              startDate: updatedSchedule?.startDate || startDate, 
+              employeeSchedules: updatedSchedule?.employeeSchedules.map(es => ({
+                employeeId: es.employeeId, shifts: es.shifts.map(s => ({
+                  date: s.date, startHour: s.startHour || '', endHour: s.endHour || '', notes: s.notes || ''
+                }))
+              })) || [] 
+            }})
           }}
         >
           {() => (

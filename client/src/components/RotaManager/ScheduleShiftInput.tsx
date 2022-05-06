@@ -8,7 +8,7 @@ interface IScheduleShiftInputProps {
 const ScheduleShiftInput = ({ name }: IScheduleShiftInputProps) => {
   return (
     <Field
-      className={combineClassNames(`w-10 focus:outline-none text-gray-200 bg-gray-800 rounded text-center font-semibold tracking-wider text-xl uppercase leading-loose`)}
+      className={combineClassNames(`w-8 p-1 caret-blue-500 focus:outline-none text-gray-200 bg-gray-800 rounded text-center font-semibold tracking-wider text-base md:text-xl uppercase leading-loose`)}
       name={name}
       maxLength={2}
     />

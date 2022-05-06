@@ -5,6 +5,7 @@ import { endpoints } from "../config";
 
 export const ScheduleContext = createContext<IScheduleContext>({
   getSchedules: () => [],
+  setSchedules: () => {},
   getCount: () => 0,
   isLoading: false,
   error: undefined,
@@ -24,7 +25,6 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
   const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", groupId), requestBuilder(), [rotaDependency, dependency, rotaId, groupId])
 
   useEffect(() => {
-    console.log(response)
     if (response) {
       setSchedules(response.schedules)
       setCount(response.count)
@@ -33,6 +33,7 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
 
   const contextValue = {
     getSchedules: useCallback(() => schedules, [schedules]),
+    setSchedules,
     getCount: useCallback(() => count, [count]),
     isLoading,
     error,

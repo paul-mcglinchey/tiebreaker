@@ -3,9 +3,9 @@ import { IRota } from "./rota.model";
 
 export interface IScheduleShift {
   date: Date,
-  startHour: string,
-  endHour: string,
-  notes: string
+  startHour?: string,
+  endHour?: string,
+  notes?: string
 }
 export interface IEmployeeSchedule {
   employeeId: string | undefined,

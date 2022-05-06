@@ -3,6 +3,7 @@ import { FieldArray } from "formik";
 import { useEmployeeService } from "../../hooks";
 import { IEmployeeSchedule, ISchedule, IScheduleShift } from "../../models";
 import { ScheduleTableRowItem } from ".";
+import { generateColour, getInitials } from "../../services";
 
 interface IScheduleTableRowProps {
   employeeSchedule: IEmployeeSchedule,
@@ -55,12 +56,19 @@ const ScheduleTableRow = ({ employeeSchedule, dayCycle, employeeIndex, values, e
 
   return (
     <tr className="bg-gray-900 border-gray-700">
-      <th className="flex flex-col space-y-1 text-left px-6 py-6 tracking-wider">
-        <div>
-          {employee?.name.firstName || '--'} {employee?.name.lastName}
+      <th className="sticky left-0 bg-gray-900">
+        <div className="md:flex flex-col space-y-1 py-6 px-6 text-left tracking-wider hidden">
+          <div>
+            {employee?.name.firstName || '--'} {employee?.name.lastName}
+          </div>
+          <div className="text-sm font-light">
+            {employee?.contactInfo.primaryEmail || '--'}
+          </div>
         </div>
-        <div className="text-sm font-light">
-          {employee?.contactInfo.primaryEmail || '--'}
+        <div className="block md:hidden p-1">
+          <div style={{ backgroundColor: employee?.colour || generateColour() }} className="p-1 rounded-full text-gray-900 font-extrabold tracking-wide">
+            {getInitials(`${employee?.name.firstName} ${employee?.name.lastName}`)}
+          </div>
         </div>
       </th>
       <FieldArray

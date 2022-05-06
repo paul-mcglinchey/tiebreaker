@@ -26,32 +26,30 @@ const ScheduleTableRowItem = ({ values, day, employeeIndex, index, editing }: IS
   }, [cellValues, currentDate])
 
   return (
-    <div className="flex justify-center items-center space-x-2">
-      <div className="flex items-center space-x-2 w-18 uppercase">
-        {editing ? (
-          <>
-            <ScheduleShiftInput name={`employeeSchedules.${employeeIndex}.shifts.${index}.startHour`} />
-            <div>
-              -
+    <div className="flex justify-center space-x-1 items-center uppercase">
+      {editing ? (
+        <>
+          <ScheduleShiftInput name={`employeeSchedules.${employeeIndex}.shifts.${index}.startHour`} />
+          <div>
+            -
+          </div>
+          <ScheduleShiftInput name={`employeeSchedules.${employeeIndex}.shifts.${index}.endHour`} />
+        </>
+      ) : (
+        <>
+          {cellValues?.startHour && cellValues?.endHour ? (
+            <div className="flex text-lg font-bold items-center space-x-1">
+              <div>{cellValues.startHour}</div>
+              <div> - </div>
+              <div>{cellValues.endHour}</div>
             </div>
-            <ScheduleShiftInput name={`employeeSchedules.${employeeIndex}.shifts.${index}.endHour`} />
-          </>
-        ) : (
-          <>
-            {cellValues?.startHour && cellValues?.endHour ? (
-              <div className="flex text-lg font-bold items-center space-x-1">
-                <div>{cellValues.startHour}</div>
-                <div> - </div>
-                <div>{cellValues.endHour}</div>
-              </div>
-            ) : (
-              <div className="text-red-900 tracking-widest font-bold text-lg">
-                OFF
-              </div>
-            )}
-          </> 
-        )}
-      </div>
+          ) : (
+            <div className="text-red-900 tracking-widest font-bold text-lg">
+              OFF
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }

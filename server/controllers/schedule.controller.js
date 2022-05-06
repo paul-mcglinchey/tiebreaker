@@ -97,9 +97,9 @@ exports.update = asyncHandler(async (req, res) => {
     audit: {
       updatedBy: req.auth._id
     }
-  })
+  }, { new: true })
 
-  if (schedule) throw new Error('Problem occurred updating schedule')
+  if (!schedule) throw new Error('Problem occurred updating schedule')
 
   return res.json(schedule)
 })
