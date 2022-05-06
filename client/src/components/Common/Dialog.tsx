@@ -5,13 +5,13 @@ import { DialogButton } from "."
 interface IDialogProps {
   isOpen: boolean
   close: () => void
-  positiveAction: () => void
+  positiveActions: (() => void)[]
   title: string
   description: string
   content: string
 }
 
-const Dialog = ({ isOpen, close, positiveAction, title, description, content }: IDialogProps) => {
+const Dialog = ({ isOpen, close, positiveActions, title, description, content }: IDialogProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <HeadlessDialog as="div" className="relative z-10" onClose={close}>
@@ -58,7 +58,7 @@ const Dialog = ({ isOpen, close, positiveAction, title, description, content }: 
                   <DialogButton action={close}>
                     Cancel
                   </DialogButton>
-                  <DialogButton action={positiveAction}>
+                  <DialogButton action={() => positiveActions.forEach(pa => pa())}>
                     Got it, thanks!
                   </DialogButton>
                 </div>

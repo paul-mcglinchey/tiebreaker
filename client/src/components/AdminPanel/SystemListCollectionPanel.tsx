@@ -57,7 +57,7 @@ const SystemListCollectionPanel = () => {
                                   <Dialog
                                     isOpen={deleteDialogOpen}
                                     close={() => setDeleteDialogOpen(false)}
-                                    positiveAction={() => arrayHelpers.remove(index)}
+                                    positiveActions={[() => arrayHelpers.remove(index), () => setDeleteDialogOpen(false)]}
                                     title="Delete system list"
                                     description="This action will delete the system list"
                                     content="If you choose to continue the system list will be deleted - this could cause application breaking problems."

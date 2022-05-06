@@ -12,7 +12,7 @@ const useEmployeeService = (): IEmployeeService => {
   const { handleResolution } = useResolutionService()
 
   const employeeContext = useContext(EmployeeContext)
-  const { getEmployees, refresh } = employeeContext
+  const { getEmployees, setEmployees, refresh } = employeeContext
 
   const getEmployee = (employeeId: string | undefined): IEmployee | undefined => {
     return getEmployees().find((employee: IEmployee) => employee._id === employeeId)
@@ -33,8 +33,12 @@ const useEmployeeService = (): IEmployeeService => {
     const res = await fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'employee', [() => refresh()])
+    handleResolution(res, json, 'delete', 'employee', [() => removeEmployeeFromContext(employeeId)])
   })
+
+  const removeEmployeeFromContext = (employeeId: string) => {
+    setEmployees(employees => employees.filter(e => e._id !== employeeId))
+  }
   
   return { ...employeeContext, getEmployee, addEmployee, deleteEmployee }
 }

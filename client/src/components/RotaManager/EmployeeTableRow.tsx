@@ -31,7 +31,7 @@ const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
             <Dialog 
               isOpen={deleteEmployeeOpen} 
               close={() => setDeleteEmployeeOpen(false)} 
-              positiveAction={() => deleteEmployee(employee._id, groupId)}
+              positiveActions={[() => deleteEmployee(employee._id, groupId), () => setDeleteEmployeeOpen(false)]}
               title="Delete employee"
               description="This action will delete the employee from the current group"
               content="If you choose to continue you'll no longer have access to this employee in future schedules - this won't affect schedules created in the past."

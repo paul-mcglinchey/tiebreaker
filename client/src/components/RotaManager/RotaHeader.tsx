@@ -63,7 +63,7 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
       <Dialog
         isOpen={deletionOpen} 
         close={() => setDeletionOpen(false)} 
-        positiveAction={() => deleteRota(rota._id, groupId)}
+        positiveActions={[() => deleteRota(rota._id, groupId)]}
         title="Delete rota"
         description="This action will delete the rota from the current group"
         content="If you choose to continue you'll no longer have access to this rota or any of the schedules belonging to it"

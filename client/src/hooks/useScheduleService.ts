@@ -27,7 +27,9 @@ const useScheduleService = (): IScheduleService => {
     const startDateInPast: boolean = startDateIso < currentDateIso
 
     if (schedule) {
-      return startDateInPast ? { ...schedule, locked: true } : schedule
+      return startDateInPast 
+        ? { ...schedule, locked: true } 
+        : { ...schedule, employeeSchedules: rotaEmployees.map(re => ({ employeeId: re._id, shifts: schedule.employeeSchedules.find(es => re._id === es.employeeId)?.shifts || week.map(d => ({ date: new Date(d)})) }))}
     } else {
       return {
         startDate: new Date(startDate),

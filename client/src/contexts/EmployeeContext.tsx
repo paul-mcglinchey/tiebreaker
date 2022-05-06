@@ -9,6 +9,7 @@ interface IEmployeeProviderProps extends IChildrenProps {
 
 export const EmployeeContext = createContext<IEmployeeContext>({
   getEmployees: () => [],
+  setEmployees: () => {},
   getCount: () => 0,
   sortField: undefined,
   updateSortField: () => {},
@@ -41,6 +42,7 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
 
   const contextValue = {
     getEmployees: useCallback(() => employees, [employees]),
+    setEmployees,
     getCount: useCallback(() => count, [count]),
     sortField,
     updateSortField: useCallback((sortField: string) => setSortField(sortField), []),

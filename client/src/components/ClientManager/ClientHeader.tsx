@@ -58,7 +58,7 @@ const ClientHeader = ({ client }: { client: IClient }) => {
       <Dialog
         isOpen={deleteClientOpen}
         close={() => setDeleteClientOpen(false)}
-        positiveAction={() => deleteClient()}
+        positiveActions={[() => deleteClient(), () => setDeleteClientOpen(false)]}
         title="Delete client"
         description="This action will delete the client from the current group"
         content="If you choose to continue you'll no longer have access to this client - all sessions belonging to the client will also become innaccessible."
