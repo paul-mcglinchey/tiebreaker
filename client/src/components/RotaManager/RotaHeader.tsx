@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeftIcon, EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
+import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { useFormikContext } from "formik";
 import { ButtonType, IRota } from "../../models";
 import { useGroupService, useRotaService } from "../../hooks";
@@ -33,8 +33,8 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
 
   return (
     <div className="flex justify-between items-center text-gray-200">
-      <Link to="/rotas/dashboard" className="flex sm:hidden p-1 rounded-lg">
-        <ChevronLeftIcon className="w-8 h-8 transform hover:scale-105" />
+      <Link to="/rotas/dashboard" className="flex sm:hidden rounded-lg">
+        <Button content="Back to rotas" buttonType={ButtonType.Tertiary} />
       </Link>
       <div className="hidden sm:flex items-center pb-0.5 space-x-3 text-white text-base md:text-2xl font-semibold tracking-wider">
         <Link to="/rotas/dashboard">

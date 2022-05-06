@@ -5,7 +5,7 @@ import { useEmployeeService, useGroupService, useRotaService } from '../../hooks
 import { IListValue, IRota } from '../../models';
 import { rotaValidationSchema } from '../../schema';
 import { generateColour } from '../../services';
-import { Button, StyledField, FormSection, ListboxSelector } from '../Common';
+import { Button, StyledField, FormSection } from '../Common';
 import { EmployeeMultiSelector, AddEmployeeModal } from '.';
 
 interface IRotaFormProps {
@@ -60,7 +60,6 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
             <div className="flex flex-col space-y-3">
               <div className="flex flex-col md:flex-row space-y-4 md:space-x-4 md:space-y-0 items-end">
                 <StyledField name="name" label="Name" errors={errors.name} touched={touched.name} />
-                <ListboxSelector label="Start Day" items={weekdaysList.map(wd => ({ value: wd._id, label: wd.long }))} selected={{ value: values.startDay, label: weekdaysList.find(wd => wd._id === values.startDay)?._id }} setSelected={(selected) => setFieldValue('startDay', selected)} />
                 <StyledField type="number" name="closingHour" label="Closing hour" errors={errors.closingHour} touched={touched.closingHour} />
               </div>
               <StyledField as="textarea" name="description" label="Description" errors={errors.description} touched={touched.description} />

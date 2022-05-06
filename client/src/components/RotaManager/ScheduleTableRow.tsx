@@ -65,7 +65,7 @@ const ScheduleTableRow = ({ employeeSchedule, dayCycle, employeeIndex, values, e
             {employee?.contactInfo.primaryEmail || '--'}
           </div>
         </div>
-        <div className="block md:hidden p-1">
+        <div className="block md:hidden p-1 pr-6">
           <div style={{ backgroundColor: employee?.colour || generateColour() }} className="p-1 rounded-full text-gray-900 font-extrabold tracking-wide">
             {getInitials(`${employee?.name.firstName} ${employee?.name.lastName}`)}
           </div>
@@ -77,11 +77,11 @@ const ScheduleTableRow = ({ employeeSchedule, dayCycle, employeeIndex, values, e
           <>
             {dayCycle.map((day: number, index: number) => (
               <Fragment key={index}>
-                <td key={index} className="px-1 py-4 text-sm whitespace-nowrap text-gray-400">
+                <td key={index} className="px-4 py-6 md:py-4 text-sm whitespace-nowrap text-gray-400">
                   <ScheduleTableRowItem employeeIndex={employeeIndex} index={index} employeeSchedule={employeeSchedule} values={values} day={day} editing={editing} />
                 </td>
-                <td>
-                  <div className="p-1 border border-gray-800 rounded text-center w-8 font-semibold tracking-wide text-gray-400">
+                <td className="hidden md:table-cell">
+                  <div className="p-1 border border-gray-800 rounded text-center text-xs w-6 md:text-lg md:w-8 font-semibold tracking-wide text-gray-400">
                     {getHours(values.employeeSchedules[employeeIndex]?.shifts[index]?.startHour || "", values.employeeSchedules[employeeIndex]?.shifts[index]?.endHour || "")}
                   </div>
                 </td>

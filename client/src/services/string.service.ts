@@ -1,4 +1,6 @@
-export const getInitials = (phrase: string) => {
+export const getInitials = (phrase: string | undefined) => {
+  if (!phrase) return "N/A"
+
   var initials = "";
   phrase.split(" ").forEach((w: string) => {
     initials += w[0];

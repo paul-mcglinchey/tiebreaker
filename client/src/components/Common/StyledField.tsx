@@ -7,9 +7,10 @@ interface IFieldProps {
   errors: any,
   touched: any
   noAutocomplete?: boolean
+  classes?: string
 }
 
-const StyledField = ({ label, errors, touched, placeholder, type = "text", compact = false, noAutocomplete, ...props }: IFieldProps & FieldHookConfig<string>) => {
+const StyledField = ({ label, errors, touched, placeholder, type = "text", compact = false, noAutocomplete, classes, ...props }: IFieldProps & FieldHookConfig<string>) => {
   const [field] = useField(props)
 
   return (
@@ -33,10 +34,11 @@ const StyledField = ({ label, errors, touched, placeholder, type = "text", compa
       <input className={combineClassNames(
         "w-full h-10 caret-gray-200 autofill:text-fill-gray-200 autofill:shadow-fill-black autofill:border-0 autofill:rounded text-gray-300 bg-gray-900 rounded py-2 px-4 leading-tight",
         "focus-visible:border-0 focus:border-0 border-0 focus-visible:outline-1 focus-visible:outline-blue-500 focus:outline-none",
-        compact && errors && touched && 'border-red-500'
+        compact && errors && touched && 'border-red-500',
+        classes
       )}
         {...field}
-        placeholder={placeholder || label}
+        placeholder={placeholder}
         type={type}
         autoComplete={noAutocomplete ? "off" : "on"}
       />

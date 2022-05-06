@@ -4,6 +4,7 @@ import { LockClosedIcon } from "@heroicons/react/solid";
 import { ButtonType, DayOfWeek, IEmployeeSchedule, ISchedule } from "../../models";
 import { Button } from "../Common";
 import { ScheduleTableRow } from '.'
+import { getInitials } from "../../services";
 
 interface IScheduleTableProps {
   currentWeek: { firstDay: Date, lastDay: Date }
@@ -42,7 +43,10 @@ const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
                     key={day}
                   >
                     <div className="flex justify-center space-x-2 items-center">
-                      <span>
+                      <span className="inline sm:hidden">
+                        {getInitials(DayOfWeek[day])}
+                      </span>
+                      <span className="hidden sm:inline">
                         {DayOfWeek[day]}
                       </span>
                       <span className="text-white text-sm">
@@ -50,7 +54,7 @@ const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
                       </span>
                     </div>
                   </th>
-                  <th></th>
+                  <th className="hidden sm:table-cell"></th>
                 </Fragment>
               ))}
               <th
