@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useGroupService } from "../../hooks";
 import { IGroup } from "../../models";
 import { getItemInLocalStorage, setItemInLocalStorage } from "../../services";
@@ -19,14 +19,16 @@ const GroupSelector = () => {
 
   return (
     <div className="flex flex-grow items-center justify-end">
-      <ListboxSelector 
-        label="Groups" 
+      <ListboxSelector
+        label="Groups"
         items={getGroups().map(g => ({ value: g._id, label: g.name }))} 
         selected={{ value: group?._id, label: group?.name }} 
-        setSelected={(groupId) => updateGroup(groupId)} 
+        setSelected={(groupId) => updateGroup(groupId)}
+        selectorClasses="bg-transparent shadow-none"
+        optionsClasses="text-gray-800 dark:text-gray-200"
       />
     </div>
   )
 }
 
-export default memo(GroupSelector)
+export default GroupSelector

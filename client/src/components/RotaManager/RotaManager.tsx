@@ -11,7 +11,7 @@ const RotaManager = () => {
   return (
     <>
       <NavMenu links={rotaLinks} />
-      <div className="px-2 sm:px-6 lg:px-8 text-gray-300">
+      <div className="px-2 sm:px-6 lg:px-8">
         {isLoading || !groupId ? (
           <SpinnerLoader />
         ) : (

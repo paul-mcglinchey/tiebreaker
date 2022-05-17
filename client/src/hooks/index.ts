@@ -11,6 +11,7 @@ export { default as useSessionStorage } from './useSessionStorage';
 export { default as useRequestBuilder } from './useRequestBuilder';
 export { default as useAuthContext } from './useAuthContext'
 export { default as useAsyncHandler } from './useAsyncHandler'
+export { default as useTheme } from './useTheme'
 
 // Services
 export { default as useClientService } from './useClientService'

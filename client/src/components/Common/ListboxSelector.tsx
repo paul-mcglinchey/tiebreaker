@@ -13,16 +13,17 @@ interface IListboxSelectorProps {
   items: IListboxSelectorItem[]
   selected: IListboxSelectorItem | undefined
   setSelected: (value: string) => void
-  className?: string
+  selectorClasses?: string
+  optionsClasses?: string
 }
 
-const ListboxSelector = ({ label, items, selected, setSelected, className }: IListboxSelectorProps) => {
+const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses, optionsClasses }: IListboxSelectorProps) => {
   return (
     <Listbox value={selected?.value} onChange={setSelected}>
       <div className="relative mt-1">
         <Listbox.Button className={combineClassNames(
-          "h-10 relative w-max py-2 pl-3 pr-10 text-left rounded-lg shadow-md focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
-          className || "bg-gray-800"
+          "h-10 relative w-max py-2 pl-3 pr-10 text-left rounded-lg focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
+          selectorClasses
         )}>
           <span className="block truncate">{selected?.label || label}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -42,15 +43,16 @@ const ListboxSelector = ({ label, items, selected, setSelected, className }: ILi
           leaveTo="opacity-0"
         >
           <Listbox.Options className={combineClassNames(
-            "focus:outline-none absolute mt-1 max-h-60 w-full overflow-auto rounded-md py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5",
-            className || "bg-gray-800"
+            "focus:outline-none absolute origin-top-right z-50 mt-1 max-h-60 overflow-auto rounded-md py-1 text-base ring-1 shadow-lg ring-black ring-opacity-5",
+            "bg-gray-200 dark:bg-gray-900",
+            optionsClasses
           )}>
             {items.map((item, index) => (
               <Listbox.Option
                 key={index}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 transition-all 
-                  ${active ? 'bg-gray-900 text-blue-500' : 'text-gray-300'}`
+                  ${active && 'text-blue-500'}`
                 }
                 value={item.value}
               >

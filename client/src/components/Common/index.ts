@@ -52,7 +52,6 @@ export { default as TableRowItem } from './TableRowItem'
 
 export { default as GroupInfoDisplay } from './GroupInfoDisplay';
 export { default as GroupSelector } from './GroupSelector';
-export { default as GroupToolbar } from './GroupToolbar';
 
 export { default as Toolbar } from './Toolbar';
 export { default as ToolbarCreateButton} from './ToolbarCreateButton'

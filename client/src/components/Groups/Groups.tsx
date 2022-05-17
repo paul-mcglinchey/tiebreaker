@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGroupService } from "../../hooks";
 import { IGroup } from "../../models";
 import { dashboardLinks } from "../../config";
-import { GroupToolbar, NavMenu, SpinnerIcon } from "../Common";
+import { Toolbar, NavMenu, SpinnerIcon } from "../Common";
 import { GroupCard, DataPoint, GroupPrompter, AddGroupModal } from ".";
 
 const Groups = () => {
@@ -14,7 +14,7 @@ const Groups = () => {
     <>
       <NavMenu links={dashboardLinks} />
       <div className="px-2 sm:px-6 lg:px-8">
-        <GroupToolbar title="Group management" createGroupAction={() => setAddGroupOpen(true)} />
+        <Toolbar title="Group management" createGroupAction={() => setAddGroupOpen(true)} />
             {isLoading ? (
               <div className="flex justify-center py-10">
                 <SpinnerIcon className="text-white h-12 w-12" />

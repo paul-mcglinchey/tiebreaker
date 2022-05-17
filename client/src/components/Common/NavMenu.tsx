@@ -1,10 +1,10 @@
 import { Fragment, memo } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { MenuIcon, FireIcon, XIcon } from '@heroicons/react/solid';
+import { MenuIcon, FireIcon, XIcon, MoonIcon, SunIcon } from '@heroicons/react/solid';
 import { Link, PathMatch } from 'react-router-dom';
 import { combineClassNames } from '../../services';
-import { useAuth } from '../../hooks';
-import { SmartLink, ThumbIcon, WideIcon } from '.';
+import { useAuth, useTheme } from '../../hooks';
+import { GroupSelector, SmartLink, Switch, ThumbIcon, WideIcon } from '.';
 
 interface INavMenuProps {
   links?: {
@@ -15,10 +15,15 @@ interface INavMenuProps {
 
 const NavMenu = ({ links = [] }: INavMenuProps) => {
 
-  const { getUser, logout } = useAuth();
+  const { getUser, logout } = useAuth()
+  const { theme, setTheme } = useTheme()
+
+  const toggleDarkTheme = () => {
+    theme === 'dark' ? setTheme('light') : setTheme('dark')
+  }
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 mb-4">
+    <Disclosure as="nav" className="bg-blue-500 dark:bg-gray-800 text-gray-200 mb-4">
       {({ open, close }) => (
         <>
           <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -53,8 +58,8 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                         to={item.href}
                         className={(match: PathMatch<string> | null): string => (
                           combineClassNames(match
-                            ? 'bg-gray-900 text-white'
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            ? 'bg-blue-800 dark:bg-gray-900 text-white'
+                            : 'dark:hover:bg-gray-700 hover:text-white',
                             'px-3 py-1 mt-0.5 rounded-md font-bold tracking-wide'
                           )
                         )}
@@ -66,15 +71,21 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="absolute inset-y-0 right-0 flex items-center space-x-4 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                {/* Dark Mode toggle */}
+                <Switch enabled={theme === 'dark'} setEnabled={() => toggleDarkTheme()} description="theme" IconEnabled={MoonIcon} IconDisabled={SunIcon} />
 
-                {/* Profile dropdown */}
-                <div className="font-semibold tracking-wide text-white hidden md:block">
+                {/* Group selector */}
+                <GroupSelector />
+
+                {/* Current user's username */}
+                <div className="font-semibold tracking-wide hidden md:block">
                   {getUser()?.username}
                 </div>
+                {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
                   <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <Menu.Button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
                       <FireIcon className="w-8 h-auto text-gray-300 hover:text-blue-800 transition-all" />
                     </Menu.Button>

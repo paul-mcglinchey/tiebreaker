@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { FetchError, SpinnerIcon, GroupToolbar } from "../Common";
+import { FetchError, SpinnerIcon, Toolbar } from "../Common";
 import { useEmployeeService, useGroupService } from "../../hooks";
 import { AddGroupModal, GroupPrompter } from "../Groups";
 import { AddEmployeeModal, EmployeeList } from ".";
@@ -23,7 +23,7 @@ const EmployeeDashboard = () => {
       ) : (
         getCount() > 0 ? (
           <>
-            <GroupToolbar title="Employees" addEmployeeAction={() => setAddEmployeeOpen(true)} showSelector />
+            <Toolbar title="Employees" addEmployeeAction={() => setAddEmployeeOpen(true)} />
             <EmployeeList setAddEmployeesOpen={setAddEmployeeOpen} />
           </>
         ) : (

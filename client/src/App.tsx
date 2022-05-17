@@ -6,9 +6,8 @@ import {
 import { Login, PasswordReset, PasswordResetRequest, Signup, PrivateApp, NotificationContainer } from './components';
 
 export default function App() {
-
   return (
-    <div className="font-sans antialiased">
+    <div className="font-sans antialiased text-color-paragraph">
       <NotificationContainer />
       <Routes>
         <Route path="/*" element={<PrivateApp />} />

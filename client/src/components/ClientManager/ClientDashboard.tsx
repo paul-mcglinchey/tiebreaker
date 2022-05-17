@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGroupService } from '../../hooks';
-import { FetchError, GroupToolbar, SpinnerIcon } from '../Common';
+import { FetchError, Toolbar, SpinnerIcon } from '../Common';
 import { AddGroupModal, GroupPrompter } from '../Groups';
 import { AddClientModal, ClientList } from '.';
 
@@ -14,7 +14,7 @@ const ClientDashboard = () => {
     <>
       {!isLoading && getCount() > 0 ? (
         <>
-          <GroupToolbar title="Clients" addClientAction={() => setAddClientOpen(true)} showSelector />
+          <Toolbar title="Clients" addClientAction={() => setAddClientOpen(true)} />
           <ClientList setAddClientOpen={setAddClientOpen} />
         </>
       ) : (
