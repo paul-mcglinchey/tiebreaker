@@ -11,9 +11,10 @@ interface INavMenuProps {
     name: string,
     href: string
   }[]
+  hideGroupSelector?: boolean
 }
 
-const NavMenu = ({ links = [] }: INavMenuProps) => {
+const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
 
   const { getUser, logout } = useAuth()
   const { theme, setTheme } = useTheme()
@@ -71,82 +72,84 @@ const NavMenu = ({ links = [] }: INavMenuProps) => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center space-x-4 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* Dark Mode toggle */}
-                <Switch enabled={theme === 'dark'} setEnabled={() => toggleDarkTheme()} description="theme" IconEnabled={MoonIcon} IconDisabled={SunIcon} />
-
-                {/* Group selector */}
-                <GroupSelector />
-
-                {/* Current user's username */}
-                <div className="font-semibold tracking-wide hidden md:block">
-                  {getUser()?.username}
+              <div className="flex items-center divide-x divide-blue-400 dark:divide-gray-700">
+                <div>
+                  {/* Group selector */}
+                  {!hideGroupSelector && (
+                    <GroupSelector />
+                  )}
                 </div>
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <FireIcon className="w-8 h-auto text-gray-300 hover:text-blue-800 transition-all" />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                      <div className="px-4 py-2 font-semibold tracking-wide block md:hidden">
-                        {getUser()?.username}
-                      </div>
-                      {getUser()?.isAdmin && (
+
+                <div className='flex justify-center items-center pl-3'>
+                  {/* Dark Mode toggle */}
+                  <Switch enabled={theme === 'dark'} setEnabled={() => toggleDarkTheme()} description="theme" IconEnabled={MoonIcon} IconDisabled={SunIcon} />
+
+                  {/* Profile dropdown */}
+                  <Menu as="div" className="ml-3 relative">
+                    <div>
+                      <Menu.Button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span className="sr-only">Open user menu</span>
+                        <FireIcon className="w-8 h-auto text-gray-300 hover:text-blue-800 dark:hover:text-blue-500 transition-all" />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                        <div className="px-4 py-2 font-semibold tracking-wide text-color-header">
+                          {getUser()?.username}
+                        </div>
+                        {getUser()?.isAdmin && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/adminpanel"
+                                className={combineClassNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-purple-700')}
+                              >
+                                Admin Panel
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+
                         <Menu.Item>
                           {({ active }) => (
-                            <Link
-                              to="/adminpanel"
-                              className={combineClassNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-purple-700')}
+                            <button
+                              className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
                             >
-                              Admin Panel
-                            </Link>
+                              Your Profile
+                            </button>
                           )}
                         </Menu.Item>
-                      )}
-
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={() => logout()}
-                            className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Settings
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={() => logout()}
+                              className={combineClassNames(active ? 'bg-gray-100' : '', 'w-full text-left px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                </div>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ const Groups = () => {
 
   return (
     <>
-      <NavMenu links={dashboardLinks} />
+      <NavMenu links={dashboardLinks} hideGroupSelector />
       <div className="px-2 sm:px-6 lg:px-8">
         <Toolbar title="Group management" createGroupAction={() => setAddGroupOpen(true)} />
             {isLoading ? (

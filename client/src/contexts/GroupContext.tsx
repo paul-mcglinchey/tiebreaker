@@ -1,23 +1,14 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IGroup, IGroupsResponse } from "../models";
+import { IChildrenProps, IFetch, IGroup, IGroupContext, IGroupsResponse } from "../models";
 import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage } from "../services";
-
-interface IGroupContext {
-  groupId: string
-  updateGroupId: (groupId: string) => void
-  getGroups: () => IGroup[]
-  getCount: () => number
-  isLoading: boolean
-  error: any | undefined
-  refresh: () => void
-}
 
 export const GroupContext = createContext<IGroupContext>({
   groupId: "",
   updateGroupId: () => {},
   getGroups: () => [],
+  setGroups: () => {},
   getCount: () => 0,
   isLoading: false,
   error: undefined,
@@ -46,8 +37,9 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
 
   const contextValue = {
     groupId,
-    updateGroupId: useCallback((groupId: string) => setGroupId(groupId), []),
-    getGroups: useCallback(() => groups, [groups]), 
+    updateGroupId: (groupId: string) => setGroupId(groupId),
+    getGroups: useCallback(() => groups, [groups]),
+    setGroups,
     getCount: useCallback(() => count, [count]),
     isLoading,
     error,

@@ -24,7 +24,7 @@ const GroupSelector = () => {
         items={getGroups().map(g => ({ value: g._id, label: g.name }))} 
         selected={{ value: group?._id, label: group?.name }} 
         setSelected={(groupId) => updateGroup(groupId)}
-        selectorClasses="bg-transparent shadow-none"
+        selectorClasses="bg-transparent shadow-none group"
         optionsClasses="text-gray-800 dark:text-gray-200"
       />
     </div>

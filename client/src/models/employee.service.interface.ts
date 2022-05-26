@@ -2,7 +2,8 @@ import { IEmployee, IEmployeeContext } from "."
 
 export interface IEmployeeService extends IEmployeeContext {
   getEmployee: (employeeId: string | undefined) => IEmployee | undefined
-  addEmployee: (values: IEmployee, groupId: string) => void
-  deleteEmployee: (employeeId: string | undefined, groupId: string | undefined) => void
+  addEmployee: (values: IEmployee) => void
+  updateEmployee: (employeeId: string, values: IEmployee) => void
+  deleteEmployee: (employeeId: string | undefined) => void
   refresh: () => void
 }

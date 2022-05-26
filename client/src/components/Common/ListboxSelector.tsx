@@ -20,7 +20,7 @@ interface IListboxSelectorProps {
 const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses, optionsClasses }: IListboxSelectorProps) => {
   return (
     <Listbox value={selected?.value} onChange={setSelected}>
-      <div className="relative mt-1">
+      <div className="relative">
         <Listbox.Button className={combineClassNames(
           "h-10 relative w-max py-2 pl-3 pr-10 text-left rounded-lg focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
           selectorClasses
@@ -28,7 +28,7 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
           <span className="block truncate">{selected?.label || label}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <SelectorIcon
-              className="h-5 w-5"
+              className="h-5 w-5 dark:group-hover:text-blue-500 group-hover:text-blue-900 transition-colors"
               aria-hidden="true"
             />
           </span>

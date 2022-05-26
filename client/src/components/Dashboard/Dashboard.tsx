@@ -1,30 +1,21 @@
-import { useState } from "react";
-import { useGroupService } from "../../hooks";
 import { Application } from "../../models";
 import { dashboardLinks } from "../../config";
-import { NavMenu, SpinnerIcon } from "../Common";
-import { AddGroupModal, GroupPrompter } from "../Groups";
+import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
 
 const Dashboard = () => {
-  const [addGroupOpen, setAddGroupOpen] = useState(false)
-
-  const { getGroups, getCount, isLoading, getTotalClients, getTotalEmployees, getTotalRotas } = useGroupService()
 
   return (
     <>
       <NavMenu links={dashboardLinks} />
-      {getCount() > 0 ? (
-        <div className="flex flex-col md:flex-row justify-start mt-10 tracking-wide gap-8 px-2 sm:px-6 lg:px-8">
+      <div className="px-2 sm:px-6 lg:px-8">
+        <Toolbar title="Applications" />
+        <div className="flex flex-col md:flex-row justify-start tracking-wide gap-8">
           <AppCard
             title={Application.ClientManager}
             href="/clients/dashboard"
             subtitle="Manage all of your clients here."
             datapoints={[
-              {
-                title: 'client',
-                value: getTotalClients(getGroups())
-              }
             ]}
             colours={{ from: 'from-orange-400', to: 'to-red-500' }}
           />
@@ -33,26 +24,11 @@ const Dashboard = () => {
             href="/rotas/dashboard"
             subtitle="Manage all of your rotas here."
             datapoints={[
-              {
-                title: 'rota',
-                value: getTotalRotas(getGroups())
-              },
-              {
-                title: 'employee',
-                value: getTotalEmployees(getGroups())
-              }
             ]}
             colours={{ from: 'from-blue-500', to: 'to-purple-600' }}
           />
         </div>
-      ) : (
-        isLoading ? (
-          <SpinnerIcon className="w-8 h-8" />
-        ) : (
-          <GroupPrompter action={() => setAddGroupOpen(true)} />
-        )
-      )}
-      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+      </div>
     </>
   )
 }

@@ -8,7 +8,10 @@ const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
-  const { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh } = useContext(GroupContext)
+  
+  const groupContext = useContext(GroupContext)
+  const { getGroups, setGroups } = useContext(GroupContext)
+
 
   const getGroup = (groupId: string | undefined): IGroup | undefined => {
     return getGroups().find((group: IGroup) => group._id === groupId)
@@ -18,7 +21,7 @@ const useGroupService = (): IGroupService => {
     const res = await fetch(endpoints.groups, requestBuilder('POST', undefined, values))
     const json = await res.json()
 
-    handleResolution(res, json, 'create', 'group', [() => refresh()])
+    handleResolution(res, json, 'create', 'group', [() => addGroupInContext(json)])
   })
 
   const updateGroup = asyncHandler(async (values: IGroup, groupId: string | undefined) => {
@@ -27,7 +30,7 @@ const useGroupService = (): IGroupService => {
     const res = await fetch(endpoints.group(groupId), requestBuilder('PUT', undefined, values))
     const json = await res.json()
 
-    handleResolution(res, json, 'update', 'group', [() => refresh()])
+    handleResolution(res, json, 'update', 'group', [() => updateGroupInContext(groupId, values)])
   })
 
   const deleteGroup = asyncHandler(async (groupId: string | undefined) => {
@@ -36,44 +39,24 @@ const useGroupService = (): IGroupService => {
     const res = await fetch(endpoints.group(groupId), requestBuilder("DELETE"))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'group', [() => refresh()])
+    handleResolution(res, json, 'delete', 'group', [() => removeGroupInContext(groupId)])
   })
 
-  const getTotalEmployees = (groups: IGroup[]): number => {
-    const distinctEmployees: string[] = [];
-
-    groups.forEach((group: IGroup) => {
-      group.entities?.employees?.forEach((employeeId: string) => {
-        if (!distinctEmployees.includes(employeeId)) distinctEmployees.push(employeeId);
-      });
-    });
-
-    return distinctEmployees.length;
+  const addGroupInContext = (group: IGroup) => {
+    setGroups(groups => [...groups, group])
   }
 
-  const getTotalRotas = (groups: IGroup[]): number => {
-    const distinctRotas: string[] = [];
-
-    groups.forEach((group: IGroup) => {
-      group.entities?.rotas?.forEach((rotaId: string) => {
-        if (!distinctRotas.includes(rotaId)) distinctRotas.push(rotaId);
-      });
-    });
-
-    return distinctRotas.length;
+  const removeGroupInContext = (groupId: string) => {
+    setGroups(groups => groups.filter(g => g._id !== groupId))
   }
 
-  const getTotalClients = (groups: IGroup[]): number => {
-    let totalClients: number = 0;
-
-    groups.forEach((group: IGroup) => {
-      totalClients += group.entities?.clients?.length || 0;
+  const updateGroupInContext = (groupId: string, values: IGroup) => {
+    setGroups(groups => {
+      return groups.map(g => g._id === groupId ? values : g)
     })
-
-    return totalClients;
   }
 
-  return { groupId, updateGroupId, getGroups, getCount, isLoading, error, refresh, getGroup, addGroup, updateGroup, deleteGroup, getTotalClients, getTotalEmployees, getTotalRotas }
+  return { ...groupContext, getGroup, addGroup, updateGroup, deleteGroup }
 }
 
 export default useGroupService

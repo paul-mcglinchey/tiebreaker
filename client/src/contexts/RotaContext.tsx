@@ -5,6 +5,7 @@ import { endpoints } from "../config";
 
 export const RotaContext = createContext<IRotaContext>({
   getRotas: () => [],
+  setRotas: () => {},
   getCount: () => 0,
   rotaId: undefined,
   updateRotaId: () => {},
@@ -40,6 +41,7 @@ export const RotaProvider = ({ children }: IChildrenProps) => {
 
   const contextValue = {
     getRotas: useCallback(() => rotas, [rotas]),
+    setRotas,
     getCount: useCallback(() => count, [count]),
     rotaId,
     updateRotaId: useCallback((rotaId: string | undefined) => setRotaId(rotaId), []),  

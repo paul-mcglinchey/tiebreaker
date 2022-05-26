@@ -4,14 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider, NotificationProvider } from './contexts';
+import { AuthProvider, GroupProvider, NotificationProvider, UserProvider } from './contexts';
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
       <NotificationProvider>
         <AuthProvider>
-          <App />
+          <GroupProvider>
+            <UserProvider>
+              <App />
+            </UserProvider>
+          </GroupProvider>
         </AuthProvider>
       </NotificationProvider>
     </React.StrictMode>

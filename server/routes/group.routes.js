@@ -45,5 +45,6 @@ router.delete(
 router.use('/:groupId/clients', require('./client.routes'))
 router.use('/:groupId/rotas', require('./rota.routes'))
 router.use('/:groupId/employees', require('./employee.routes'))
+router.use('/:groupId/applications', require('./application.routes'))
 
 module.exports = router

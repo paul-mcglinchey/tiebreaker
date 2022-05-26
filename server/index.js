@@ -45,7 +45,6 @@ app.use(middleware.authMiddleware.protect);
 
 // routes
 app.use('/api/listcollections', require('./routes/listcollection.routes'))
-app.use('/api/applications', require('./routes/application.routes'))
 app.use('/api/permissions', require('./routes/permission.routes'))
 app.use('/api/groups', require('./routes/group.routes'))
 

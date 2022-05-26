@@ -1,18 +1,8 @@
-import { IGroup } from ".";
+import { IGroup, IGroupContext } from ".";
 
-export interface IGroupService {
-  groupId: string
-  updateGroupId: (groupId: string) => void
-  getGroups: () => IGroup[]
-  getCount: () => number
-  isLoading: boolean
-  error: any | undefined
-  refresh: () => void
+export interface IGroupService extends IGroupContext {
   getGroup: (groupId: string | undefined) => IGroup | undefined
   addGroup: (values: IGroup) => void
   updateGroup: (values: IGroup, groupId: string | undefined) => void
   deleteGroup: (groupId: string | undefined) => void
-  getTotalClients: (groups: IGroup[]) => number
-  getTotalEmployees: (groups: IGroup[]) => number
-  getTotalRotas: (groups: IGroup[]) => number
 }

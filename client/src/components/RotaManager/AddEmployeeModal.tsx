@@ -1,6 +1,6 @@
 import { PlusIcon } from "@heroicons/react/solid"
 import { useState } from "react"
-import { useEmployeeService, useGroupService } from "../../hooks"
+import { useEmployeeService } from "../../hooks"
 import { Button, Checkbox, Modal } from "../Common"
 import { CompactEmployeeForm } from "."
 
@@ -12,7 +12,6 @@ interface IAddEmployeeModalProps {
 
 const AddEmployeeModal = ({ isOpen, close, level = 1 }: IAddEmployeeModalProps) => {
 
-  const { groupId } = useGroupService()
   const { addEmployee } = useEmployeeService()
 
   const [addMultiple, setAddMultiple] = useState(false);
@@ -28,7 +27,7 @@ const AddEmployeeModal = ({ isOpen, close, level = 1 }: IAddEmployeeModalProps) 
     >
       <CompactEmployeeForm
         handleSubmit={(values) => {
-          addEmployee(values, groupId);
+          addEmployee(values);
           !addMultiple && close();
         }}
         submissionBar={(

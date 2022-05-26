@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { useEmployeeService, useGroupService } from "../../hooks";
+import { useEmployeeService } from "../../hooks";
 import { employeeValidationSchema } from "../../schema";
 import { EmployeeRole, IEmployee } from "../../models";
 import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../Common";
 
 const FullEmployeeForm = () => {
-
-  const { groupId } = useGroupService()
 
   const [showAddress, setShowAddress] = useState(false);
   const [showRequirements, setShowRequirements] = useState(false);
@@ -75,7 +73,7 @@ const FullEmployeeForm = () => {
       }}
       validationSchema={employeeValidationSchema}
       onSubmit={(values) => {
-        addEmployee(values, groupId);
+        addEmployee(values);
       }}
     >
       {({ errors, touched, setFieldValue }) => (
