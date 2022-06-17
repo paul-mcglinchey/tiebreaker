@@ -10,7 +10,6 @@ const AppLoader = ({ children }: { children: any }) => {
   const { isLoading: groupsLoading } = useGroupService()
   const { isLoading: usersLoading } = useUserService()
 
-  let isLoading = true
   const [progress, setProgress] = useState(0)
   const [showApp, setShowApp] = useState(false)
 
@@ -22,10 +21,8 @@ const AppLoader = ({ children }: { children: any }) => {
 
     return () => clearTimeout()
   }, [authLoading, groupsLoading, usersLoading])
-
   
   const show = useDelayedRendering(100)
-  console.log(authLoading, groupsLoading, usersLoading, isLoading, progress)
 
   return (
     <>
