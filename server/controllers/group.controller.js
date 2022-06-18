@@ -11,7 +11,7 @@ const ListCollection = db.listcollection
 // Get all groups
 exports.get = asyncHandler(async (req, res) => {
   // the mongoose query to fetch the groups for the current user
-  const groupQuery = { users: new ObjectId(req.auth._id) }
+  const groupQuery = { "users.user": new ObjectId(req.auth._id) }
 
   const count = await Group.countDocuments(groupQuery)
   const groups = await Group.find(groupQuery)
@@ -29,7 +29,10 @@ exports.create = asyncHandler(async (req, res) => {
 
   const group = await Group.create({
     ...req.body,
-    entities: { users: [req.auth._id] },
+    users: [{
+      user: req.auth._id,
+      applications: []
+    }],
     listcollections: [systemListCollectionId],
     audit: { createdBy: req.auth._id, updatedBy: req.auth._id }
   })

@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { useDelayedRendering } from '../../hooks';
 import { Button } from '.';
+import { ButtonType } from '../../models';
 
 interface IconProps {
   childComp?: React.ReactNode
@@ -27,21 +28,21 @@ const Prompter = ({ Icon, title, subtitle, action }: IPrompterProps) => {
       leave="transition ease-in duration-75"
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
-      className="flex mt-24 justify-center rounded-md text-gray-200"
+      className="flex mt-24 justify-center rounded-md"
     >
-      <div className="flex flex-col border-2 border-blue-500 p-4 rounded-lg">
+      <div className="flex flex-col p-4 rounded-lg">
         <div>
-          <h3 className='whitespace-nowrap text-gray-100 font-extrabold tracking-wide text-xl mb-2'>
+          <h2 className='whitespace-nowrap font-extrabold tracking-wide text-2xl mb-2'>
             {title}
-          </h3>
+          </h2>
           {subtitle && (
             <p className='tracking-wide'>
               {subtitle}
             </p>
           )}
         </div>
-        <div className="flex justify-end mt-20">
-          <Button action={() => action()} Icon={Icon} content='Lets go!' />
+        <div className="flex justify-center">
+          <Button action={() => action()} Icon={Icon} content='Lets go!' buttonType={ButtonType.Tertiary} XL />
         </div>
       </div>
     </Transition>

@@ -8,6 +8,7 @@ export interface IPermissionGroup {
 }
 export interface IPermission {
   _id?: string,
+  identifier?: string,
   name?: string,
   description?: string
   language?: string

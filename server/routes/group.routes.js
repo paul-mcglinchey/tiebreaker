@@ -29,6 +29,7 @@ router.put(
   '/:groupId',
   middleware.groupMiddleware.checkIfQueryHasGroupId,
   middleware.groupMiddleware.checkIfGroupExists,
+  middleware.groupMiddleware.checkIfGroupNameExists,
   middleware.groupMiddleware.checkAccess(['view', 'edit']),
   middleware.validationMiddleware.checkRequestHasBody,
   group.update

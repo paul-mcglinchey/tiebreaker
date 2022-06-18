@@ -4,12 +4,8 @@ import {
 } from 'react-router-dom';
 
 import { Login, PasswordReset, PasswordResetRequest, Signup, PrivateApp, NotificationContainer } from './components';
-import { useTheme } from './hooks';
 
 export default function App() {
-
-  const { theme } = useTheme()
-  console.log(theme)
 
   return (
     <div className="font-sans antialiased text-color-paragraph">

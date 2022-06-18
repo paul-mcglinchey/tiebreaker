@@ -59,7 +59,7 @@ const Permission = ({ permission, refresh }: IPermissionProps) => {
 
   return (
     <Formik
-      initialValues={permission || { name: '', description: '', language: 'en-US' }}
+      initialValues={permission || { identifier: '', name: '', description: '', language: 'en-US' }}
       onSubmit={(values) => {
         permission
           ? updatePermission(values, permission._id)
@@ -69,6 +69,7 @@ const Permission = ({ permission, refresh }: IPermissionProps) => {
     >
       {({ errors, touched }) => (
         <Form className="flex space-x-4">
+          <PermissionField name='identifier' classes="basis-1/5" errors={errors.identifier} touched={touched.identifier} />
           <PermissionField name='name' classes="basis-1/5" errors={errors.name} touched={touched.name} />
           <PermissionField name='description' classes="flex-grow" errors={errors.name} touched={touched.name} />
           <PermissionField name='language' disabled errors={errors.name} touched={touched.name} />

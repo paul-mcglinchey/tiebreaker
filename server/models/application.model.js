@@ -15,6 +15,9 @@ const Application = mongoose.model(
     icon: {
       type: String, required: false
     },
+    url: {
+      type: String, required: true
+    },
     audit: AuditSchema
   }, { timestamps: true })
 );

@@ -2,8 +2,13 @@ import { Application } from "../../models";
 import { dashboardLinks } from "../../config";
 import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
+import { useGroupService } from "../../hooks";
 
 const Dashboard = () => {
+
+  const { getCurrentGroup } = useGroupService()
+
+  console.log(getCurrentGroup())
 
   return (
     <>

@@ -22,10 +22,10 @@ const Groups = () => {
             ) : (
               getCount() > 0 ? (
                 <div className="flex grow flex-col md:flex-row flex-wrap -m-2 mb-2">
-                  {getGroups().map((g: IGroup) => (
+                  {getGroups().map((g: IGroup, i: number) => (
                     <GroupCard
                       g={g}
-                      key={g._id}
+                      key={i}
                       render={isCardFlipped => (
                         <div className="flex flex-col grow md:flex-row space-y-2 md:space-x-8">
                           {isCardFlipped ? (

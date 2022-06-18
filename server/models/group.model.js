@@ -14,9 +14,21 @@ const Group = mongoose.model(
     description: {
       type: String, required: false 
     },
-    applications: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Application'
+    users: [{
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      applications: [{
+        application: {
+          type: Schema.Types.ObjectId,
+          ref: 'Application'
+        },
+        permissions: [{
+          type: Schema.Types.ObjectId,
+          ref: 'Permission'
+        }]
+      }]
     }],
     entities: GroupEntitySchema,
     listcollections: [{

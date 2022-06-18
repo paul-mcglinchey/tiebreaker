@@ -2,6 +2,9 @@ const mongoose      = require('mongoose');
 const { AuditSchema } = require('./common/audit.schema');
 
 const permissionSchema = mongoose.Schema({
+  identifier: {
+    type: Number, required: true, unique: true
+  },
   name: { 
     type: String, required: true, unique: true 
   },
