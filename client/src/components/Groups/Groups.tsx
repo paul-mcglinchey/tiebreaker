@@ -8,7 +8,8 @@ import { GroupCard, DataPoint, GroupPrompter, AddGroupModal } from ".";
 const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
 
-  const { getCount, getGroups, isLoading } = useGroupService();
+  const { getGroups, isLoading } = useGroupService();
+  const groups = getGroups()
 
   return (
     <>
@@ -20,9 +21,9 @@ const Groups = () => {
                 <SpinnerIcon className="text-white h-12 w-12" />
               </div>
             ) : (
-              getCount() > 0 ? (
+              groups.length > 0 ? (
                 <div className="flex grow flex-col md:flex-row flex-wrap -m-2 mb-2">
-                  {getGroups().map((g: IGroup, i: number) => (
+                  {groups.map((g: IGroup, i: number) => (
                     <GroupCard
                       g={g}
                       key={i}

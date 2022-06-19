@@ -30,7 +30,10 @@ const Group = mongoose.model(
         }]
       }]
     }],
-    entities: GroupEntitySchema,
+    entities: {
+      type: GroupEntitySchema,
+      required: true
+    },
     listcollections: [{
       type: Schema.Types.ObjectId,
       ref: 'ListCollection'

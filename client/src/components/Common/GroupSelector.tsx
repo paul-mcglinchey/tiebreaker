@@ -6,6 +6,10 @@ import { ListboxSelector } from ".";
 
 const GroupSelector = () => {
   const { getGroups, getGroup, updateGroupId } = useGroupService()
+  const groups = getGroups()
+
+  console.log(groups)
+
   const group: IGroup | undefined = getGroup(getItemInLocalStorage('group-id')) || getGroups()[0]
 
   const updateGroup = useCallback((groupId: string) => {
