@@ -12,7 +12,7 @@ interface ICompactClientFormProps {
 const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: ICompactClientFormProps) => {
 
   const { addClient } = useClientService()
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
 
   return (
     <Formik
@@ -27,7 +27,7 @@ const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: IComp
       }}
       validationSchema={clientValidationSchema}
       onSubmit={(values, actions) => {
-        addClient(values, groupId)
+        addClient(values, currentGroup?._id)
 
         additionalSubmissionActions?.forEach(asa => asa())
         actions.resetForm();

@@ -13,7 +13,7 @@ interface IGroupFormProps {
 
 const GroupForm = ({ group, submitButton, additionalSubmissionActions }: IGroupFormProps) => {
 
-  const { addGroup, updateGroup, groupId } = useGroupService()
+  const { addGroup, updateGroup } = useGroupService()
 
   return (
     <Formik
@@ -24,7 +24,7 @@ const GroupForm = ({ group, submitButton, additionalSubmissionActions }: IGroupF
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
-        group?._id ? updateGroup(values, groupId) : addGroup(values)
+        group?._id ? updateGroup(values, group?._id) : addGroup(values)
 
         additionalSubmissionActions?.forEach(asa => asa())
       }}

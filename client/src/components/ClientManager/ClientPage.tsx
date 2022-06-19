@@ -14,12 +14,12 @@ import { Fetch } from "..";
 const ClientPage = () => {
 
   const { clientId } = useParams()
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
 
   return (
     <Fetch
-      fetchOutput={useFetch(endpoints.client(clientId || "", groupId), requestBuilder(), [])}
+      fetchOutput={useFetch(endpoints.client(clientId || "", currentGroup?._id || ""), requestBuilder(), [])}
       render={({ response: client }: IFetch<IClient>) => (
         <Fragment>
           {client && (

@@ -28,10 +28,10 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
   const [sortField, setSortField] = useState<string | undefined>(undefined)
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.Desc)
 
-  const { groupId, refresh: groupRefresh } = useGroupService()
+  const { currentGroup, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(groupId, includeDeleted), requestBuilder(), [dependency, sortField, sortDirection, groupId])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || "", includeDeleted), requestBuilder(), [dependency, sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {

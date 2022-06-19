@@ -27,10 +27,10 @@ export const RotaProvider = ({ children }: IChildrenProps) => {
   const [sortField, setSortField] = useState<string | undefined>(undefined)
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.Desc)
 
-  const { groupId, refresh: groupRefresh } = useGroupService()
+  const { currentGroup, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IRotasResponse> = useFetch(endpoints.rotas(groupId), requestBuilder(), [dependency, sortField, sortDirection, groupId])
+  const { response, isLoading, error }: IFetch<IRotasResponse> = useFetch(endpoints.rotas(currentGroup?._id || ""), requestBuilder(), [dependency, sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {

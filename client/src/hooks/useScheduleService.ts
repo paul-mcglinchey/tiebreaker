@@ -11,7 +11,7 @@ const useScheduleService = (): IScheduleService => {
   const { requestBuilder } = useRequestBuilder()
   const { handleResolution } = useResolutionService()
   
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { getRotaEmployees } = useRotaService()
 
   const scheduleContext = useContext(ScheduleContext)
@@ -40,9 +40,9 @@ const useScheduleService = (): IScheduleService => {
   }
 
   const updateSchedule = asyncReturnHandler<ISchedule>(async (values: ISchedule, scheduleId: string | undefined,  rotaId: string | undefined): Promise<ISchedule> => {
-    if (!rotaId || !groupId || !scheduleId) throw new Error()
+    if (!rotaId || !currentGroup?._id || !scheduleId) throw new Error()
 
-    const res = await fetch(endpoints.schedule(rotaId, groupId, scheduleId), requestBuilder("PUT", undefined, values))
+    const res = await fetch(endpoints.schedule(rotaId, currentGroup._id, scheduleId), requestBuilder("PUT", undefined, values))
     const json: ISchedule = await res.json()
 
     handleResolution(res, json, 'update', 'schedule', [() => updateSchedulesInContext(json, scheduleId)])
@@ -52,9 +52,9 @@ const useScheduleService = (): IScheduleService => {
 
   const createSchedule = asyncReturnHandler<ISchedule>(async (values: ISchedule, rotaId: string | undefined): Promise<ISchedule> => {
     let startDate = new Date(values.startDate || "").toISOString().split('T')[0];
-    if (!rotaId || !groupId || !startDate) throw new Error()
+    if (!rotaId || !currentGroup?._id || !startDate) throw new Error()
 
-    const res = await fetch(endpoints.schedules(rotaId, groupId), requestBuilder('POST', undefined, values))
+    const res = await fetch(endpoints.schedules(rotaId, currentGroup._id), requestBuilder('POST', undefined, values))
     const json: ISchedule = await res.json()
 
     handleResolution(res, json, 'create', 'schedule', [() => updateSchedulesInContext(json)])

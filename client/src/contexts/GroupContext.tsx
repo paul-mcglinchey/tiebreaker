@@ -1,15 +1,15 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IGroup, IGroupContext, IGroupsResponse } from "../models";
 import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage } from "../services";
 
 export const GroupContext = createContext<IGroupContext>({
-  groupId: "",
-  updateGroupId: () => {},
-  getGroups: () => [],
+  currentGroup: undefined,
+  setCurrentGroup: () => {},
+  groups: [],
   setGroups: () => {},
-  getCount: () => 0,
+  count: 0,
   isLoading: false,
   error: undefined,
   refresh: () => {}
@@ -18,7 +18,8 @@ export const GroupContext = createContext<IGroupContext>({
 export const GroupProvider = ({ children }: IChildrenProps) => {
   const [groups, setGroups] = useState<IGroup[]>([])
   const [count, setCount] = useState<number>(0)
-  const [groupId, setGroupId] = useState<string>(getItemInLocalStorage('group-id') || groups[0]?._id || "")
+  const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
+  
   const isMounted = useIsMounted()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh()
@@ -29,18 +30,18 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
       setGroups(response.groups)
       setCount(response.count)
 
-      if (!groupId) {
-        response.groups[0]?._id && setGroupId(response.groups[0]?._id)
+      if (!currentGroup) {
+        response.groups[0] && setCurrentGroup(response.groups[0])
       }
     }
-  }, [isMounted, response, groupId])
+  }, [isMounted, response, currentGroup])
 
   const contextValue = {
-    groupId,
-    updateGroupId: (groupId: string) => setGroupId(groupId),
-    getGroups: useCallback(() => groups, [groups]),
+    currentGroup,
+    setCurrentGroup,
+    groups,
     setGroups,
-    getCount: useCallback(() => count, [count]),
+    count,
     isLoading,
     error,
     refresh

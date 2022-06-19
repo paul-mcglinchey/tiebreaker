@@ -6,13 +6,13 @@ import { NavMenu, SpinnerLoader } from "../Common";
 
 const RotaManager = () => {
 
-  const { isLoading, groupId } = useGroupService()
+  const { isLoading, currentGroup } = useGroupService()
 
   return (
     <>
       <NavMenu links={rotaLinks} />
       <div className="px-2 sm:px-6 lg:px-8">
-        {isLoading || !groupId ? (
+        {isLoading || !currentGroup ? (
           <SpinnerLoader />
         ) : (
           <RotaProvider>

@@ -13,7 +13,7 @@ interface IEditRotaEmployeesProps {
 
 const EditRotaEmployeesModal = ({ isOpen, close, rota }: IEditRotaEmployeesProps) => {
 
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { updateRota } = useRotaService()
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const EditRotaEmployeesModal = ({ isOpen, close, rota }: IEditRotaEmployeesProps
           employees: rota?.employees || []
         }}
         onSubmit={(values) => {
-          updateRota(values, rota?._id, groupId)
+          updateRota(values, rota?._id, currentGroup?._id)
           close()
         }}
       >

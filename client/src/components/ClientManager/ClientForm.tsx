@@ -16,7 +16,7 @@ interface IClientFormProps {
 
 const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: IClientFormProps) => {
 
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const clientService = useClientService();
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
@@ -51,7 +51,7 @@ const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: ICli
       }}
       validationSchema={clientValidationSchema}
       onSubmit={(values, actions) => {
-        client?._id ? clientService.updateClient(values, client._id, groupId) : clientService.addClient(values, groupId);
+        client?._id ? clientService.updateClient(values, client._id, currentGroup?._id) : clientService.addClient(values, currentGroup?._id);
         additionalSubmissionActions?.forEach(asa => asa())
         actions.resetForm();
       }}

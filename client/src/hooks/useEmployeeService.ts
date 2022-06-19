@@ -12,7 +12,7 @@ const useEmployeeService = (): IEmployeeService => {
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
 
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
 
   const employeeContext = useContext(EmployeeContext)
   const { getEmployees, setEmployees } = employeeContext
@@ -22,27 +22,27 @@ const useEmployeeService = (): IEmployeeService => {
   }
 
   const addEmployee = asyncHandler(async (values: IEmployee) => {
-    if (!groupId) throw new Error()
+    if (!currentGroup?._id) throw new Error()
 
-    const res = await fetch(endpoints.employees(groupId), requestBuilder('POST', undefined, { ...values, colour: generateColour() }))
+    const res = await fetch(endpoints.employees(currentGroup._id), requestBuilder('POST', undefined, { ...values, colour: generateColour() }))
     const json = await res.json()
 
     handleResolution(res, json, 'create', 'employee', [() => addEmployeeInContext(json)])
   })
 
   const updateEmployee = asyncHandler(async (employeeId: string | undefined, values: IEmployee) => {
-    if (!employeeId || !groupId) throw new Error()
+    if (!employeeId || !currentGroup?._id) throw new Error()
 
-    const res = await fetch(endpoints.employee(employeeId, groupId), requestBuilder('PUT', undefined, { ...values }))
+    const res = await fetch(endpoints.employee(employeeId, currentGroup._id), requestBuilder('PUT', undefined, { ...values }))
     const json = await res.json()
 
     handleResolution(res, json, 'update', 'employee', [() => updateEmployeeInContext(employeeId, json)])
   })
 
   const deleteEmployee = asyncHandler(async (employeeId: string | undefined) => {
-    if (!employeeId) throw new Error()
+    if (!employeeId || !currentGroup?._id) throw new Error()
 
-    const res = await fetch(endpoints.employee(employeeId, groupId), requestBuilder('DELETE'))
+    const res = await fetch(endpoints.employee(employeeId, currentGroup?._id), requestBuilder('DELETE'))
     const json = await res.json()
 
     handleResolution(res, json, 'delete', 'employee', [() => removeEmployeeFromContext(employeeId)])

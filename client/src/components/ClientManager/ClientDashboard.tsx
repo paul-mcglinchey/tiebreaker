@@ -8,11 +8,11 @@ const ClientDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
   const [addClientOpen, setAddClientOpen] = useState(false)
 
-  const { getCount, isLoading, error, refresh } = useGroupService()
+  const { count, isLoading, error, refresh } = useGroupService()
 
   return (
     <>
-      {!isLoading && getCount() > 0 ? (
+      {!isLoading && count > 0 ? (
         <>
           <Toolbar title="Clients" addClientAction={() => setAddClientOpen(true)} />
           <ClientList setAddClientOpen={setAddClientOpen} />

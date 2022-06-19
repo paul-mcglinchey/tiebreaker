@@ -6,10 +6,9 @@ import { Toolbar, NavMenu, SpinnerIcon } from "../Common";
 import { GroupCard, DataPoint, GroupPrompter, AddGroupModal } from ".";
 
 const Groups = () => {
-  const [addGroupOpen, setAddGroupOpen] = useState(false);
+  const [addGroupOpen, setAddGroupOpen] = useState(false)
 
-  const { getGroups, isLoading } = useGroupService();
-  const groups = getGroups()
+  const { groups, isLoading } = useGroupService()
 
   return (
     <>

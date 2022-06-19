@@ -11,7 +11,7 @@ const EmployeeDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const [addEmployeeOpen, setAddEmployeeOpen] = useState(isAddEmployeeOpen ? true : false);
 
-  const { getCount, isLoading, error } = useGroupService();
+  const { count, isLoading, error } = useGroupService();
   const { refresh } = useEmployeeService();
 
   return (
@@ -21,7 +21,7 @@ const EmployeeDashboard = () => {
           <SpinnerIcon className="text-white h-12 w-12" />
         </div>
       ) : (
-        getCount() > 0 ? (
+        count > 0 ? (
           <>
             <Toolbar title="Employees" addEmployeeAction={() => setAddEmployeeOpen(true)} />
             <EmployeeList setAddEmployeesOpen={setAddEmployeeOpen} />

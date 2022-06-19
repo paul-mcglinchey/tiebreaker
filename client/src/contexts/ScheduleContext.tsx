@@ -17,12 +17,12 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
   const [schedules, setSchedules] = useState<ISchedule[]>([])
   const [count, setCount] = useState<number>(0)
 
-  const { groupId, refresh: groupRefresh } = useGroupService()
+  const { currentGroup, refresh: groupRefresh } = useGroupService()
   const { rotaId, dependency: rotaDependency } = useRotaService()
 
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", groupId), requestBuilder(), [rotaDependency, dependency, rotaId, groupId])
+  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", currentGroup?._id || ""), requestBuilder(), [rotaDependency, dependency, rotaId, currentGroup])
 
   useEffect(() => {
     if (response) {

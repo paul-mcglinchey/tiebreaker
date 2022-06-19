@@ -1,4 +1,4 @@
-import { Fragment, memo } from 'react';
+import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, FireIcon, XIcon, MoonIcon, SunIcon } from '@heroicons/react/solid';
 import { Link, PathMatch } from 'react-router-dom';
@@ -182,4 +182,4 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
   )
 }
 
-export default memo(NavMenu);
+export default NavMenu

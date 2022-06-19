@@ -2,11 +2,11 @@ import { Dispatch, SetStateAction } from "react"
 import { IGroup } from "."
 
 export interface IGroupContext {
-  groupId: string
-  updateGroupId: (groupId: string) => void
-  getGroups: () => IGroup[]
+  currentGroup: IGroup | undefined
+  setCurrentGroup: Dispatch<SetStateAction<IGroup | undefined>>
+  groups: IGroup[]
   setGroups: Dispatch<SetStateAction<IGroup[]>>
-  getCount: () => number
+  count: number
   isLoading: boolean
   error: any | undefined
   refresh: () => void

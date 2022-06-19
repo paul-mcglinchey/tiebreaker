@@ -21,9 +21,9 @@ export const UserProvider = ({ children }: IChildrenProps) => {
   const [users, setUsers] = useState<IUser[]>([])
   const [count, setCount] = useState<number>(0)
   
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading, error }: IFetch<IUsersResponse> = useFetch(endpoints.groupusers(groupId), requestBuilder(), [groupId])
+  const { response, isLoading, error }: IFetch<IUsersResponse> = useFetch(endpoints.groupusers(currentGroup?._id || ""), requestBuilder(), [currentGroup?._id])
 
   useEffect(() => {
     if (response) {

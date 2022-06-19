@@ -12,11 +12,11 @@ const ClientHeader = ({ client }: { client: IClient }) => {
 
   const [deleteClientOpen, setDeleteClientOpen] = useState(false);
 
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const clientService = useClientService();
 
   const deleteClient = () => {
-    clientService.deleteClient(client._id, groupId);
+    clientService.deleteClient(client._id, currentGroup?._id);
     navigate('/clients/dashboard', { replace: true });
   }
 

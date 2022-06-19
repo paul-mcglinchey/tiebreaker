@@ -30,7 +30,7 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
     colour: generateColour()
   }]
 
-  const { groupId } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { addRota, updateRota } = useRotaService()
 
   const { getEmployees } = useEmployeeService()
@@ -49,7 +49,7 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
         }}
         validationSchema={rotaValidationSchema}
         onSubmit={(values, actions) => {
-          rota?._id ? updateRota(values, rota?._id, groupId) : addRota(values, groupId)
+          rota?._id ? updateRota(values, rota?._id, currentGroup?._id) : addRota(values, currentGroup?._id)
 
           additionalSubmissionActions?.forEach(asa => asa())
           actions.resetForm();

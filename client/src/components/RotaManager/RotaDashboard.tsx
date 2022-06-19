@@ -8,12 +8,12 @@ const RotaDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
   const [addRotaOpen, setAddRotaOpen] = useState(false);
 
-  const { getCount, isLoading, error, refresh } = useGroupService();
+  const { count, isLoading, error, refresh } = useGroupService();
 
   return (
     <>
       {!error && !isLoading ? (
-        getCount() > 0 ? (
+        count > 0 ? (
           <>
             <Toolbar title="Rotas" addRotaAction={() => setAddRotaOpen(true)} />
             <RotaList />

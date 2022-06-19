@@ -55,7 +55,7 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     'name': { value: null, label: 'Name' }
   });
 
-  const { groupId, refresh: groupRefresh } = useGroupService()
+  const { currentGroup, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
   const { 
@@ -63,9 +63,9 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     isLoading,
     error 
   }: IFetch<IClientsResponse> = useFetch(
-    `${endpoints.clients(groupId, includeDeleted)}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
+    `${endpoints.clients(currentGroup?._id || "", includeDeleted)}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
     requestBuilder(), 
-    [dependency, sortField, sortDirection, pageSize, pageNumber, groupId]
+    [dependency, sortField, sortDirection, pageSize, pageNumber, currentGroup]
   )
 
   useEffect(() => {
