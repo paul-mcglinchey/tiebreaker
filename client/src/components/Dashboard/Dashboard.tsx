@@ -2,8 +2,16 @@ import { Application } from "../../models";
 import { dashboardLinks } from "../../config";
 import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
+import { useAuth, useGroupService, useApplicationsService } from "../../hooks";
 
 const Dashboard = () => {
+
+  const { user } = useAuth()
+  const { currentGroup } = useGroupService()
+  const { applications } = useApplicationsService()
+
+  console.log(currentGroup?.users?.find(a => a.user === user?._id)?.applications.map(a => a.application))
+  console.log(applications)
 
   return (
     <>
@@ -11,6 +19,15 @@ const Dashboard = () => {
       <div className="px-2 sm:px-6 lg:px-8">
         <Toolbar title="Applications" />
         <div className="flex flex-col md:flex-row justify-start tracking-wide gap-8">
+          {applications.map((a, i) => (
+            <AppCard 
+              title={a.name || '--'}
+              href={a.url || '/dashboard'}
+              subtitle={a.description}
+              datapoints={[]}
+              key={i}
+            />
+          ))}
           <AppCard
             title={Application.ClientManager}
             href="/clients/dashboard"

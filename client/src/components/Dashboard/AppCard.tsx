@@ -8,7 +8,7 @@ interface IGradient {
 }
 interface IAppCardProps {
   title: string,
-  subtitle: string,
+  subtitle?: string | undefined,
   href: string,
   datapoints: {
     title: string,

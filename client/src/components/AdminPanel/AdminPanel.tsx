@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { NavMenu, Toolbar } from "../Common";
-import { SystemListCollectionPanel, PermissionPanel } from ".";
+import { SystemListCollectionPanel, ApplicationPanel, PermissionPanel } from ".";
 
 const AdminPanel = () => {
   return (
@@ -10,6 +10,7 @@ const AdminPanel = () => {
         <Toolbar title='Admin panel' />
         <div className="flex flex-col space-y-8">
           <SystemListCollectionPanel />
+          <ApplicationPanel />
           <PermissionPanel />
         </div>
       </div>

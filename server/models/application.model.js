@@ -6,8 +6,11 @@ const { AuditSchema }             = require('./common/audit.schema');
 const Application = mongoose.model(
   "Application",
   new Schema({
+    identifier: {
+      type: String, required: true, unique: true
+    },
     name: {
-      type: String, required: true
+      type: String, required: true, unique: true
     },
     description: {
       type: String, required: false

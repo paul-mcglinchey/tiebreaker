@@ -5,7 +5,7 @@ const Application         = db.application
 exports.get = asyncHandler(async (req, res) => {
   const applications = await Application.find()
 
-  return res.json(applications)
+  return res.json({ applications: applications, count: applications.length })
 })
 
 exports.create = asyncHandler(async (req, res) => {

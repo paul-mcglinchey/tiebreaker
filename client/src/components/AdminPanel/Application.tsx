@@ -1,17 +1,17 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/solid"
 import { Field, Form, Formik } from "formik"
-import { usePermissionService } from "../../hooks"
-import { ButtonType, IPermission } from "../../models"
+import { ButtonType, IApplication } from "../../models"
 import { combineClassNames } from "../../services"
-import { permissionValidationSchema } from "../../schema"
+import { applicationValidationSchema } from "../../schema"
 import { Button } from "../Common"
+import { useApplicationsService } from "../../hooks"
 
-interface IPermissionProps {
-  permission?: IPermission
+interface IApplicationProps {
+  application?: IApplication
   refresh?: () => void
 }
 
-interface IPermissionFieldProps {
+interface IApplicationFieldProps {
   name: string
   placeholder?: string
   label?: string
@@ -21,7 +21,7 @@ interface IPermissionFieldProps {
   touched?: boolean | undefined
 }
 
-const PermissionField = ({ name, placeholder, label, classes, disabled, errors, touched }: IPermissionFieldProps) => {
+const ApplicationField = ({ name, placeholder, label, classes, disabled, errors, touched }: IApplicationFieldProps) => {
   return (
     <div className={combineClassNames("flex flex-col space-y-1", classes)}>
       <div className="flex justify-between">
@@ -52,35 +52,36 @@ const PermissionField = ({ name, placeholder, label, classes, disabled, errors, 
   )
 }
 
-const Permission = ({ permission, refresh }: IPermissionProps) => {
+const Application = ({ application, refresh }: IApplicationProps) => {
 
-  const { updatePermission, addPermission, deletePermission } = usePermissionService(refresh)
+  const { updateApplication, addApplication, deleteApplication } = useApplicationsService(refresh)
 
   return (
     <Formik
-      initialValues={permission || { identifier: '', name: '', description: '', language: 'en-US' }}
+      initialValues={application || { identifier: '', name: '', description: '', icon: '', url: '' }}
       onSubmit={(values) => {
-        permission
-          ? updatePermission(values, permission._id)
-          : addPermission(values)
+        application
+          ? updateApplication(values, application._id)
+          : addApplication(values)
       }}
-      validationSchema={permissionValidationSchema}
+      validationSchema={applicationValidationSchema}
     >
       {({ errors, touched }) => (
         <Form className="flex space-x-4">
-          <PermissionField name='identifier' classes="basis-1/5" errors={errors.identifier} touched={touched.identifier} />
-          <PermissionField name='name' classes="basis-1/5" errors={errors.name} touched={touched.name} />
-          <PermissionField name='description' classes="flex-grow" errors={errors.name} touched={touched.name} />
-          <PermissionField name='language' disabled errors={errors.name} touched={touched.name} />
+          <ApplicationField name='identifier' classes="basis-1/5" errors={errors.identifier} touched={touched.identifier} />
+          <ApplicationField name='name' classes="basis-1/5" errors={errors.name} touched={touched.name} />
+          <ApplicationField name='description' classes="flex-grow" errors={errors.name} touched={touched.name} />
+          <ApplicationField name='icon' label="Icon URL" errors={errors.icon} touched={touched.icon} />
+          <ApplicationField name='url' label="Url/Route" errors={errors.url} touched={touched.url} />
           <div className="flex self-end pb-1 items-center w-1/5 justify-end">
-            {permission ? (
+            {application ? (
               <>
                 <Button buttonType={ButtonType.Tertiary} content='Update' />
-                <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)}/>
+                <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deleteApplication(application._id)}/>
               </>
             ) : (
               <>
-                <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} />
+                <Button buttonType={ButtonType.Tertiary} content='Add Application' Icon={PlusIcon} />
               </>
             )}
           </div>
@@ -90,4 +91,4 @@ const Permission = ({ permission, refresh }: IPermissionProps) => {
   )
 }
 
-export default Permission
+export default Application

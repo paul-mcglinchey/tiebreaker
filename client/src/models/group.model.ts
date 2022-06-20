@@ -8,7 +8,13 @@ export interface IGroup {
   _id?: string
   name?: string
   description?: string
-  applications?: string[]
+  users?: {
+    user: string,
+    applications: {
+      application: string,
+      permissions: string[]
+    }[]
+  }[],
   entities?: IGroupEntities
   deletedEntities?: IGroupEntities
   listDefinitions?: string

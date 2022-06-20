@@ -10,7 +10,8 @@ export const endpoints = {
     "groups"    : BASE_API_URL + 'groups',
     "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`, 
     
-    "applications": (groupId: string) => BASE_API_URL + `groups/${groupId}/applications`,
+    "applications": BASE_API_URL + `applications`,
+    "application": (applicationId: string) => BASE_API_URL + `applications/${applicationId}`,
 
     "clients"   : (groupId: string, includeDeleted?: boolean) => BASE_API_URL + `groups/${groupId}/clients${includeDeleted ? '/deleted' : ''}`,
     "client"    : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}`, 
@@ -34,6 +35,6 @@ export const endpoints = {
     "systemlistcollection"  : (listcollectionId: string) => BASE_API_URL + `listcollections/system/${listcollectionId}`,
     "systemlistcollections" : BASE_API_URL + "listcollections/system",
 
+    "permissions"           : BASE_API_URL + "permissions",
     "permission"            : (permissionId: string) => BASE_API_URL + `permissions/${permissionId}`,
-    "permissions"           : BASE_API_URL + "permissions"
 }
