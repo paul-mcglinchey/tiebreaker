@@ -4,12 +4,12 @@ import { Notification } from "../models"
 const useAsyncHandler = () => {
   const { addNotification } = useNotification()
   
-  const asyncHandler = (fn: (...args: any[]) => any) => async (...args: any) => {
+  const asyncHandler = (fn: (...args: any[]) => any, notify: boolean = true) => async (...args: any) => {
     try {
       await fn(...args)
     } catch (err) {
       console.error(err)
-      addNotification('Something went wrong...', Notification.Error)
+      notify && addNotification('Something went wrong...', Notification.Error)
     }
   }
   

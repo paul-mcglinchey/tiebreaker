@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { IFetch } from "../models/fetch.model";
+import useAsyncHandler from "./useAsyncHandler";
+import useIsMounted from "./useIsMounted";
 
 interface ICache<T> {
   [key: string]: T
@@ -9,54 +11,37 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCac
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const cache = useRef<ICache<T>>({});
+  
+  const { asyncHandler } = useAsyncHandler()
 
+  const cache = useRef<ICache<T>>({})
+  const isMounted = useIsMounted()
+  
   useEffect(() => {
-    let componentIsMounted = true;
-
-    if (!url) return;
-
-    const _fetch = async () => {
-
-      if (componentIsMounted) setIsLoading(true);
+    const _fetch = asyncHandler(async () => {
+      setIsLoading(true)
 
       if (cache.current[url] && useCache) {
-        if (componentIsMounted) {
-          setResponse(cache.current[url])
-          setIsLoading(false);
-        }
-        return;
+        setResponse(cache.current[url])
       } else {
-        await fetch(url, options)
-          .then(res => {
-            if (res.status === 404) throw new Error(`${res.status} ${res.statusText}`)
+        const res = await fetch(url, options)
+        const json = await res.json()
 
-            return res.json();
-          })
-          .then(json => {
-            if (componentIsMounted) {
-              setResponse(json as unknown as T);
-              cache.current[url] = json;
-            }
-          })
-          .catch(err => {
-            if (componentIsMounted) setError(err)
-          })
-          .finally(() => {
-            if (componentIsMounted) setIsLoading(false);
-          })
+        if (res.ok) {
+          setResponse(json as unknown as T)
+          cache.current[url] = json
+        } else {
+          setError({ message: `${res.status} ${res.statusText}`})
+        }
+
+        setIsLoading(false)
       }
+    })
 
-    }
-
-    componentIsMounted && _fetch();
-
-    return () => {
-      componentIsMounted = false;
-    }
+    isMounted() && _fetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-
+  
   return { response, error, isLoading };
 }
 

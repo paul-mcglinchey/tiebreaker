@@ -16,7 +16,7 @@ interface INavMenuProps {
 
 const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
 
-  const { getUser, logout } = useAuth()
+  const { user, logout, isAdmin } = useAuth()
   const { theme, setTheme } = useTheme()
 
   const toggleDarkTheme = () => {
@@ -103,9 +103,9 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
                     >
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                         <div className="px-4 py-2 font-semibold tracking-wide text-color-header">
-                          {getUser()?.username}
+                          {user?.username}
                         </div>
-                        {getUser()?.isAdmin && (
+                        {isAdmin() && (
                           <Menu.Item>
                             {({ active }) => (
                               <Link

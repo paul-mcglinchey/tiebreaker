@@ -1,4 +1,3 @@
-export { default as Authenticate } from './Authenticate'
 export { default as PublicWrapper } from './PublicWrapper'
 export { default as Login } from './Login'
 export { default as PasswordReset } from './PasswordReset'

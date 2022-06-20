@@ -12,8 +12,8 @@ const GroupSelector = () => {
   }
 
   useEffect(() => {
-    currentGroup && currentGroup._id && updateGroup(currentGroup?._id)
-  }, [currentGroup, updateGroup])
+    //currentGroup && currentGroup._id && updateGroup(currentGroup?._id)
+  }, [currentGroup])
 
   return (
     <div className="flex flex-grow items-center justify-end">

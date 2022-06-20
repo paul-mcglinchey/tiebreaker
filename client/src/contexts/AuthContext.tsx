@@ -1,16 +1,18 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IAuthContext, IChildrenProps, IPermissionGroup, IUser } from "../models";
 import { useCookies } from 'react-cookie'
-import { useIsMounted } from "../hooks";
+import { useFetch, useIsMounted, useRequestBuilder } from "../hooks";
+import { endpoints } from "../config";
 
 export const AuthContext = createContext<IAuthContext>({
   user: undefined,
-  getUser: () => undefined,
   updateUser: () => {},
   getAccess: () => false,
   getToken: () => undefined,
   getCookie: () => undefined,
   isAdmin: () => false,
+  isLoading: false,
+  setIsLoading: () => {},
   getPermissions: () => [],
   getGroupPermissions: () => []
 });
@@ -18,10 +20,19 @@ export const AuthContext = createContext<IAuthContext>({
 export const AuthProvider = ({ children }: IChildrenProps) => {
   const [cookies, setCookie, removeCookie] = useCookies(['UserAuth'])
   const isMounted = useIsMounted()
+  const { requestBuilder } = useRequestBuilder()
 
   const [user, setUser] = useState<IUser | undefined>(cookies.UserAuth)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { response, isLoading: isAuthLoading } = useFetch<IUser>(endpoints.authenticate, requestBuilder('GET', user?.token))
 
-  const getUser = () => user
+  useEffect(() => {
+    updateUser(response)
+  }, [response])
+
+  useEffect(() => {
+    setIsLoading(isAuthLoading)
+  }, [isAuthLoading])
 
   const updateUser = (user: IUser | undefined) => {
     isMounted() && setUser(user?.token ? user : undefined)
@@ -43,12 +54,13 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
 
   const contextValue = {
     user,
-    getUser,
     updateUser,
     getAccess,
     getToken,
     getCookie,
     isAdmin,
+    isLoading,
+    setIsLoading,
     getPermissions,
     getGroupPermissions
   }

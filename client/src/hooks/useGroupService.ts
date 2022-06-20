@@ -3,6 +3,7 @@ import { IGroup, IGroupService } from "../models"
 import { GroupContext } from "../contexts"
 import { endpoints } from '../config'
 import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
+import { removeItemInLocalStorage } from "../services"
 
 const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()
@@ -10,8 +11,7 @@ const useGroupService = (): IGroupService => {
   const { handleResolution } = useResolutionService()
   
   const groupContext = useContext(GroupContext)
-  const { groups, setGroups } = groupContext
-
+  const { groups, setGroups, currentGroup } = groupContext
 
   const getGroup = (groupId: string | undefined): IGroup | undefined => {
     return groups.find((group: IGroup) => group._id === groupId)
@@ -39,7 +39,7 @@ const useGroupService = (): IGroupService => {
     const res = await fetch(endpoints.group(groupId), requestBuilder("DELETE"))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'group', [() => removeGroupInContext(groupId)])
+    handleResolution(res, json, 'delete', 'group', [() => removeGroupInContext(groupId), () => currentGroup?._id === groupId && removeItemInLocalStorage('group-id')])
   })
 
   const addGroupInContext = (group: IGroup) => {
