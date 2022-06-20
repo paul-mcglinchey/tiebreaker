@@ -12,7 +12,7 @@ const GroupSelector = () => {
   }
 
   useEffect(() => {
-    //currentGroup && currentGroup._id && updateGroup(currentGroup?._id)
+    currentGroup && currentGroup._id && updateGroup(currentGroup?._id)
   }, [currentGroup])
 
   return (

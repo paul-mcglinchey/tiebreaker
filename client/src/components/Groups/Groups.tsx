@@ -27,7 +27,7 @@ const Groups = () => {
                       g={g}
                       key={i}
                       render={isCardFlipped => (
-                        <div className="flex flex-col grow md:flex-row space-y-2 md:space-x-8">
+                        <div className="flex flex-col grow md:flex-row space-y-2 md:space-y-0 md:space-x-8">
                           {isCardFlipped ? (
                             <>
                               <DataPoint value={g.entities?.users?.length || 0} label="user" />

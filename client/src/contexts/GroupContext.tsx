@@ -17,13 +17,18 @@ export const GroupContext = createContext<IGroupContext>({
 
 export const GroupProvider = ({ children }: IChildrenProps) => {
   const [groups, setGroups] = useState<IGroup[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState<number>(0)
   const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
   
   const isMounted = useIsMounted()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh()
-  const { response, isLoading, error }: IFetch<IGroupsResponse> = useFetch(endpoints.groups, requestBuilder(), [dependency])
+  const { response, isLoading: isGroupsLoading, error }: IFetch<IGroupsResponse> = useFetch(endpoints.groups, requestBuilder(), [dependency])
+
+  useEffect(() => {
+    setIsLoading(isGroupsLoading)
+  }, [isGroupsLoading])
 
   useEffect(() => {
     if (isMounted() && response) {
@@ -34,7 +39,7 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
         response.groups[0] && setCurrentGroup(response.groups[0])
       }
     }
-  }, [isMounted, response, currentGroup])
+  }, [response])
 
   const contextValue = {
     currentGroup,

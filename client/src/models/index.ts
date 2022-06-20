@@ -39,6 +39,7 @@ export * from './rota.context.model'
 export * from './employee.context.model'
 export * from './client.context.model'
 export * from './group.context.model'
+export * from './user.context.model'
 
 export * from './task.type';
 export * from './application.type';

@@ -26,7 +26,7 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
           selectorClasses
         )}>
           <span className="block truncate">{selected?.label || label}</span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+          <span className="absolute inset-y-0 right-0 flex items-center pr-2">
             <SelectorIcon
               className="h-5 w-5 dark:group-hover:text-blue-500 group-hover:text-blue-900 transition-colors"
               aria-hidden="true"
@@ -51,7 +51,7 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
               <Listbox.Option
                 key={index}
                 className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 transition-all 
+                  `relative cursor-pointer select-none py-2 pl-10 pr-4 transition-all 
                   ${active && 'text-blue-500'}`
                 }
                 value={item.value}

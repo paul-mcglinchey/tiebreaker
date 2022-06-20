@@ -3,13 +3,14 @@ import { IUser, IUserService } from "../models"
 import { UserContext } from "../contexts"
 
 const useUserService = (): IUserService => {
-  const { getUsers, getCount, isLoading, error } = useContext(UserContext)
+  const userContext = useContext(UserContext)
+  const { users } = userContext
 
   const getUser = (userId: string | undefined): IUser | undefined => {
-    return getUsers() && getUsers().filter((user: IUser) => user._id === userId)[0]
+    return users.find((user: IUser) => user._id === userId)
   }
 
-  return { getUsers, getCount, isLoading, error, getUser }
+  return { ...userContext, getUser }
 }
 
 export default useUserService

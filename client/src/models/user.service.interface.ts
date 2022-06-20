@@ -1,9 +1,5 @@
-import { IUser } from ".";
+import { IUser, IUserContext } from ".";
 
-export interface IUserService {
-  getUsers: () => IUser[]
-  getCount: () => number
-  isLoading: boolean
-  error: any | undefined
+export interface IUserService extends IUserContext {
   getUser: (userId: string | undefined) => IUser | undefined
 }
