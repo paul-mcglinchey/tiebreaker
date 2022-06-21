@@ -10,6 +10,12 @@ router.get(
   group.get
 );
 
+// Get all groups
+router.get(
+  '/all',
+  group.getAll
+)
+
 // Get all users for a group
 router.get(
   '/:groupId/users',

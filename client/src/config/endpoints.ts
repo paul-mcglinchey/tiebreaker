@@ -8,6 +8,7 @@ export const endpoints = {
     "authenticate"  : BASE_API_URL + `users/authenticate`,
 
     "groups"    : BASE_API_URL + 'groups',
+    "allgroups" : BASE_API_URL + 'groups/all',
     "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`, 
     
     "applications": BASE_API_URL + `applications`,

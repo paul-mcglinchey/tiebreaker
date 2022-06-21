@@ -8,7 +8,7 @@ const Employee = db.employee
 const Rota = db.rota
 const ListCollection = db.listcollection
 
-// Get all groups
+// Get all groups for the current user
 exports.get = asyncHandler(async (req, res) => {
   // the mongoose query to fetch the groups for the current user
   const groupQuery = { "users.user": new ObjectId(req.auth._id) }
@@ -20,6 +20,20 @@ exports.get = asyncHandler(async (req, res) => {
     count: count,
     groups: groups
   })
+})
+
+// Get all groups
+exports.getAll = asyncHandler(async (req, res) => {
+  const name = req.query.name
+  const pageNumber = parseInt(req.query.pageNumber || 1)
+
+  const count = await Group.countDocuments()
+  const groups = await Group
+    .find(name && { name: { $regex: name, $options: 'i' } })
+    .skip((pageNumber - 1) * 5)
+    .limit(5)
+
+  return res.status(200).json({ count, groups })
 })
 
 // Create group

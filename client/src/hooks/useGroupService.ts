@@ -1,12 +1,12 @@
 import { useContext } from "react"
-import { IGroup, IGroupService } from "../models"
+import { IGroup, IGroupService, IGroupsResponse } from "../models"
 import { GroupContext } from "../contexts"
 import { endpoints } from '../config'
 import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
 
 const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()
-  const { asyncHandler } = useAsyncHandler()
+  const { asyncHandler, asyncReturnHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
   
   const groupContext = useContext(GroupContext)
@@ -15,6 +15,13 @@ const useGroupService = (): IGroupService => {
   const getGroup = (groupId: string | undefined): IGroup | undefined => {
     return groups.find((group: IGroup) => group._id === groupId)
   }
+
+  const getAllGroups = asyncReturnHandler<IGroupsResponse>(async () => {
+    const res = await fetch(endpoints.allgroups, requestBuilder())
+    const json: IGroupsResponse = await res.json()
+
+    return json
+  })
 
   const addGroup = asyncHandler(async (values: IGroup) => {
     const res = await fetch(endpoints.groups, requestBuilder('POST', undefined, values))
@@ -57,7 +64,7 @@ const useGroupService = (): IGroupService => {
     })
   }
 
-  return { ...groupContext, getGroup, addGroup, updateGroup, deleteGroup }
+  return { ...groupContext, getGroup, getAllGroups, addGroup, updateGroup, deleteGroup }
 }
 
 export default useGroupService

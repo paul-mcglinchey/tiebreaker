@@ -54,7 +54,7 @@ const PrivateApp = () => {
 
                 {/* Admin Routes */}
 
-                <Route path="adminpanel" element={
+                <Route path="adminpanel/*" element={
                   isAdmin() ? <AdminPanel /> : <Navigate to="/" />
                 } />
               </Routes>

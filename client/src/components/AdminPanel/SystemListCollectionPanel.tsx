@@ -1,4 +1,4 @@
-import { memo, useState } from "react"
+import { useState } from "react"
 import { FieldArray, Form, Formik } from "formik"
 import { Persist } from 'formik-persist'
 import { PlusIcon } from "@heroicons/react/solid"
@@ -120,4 +120,4 @@ const SystemListCollectionPanel = () => {
   )
 }
 
-export default memo(SystemListCollectionPanel)
+export default SystemListCollectionPanel
