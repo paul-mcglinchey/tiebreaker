@@ -16,7 +16,7 @@ const Table = ({
   children
 }: ITableProps) => {
   return (
-    <div className="shadow overflow-x-auto rounded-md">
+    <div className="overflow-x-auto rounded-md">
       <table className="min-w-full">
         <thead className="bg-gray-800">
           <tr>
