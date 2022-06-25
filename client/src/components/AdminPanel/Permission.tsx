@@ -1,10 +1,10 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/solid"
 import { Field, Form, Formik } from "formik"
 import { usePermissionService } from "../../hooks"
-import { ButtonType, IPermission } from "../../models"
+import { ButtonType, IPermission, PermissionType } from "../../models"
 import { combineClassNames } from "../../services"
 import { permissionValidationSchema } from "../../schema"
-import { Button } from "../Common"
+import { Button, ListboxSelector } from "../Common"
 
 interface IPermissionProps {
   permission?: IPermission
@@ -58,7 +58,7 @@ const Permission = ({ permission, refresh }: IPermissionProps) => {
 
   return (
     <Formik
-      initialValues={permission || { identifier: '', name: '', description: '', language: 'en-US' }}
+      initialValues={permission || { identifier: '', name: '', description: '', language: 'en-US', type: PermissionType.Application }}
       onSubmit={(values) => {
         permission
           ? updatePermission(values, permission._id)
@@ -66,17 +66,25 @@ const Permission = ({ permission, refresh }: IPermissionProps) => {
       }}
       validationSchema={permissionValidationSchema}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, values, setFieldValue }) => (
         <Form className="flex space-x-4">
           <PermissionField name='identifier' classes="basis-1/5" errors={errors.identifier} touched={touched.identifier} />
           <PermissionField name='name' classes="basis-1/5" errors={errors.name} touched={touched.name} />
           <PermissionField name='description' classes="flex-grow" errors={errors.name} touched={touched.name} />
           <PermissionField name='language' disabled errors={errors.name} touched={touched.name} />
+          <div className="flex">
+            <ListboxSelector
+              label="Permission type"
+              items={[{ label: 'Group', value: PermissionType.Group }, { label: 'Application', value: PermissionType.Application }]}
+              selected={{ label: values.type?.toString(), value: values.type }}
+              setSelected={(value) => setFieldValue('type', value)}
+            />
+          </div>
           <div className="flex self-end pb-1 items-center w-1/5 justify-end">
             {permission ? (
               <>
                 <Button buttonType={ButtonType.Tertiary} content='Update' />
-                <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)}/>
+                <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)} />
               </>
             ) : (
               <>

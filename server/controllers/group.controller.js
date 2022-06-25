@@ -22,20 +22,6 @@ exports.get = asyncHandler(async (req, res) => {
   })
 })
 
-// Get all groups
-exports.getAll = asyncHandler(async (req, res) => {
-  const name = req.query.name
-  const pageNumber = parseInt(req.query.pageNumber || 1)
-
-  const count = await Group.countDocuments()
-  const groups = await Group
-    .find(name && { name: { $regex: name, $options: 'i' } })
-    .skip((pageNumber - 1) * 5)
-    .limit(5)
-
-  return res.status(200).json({ count, groups })
-})
-
 // Create group
 exports.create = asyncHandler(async (req, res) => {
   // get the ID of the default list set to create the group with

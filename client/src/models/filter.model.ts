@@ -1,6 +1,6 @@
 export interface IFilter {
   [key: string]: {
-    value: string | null,
+    value: any | null,
     label: string
   }
 }

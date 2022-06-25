@@ -46,7 +46,7 @@ const ClientList = ({ setAddClientOpen }: IClientListProps) => {
               </>
             </Table>
           </div>
-          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={updatePageNumber} setPageSize={updatePageSize} totalClients={getCount()} />
+          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={updatePageNumber} setPageSize={updatePageSize} totalItems={getCount()} />
         </Fragment>
       ) : (
         !isLoading && (

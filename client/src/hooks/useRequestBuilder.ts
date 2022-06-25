@@ -1,4 +1,5 @@
 import { useAuthContext } from ".";
+import { IFilter } from "../models";
 
 const useRequestBuilder = () => {
 
@@ -21,7 +22,17 @@ const useRequestBuilder = () => {
     return request;
   }
 
-  return { requestBuilder }
+  const buildQuery = (filters: IFilter): string => {
+    let query: string = ""
+
+    Object.keys(filters).map((k, i) => {
+      query += `${i === 0 ? '?' : '&'}${k}=${filters[k]?.value}`
+    })
+
+    return query
+  }
+
+  return { requestBuilder, buildQuery }
 }
 
 export default useRequestBuilder;

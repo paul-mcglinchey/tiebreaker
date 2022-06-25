@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { NavMenu, SmartLink, Toolbar } from "../Common";
-import { SystemListCollectionPanel, ApplicationPanel, GroupConfigurationPanel, PermissionPanel } from ".";
+import { SystemListCollectionPanel, ApplicationPanel, PermissionPanel } from ".";
 import { Navigate, Route, Routes } from "react-router";
 import { IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
@@ -14,15 +14,13 @@ const AdminPanel = () => {
         <div className="inline-flex space-x-2 mb-4">
           <TabLink to="lists">Lists</TabLink>
           <TabLink to="applications">Applications</TabLink>
-          <TabLink to="groups">Groups</TabLink>
           <TabLink to="permissions">Permissions</TabLink>
         </div>
         <Routes>
           <Route path="lists" element={<SystemListCollectionPanel />} />
           <Route path="applications" element={<ApplicationPanel />} />
-          <Route path="groups" element={<GroupConfigurationPanel />} />
           <Route path="permissions" element={<PermissionPanel />} />
-          <Route path="**" element={<Navigate to="lists" />} />
+          <Route path="/" element={<Navigate to="lists" />} />
         </Routes>
       </div>
     </>
@@ -32,7 +30,7 @@ const AdminPanel = () => {
 const TabLink = ({ to, children }: { to: string } & IChildrenProps) => {
   return (
     <SmartLink 
-      to={to} 
+      to={to}
       className={(match) => combineClassNames(
         match ? "border-blue-500" : "border-transparent", "py-1 px-2 text-xl transition-all border-b-2"
       )}

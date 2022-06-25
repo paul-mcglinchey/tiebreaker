@@ -6,13 +6,14 @@ interface IPaginatorProps {
   pageNumber: number,
   setPageNumber: (page: number) => void,
   setPageSize: (size: number) => void,
-  totalClients: number
+  totalItems: number
+  itemType?: string
 }
 
-const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClients }: IPaginatorProps) => {
+const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalItems, itemType = 'items' }: IPaginatorProps) => {
 
   const isMinPage = () => pageNumber <= 1;
-  const isMaxPage = () => pageNumber >= Math.ceil(totalClients / pageSize);
+  const isMaxPage = () => pageNumber >= Math.ceil(totalItems / pageSize);
 
   const decrementPageNumber = () => {
     !isMinPage() && setPageNumber(pageNumber - 1);
@@ -23,8 +24,8 @@ const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClie
   }
 
   const updatePageSize = (ps: number) => {
-    if (ps >= pageSize && (totalClients / (pageNumber * ps) < 1)) {
-      setPageNumber(Math.ceil(totalClients / ps));
+    if (ps >= pageSize && (totalItems / (pageNumber * ps) < 1)) {
+      setPageNumber(Math.ceil(totalItems / ps));
     }
     setPageSize(ps);
   }
@@ -36,13 +37,13 @@ const Paginator = ({ pageSize, pageNumber, setPageNumber, setPageSize, totalClie
   return (
     <div className="flex justify-between text-gray-400 py-4 items-center">
       <div className="font-semibold tracking-wider pb-1">
-        {totalClients} clients
+        {totalItems} {itemType}
       </div>
       <div className="flex items-center">
         {!isMinPage() && (
           <div><SquareIconButton Icon={ChevronLeftIcon} action={decrementPageNumber} className={!isMinPage() ? 'hover:text-gray-200' : ''} /></div>
         )}
-        <div className={`pb-1 font-bold tracking-wide ${isMinPage() && 'pl-8'} ${isMaxPage() && 'pr-8'}`}>{pageNumber} of {Math.ceil(totalClients / pageSize)}</div>
+        <div className={`pb-1 font-bold tracking-wide ${isMinPage() && 'pl-8'} ${isMaxPage() && 'pr-8'}`}>{pageNumber} of {Math.ceil(totalItems / pageSize)}</div>
         {!isMaxPage() && (
           <div><SquareIconButton Icon={ChevronRightIcon} action={incrementPageNumber} className={!isMaxPage() ? 'hover:text-gray-200' : ''} /></div>
         )}
