@@ -77,19 +77,17 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
             </div>
           </TableRowItem>
           <TableRowItem>
-            <div className="flex self-end justify-end">
-              <div className="flex pb-1">
-                {permission ? (
-                  <>
-                    <Button buttonType={ButtonType.Tertiary} content='Update' />
-                    <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)} />
-                  </>
-                ) : (
-                  <>
-                    <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} />
-                  </>
-                )}
-              </div>
+            <div className="flex grow pb-1">
+              {permission ? (
+                <>
+                  <Button buttonType={ButtonType.Tertiary} content='Update' />
+                  <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)} />
+                </>
+              ) : (
+                <>
+                  <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} />
+                </>
+              )}
             </div>
           </TableRowItem>
         </TableRow>

@@ -22,7 +22,7 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
     <Listbox value={selected?.value} onChange={setSelected}>
       <div className="relative">
         <Listbox.Button className={combineClassNames(
-          "h-10 relative w-56 py-2 pl-3 pr-10 text-left rounded-lg focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
+          "h-10 w-56 py-2 pl-3 pr-10 text-left rounded-lg focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
           selectorClasses
         )}>
           <span className="block truncate">{selected?.label || label}</span>
@@ -43,8 +43,8 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
           leaveTo="opacity-0"
         >
           <Listbox.Options className={combineClassNames(
-            "focus:outline-none absolute origin-top-right z-50 mt-1 max-h-60 w-56 overflow-auto rounded-md py-1 text-base ring-1 shadow-lg ring-black ring-opacity-5",
-            "bg-gray-200 dark:bg-gray-900",
+            "focus:outline-none absolute origin-top-right z-50 mt-1 max-h-60 w-56 overflow-auto rounded-md py-1 text-base ring-1 ring-black ring-opacity-5",
+            "bg-gray-200 dark:bg-gray-700",
             optionsClasses
           )}>
             {items.map((item, index) => (
