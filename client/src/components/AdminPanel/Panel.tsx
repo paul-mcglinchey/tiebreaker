@@ -10,7 +10,7 @@ interface IPanelProps {
 
 const Panel = ({ title, subtitle, HeaderActions, hideSave, children }: IPanelProps & IChildrenProps) => {
   return (
-    <div className="flex flex-col space-y-4 text-gray-200 relative">
+    <div className="flex flex-col space-y-4 text-gray-200">
       <div>
         <div className="flex justify-between items-center border-b-2 border-gray-600/60 pb-2 mb-4">
           <div>

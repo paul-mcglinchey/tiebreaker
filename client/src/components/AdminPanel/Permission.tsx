@@ -66,15 +66,13 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
             <PermissionField name='language' disabled errors={errors.name} touched={touched.name} />
           </TableRowItem>
           <TableRowItem>
-            <div className="flex flex-grow">
-              <ListboxSelector
-                label="Permission type"
-                items={[{ label: 'Group', value: PermissionType.Group }, { label: 'Application', value: PermissionType.Application }]}
-                selected={{ label: values.type?.toString(), value: values.type }}
-                setSelected={(value) => setFieldValue('type', value)}
-                selectorClasses="bg-gray-800"
-              />
-            </div>
+            <ListboxSelector
+              label="Permission type"
+              items={[{ label: 'Group', value: PermissionType.Group }, { label: 'Application', value: PermissionType.Application }]}
+              selected={{ label: values.type?.toString(), value: values.type }}
+              setSelected={(value) => setFieldValue('type', value)}
+              selectorClasses="bg-gray-800"
+            />
           </TableRowItem>
           <TableRowItem>
             <div className="flex grow pb-1">

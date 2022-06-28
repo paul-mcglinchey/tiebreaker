@@ -43,7 +43,7 @@ const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses,
           leaveTo="opacity-0"
         >
           <Listbox.Options className={combineClassNames(
-            "focus:outline-none absolute origin-top-right z-50 mt-1 max-h-60 w-56 overflow-auto rounded-md py-1 text-base ring-1 ring-black ring-opacity-5",
+            "focus:outline-none absolute origin-top-right z-50 mt-1 w-56 overflow-auto rounded-md py-1 text-base ring-1 ring-black ring-opacity-5",
             "bg-gray-200 dark:bg-gray-700",
             optionsClasses
           )}>
