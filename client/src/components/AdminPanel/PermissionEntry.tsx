@@ -48,7 +48,7 @@ export const PermissionHeader = ({ children }: IChildrenProps) => {
   )
 }
 
-export const PermissionEntry = ({ permission, fieldClasses }: IPermissionEntryProps) => {
+export const PermissionEntry = ({ permission }: IPermissionEntryProps) => {
 
   const { updatePermission, addPermission, deletePermission } = usePermissionService()
 
@@ -65,7 +65,7 @@ export const PermissionEntry = ({ permission, fieldClasses }: IPermissionEntryPr
       {({ errors, touched, values, setFieldValue }) => (
         <>
           <div>
-            <PermissionField name='identifier' fieldClasses= errors={errors.identifier} touched={touched.identifier} />
+            <PermissionField name='identifier' errors={errors.identifier} touched={touched.identifier} />
           </div>
           <div>
             <PermissionField name='name' errors={errors.name} touched={touched.name} />

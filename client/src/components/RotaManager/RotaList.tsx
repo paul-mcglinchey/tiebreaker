@@ -15,7 +15,7 @@ const headers = [
 
 const RotaList = () => {
 
-  const { getCount, getRotas, isLoading, sortField, updateSortField, sortDirection, updateSortDirection } = useRotaService();
+  const { getCount, getRotas, isLoading, sortField, updateSortField } = useRotaService();
 
   const [addRotaOpen, setAddRotaOpen] = useState(false);
 
@@ -30,11 +30,8 @@ const RotaList = () => {
           <>
             <div className="flex flex-col flex-grow space-y-4">
               <Table
-                sortField={sortField}
-                setSortField={updateSortField}
-                sortDirection={sortDirection}
-                setSortDirection={updateSortDirection}
                 headers={headers}
+                defaultSortField={sortField}
                 isLoading={isLoading}
               >
                 <>

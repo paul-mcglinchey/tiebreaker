@@ -2,8 +2,8 @@ import { memo, useState } from 'react'
 import { useFetch, useRefresh, useRequestBuilder } from '../../hooks'
 import { ButtonType, IFetch, IPermissionsResponse } from '../../models'
 import { endpoints } from '../../config'
-import { Button, Fetch, Modal } from '../Common'
-import { Panel, PermissionEntry, PermissionHeader } from '.'
+import { Button, Fetch, Modal, Table } from '../Common'
+import { Panel, PermissionEntry } from '.'
 import { PlusIcon } from '@heroicons/react/solid'
 
 const PermissionPanel = () => {
@@ -12,6 +12,15 @@ const PermissionPanel = () => {
   const { dependency } = useRefresh()
 
   const [addPermissionModalOpen, setAddPermissionModalOpen] = useState<boolean>(false)
+
+  const headers = [
+    { name: 'Identifier', value: 'identifier', interactive: true },
+    { name: 'Name', value: 'name', interactive: true },
+    { name: 'Description', value: 'description', interactive: true },
+    { name: 'Language', value: 'language', interactive: true },
+    { name: 'Type', value: 'type', interactive: false },
+    { name: 'Options', value: 'options', interactive: false },
+  ]
 
   return (
     <Fetch
@@ -27,13 +36,12 @@ const PermissionPanel = () => {
                 <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} action={() => setAddPermissionModalOpen(true)} />
               }
             >
-              <div className="grid grid-cols-6">
-                <PermissionHeader>Identifier</PermissionHeader>
-                <PermissionHeader>Name</PermissionHeader>
-                <PermissionHeader>Description</PermissionHeader>
-                <PermissionHeader>Language</PermissionHeader>
-                <PermissionHeader>Permission Type</PermissionHeader>
-              </div>
+              <Table
+                headers={headers}
+                isLoading={isLoading}
+              >
+                
+              </Table>
               <div className="grid grid-cols-6 gap-2">
                 {response.permissions.map((p, i) => (
                   <PermissionEntry key={i} permission={p} />
