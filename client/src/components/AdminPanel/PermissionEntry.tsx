@@ -1,13 +1,14 @@
-import { PlusIcon, TrashIcon } from "@heroicons/react/solid"
+import { TrashIcon } from "@heroicons/react/solid"
 import { Field, Formik } from "formik"
 import { usePermissionService } from "../../hooks"
-import { ButtonType, IPermission, PermissionType } from "../../models"
+import { ButtonType, IChildrenProps, IPermission, PermissionType } from "../../models"
 import { combineClassNames } from "../../services"
 import { permissionValidationSchema } from "../../schema"
-import { Button, ListboxSelector, TableRow, TableRowItem } from "../Common"
+import { Button, ListboxSelector } from "../Common"
 
-interface IPermissionTableRowProps {
+interface IPermissionEntryProps {
   permission?: IPermission
+  fieldClasses?: string
 }
 
 interface IPermissionFieldProps {
@@ -15,12 +16,13 @@ interface IPermissionFieldProps {
   placeholder?: string
   label?: string
   classes?: string
+  fieldClasses?: string
   disabled?: boolean
   errors?: string | undefined
   touched?: boolean | undefined
 }
 
-const PermissionField = ({ name, placeholder, label, classes, disabled, errors, touched }: IPermissionFieldProps) => {
+const PermissionField = ({ name, placeholder, label, classes, fieldClasses, disabled, errors, touched }: IPermissionFieldProps) => {
   return (
     <div className={combineClassNames("flex grow flex-col space-y-1", classes)}>
       <Field
@@ -29,7 +31,8 @@ const PermissionField = ({ name, placeholder, label, classes, disabled, errors, 
         className={combineClassNames(
           "flex flex-1 bg-gray-800 px-3 py-2 rounded placeholder-gray-500 placeholder-opacity-50",
           disabled && "opacity-50",
-          touched && errors && !disabled && "border border-red-500"
+          touched && errors && !disabled && "border border-red-500",
+          fieldClasses && fieldClasses
         )}
         disabled={disabled}
       />
@@ -37,7 +40,15 @@ const PermissionField = ({ name, placeholder, label, classes, disabled, errors, 
   )
 }
 
-const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
+export const PermissionHeader = ({ children }: IChildrenProps) => {
+  return (
+    <div className="uppercase text-sm font-bold tracking-wide px-2">
+      {children}
+    </div>
+  )
+}
+
+export const PermissionEntry = ({ permission, fieldClasses }: IPermissionEntryProps) => {
 
   const { updatePermission, addPermission, deletePermission } = usePermissionService()
 
@@ -52,46 +63,35 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
       validationSchema={permissionValidationSchema}
     >
       {({ errors, touched, values, setFieldValue }) => (
-        <TableRow>
-          <TableRowItem>
-            <PermissionField name='identifier' classes="basis-1/5" errors={errors.identifier} touched={touched.identifier} />
-          </TableRowItem>
-          <TableRowItem>
-            <PermissionField name='name' classes="basis-1/5" errors={errors.name} touched={touched.name} />
-          </TableRowItem>
-          <TableRowItem>
-            <PermissionField name='description' classes="flex-grow" errors={errors.name} touched={touched.name} />
-          </TableRowItem>
-          <TableRowItem>
+        <>
+          <div>
+            <PermissionField name='identifier' fieldClasses= errors={errors.identifier} touched={touched.identifier} />
+          </div>
+          <div>
+            <PermissionField name='name' errors={errors.name} touched={touched.name} />
+          </div>
+          <div>
+            <PermissionField name='description' errors={errors.name} touched={touched.name} />
+          </div>
+          <div>
             <PermissionField name='language' disabled errors={errors.name} touched={touched.name} />
-          </TableRowItem>
-          <TableRowItem>
+          </div>
+          <div>
             <ListboxSelector
               label="Permission type"
               items={[{ label: 'Group', value: PermissionType.Group }, { label: 'Application', value: PermissionType.Application }]}
               selected={{ label: values.type?.toString(), value: values.type }}
               setSelected={(value) => setFieldValue('type', value)}
               selectorClasses="bg-gray-800"
+              optionsClasses="w-full"
             />
-          </TableRowItem>
-          <TableRowItem>
-            <div className="flex grow pb-1">
-              {permission ? (
-                <>
-                  <Button buttonType={ButtonType.Tertiary} content='Update' />
-                  <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission._id)} />
-                </>
-              ) : (
-                <>
-                  <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} />
-                </>
-              )}
-            </div>
-          </TableRowItem>
-        </TableRow>
+          </div>
+          <div className="flex justify-end">
+            <Button buttonType={ButtonType.Tertiary} content='Update' />
+            <Button buttonType={ButtonType.Cancel} Icon={TrashIcon} type="button" action={() => deletePermission(permission?._id)} />
+          </div>
+        </>
       )}
     </Formik>
   )
 }
-
-export default PermissionTableRow

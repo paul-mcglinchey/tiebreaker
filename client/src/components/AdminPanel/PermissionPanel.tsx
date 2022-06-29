@@ -1,26 +1,17 @@
 import { memo, useState } from 'react'
 import { useFetch, useRefresh, useRequestBuilder } from '../../hooks'
-import { IFetch, IPermissionsResponse, SortDirection } from '../../models'
+import { ButtonType, IFetch, IPermissionsResponse } from '../../models'
 import { endpoints } from '../../config'
-import { Fetch, Table } from '../Common'
-import { Panel, PermissionTableRow } from '.'
+import { Button, Fetch, Modal } from '../Common'
+import { Panel, PermissionEntry, PermissionHeader } from '.'
+import { PlusIcon } from '@heroicons/react/solid'
 
 const PermissionPanel = () => {
 
   const { requestBuilder } = useRequestBuilder()
   const { dependency } = useRefresh()
 
-  const headers = [
-    { name: 'Identifer', value: 'identifier', interactive: true },
-    { name: 'Name', value: 'name', interactive: true },
-    { name: 'Description', value: 'description', interactive: true },
-    { name: 'Language', value: 'language', interactive: true },
-    { name: 'Type', value: 'type', interactive: true },
-    { name: 'Options', value: 'options', interactive: false },
-  ]
-
-  const [sortField, setSortField] = useState<string>('name')
-  const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.Desc)
+  const [addPermissionModalOpen, setAddPermissionModalOpen] = useState<boolean>(false)
 
   return (
     <Fetch
@@ -32,24 +23,34 @@ const PermissionPanel = () => {
               title="Permissions"
               subtitle={`Number of permissions: ${response.count}`}
               hideSave
+              HeaderActions={
+                <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} action={() => setAddPermissionModalOpen(true)} />
+              }
             >
-              <Table
-                headers={headers}
-                isLoading={isLoading}
-                sortField={sortField}
-                setSortField={setSortField}
-                sortDirection={sortDirection}
-                setSortDirection={setSortDirection}
-              >
-                <>
-                  {response.permissions.map((p, i) => (
-                    <PermissionTableRow key={i} permission={p} />
-                  ))}
-                  <PermissionTableRow />
-                </>
-              </Table>
+              <div className="grid grid-cols-6">
+                <PermissionHeader>Identifier</PermissionHeader>
+                <PermissionHeader>Name</PermissionHeader>
+                <PermissionHeader>Description</PermissionHeader>
+                <PermissionHeader>Language</PermissionHeader>
+                <PermissionHeader>Permission Type</PermissionHeader>
+              </div>
+              <div className="grid grid-cols-6 gap-2">
+                {response.permissions.map((p, i) => (
+                  <PermissionEntry key={i} permission={p} />
+                ))}
+              </div>
             </Panel>
           )}
+          <Modal
+            title="Add permission"
+            description="This dialog can be used to create a new permission"
+            isOpen={addPermissionModalOpen}
+            close={() => setAddPermissionModalOpen(false)}
+          >
+            <div className="grid grid-cols-6">
+              <PermissionEntry />
+            </div>
+          </Modal>
         </>
       )}
     />
