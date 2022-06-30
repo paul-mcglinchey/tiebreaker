@@ -25,7 +25,7 @@ const EmployeeTableRow = ({ employee }: IEmployeeTableRowProps) => {
         <TableRowItem>
           <div className="flex flex-grow justify-end">
             <InlineButton action={() => setDeleteEmployeeOpen(true)} color="text-red-500">
-              <div>Delete</div>
+              Delete
             </InlineButton>
             <Dialog 
               isOpen={deleteEmployeeOpen} 

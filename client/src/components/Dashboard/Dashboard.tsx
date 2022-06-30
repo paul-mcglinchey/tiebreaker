@@ -2,13 +2,13 @@ import { Application } from "../../models";
 import { dashboardLinks } from "../../config";
 import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
-import { useAuth, useGroupService, useApplicationsService } from "../../hooks";
+import { useAuth, useGroupService, useApplicationService } from "../../hooks";
 
 const Dashboard = () => {
 
   const { user } = useAuth()
   const { currentGroup } = useGroupService()
-  const { applications } = useApplicationsService()
+  const { applications } = useApplicationService()
 
   console.log(currentGroup?.users?.find(a => a.user === user?._id)?.applications.map(a => a.application))
   console.log(applications)

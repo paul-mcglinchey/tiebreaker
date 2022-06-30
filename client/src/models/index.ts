@@ -26,7 +26,7 @@ export * from './permission.model'
 export * from './client.service.interface'
 export * from './employee.service.interface'
 export * from './group.service.interface'
-export * from './applications.service.interface'
+export * from './application.service.interface'
 export * from './permission.service.interface'
 export * from './rota.service.interface'
 export * from './schedule.service.interface'
@@ -40,7 +40,8 @@ export * from './employee.context.model'
 export * from './client.context.model'
 export * from './group.context.model'
 export * from './user.context.model'
-export * from './applications.context.model'
+export * from './application.context.model'
+export * from './permission.context.model'
 
 export * from './task.type';
 export * from './application.type';

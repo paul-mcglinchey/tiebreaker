@@ -18,7 +18,7 @@ interface IClientListProps {
 
 const ClientList = ({ setAddClientOpen }: IClientListProps) => {
 
-  const { getClients, getCount, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, updatePageNumber, pageSize, updatePageSize } = useClientService()
+  const { getClients, getCount, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
   const clients = getClients()
 
   return (
@@ -31,22 +31,16 @@ const ClientList = ({ setAddClientOpen }: IClientListProps) => {
               setFilters={setFilters}
               searchField='name'
             />
-            <Table
-              sortField={sortField}
-              setSortField={setSortField}
-              sortDirection={sortDirection}
-              setSortDirection={setSortDirection}
-              headers={headers}
-              isLoading={isLoading}
-            >
-              <>
+            <Table isLoading={isLoading}>
+              <Table.SortableHeader headers={headers} sortField={sortField} setSortField={setSortField} sortDirection={sortDirection} setSortDirection={setSortDirection} />
+              <Table.Body>
                 {clients.map((c: IClient, index: number) => (
                   <ClientTableRow client={c} key={index} />
                 ))}
-              </>
+              </Table.Body>
             </Table>
           </div>
-          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={updatePageNumber} setPageSize={updatePageSize} totalItems={getCount()} />
+          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={getCount()} />
         </Fragment>
       ) : (
         !isLoading && (

@@ -1,21 +1,22 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IApplicationsContext, IApplication, IApplicationsResponse } from "../models";
+import { IChildrenProps, IFetch, IApplicationContext, IApplication, IApplicationsResponse } from "../models";
 import { useFetch, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 
-export const ApplicationsContext = createContext<IApplicationsContext>({
+export const ApplicationContext = createContext<IApplicationContext>({
   applications: [],
   setApplications: () => {},
   count: 0,
-  setCount: () => {}
+  setCount: () => {},
+  isLoading: false
 });
 
-export const ApplicationsProvider = ({ children }: IChildrenProps) => {
+export const ApplicationProvider = ({ children }: IChildrenProps) => {
   const [applications, setApplications] = useState<IApplication[]>([])
   const [count, setCount] = useState<number>(0)
 
   const { requestBuilder } = useRequestBuilder()
-  const { response }: IFetch<IApplicationsResponse> = useFetch(endpoints.applications, requestBuilder(), [])
+  const { response, isLoading }: IFetch<IApplicationsResponse> = useFetch(endpoints.applications, requestBuilder(), [])
 
   useEffect(() => {
     if (response) {
@@ -28,12 +29,13 @@ export const ApplicationsProvider = ({ children }: IChildrenProps) => {
     applications,
     setApplications,
     count,
-    setCount
+    setCount,
+    isLoading
   }
 
   return (
-    <ApplicationsContext.Provider value={contextValue}>
+    <ApplicationContext.Provider value={contextValue}>
       {children}
-    </ApplicationsContext.Provider>
+    </ApplicationContext.Provider>
   )
 } 

@@ -3,7 +3,7 @@ import { IChildrenProps, ISortable, SortDirection } from '../../models';
 import { SquareIcon } from '.';
 
 interface IInteractiveHeaderProps extends ISortable, IChildrenProps {
-  value: string
+  value: string | undefined
 }
 
 const TableInteractiveHeader = ({ 

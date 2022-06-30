@@ -15,13 +15,13 @@ const headers = [
 
 const RotaList = () => {
 
-  const { getCount, getRotas, isLoading, sortField, updateSortField } = useRotaService();
+  const { getCount, getRotas, isLoading, sortField, sortDirection, setSortField, setSortDirection } = useRotaService();
 
   const [addRotaOpen, setAddRotaOpen] = useState(false);
 
   useEffect(() => {
-    updateSortField(headers[1]!.value)
-  }, [updateSortField])
+    setSortField(headers[1]!.value)
+  }, [setSortField])
 
   return (
     <>
@@ -30,15 +30,14 @@ const RotaList = () => {
           <>
             <div className="flex flex-col flex-grow space-y-4">
               <Table
-                headers={headers}
-                defaultSortField={sortField}
                 isLoading={isLoading}
               >
-                <>
+                <Table.SortableHeader headers={headers} sortField={sortField} sortDirection={sortDirection} setSortField={setSortField} setSortDirection={setSortDirection} />
+                <Table.Body>
                   {getRotas().map((r: IRota, index: number) => (
                     <RotaTableRow rota={r} key={index} />
                   ))}
-                </>
+                </Table.Body>
               </Table>
             </div>
           </>

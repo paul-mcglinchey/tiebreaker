@@ -1,16 +1,17 @@
+import { Dispatch, SetStateAction } from "react"
 import { IClient, SortDirection, IFilter } from "."
 
 export interface IClientContext {
   getClients: () => IClient[]
   getCount: () => number
   sortField: string | undefined
-  setSortField: (sortField: string) => void
+  setSortField: (sortField: string | undefined) => void
   sortDirection: SortDirection
   setSortDirection: (sortDirection: SortDirection) => void
   pageNumber: number,
-  updatePageNumber: (pageNumber: number) => void,
+  setPageNumber: Dispatch<SetStateAction<number>>,
   pageSize: number,
-  updatePageSize: (pageSize: number) => void,
+  setPageSize: Dispatch<SetStateAction<number>>,
   filters: IFilter,
   setFilters: (filters: IFilter) => void,
   isLoading: boolean

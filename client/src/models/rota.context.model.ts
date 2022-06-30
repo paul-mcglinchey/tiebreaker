@@ -8,9 +8,9 @@ export interface IRotaContext {
   rotaId: string | undefined
   updateRotaId: (rotaId: string | undefined) => void 
   sortField: string | undefined
-  updateSortField: (sortField: string) => void
+  setSortField: Dispatch<SetStateAction<string | undefined>>
   sortDirection: SortDirection
-  updateSortDirection: (sortDirection: SortDirection) => void
+  setSortDirection: Dispatch<SetStateAction<SortDirection>>
   isLoading: boolean
   error: any | undefined
   refresh: () => void

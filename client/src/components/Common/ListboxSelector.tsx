@@ -10,19 +10,22 @@ interface IListboxSelectorItem {
 
 interface IListboxSelectorProps {
   label: string
+  showLabel?: boolean
   items: IListboxSelectorItem[]
   selected: IListboxSelectorItem | undefined
   setSelected: (value: string) => void
+  classes?: string
   selectorClasses?: string
   optionsClasses?: string
 }
 
-const ListboxSelector = ({ label, items, selected, setSelected, selectorClasses, optionsClasses }: IListboxSelectorProps) => {
+const ListboxSelector = ({ label, showLabel = false, items, selected, setSelected, classes, selectorClasses, optionsClasses }: IListboxSelectorProps) => {
   return (
     <Listbox value={selected?.value} onChange={setSelected}>
-      <div className="relative">
+      <div className={combineClassNames("relative", classes)}>
+        {showLabel && <label className="block font-bold text-sm text-gray-500 mb-1 uppercase">{label}</label>}
         <Listbox.Button className={combineClassNames(
-          "h-10 w-full py-2 pl-3 pr-10 text-left rounded-lg focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
+          "h-10 w-full relative py-2 pl-3 pr-10 text-left rounded focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
           selectorClasses
         )}>
           <span className="block truncate">{selected?.label || label}</span>

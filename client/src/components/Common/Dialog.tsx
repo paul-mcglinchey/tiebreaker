@@ -9,9 +9,10 @@ interface IDialogProps {
   title: string
   description: string
   content: string
+  keepOpen?: boolean
 }
 
-const Dialog = ({ isOpen, close, positiveActions, title, description, content }: IDialogProps) => {
+const Dialog = ({ isOpen, close, positiveActions, title, description, content, keepOpen = false }: IDialogProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <HeadlessDialog as="div" className="relative z-10" onClose={close}>
@@ -55,10 +56,10 @@ const Dialog = ({ isOpen, close, positiveActions, title, description, content }:
                 </div>
 
                 <div className="mt-8 flex justify-between">
-                  <DialogButton action={close}>
+                  <DialogButton actions={[close]}>
                     Cancel
                   </DialogButton>
-                  <DialogButton action={() => positiveActions.forEach(pa => pa())}>
+                  <DialogButton actions={[...positiveActions, ...(keepOpen ? [] : [close])]}>
                     Got it, thanks!
                   </DialogButton>
                 </div>

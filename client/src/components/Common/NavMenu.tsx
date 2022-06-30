@@ -24,7 +24,7 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
   }
 
   return (
-    <Disclosure as="nav" className="bg-blue-500 dark:bg-gray-800 text-gray-200 mb-4">
+    <Disclosure as="nav" className="bg-blue-500 dark:bg-gray-800 mb-4">
       {({ open, close }) => (
         <>
           <div className="mx-auto px-2 sm:px-6 lg:px-8">

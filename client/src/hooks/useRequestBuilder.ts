@@ -25,7 +25,7 @@ const useRequestBuilder = () => {
   const buildQuery = (filters: IFilter): string => {
     let query: string = ""
 
-    Object.keys(filters).map((k, i) => {
+    Object.keys(filters).forEach((k, i) => {
       query += `${i === 0 ? '?' : '&'}${k}=${filters[k]?.value}`
     })
 

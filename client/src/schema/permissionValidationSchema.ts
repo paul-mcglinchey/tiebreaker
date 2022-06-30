@@ -9,7 +9,8 @@ const permissionValidationSchema = Yup.object().shape({
     .max(20, 'Too Long!')
     .required('Required'),
   description: Yup.string()
-    .max(100, 'Too Long!'),
+    .max(1000, 'Too Long!')
+    .required('Required'),
   language: Yup.string()
     .required('Required')
 });

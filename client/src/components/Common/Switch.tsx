@@ -1,4 +1,5 @@
 import { Switch as HeadlessSwitch } from '@headlessui/react'
+import { combineClassNames } from '../../services'
 
 interface ISwitchProps {
   enabled: boolean
@@ -20,12 +21,14 @@ const Switch = ({ enabled, setEnabled, description, IconEnabled, IconDisabled }:
     >
       <span className="sr-only">{description}</span>
       <div
-        className={`${
-          enabled ? 'translate-x-6' : 'translate-x-1'
-        } inline-block h-4 w-4 transform rounded-full text-gray-400 dark:text-gray-900 transition-all`}
+        className={combineClassNames(
+          enabled ? 'translate-x-6' : 'translate-x-1',
+          enabled ? !IconEnabled && 'bg-gray-900' : !IconDisabled && 'bg-green-500',
+          'inline-block h-4 w-4 transform rounded-full text-gray-600 dark:text-gray-900 transition-all'
+        )}
       >
         {enabled 
-          ? IconEnabled && <IconEnabled className="w-4 h-4" /> 
+          ? IconEnabled && <IconEnabled className="w-4 h-4" />
           : IconDisabled && <IconDisabled className="w-4 h-4" />}
       </div>
     </HeadlessSwitch>

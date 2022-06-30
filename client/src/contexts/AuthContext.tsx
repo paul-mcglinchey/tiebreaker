@@ -26,14 +26,6 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { response, isLoading: isAuthLoading } = useFetch<IUser>(endpoints.authenticate, requestBuilder('GET', user?.token))
 
-  useEffect(() => {
-    updateUser(response)
-  }, [response])
-
-  useEffect(() => {
-    setIsLoading(isAuthLoading)
-  }, [isAuthLoading])
-
   const updateUser = (user: IUser | undefined) => {
     isMounted() && setUser(user?.token ? user : undefined)
 
@@ -44,6 +36,16 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
       ? setCookie('UserAuth', user, { path: '/', expires: expiryDate })
       : removeCookie('UserAuth')
   }
+
+  useEffect(() => {
+    updateUser(response)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response])
+
+  useEffect(() => {
+    setIsLoading(isAuthLoading)
+  }, [isAuthLoading])
 
   const getAccess = () => user !== undefined
   const getToken = () => user?.token

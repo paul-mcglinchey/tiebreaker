@@ -1,6 +1,6 @@
-import { IPermission } from ".";
+import { IPermission, IPermissionContext } from ".";
 
-export interface IPermissionService {
+export interface IPermissionService extends IPermissionContext {
   addPermission     : (
     values: IPermission
   ) => void

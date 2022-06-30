@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IGroup, IGroupContext, IGroupsResponse } from "../models";
 import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
-import { getItemInLocalStorage } from "../services";
+import { getItemInLocalStorage, setItemInStorage } from "../services";
 
 export const GroupContext = createContext<IGroupContext>({
   currentGroup: undefined,
@@ -39,7 +39,13 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
         response.groups[0] && setCurrentGroup(response.groups[0])
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
+
+  useEffect(() => {
+    setItemInStorage('group-id', currentGroup?._id)
+  }, [currentGroup])
 
   const contextValue = {
     currentGroup,

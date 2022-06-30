@@ -3,7 +3,7 @@ import { useUserService } from '../../hooks';
 import { IClient } from '../../models';
 import { InlineLink, TableRow, TableRowItem } from '..';
 
-const ClientRow = ({ client }: { client: IClient }) => {
+const ClientTableRow = ({ client }: { client: IClient }) => {
 
   const { getUser } = useUserService()
 
@@ -51,4 +51,4 @@ const ClientRow = ({ client }: { client: IClient }) => {
   )
 }
 
-export default ClientRow;
+export default ClientTableRow;

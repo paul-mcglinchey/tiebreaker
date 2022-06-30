@@ -45,7 +45,7 @@ exports.create = asyncHandler(async (req, res) => {
 exports.update = asyncHandler(async (req, res) => {
   const group = await Group.findByIdAndUpdate(req.params.groupId, {
     ...req.body,
-    'audit.updateBy': req.auth._id
+    'audit.updatedBy': req.auth._id
   })
 
   return res.status(200).json(group)

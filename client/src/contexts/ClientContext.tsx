@@ -16,9 +16,9 @@ export const ClientContext = createContext<IClientContext>({
   sortDirection: SortDirection.Desc,
   setSortDirection: () => {},
   pageNumber: 1,
-  updatePageNumber: () => {},
+  setPageNumber: () => {},
   pageSize: 10,
-  updatePageSize: () => {},
+  setPageSize: () => {},
   filters: {},
   setFilters: () => {},
   isLoading: false,
@@ -75,15 +75,13 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     }
   }, [response])
 
-  const updatePageNumber = useCallback((pageNumber: number) => {
+  useEffect(() => {
     setItemInLocalStorage('clientlist-pagenumber', pageNumber)
-    setPageNumber(pageNumber)
-  }, [])
+  }, [pageNumber])
 
-  const updatePageSize = useCallback((pageSize: number) => {
+  useEffect(() => {
     setItemInLocalStorage('clientlist-pagesize', pageSize)
-    setPageSize(pageSize)
-  }, [])
+  }, [pageSize])
 
   const contextValue = {
     getClients: useCallback(() => clients, [clients]),
@@ -93,9 +91,9 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     sortDirection,
     setSortDirection,
     pageNumber,
-    updatePageNumber,
+    setPageNumber,
     pageSize,
-    updatePageSize,
+    setPageSize,
     filters,
     setFilters,
     isLoading,

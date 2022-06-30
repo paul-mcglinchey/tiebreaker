@@ -6,9 +6,9 @@ export interface IEmployeeContext {
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>
   getCount: () => number
   sortField: string | undefined
-  updateSortField: (sortField: string) => void
+  setSortField: Dispatch<SetStateAction<string | undefined>>
   sortDirection: SortDirection
-  updateSortDirection: (sortDirection: SortDirection) => void
+  setSortDirection: Dispatch<SetStateAction<SortDirection>>
   isLoading: boolean
   error: any | undefined
   refresh: () => void

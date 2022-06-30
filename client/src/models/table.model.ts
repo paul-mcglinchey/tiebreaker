@@ -1,10 +1,9 @@
-import { ISortable } from "."
-
-export interface ITable  {
+export interface ITableHeader {
   headers: Array<{
-    name: string, value: string, interactive: boolean
-  }>,
-  isLoading: boolean
+    name: string, value?: string, interactive?: boolean
+  }>
 }
 
-export interface ISortableTable extends ITable, ISortable {}
+export interface ITable  {
+  isLoading: boolean
+}

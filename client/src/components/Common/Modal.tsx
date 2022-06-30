@@ -15,7 +15,7 @@ interface IModalProps {
 const Modal = ({ children, title, description, isOpen, close, level = 1 }: IChildrenProps & IModalProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={close}>
+      <Dialog as="div" className="relative z-10 text-color-paragraph" onClose={close}>
         <Transition.Child>
           <div className="fixed inset-0 bg-black bg-opacity-50" />
         </Transition.Child>
@@ -43,7 +43,7 @@ const Modal = ({ children, title, description, isOpen, close, level = 1 }: IChil
                   >
                     {title}
                   </Dialog.Title>
-                  <DialogButton action={close}>
+                  <DialogButton actions={[close]}>
                     Cancel
                   </DialogButton>
                 </div>

@@ -1,38 +1,39 @@
-import { useFetch, useRefresh, useRequestBuilder } from '../../hooks'
-import { IApplication, IApplicationsResponse, IFetch } from '../../models'
-import { endpoints } from '../../config'
-import { Fetch } from '../Common'
-import { Panel, SubPanel, SubPanelContent, Application } from '.'
+import { useApplicationService } from '../../hooks'
+import { Table } from '../Common'
+import { Panel, ApplicationTableRow } from '.'
 
 const ApplicationPanel = () => {
 
-  const { requestBuilder } = useRequestBuilder()
-  const { refresh, dependency } = useRefresh()
+  const { applications, count, isLoading } = useApplicationService()
+
+  const headers = [
+    { name: 'Identifier' },
+    { name: 'Name' },
+    { name: 'Description' },
+    { name: 'Icon URL' },
+    { name: 'URL/Route' },
+    { name: '' },
+  ]
 
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.applications, requestBuilder(), [dependency])}
-      render={({ response, isLoading }: IFetch<IApplicationsResponse>) => (
-        <>
-          {!isLoading && response && (
-            <Panel 
-              title="Applications" 
-              subtitle={`Number of applications: ${response.count}`} 
-              hideSave
-            >
-              <SubPanel>
-                <SubPanelContent>
-                  {response.applications.map((application: IApplication, index: number) => (
-                    <Application key={index} application={application} refresh={refresh} />
-                  ))}
-                  <Application refresh={refresh} />
-                </SubPanelContent>
-              </SubPanel>
-            </Panel>
-          )}
-        </>
+    <>
+      {!isLoading && (
+        <Panel
+          title="Applications"
+          subtitle={`Number of applications: ${count}`}
+          hideSave
+        >
+          <Table isLoading={isLoading}>
+            <Table.Header headers={headers} />
+            <Table.Body>
+              {applications.map((a, i) => (
+                <ApplicationTableRow key={i} application={a} />
+              ))}
+            </Table.Body>
+          </Table>
+        </Panel>
       )}
-    />
+    </>
   )
 }
 

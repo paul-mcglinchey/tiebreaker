@@ -38,14 +38,14 @@ const useGroupService = (): IGroupService => {
     const res = await fetch(endpoints.group(groupId), requestBuilder("DELETE"))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'group', [() => removeGroupInContext(groupId)])
+    handleResolution(res, json, 'delete', 'group', [() => deleteGroupInContext(groupId)])
   })
 
   const addGroupInContext = (group: IGroup) => {
     setGroups(groups => [...groups, group])
   }
 
-  const removeGroupInContext = (groupId: string) => {
+  const deleteGroupInContext = (groupId: string) => {
     setGroups(groups => groups.filter(g => g._id !== groupId))
   }
 

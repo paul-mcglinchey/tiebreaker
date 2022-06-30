@@ -1,6 +1,6 @@
-import { IApplication, IApplicationsContext } from ".";
+import { IApplication, IApplicationContext } from ".";
 
-export interface IApplicationsService extends IApplicationsContext {
+export interface IApplicationService extends IApplicationContext {
   addApplication     : (
     values: IApplication
   ) => void
