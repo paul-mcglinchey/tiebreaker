@@ -10,7 +10,11 @@ const usePermissionService = (): IPermissionService => {
   const { handleResolution } = useResolutionService()
 
   const permissionContext = useContext(PermissionContext)
-  const { setPermissions } = permissionContext
+  const { permissions, setPermissions } = permissionContext
+
+  const getPermission = (permissionIdentifier: string | undefined): IPermission | undefined => {
+    return permissions.find(p => p.identifier?.toString() === permissionIdentifier?.toString())
+  }
 
   const addPermission = asyncHandler(async (values: IPermission) => {
     const res = await fetch(endpoints.permissions, requestBuilder('POST', undefined, values))
@@ -53,7 +57,7 @@ const usePermissionService = (): IPermissionService => {
     setPermissions(permissions => permissions.filter(p => p._id !== permissionId))
   }
 
-  return { ...permissionContext, addPermission, updatePermission, deletePermission }
+  return { ...permissionContext, getPermission, addPermission, updatePermission, deletePermission }
 }
 
 export default usePermissionService

@@ -23,12 +23,12 @@ exports.create = asyncHandler(async (req, res) => {
 })
 
 exports.update = asyncHandler(async (req, res) => {
-  const { applicationId } = req.params
+  const application = await Application.findByIdAndUpdate(req.params.applicationId, {
+    ...req.body,
+    'audit.updatedBy': req.auth._id
+  })
 
-  const updateBody = req.body
-  updateBody.audit.updatedBy = req.auth._id
-
-  const application = Application.findByIdAndUpdate(applicationId, updateBody)
+  if (!application) throw new Error('Problem occurred updating application')
 
   return res.json(application)
 })

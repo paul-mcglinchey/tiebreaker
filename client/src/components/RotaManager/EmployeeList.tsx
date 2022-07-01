@@ -16,8 +16,7 @@ interface IEmployeeListProps {
 
 const EmployeeList = ({ setAddEmployeesOpen }: IEmployeeListProps) => {
 
-  const { getEmployees, isLoading, sortField, setSortField, sortDirection, setSortDirection } = useEmployeeService()
-  const employees = getEmployees()
+  const { employees, isLoading, sortField, setSortField, sortDirection, setSortDirection } = useEmployeeService()
 
   useEffect(() => {
     setSortField(headers[1]!.value)

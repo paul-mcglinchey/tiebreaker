@@ -15,10 +15,10 @@ const useEmployeeService = (): IEmployeeService => {
   const { currentGroup } = useGroupService()
 
   const employeeContext = useContext(EmployeeContext)
-  const { getEmployees, setEmployees } = employeeContext
+  const { employees, setEmployees } = employeeContext
 
   const getEmployee = (employeeId: string | undefined): IEmployee | undefined => {
-    return getEmployees().find((employee: IEmployee) => employee._id === employeeId)
+    return employees.find((e) => e._id === employeeId)
   }
 
   const addEmployee = asyncHandler(async (values: IEmployee) => {
@@ -45,14 +45,14 @@ const useEmployeeService = (): IEmployeeService => {
     const res = await fetch(endpoints.employee(employeeId, currentGroup?._id), requestBuilder('DELETE'))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'employee', [() => removeEmployeeFromContext(employeeId)])
+    handleResolution(res, json, 'delete', 'employee', [() => deleteEmployeeInContext(employeeId)])
   })
 
   const addEmployeeInContext = (employee: IEmployee) => {
     setEmployees(employees => [...employees, employee])
   }
 
-  const removeEmployeeFromContext = (employeeId: string) => {
+  const deleteEmployeeInContext = (employeeId: string) => {
     setEmployees(employees => employees.filter(e => e._id !== employeeId))
   }
 

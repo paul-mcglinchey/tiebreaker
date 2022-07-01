@@ -6,11 +6,15 @@ import { ApplicationContext } from "../contexts"
 
 const useApplicationService = (): IApplicationService => {
   const applicationsContext = useContext(ApplicationContext)
-  const { setApplications } = applicationsContext
+  const { applications, setApplications } = applicationsContext
 
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
+
+  const getApplication = (identifier: string | undefined): IApplication | undefined => {
+    return applications.find(a => a.identifier === identifier)
+  }
 
   const addApplication = asyncHandler(async (values: IApplication) => {
     const res = await fetch(endpoints.applications, requestBuilder('POST', undefined, values))
@@ -53,7 +57,7 @@ const useApplicationService = (): IApplicationService => {
     setApplications(applications => applications.filter(a => a._id !== applicationId))
   } 
 
-  return { ...applicationsContext, addApplication, updateApplication, deleteApplication }
+  return { ...applicationsContext, getApplication, addApplication, updateApplication, deleteApplication }
 }
 
 export default useApplicationService

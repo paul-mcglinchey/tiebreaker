@@ -1,17 +1,16 @@
 import { Form, Formik } from "formik";
 import { useGroupService } from "../../hooks";
-import { IGroup } from "../../models";
+import { IContextualFormProps, IGroup } from "../../models";
 import { generateColour } from "../../services";
 import { groupValidationSchema } from "../../schema";
-import { Button, ColourPicker, StyledField } from "../Common";
+import { ColourPicker, FormSection, StyledField } from "../Common";
+import { ApplicationMultiSelector, UserPermissionSelector } from '.'
 
 interface IGroupFormProps {
   group?: IGroup | undefined
-  submitButton?: JSX.Element
-  additionalSubmissionActions?: (() => void)[]
 }
 
-const GroupForm = ({ group, submitButton, additionalSubmissionActions }: IGroupFormProps) => {
+const GroupForm = ({ group, ContextualSubmissionButton }: IGroupFormProps & IContextualFormProps) => {
 
   const { addGroup, updateGroup } = useGroupService()
 
@@ -20,13 +19,12 @@ const GroupForm = ({ group, submitButton, additionalSubmissionActions }: IGroupF
       initialValues={{
         name: group?.name || '',
         description: group?.description || '',
+        applications: group?.applications || [],
         colour: group?.colour || generateColour()
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
         group?._id ? updateGroup(values, group?._id) : addGroup(values)
-
-        additionalSubmissionActions?.forEach(asa => asa())
       }}
     >
       {({ errors, touched, values, setFieldValue }) => (
@@ -42,9 +40,18 @@ const GroupForm = ({ group, submitButton, additionalSubmissionActions }: IGroupF
               <StyledField as="textarea" name="description" label="Description" errors={errors.description} touched={touched.description} />
             </div>
           </div>
-          <div className="flex justify-end">
-            {submitButton ? submitButton : <Button content='Add group' />}
-          </div>
+          <FormSection title="Group Applications">
+            <ApplicationMultiSelector
+              formValues={values.applications}
+              setFieldValue={(a) => setFieldValue('applications', a)}
+            />
+          </FormSection>
+          {group && (
+            <FormSection title="User Permissions">
+              <UserPermissionSelector group={group} />
+            </FormSection>
+          )}
+          {ContextualSubmissionButton()}
         </Form>
       )}
     </Formik>

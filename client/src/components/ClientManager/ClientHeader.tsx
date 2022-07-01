@@ -2,7 +2,7 @@ import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SquareIconButton, Dialog, Dropdown } from "..";
-import { useClientService, useGroupService } from "../../hooks";
+import { useClientService } from "../../hooks";
 import { IClient } from "../../models";
 
 const ClientHeader = ({ client }: { client: IClient }) => {
@@ -11,14 +11,7 @@ const ClientHeader = ({ client }: { client: IClient }) => {
   const navigate = useNavigate();
 
   const [deleteClientOpen, setDeleteClientOpen] = useState(false);
-
-  const { currentGroup } = useGroupService()
-  const clientService = useClientService();
-
-  const deleteClient = () => {
-    clientService.deleteClient(client._id, currentGroup?._id);
-    navigate('/clients/dashboard', { replace: true });
-  }
+  const { deleteClient } = useClientService();
 
   const getRouteName = () => {
     switch (pathname.split('/').pop()) {
@@ -58,7 +51,7 @@ const ClientHeader = ({ client }: { client: IClient }) => {
       <Dialog
         isOpen={deleteClientOpen}
         close={() => setDeleteClientOpen(false)}
-        positiveActions={[() => deleteClient(), () => setDeleteClientOpen(false)]}
+        positiveActions={[() => deleteClient(client._id), () => setDeleteClientOpen(false), () => navigate('/clients/dashboard')]}
         title="Delete client"
         description="This action will delete the client from the current group"
         content="If you choose to continue you'll no longer have access to this client - all sessions belonging to the client will also become innaccessible."

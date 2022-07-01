@@ -8,6 +8,7 @@ export interface IGroup {
   _id?: string
   name?: string
   description?: string
+  applications?: string[]
   users?: {
     user: string,
     applications: {

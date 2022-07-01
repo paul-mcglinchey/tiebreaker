@@ -1,18 +1,28 @@
-import { Fragment } from "react";
+import { Fragment, ReactNode, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import { IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
-import { DialogButton } from ".";
+import { DialogButton, Checkbox } from ".";
 
 interface IModalProps {
+  children?: (
+    SubmissionButton: (
+      content?: string | undefined, 
+      actions?: (() => void)[] | undefined,
+      submissionGate?: boolean
+    ) => ReactNode
+  ) => JSX.Element
   title: string,
   description: string,
   isOpen: boolean,
   close: () => void
+  allowAddMultiple?: boolean
   level?: 1 | 2 | 3
 }
 
-const Modal = ({ children, title, description, isOpen, close, level = 1 }: IChildrenProps & IModalProps) => {
+const Modal = ({ children, title, description, isOpen, close, level = 1, allowAddMultiple = false }: IModalProps) => {
+
+  const [keepOpen, setKeepOpen] = useState<boolean>(false)
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10 text-color-paragraph" onClose={close}>
@@ -53,7 +63,12 @@ const Modal = ({ children, title, description, isOpen, close, level = 1 }: IChil
                   {description}
                 </Dialog.Description>
 
-                {children}
+                {children && children((content, actions, submissionGate = true) =>
+                  <div className={`flex ${allowAddMultiple ? 'justify-between' : 'justify-end'}`}>
+                    {allowAddMultiple && <Checkbox id="addMultiple" label="Add multiple" onChange={() => setKeepOpen(!keepOpen)} checked={keepOpen} />}
+                    <DialogButton disabled={!submissionGate} type="submit" actions={[...(keepOpen ? [] : [close]), ...actions || []]}>{content || 'Submit'}</DialogButton>
+                  </div>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

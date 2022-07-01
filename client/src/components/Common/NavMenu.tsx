@@ -24,7 +24,7 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
   }
 
   return (
-    <Disclosure as="nav" className="bg-blue-500 dark:bg-gray-800 mb-4">
+    <Disclosure as="nav" className="mt-2 mb-4">
       {({ open, close }) => (
         <>
           <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -43,25 +43,25 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <Link to="/" className="flex-shrink-0 flex items-center transform hover:scale-102 transition-transform">
                   <ThumbIcon
-                    className="lg:hidden h-10 w-10 text-white"
+                    className="lg:hidden h-10 w-10 dark:text-white"
                     alt="tiebreaker"
                   />
                   <WideIcon
-                    className="hidden text-white lg:block w-48"
+                    className="hidden dark:text-white lg:block w-36"
                     alt="tiebreaker"
                   />
                 </Link>
+              </div>
+              <div className="flex items-center divide-x divide-blue-400 dark:divide-gray-700">
                 <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
+                  <div className="flex ">
                     {links.map((item) => (
                       <SmartLink
                         key={item.name}
                         to={item.href}
                         className={(match: PathMatch<string> | null): string => (
-                          combineClassNames(match
-                            ? 'bg-blue-800 dark:bg-gray-900 text-white'
-                            : 'dark:hover:bg-gray-700 hover:text-white',
-                            'px-3 py-1 mt-0.5 rounded-md font-bold tracking-wide'
+                          combineClassNames(match ? 'text-blue-500' : '',
+                            'px-3 rounded-md font-bold tracking-wide hover:text-blue-500 transition-colors'
                           )
                         )}
                         aria-current={(match: PathMatch<string> | null): string | undefined => match ? 'page' : undefined}
@@ -71,8 +71,7 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
                     ))}
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center divide-x divide-blue-400 dark:divide-gray-700">
+
                 <div>
                   {/* Group selector */}
                   {!hideGroupSelector && (
@@ -80,7 +79,7 @@ const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
                   )}
                 </div>
 
-                <div className='flex justify-center items-center pl-3'>
+                <div className='flex justify-center items-center pl-3 py-1'>
                   {/* Dark Mode toggle */}
                   <Switch enabled={theme === 'dark'} setEnabled={() => toggleDarkTheme()} description="theme" IconEnabled={MoonIcon} IconDisabled={SunIcon} />
 

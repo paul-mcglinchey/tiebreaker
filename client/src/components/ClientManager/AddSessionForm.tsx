@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { sessionValidationSchema } from '../../schema';
 import { IClient, ITag } from '../../models';
-import { useClientService, useGroupService } from '../../hooks';
+import { useClientService } from '../../hooks';
 import { Button, CustomDate, StyledField, StyledTagField } from '..';
 
 const currentDate = new Date();
@@ -17,7 +17,6 @@ const AddSessionForm = ({ client }: IAddSessionProps) => {
   const [tags, setTags] = useState<ITag[]>([])
 
   const clientService = useClientService()
-  const { currentGroup } = useGroupService()
 
   return (
     <div className="flex flex-1">
@@ -30,7 +29,7 @@ const AddSessionForm = ({ client }: IAddSessionProps) => {
         }}
         validationSchema={sessionValidationSchema}
         onSubmit={(values, { resetForm }) => {
-          clientService.addSession({ ...values, tags: tags }, client._id, currentGroup?._id);
+          clientService.addSession(client._id, { ...values, tags: tags });
           resetForm();
         }}
       >

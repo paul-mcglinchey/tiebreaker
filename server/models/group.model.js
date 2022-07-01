@@ -14,24 +14,18 @@ const Group = mongoose.model(
     description: {
       type: String, required: false 
     },
+    applications: [String],
     users: [{
       user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
       },
-      permissions: {
-        type: Schema.Types.ObjectId,
-        ref: 'Permission'
-      },
+      permissions: [String],
       applications: [{
         application: {
-          type: Schema.Types.ObjectId,
-          ref: 'Application'
+          type: String
         },
-        permissions: [{
-          type: Schema.Types.ObjectId,
-          ref: 'Permission'
-        }]
+        permissions: [String]
       }]
     }],
     entities: {

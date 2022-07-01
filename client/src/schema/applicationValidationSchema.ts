@@ -9,7 +9,10 @@ const permissionValidationSchema = Yup.object().shape({
     .max(20, 'Too Long!')
     .required('Required'),
   description: Yup.string()
-    .max(100, 'Too Long!')
+    .max(2000, 'Too Long!'),
+  icon: Yup.string(),
+  url: Yup.string()
+    .required('Required')
 });
 
 export default permissionValidationSchema;

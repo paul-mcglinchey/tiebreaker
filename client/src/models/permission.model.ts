@@ -18,6 +18,7 @@ export interface IPermission {
   description?: string
   language?: string
   type?: PermissionType
+  application?: string
   audit?: {
     createdBy: string
     updatedBy: string

@@ -1,22 +1,19 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
-import { PlusIcon, SelectorIcon } from "@heroicons/react/solid";
+import { SelectorIcon } from "@heroicons/react/solid";
 import { generateColour } from "../../services";
 import { clientValidationSchema } from "../../schema";
-import { useClientService, useGroupService } from "../../hooks";
-import { IClient } from "../../models";
-import { CustomDate, StyledField, Button, AddressForm, FormSection } from "..";
+import { useClientService } from "../../hooks";
+import { IClient, IContextualFormProps } from "../../models";
+import { CustomDate, StyledField, AddressForm, FormSection } from "..";
 
 interface IClientFormProps {
   client?: IClient | undefined
-  submissionBar?: JSX.Element
-  additionalSubmissionActions?: (() => void)[]
 }
 
-const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: IClientFormProps) => {
+const ClientForm = ({ client, ContextualSubmissionButton }: IClientFormProps & IContextualFormProps) => {
 
-  const { currentGroup } = useGroupService()
   const clientService = useClientService();
 
   const [middleNamesRequired, setMiddleNamesRequired] = useState(false);
@@ -50,10 +47,8 @@ const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: ICli
         colour: generateColour()
       }}
       validationSchema={clientValidationSchema}
-      onSubmit={(values, actions) => {
-        client?._id ? clientService.updateClient(values, client._id, currentGroup?._id) : clientService.addClient(values, currentGroup?._id);
-        additionalSubmissionActions?.forEach(asa => asa())
-        actions.resetForm();
+      onSubmit={(values) => {
+        client?._id ? clientService.updateClient(client._id, values) : clientService.addClient(values);
       }}
     >
       {({ errors, touched }) => (
@@ -92,11 +87,7 @@ const ClientForm = ({ client, submissionBar, additionalSubmissionActions }: ICli
               <AddressForm errors={errors} touched={touched} />
             </Transition>
           </FormSection>
-          {submissionBar ? submissionBar : (
-            <div className="flex justify-end">
-              <Button content="Add employee" Icon={PlusIcon} />
-            </div>
-          )}
+          {ContextualSubmissionButton()}
         </Form>
       )}
     </Formik>

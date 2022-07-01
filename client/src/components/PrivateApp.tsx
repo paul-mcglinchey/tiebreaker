@@ -13,7 +13,7 @@ import {
   RotaPage,
   AppLoader
 } from "."
-import { GroupProvider, UserProvider } from "../contexts"
+import { GroupProvider, PermissionProvider, UserProvider } from "../contexts"
 
 const PrivateApp = () => {
 
@@ -31,7 +31,9 @@ const PrivateApp = () => {
                   <Dashboard />
                 } />
                 <Route path="/groups" element={
-                  <Groups />
+                  <PermissionProvider>
+                    <Groups />
+                  </PermissionProvider>
                 } />
 
                 {/* Client manager specific routes */}

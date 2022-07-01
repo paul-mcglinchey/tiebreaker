@@ -1,41 +1,38 @@
 import { Fragment } from "react"
-import { Listbox, Transition } from "@headlessui/react"
+import { Combobox, Transition } from "@headlessui/react"
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid"
 import { combineClassNames } from "../../services"
 
-interface IListboxSelectorItem {
+interface IComboboxMultiSelectorItem {
   label: string | undefined
   value: string | undefined
 }
 
-interface IListboxSelectorProps {
+interface IComboboxMultiSelectorProps {
   label: string
   showLabel?: boolean
-  items: IListboxSelectorItem[]
-  selected: IListboxSelectorItem | undefined
-  setSelected: (value: string) => void
+  items: IComboboxMultiSelectorItem[]
+  selected: IComboboxMultiSelectorItem[]
+  setSelected: (values: IComboboxMultiSelectorItem[]) => void
   classes?: string
   selectorClasses?: string
   optionsClasses?: string
 }
 
-const ListboxSelector = ({ label, showLabel = false, items, selected, setSelected, classes, selectorClasses, optionsClasses }: IListboxSelectorProps) => {
+const ComboboxMultiSelector = ({ items, selected, setSelected, optionsClasses }: IComboboxMultiSelectorProps) => {
   return (
-    <Listbox value={selected?.value} onChange={setSelected}>
-      <div className={combineClassNames("relative", classes)}>
-        {showLabel && <label className="block font-bold text-sm text-gray-500 mb-1 uppercase">{label}</label>}
-        <Listbox.Button className={combineClassNames(
-          "h-10 w-full relative py-2 pl-3 pr-10 text-left rounded focus:outline-none focus-visible:outline-blue-500 focus-visible:outline-1",
-          selectorClasses
-        )}>
-          <span className="block truncate font-semibold tracking-wider">{selected?.label || label}</span>
-          <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <SelectorIcon
-              className="h-5 w-5 dark:group-hover:text-blue-500 group-hover:text-blue-900 transition-colors"
-              aria-hidden="true"
-            />
-          </span>
-        </Listbox.Button>
+    <Combobox value={selected} onChange={setSelected} multiple>
+        <Combobox.Input
+          className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+          displayValue={(selected: IComboboxMultiSelectorItem[]) => selected.map(item => item.label).join(', ')}
+          onChange={() => {}}
+        />
+        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+          <SelectorIcon 
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
+        </Combobox.Button>
         <Transition
           as={Fragment}
           enter="transition ease-in duration-100"
@@ -45,24 +42,24 @@ const ListboxSelector = ({ label, showLabel = false, items, selected, setSelecte
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className={combineClassNames(
+          <Combobox.Options className={combineClassNames(
             "focus:outline-none absolute origin-top-right z-50 mt-1 overflow-auto rounded-md py-1 text-base ring-1 ring-black ring-opacity-5",
             "bg-gray-200 dark:bg-slate-800",
             optionsClasses
           )}>
             {items.map((item, index) => (
-              <Listbox.Option
+              <Combobox.Option
                 key={index}
                 className={({ active }) =>
                   `relative cursor-pointer select-none py-2 pl-10 pr-4 transition-all 
                   ${active && 'text-blue-500'}`
                 }
-                value={item.value}
+                value={item}
               >
                 {({ selected }) => (
                   <>
                     <span className={`block truncate font-semibold`}>
-                      {item.label}
+                      {item.label} {selected && 'SELECTED'}
                     </span>
                     {selected && (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
@@ -71,13 +68,12 @@ const ListboxSelector = ({ label, showLabel = false, items, selected, setSelecte
                     )}
                   </>
                 )}
-              </Listbox.Option>
+              </Combobox.Option>
             ))}
-          </Listbox.Options>
+          </Combobox.Options>
         </Transition>
-      </div>
-    </Listbox>
+    </Combobox>
   )
 }
 
-export default ListboxSelector
+export default ComboboxMultiSelector

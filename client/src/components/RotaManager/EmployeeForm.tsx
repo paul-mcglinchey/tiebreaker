@@ -3,25 +3,20 @@ import { Formik, Form } from "formik";
 import { Transition } from "@headlessui/react";
 import { useEmployeeService } from "../../hooks";
 import { employeeValidationSchema } from "../../schema";
-import { EmployeeRole, IEmployee } from "../../models";
-import { CustomDate, FormSection, Selector, StyledField, Button, AddressForm } from "../Common";
+import { IContextualFormProps, IEmployee } from "../../models";
+import { CustomDate, FormSection, Selector, StyledField, AddressForm, ListboxSelector } from "../Common";
 
-const FullEmployeeForm = () => {
+interface IEmployeeFormProps {
+  employee?: IEmployee | undefined
+}
+
+const EmployeeForm = ({ employee, ContextualSubmissionButton }: IEmployeeFormProps & IContextualFormProps) => {
 
   const [showAddress, setShowAddress] = useState(false);
   const [showRequirements, setShowRequirements] = useState(false);
 
   const toggleShowAddress = () => setShowAddress(!showAddress);
   const toggleShowRequirements = () => setShowRequirements(!showRequirements);
-
-  const getEmployeeRoleOptions = (): { value: string, label: string }[] => {
-    return Object.keys(EmployeeRole).map((er: string) => {
-      return {
-        value: er,
-        label: er
-      }
-    });
-  }
 
   const getEmployeeOptions = (employees: IEmployee[]): { value: string, label: any }[] => {
     return employees.map((e: IEmployee) => {
@@ -37,51 +32,69 @@ const FullEmployeeForm = () => {
     })
   }
 
-  const { getEmployees, addEmployee } = useEmployeeService()
-  const employees = getEmployees()
+  const { employees, getEmployee, addEmployee, updateEmployee } = useEmployeeService()
 
   return (
     <Formik
       initialValues={{
-        reportsTo: '',
-        employeeRole: '',
+        reportsTo: employee?.reportsTo || '',
+        role: employee?.role || '',
         name: {
-          firstName: '',
-          lastName: '',
-          middleNames: ''
+          firstName: employee?.name.firstName || '',
+          lastName: employee?.name.lastName || '',
+          middleNames: employee?.name.middleNames || ''
         },
         address: {
-          firstLine: '',
-          secondLine: '',
-          thirdLine: '',
-          city: '',
-          country: '',
-          postCode: ''
+          firstLine: employee?.address?.firstLine || '',
+          secondLine: employee?.address?.secondLine || '',
+          thirdLine: employee?.address?.thirdLine || '',
+          city: employee?.address?.city || '',
+          country: employee?.address?.country || '',
+          postCode: employee?.address?.postCode || ''
         },
         contactInfo: {
-          primaryPhoneNumber: '',
-          primaryEmail: '',
-          phoneNumbers: [],
-          emails: []
+          primaryPhoneNumber: employee?.contactInfo?.primaryPhoneNumber || '',
+          primaryEmail: employee?.contactInfo?.primaryEmail || '',
+          phoneNumbers: employee?.contactInfo?.phoneNumbers || [],
+          emails: employee?.contactInfo?.emails || []
         },
-        birthdate: '',
-        startDate: '',
-        minHours: '',
-        maxHours: '',
-        unavailableDays: [],
-        employeeColour: ''
+        birthdate: employee?.birthdate || '',
+        startDate: employee?.startDate || '',
+        minHours: employee?.minHours || '',
+        maxHours: employee?.maxHours || '',
+        unavailableDays: employee?.unavailableDays || [],
+        colour: employee?.colour || ''
       }}
       validationSchema={employeeValidationSchema}
       onSubmit={(values) => {
-        addEmployee(values);
+        employee ? updateEmployee(employee._id, values) : addEmployee(values);
       }}
     >
-      {({ errors, touched, setFieldValue }) => (
+      {({ errors, touched, values, setFieldValue }) => (
         <Form>
           <div className="flex flex-grow flex-col space-y-6 content-end">
             <FormSection title="Job description">
               <div className="flex space-x-4">
-                <Selector options={getEmployeeRoleOptions()} option={getEmployeeRoleOptions()[0]} setValue={(e) => setFieldValue('employeeRole', e)} label="Employee role" />
+                <ListboxSelector
+                  label="Employee Role"
+                  showLabel
+                  items={[{ label: 'Staff', value: 'Staff' }, { label: 'Manager', value: 'Manager' }]}
+                  selected={{ label: values.role, value: values.role }}
+                  setSelected={(value) => setFieldValue('role', value)}
+                  classes="col-span-2"
+                  selectorClasses="bg-gray-900"
+                  optionsClasses="w-full"
+                />
+                <ListboxSelector
+                  label="Reports To"
+                  showLabel
+                  items={employees.map(e => ({ label: e.fullName, value: e._id }))}
+                  selected={{ label: getEmployee(values.reportsTo)?.fullName, value: values.reportsTo }}
+                  setSelected={(value) => setFieldValue('role', value)}
+                  classes="col-span-2"
+                  selectorClasses="bg-gray-900"
+                  optionsClasses="w-full"
+                />
                 {employees && (
                   <Selector options={getEmployeeOptions(employees)} option={''} setValue={(e) => setFieldValue('reportsTo', e)} label="Reports to" />
                 )}
@@ -134,13 +147,11 @@ const FullEmployeeForm = () => {
               </Transition>
             </FormSection>
           </div>
-          <div className="flex justify-end my-10">
-            <Button content='Add Employee' />
-          </div>
+          {ContextualSubmissionButton()}
         </Form>
       )}
     </Formik>
   )
 }
 
-export default FullEmployeeForm;
+export default EmployeeForm;

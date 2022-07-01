@@ -1,18 +1,16 @@
-import { PlusIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
-import { useClientService, useGroupService } from "../../hooks";
+import { useClientService } from "../../hooks";
 import { clientValidationSchema } from "../../schema";
-import { Button, StyledField } from "..";
+import { StyledField } from "..";
+import { IClient, IContextualFormProps } from "../../models";
 
 interface ICompactClientFormProps {
-  submissionBar?: JSX.Element | undefined
-  additionalSubmissionActions?: (() => void)[]
+  client?: IClient | undefined
 }
 
-const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: ICompactClientFormProps) => {
+const CompactClientForm = ({ client, ContextualSubmissionButton }: ICompactClientFormProps & IContextualFormProps) => {
 
-  const { addClient } = useClientService()
-  const { currentGroup } = useGroupService()
+  const { addClient, updateClient } = useClientService()
 
   return (
     <Formik
@@ -26,11 +24,8 @@ const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: IComp
         }
       }}
       validationSchema={clientValidationSchema}
-      onSubmit={(values, actions) => {
-        addClient(values, currentGroup?._id)
-
-        additionalSubmissionActions?.forEach(asa => asa())
-        actions.resetForm();
+      onSubmit={(values) => {
+        client ? updateClient(client._id, values) : addClient(values)
       }}
     >
       {({ errors, touched }) => (
@@ -40,11 +35,7 @@ const CompactClientForm = ({ submissionBar, additionalSubmissionActions }: IComp
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
             <StyledField compact name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />
           </div>
-          {submissionBar ? submissionBar : (
-            <div className="self-end">
-              <Button content="Add Client" Icon={PlusIcon} />
-            </div>
-          )}
+          {ContextualSubmissionButton()}
         </Form>
       )}
     </Formik>

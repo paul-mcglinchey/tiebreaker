@@ -2,9 +2,10 @@ import { Dispatch, SetStateAction } from "react"
 import { IEmployee, SortDirection } from "."
 
 export interface IEmployeeContext {
-  getEmployees: () => IEmployee[]
+  employees: IEmployee[]
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>
-  getCount: () => number
+  count: number
+  setCount: Dispatch<SetStateAction<number>>
   sortField: string | undefined
   setSortField: Dispatch<SetStateAction<string | undefined>>
   sortDirection: SortDirection

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { useFormikContext } from "formik";
 import { ButtonType, IRota } from "../../models";
-import { useGroupService, useRotaService } from "../../hooks";
+import { useRotaService } from "../../hooks";
 import { Button, Dialog, Dropdown } from "../Common";
-import { EditRotaModal } from ".";
+import { RotaModal } from ".";
 
 interface IRotaHeaderProps {
   rota: IRota,
@@ -15,7 +15,6 @@ interface IRotaHeaderProps {
 
 const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
 
-  const { currentGroup } = useGroupService()
   const { updateRota, deleteRota } = useRotaService()
   const { handleSubmit, dirty } = useFormikContext()
 
@@ -28,7 +27,7 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
   }
 
   const updateLockedStatus = () => {
-    updateRota({ locked: !rota?.locked }, rota?._id, currentGroup?._id);
+    updateRota(rota?._id, { locked: !rota?.locked });
   }
 
   return (
@@ -59,11 +58,11 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
           { label: 'Delete', action: () => setDeletionOpen(true), Icon: TrashIcon },
         ]} />
       </div>
-      <EditRotaModal isOpen={editRotaOpen} close={() => setEditRotaOpen(false)} rota={rota} />
+      <RotaModal isOpen={editRotaOpen} close={() => setEditRotaOpen(false)} rota={rota} />
       <Dialog
         isOpen={deletionOpen} 
         close={() => setDeletionOpen(false)} 
-        positiveActions={[() => deleteRota(rota._id, currentGroup?._id)]}
+        positiveActions={[() => deleteRota(rota._id)]}
         title="Delete rota"
         description="This action will delete the rota from the current group"
         content="If you choose to continue you'll no longer have access to this rota or any of the schedules belonging to it"

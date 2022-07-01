@@ -18,12 +18,11 @@ interface IClientListProps {
 
 const ClientList = ({ setAddClientOpen }: IClientListProps) => {
 
-  const { getClients, getCount, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
-  const clients = getClients()
+  const { clients, count, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
 
   return (
     <div className="rounded-lg flex flex-col space-y-0 pb-2">
-      {getCount() > 0 ? (
+      {count > 0 ? (
         <Fragment>
           <div className="flex flex-col flex-grow space-y-4">
             <SearchBar
@@ -40,7 +39,7 @@ const ClientList = ({ setAddClientOpen }: IClientListProps) => {
               </Table.Body>
             </Table>
           </div>
-          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={getCount()} />
+          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={count} />
         </Fragment>
       ) : (
         !isLoading && (

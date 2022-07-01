@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import { FetchError, SpinnerIcon, Toolbar } from "../Common";
 import { useEmployeeService, useGroupService } from "../../hooks";
-import { AddGroupModal, GroupPrompter } from "../Groups";
-import { AddEmployeeModal, EmployeeList } from ".";
+import { GroupModal, GroupPrompter } from "../Groups";
+import { EmployeeModal, EmployeeList } from ".";
 
 const EmployeeDashboard = () => {
   const { isAddEmployeeOpen } = useParams();
@@ -35,8 +35,8 @@ const EmployeeDashboard = () => {
         )
       )}
       <>
-        <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
-        <AddEmployeeModal isOpen={addEmployeeOpen} close={() => setAddEmployeeOpen(false)} />
+        <GroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+        <EmployeeModal isOpen={addEmployeeOpen} close={() => setAddEmployeeOpen(false)} />
       </>
     </>
   )

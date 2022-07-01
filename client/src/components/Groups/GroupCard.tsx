@@ -3,7 +3,7 @@ import { TrashIcon, DotsVerticalIcon, PencilIcon } from '@heroicons/react/solid'
 import { IGroup } from '../../models';
 import { useGroupService } from '../../hooks';
 import { Dialog, SquareIconButton } from '../Common';
-import { EditGroupModal } from '.';
+import { GroupModal } from '.';
 
 interface IGroupProps {
   g: IGroup,
@@ -43,7 +43,7 @@ const GroupCard = ({ g, render }: IGroupProps) => {
           </div>
         </div>
       </div>
-      <EditGroupModal isOpen={editGroupOpen} close={() => setEditGroupOpen(false)} group={g} />
+      <GroupModal isOpen={editGroupOpen} close={() => setEditGroupOpen(false)} group={g} />
       <Dialog 
         isOpen={deleteGroupOpen} 
         close={() => setDeleteGroupOpen(false)}

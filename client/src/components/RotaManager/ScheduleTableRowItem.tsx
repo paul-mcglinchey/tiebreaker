@@ -65,35 +65,37 @@ const ScheduleTableRowItem = ({ values, day, employeeIndex, index, editing }: IS
         isOpen={editShiftOpen}
         close={() => setEditShiftOpen(false)}
       >
-        <div className="flex flex-col space-y-4">
-          <div className="flex space-x-4">
+        {() => (
+          <div className="flex flex-col space-y-4">
+            <div className="flex space-x-4">
+              <StyledField
+                label="Start hour"
+                classes="uppercase"
+                noAutocomplete
+                name={`employeeSchedules.${employeeIndex}.shifts.${index}.startHour`}
+                errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.startHour`)}
+                touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.startHour`)}
+              />
+              <StyledField
+                label="Start hour"
+                classes="uppercase"
+                noAutocomplete
+                name={`employeeSchedules.${employeeIndex}.shifts.${index}.endHour`}
+                errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.endHour`)}
+                touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.endHour`)}
+              />
+            </div>
             <StyledField
-              label="Start hour"
-              classes="uppercase"
-              noAutocomplete
-              name={`employeeSchedules.${employeeIndex}.shifts.${index}.startHour`}
-              errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.startHour`)}
-              touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.startHour`)}
+              label="Notes"
+              name={`employeeSchedules.${employeeIndex}.shifts.${index}.notes`}
+              errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.notes`)}
+              touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.notes`)}
             />
-            <StyledField
-              label="Start hour"
-              classes="uppercase"
-              noAutocomplete
-              name={`employeeSchedules.${employeeIndex}.shifts.${index}.endHour`}
-              errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.endHour`)}
-              touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.endHour`)}
-            />
+            <div className="flex justify-end">
+              <Button type="button" content="Edit" action={() => setEditShiftOpen(false)} />
+            </div>
           </div>
-          <StyledField
-            label="Notes"
-            name={`employeeSchedules.${employeeIndex}.shifts.${index}.notes`}
-            errors={getIn(errors, `employeeSchedules.${employeeIndex}.shifts.${index}.notes`)}
-            touched={getIn(touched, `employeeSchedules.${employeeIndex}.shifts.${index}.notes`)}
-          />
-          <div className="flex justify-end">
-            <Button type="button" content="Edit" action={() => setEditShiftOpen(false)} />
-          </div>
-        </div>
+        )}
       </Modal>
     </>
   )

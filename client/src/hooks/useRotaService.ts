@@ -3,29 +3,31 @@ import { IEmployee, IRota, IRotaService } from "../models"
 import { RotaContext } from "../contexts"
 import { endpoints } from "../config"
 import { useNavigate } from "react-router"
-import { useAsyncHandler, useResolutionService, useEmployeeService, useRequestBuilder } from '.'
+import { useAsyncHandler, useResolutionService, useEmployeeService, useRequestBuilder, useGroupService } from '.'
 
 const useRotaService = (): IRotaService => {
   
+  const navigate = useNavigate();
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
-  const navigate = useNavigate();
-  
+  const { currentGroup } = useGroupService()
+  const groupId: string | undefined = currentGroup?._id
+
   const rotaContext = useContext(RotaContext)
   const { getRotas, setRotas } = rotaContext
 
-  const { getEmployees } = useEmployeeService()
+  const { employees } = useEmployeeService()
 
   const getRota = (rotaId: string | undefined): IRota | undefined => {
     return getRotas().filter((rota: IRota) => rota._id === rotaId)[0]
   }
 
   const getRotaEmployees = (rota: IRota | undefined): IEmployee[] => {
-    return rota ? getEmployees().filter((employee: IEmployee) => rota.employees?.includes(employee._id || "")) : []
+    return rota ? employees.filter((employee: IEmployee) => rota.employees?.includes(employee._id || "")) : []
   }
 
-  const addRota = asyncHandler(async (values: IRota, groupId: string | undefined) => {
+  const addRota = asyncHandler(async (values: IRota) => {
     if (!groupId) throw new Error()
 
     const res = await fetch(endpoints.rotas(groupId), requestBuilder('POST', undefined, values))
@@ -34,7 +36,7 @@ const useRotaService = (): IRotaService => {
     handleResolution(res, json, 'create', 'rota', [() => addRotaInContext(json)])
   })
 
-  const updateRota = asyncHandler(async (values: IRota, rotaId: string | undefined, groupId: string | undefined) => {    
+  const updateRota = asyncHandler(async (rotaId: string | undefined, values: IRota) => {    
     if (!rotaId || !groupId) throw new Error();
 
     const res = await fetch(endpoints.rota(rotaId, groupId), requestBuilder('PUT', undefined, values))
@@ -43,7 +45,7 @@ const useRotaService = (): IRotaService => {
     handleResolution(res, json, 'update', 'rota', [() => updateRotaInContext(rotaId, json)])
   })
 
-  const deleteRota = asyncHandler(async (rotaId: string | undefined, groupId: string | undefined) => {
+  const deleteRota = asyncHandler(async (rotaId: string | undefined) => {
     if (!rotaId || !groupId) throw new Error()
 
     const res = await fetch(endpoints.rota(rotaId, groupId), requestBuilder("DELETE"))

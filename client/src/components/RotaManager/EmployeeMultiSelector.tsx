@@ -26,8 +26,7 @@ const EmployeeMultiSelector = ({ formValues, setFieldValue, fieldName = 'employe
   const [showAll, setShowAll] = useState<boolean>(false)
   const toggleShowAll = () => setShowAll(!showAll)
 
-  const { getEmployee, getEmployees } = useEmployeeService()
-  const employees = getEmployees()
+  const { getEmployee, employees } = useEmployeeService()
 
   return (
     <div className="flex flex-col space-y-2">

@@ -2,8 +2,10 @@ import { Dispatch, SetStateAction } from "react"
 import { IClient, SortDirection, IFilter } from "."
 
 export interface IClientContext {
-  getClients: () => IClient[]
-  getCount: () => number
+  clients: IClient[]
+  setClients: Dispatch<SetStateAction<IClient[]>>
+  count: number
+  setCount: Dispatch<SetStateAction<number>>
   sortField: string | undefined
   setSortField: (sortField: string | undefined) => void
   sortDirection: SortDirection

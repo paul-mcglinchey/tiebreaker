@@ -3,6 +3,10 @@ import { endpoints } from "../config";
 import { useAsyncHandler, useGroupService, useIsMounted, useRequestBuilder } from "../hooks";
 import { IChildrenProps, IUser, IUserContext, IUsersResponse } from "../models";
 
+interface IUserProviderProps {
+  groupId?: string | undefined
+}
+
 export const UserContext = createContext<IUserContext>({
   users: [],
   setUsers: () => {},
@@ -14,7 +18,7 @@ export const UserContext = createContext<IUserContext>({
   setError: () => {}
 });
 
-export const UserProvider = ({ children }: IChildrenProps) => {
+export const UserProvider = ({ groupId, children }: IUserProviderProps & IChildrenProps) => {
   const [users, setUsers] = useState<IUser[]>([])
   const [count, setCount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -39,8 +43,8 @@ export const UserProvider = ({ children }: IChildrenProps) => {
   })
 
   useEffect(() => {
-    isMounted() && currentGroup && fetchUsers(currentGroup._id)
-  }, [currentGroup])
+    isMounted() && currentGroup && fetchUsers(groupId || currentGroup._id)
+  }, [currentGroup, groupId])
 
   const contextValue = {
     users,

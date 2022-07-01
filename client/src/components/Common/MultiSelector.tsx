@@ -45,7 +45,7 @@ const MultiSelector = <TValue extends unknown>({ fieldName, values, totalValuesL
               </button>
             ))}
           </div>
-          <div className="text-right tracking-wide font-semibold text-gray-300">
+          <div className="text-right tracking-wide font-semibold text-gray-300 mt-2">
             Showing {values.length} of {totalValuesLength}
             {values.length < totalValuesLength && (
               <button type="button" className="tracking-wide font-semibold" onClick={() => toggleShowAll()}> - show all</button>

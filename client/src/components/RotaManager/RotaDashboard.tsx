@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
 import { useGroupService } from '../../hooks';
 import { FetchError, Toolbar, SpinnerLoader } from '../Common';
-import { AddGroupModal, GroupPrompter } from '../Groups';
-import { AddRotaModal, RotaList } from '.';
+import { GroupModal, GroupPrompter } from '../Groups';
+import { RotaModal, RotaList } from '.';
 
 const RotaDashboard = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false);
@@ -28,8 +28,8 @@ const RotaDashboard = () => {
           <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
         )
       )}
-      <AddGroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
-      <AddRotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />
+      <GroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+      <RotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />
     </>
   )
 }

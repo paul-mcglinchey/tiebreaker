@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse, SortDirection, IEmployeeContext } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
@@ -8,9 +8,10 @@ interface IEmployeeProviderProps extends IChildrenProps {
 }
 
 export const EmployeeContext = createContext<IEmployeeContext>({
-  getEmployees: () => [],
+  employees: [],
   setEmployees: () => {},
-  getCount: () => 0,
+  count: 0,
+  setCount: () => {},
   sortField: undefined,
   setSortField: () => {},
   sortDirection: SortDirection.Desc,
@@ -41,9 +42,10 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
   }, [response])
 
   const contextValue = {
-    getEmployees: useCallback(() => employees, [employees]),
+    employees,
     setEmployees,
-    getCount: useCallback(() => count, [count]),
+    count,
+    setCount,
     sortField,
     setSortField,
     sortDirection,

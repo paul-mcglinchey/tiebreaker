@@ -18,7 +18,8 @@ module.exports = {
         red: colors.rose,
         green: colors.emerald,
         blue: colors.sky,
-        amber: colors.amber
+        amber: colors.amber,
+        slate: colors.slate
       },
       minHeight: {
         '96': '40rem'

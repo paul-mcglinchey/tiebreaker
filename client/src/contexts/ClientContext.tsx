@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IClient, IClientsResponse, SortDirection, IClientContext, IFilter } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
@@ -9,8 +9,10 @@ interface IClientProviderProps extends IChildrenProps {
 }
 
 export const ClientContext = createContext<IClientContext>({
-  getClients: () => [],
-  getCount: () => 0,
+  clients: [],
+  setClients: () => {},
+  count: 0,
+  setCount: () => {},
   sortField: undefined,
   setSortField: () => {},
   sortDirection: SortDirection.Desc,
@@ -58,11 +60,8 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
   const { currentGroup, refresh: groupRefresh } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
   const { refresh, dependency } = useRefresh([groupRefresh])
-  const { 
-    response, 
-    isLoading,
-    error 
-  }: IFetch<IClientsResponse> = useFetch(
+  const { response, isLoading, error }: IFetch<IClientsResponse> = useFetch
+  (
     `${endpoints.clients(currentGroup?._id || "", includeDeleted)}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
     requestBuilder(), 
     [dependency, sortField, sortDirection, pageSize, pageNumber, currentGroup]
@@ -84,8 +83,10 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
   }, [pageSize])
 
   const contextValue = {
-    getClients: useCallback(() => clients, [clients]),
-    getCount: useCallback(() => count, [count]),
+    clients,
+    setClients,
+    count,
+    setCount,
     sortField,
     setSortField,
     sortDirection,

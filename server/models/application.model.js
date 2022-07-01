@@ -21,6 +21,7 @@ const Application = mongoose.model(
     url: {
       type: String, required: true
     },
+    requiredPermissions: [String],
     audit: AuditSchema
   }, { timestamps: true })
 );

@@ -1,8 +1,6 @@
-import { EmployeeRole } from ".";
-
 export interface IEmployee {
   _id?: string,
-  role?: EmployeeRole,
+  role?: string,
   reportsTo?: string,
   name: {
     firstName: string,

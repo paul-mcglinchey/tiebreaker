@@ -1,15 +1,16 @@
-import { PlusIcon } from "@heroicons/react/solid"
 import { Form, Formik } from "formik"
-import { IEmployee } from "../../models"
+import { useEmployeeService } from "../../hooks";
+import { IContextualFormProps, IEmployee } from "../../models"
 import { employeeValidationSchema } from "../../schema"
-import { Button, StyledField } from "../Common";
+import { StyledField } from "../Common";
 
 interface ICompactEmployeeFormProps {
-  handleSubmit: (values: IEmployee) => void
-  submissionBar: JSX.Element | undefined
+  employee?: IEmployee | undefined
 }
 
-const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFormProps) => {
+const CompactEmployeeForm = ({ employee, ContextualSubmissionButton }: ICompactEmployeeFormProps & IContextualFormProps) => {
+
+  const { addEmployee, updateEmployee } = useEmployeeService()
 
   return (
     <Formik
@@ -23,9 +24,8 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
         }
       }}
       validationSchema={employeeValidationSchema}
-      onSubmit={(values, actions) => {
-        handleSubmit(values);
-        actions.resetForm();
+      onSubmit={(values) => {
+        employee ? updateEmployee(employee._id, values) : addEmployee(values)
       }}
     >
       {({ errors, touched }) => (
@@ -35,11 +35,7 @@ const CompactEmployeeForm = ({ handleSubmit, submissionBar }: ICompactEmployeeFo
             <StyledField compact name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
             <StyledField compact name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />
           </div>
-          {submissionBar ? submissionBar : (
-            <div className="self-end">
-              <Button content="Add employee" Icon={PlusIcon} />
-            </div>
-          )}
+          {ContextualSubmissionButton()}
         </Form>
       )}
     </Formik>

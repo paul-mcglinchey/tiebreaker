@@ -16,7 +16,7 @@ const FormSection = ({ children, title, state, setState, showExpander, expanded,
   return (
     <div className="flex flex-col">
       <div className="mb-2">
-        <div className="flex justify-between items-center px-2 pb-2 text-gray-400">
+        <div className="flex justify-between items-center px-2 pb-2">
           <h3 className="text-2xl font-semibold tracking-wide">{title}</h3>
           {typeof state === "boolean" && typeof setState === "function" && (
             <Switch enabled={state} setEnabled={() => setState(true)} description="" />

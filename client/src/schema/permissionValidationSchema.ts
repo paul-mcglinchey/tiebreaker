@@ -6,10 +6,10 @@ const permissionValidationSchema = Yup.object().shape({
     .required('Required'),
   name: Yup.string()
     .min(4, 'Too Short!')
-    .max(20, 'Too Long!')
+    .max(50, 'Too Long!')
     .required('Required'),
   description: Yup.string()
-    .max(1000, 'Too Long!')
+    .max(2000, 'Too Long!')
     .required('Required'),
   language: Yup.string()
     .required('Required')

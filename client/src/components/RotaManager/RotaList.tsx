@@ -2,8 +2,8 @@ import { memo, useEffect, useState } from 'react';
 import { TableIcon } from '@heroicons/react/solid';
 import { useRotaService } from '../../hooks';
 import { IRota } from '../../models';
-import { Modal, Prompter, SpinnerLoader, Table } from '../Common';
-import { RotaForm, RotaTableRow } from '.';
+import { Prompter, SpinnerLoader, Table } from '../Common';
+import { RotaModal, RotaTableRow } from '.';
 
 const headers = [
   { name: "Rota name", value: "name", interactive: true },
@@ -49,9 +49,7 @@ const RotaList = () => {
           )
         )}
       </div>
-      <Modal title="Add rota" description="You can use this dialog to create a new rota" isOpen={addRotaOpen} close={() => setAddRotaOpen(false)}>
-        <RotaForm />
-      </Modal>
+      <RotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />
     </>
   )
 }

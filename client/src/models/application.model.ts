@@ -7,6 +7,7 @@ export interface IApplication {
   description?: string
   icon?: string
   url?: string
+  requiredPermissions?: string[]
   audit?: IAudit
 }
 

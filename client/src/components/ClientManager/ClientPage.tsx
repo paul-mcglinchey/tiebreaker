@@ -1,42 +1,33 @@
-import { Fragment } from "react";
-import { 
+import {
   Navigate,
-  Route, 
-  Routes, 
-  useParams 
+  Route,
+  Routes,
+  useParams
 } from "react-router";
-import { AddSession, ClientHeader, EditClient, ViewClient, ClientOverview } from ".";
-import { useFetch, useGroupService, useRequestBuilder } from "../../hooks";
-import { IClient, IFetch } from "../../models";
-import { endpoints } from "../../config";
-import { Fetch } from "..";
+import { AddSession, ClientHeader, ViewClient, ClientOverview } from ".";
+import { useClientService } from "../../hooks";
 
 const ClientPage = () => {
 
   const { clientId } = useParams()
-  const { currentGroup } = useGroupService()
-  const { requestBuilder } = useRequestBuilder()
+  const { getClient } = useClientService()
+
+  const client = getClient(clientId)
 
   return (
-    <Fetch
-      fetchOutput={useFetch(endpoints.client(clientId || "", currentGroup?._id || ""), requestBuilder(), [])}
-      render={({ response: client }: IFetch<IClient>) => (
-        <Fragment>
-          {client && (
-            <div className="flex flex-col">
-              <ClientHeader client={client} />
-              <Routes>
-                <Route path="overview" element={<ClientOverview client={client} />} />
-                <Route path="view" element={<ViewClient />} />
-                <Route path="edit" element={<EditClient />} />
-                <Route path="addsession" element={<AddSession client={client} />} />
-                <Route path="**" element={<Navigate to="overview" />} />
-              </Routes>
-            </div>
-          )}
-        </Fragment>
+    <>
+      {client && (
+        <div className="flex flex-col">
+          <ClientHeader client={client} />
+          <Routes>
+            <Route path="overview" element={<ClientOverview client={client} />} />
+            <Route path="view" element={<ViewClient />} />
+            <Route path="addsession" element={<AddSession client={client} />} />
+            <Route path="**" element={<Navigate to="overview" />} />
+          </Routes>
+        </div>
       )}
-    />
+    </>
   )
 }
 

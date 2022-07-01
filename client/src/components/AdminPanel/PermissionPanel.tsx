@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { usePermissionService } from '../../hooks'
 import { ButtonType } from '../../models'
-import { Button, Modal, Table } from '../Common'
-import { Panel, PermissionTableRow, PermissionForm } from '.'
+import { Button, Table } from '../Common'
+import { Panel, PermissionTableRow, PermissionModal } from '.'
 import { PlusIcon } from '@heroicons/react/solid'
 
 const PermissionPanel = () => {
 
   const { permissions, count, isLoading } = usePermissionService()
 
-  const [addPermissionModalOpen, setAddPermissionModalOpen] = useState<boolean>(false)
+  const [addPermissionOpen, setAddPermissionOpen] = useState<boolean>(false)
 
   const headers = [
     { name: 'Identifier', value: 'identifier', interactive: true },
@@ -17,6 +17,7 @@ const PermissionPanel = () => {
     { name: 'Description', value: 'description', interactive: true },
     { name: 'Language', value: 'language', interactive: true },
     { name: 'Type', value: 'type', interactive: false },
+    { name: 'Application', value: 'application', interactive: false },
     { name: 'options', value: '', interactive: false },
   ]
 
@@ -28,7 +29,7 @@ const PermissionPanel = () => {
           subtitle={`Number of permissions: ${count}`}
           hideSave
           HeaderActions={
-            <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} action={() => setAddPermissionModalOpen(true)} />
+            <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} action={() => setAddPermissionOpen(true)} />
           }
         >
           <Table
@@ -43,14 +44,10 @@ const PermissionPanel = () => {
           </Table>
         </Panel>
       )}
-      <Modal
-        title="Add permission"
-        description="This dialog can be used to create a new permission"
-        isOpen={addPermissionModalOpen}
-        close={() => setAddPermissionModalOpen(false)}
-      >
-        <PermissionForm />
-      </Modal>
+      <PermissionModal 
+        isOpen={addPermissionOpen}
+        close={() => setAddPermissionOpen(false)}
+      />
     </>
   )
 }

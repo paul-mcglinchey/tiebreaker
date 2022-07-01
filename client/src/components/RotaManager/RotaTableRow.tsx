@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRotaService, useUserService } from '../../hooks';
 import { ButtonType, IRota } from '../../models';
 import { Button, InlineLink, TableRow, TableRowItem } from '../Common';
-import { EditRotaEmployeesModal } from '.';
+import { RotaEmployeesModal } from '.';
 
 const RotaTableRow = ({ rota }: { rota: IRota }) => {
 
@@ -36,7 +36,7 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
             content={employees.length > 0 ? `${employees.length} employees` : 'Add employees'}
             action={() => setEditRotaEmployeesOpen(true)}
           />
-          <EditRotaEmployeesModal rota={rota} isOpen={editRotaEmployeesOpen} close={() => setEditRotaEmployeesOpen(false)} />
+          <RotaEmployeesModal rota={rota} isOpen={editRotaEmployeesOpen} close={() => setEditRotaEmployeesOpen(false)} />
         </div>
       </TableRowItem>
       <TableRowItem>

@@ -1,20 +1,18 @@
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
-import { useEmployeeService, useGroupService, useRotaService } from '../../hooks';
-import { IListValue, IRota } from '../../models';
+import { useEmployeeService, useRotaService } from '../../hooks';
+import { IContextualFormProps, IListValue, IRota } from '../../models';
 import { rotaValidationSchema } from '../../schema';
 import { generateColour } from '../../services';
-import { Button, StyledField, FormSection } from '../Common';
-import { EmployeeMultiSelector, AddEmployeeModal } from '.';
+import { StyledField, FormSection } from '../Common';
+import { EmployeeMultiSelector, EmployeeModal } from '.';
 
 interface IRotaFormProps {
-  rota?: IRota | undefined,
-  submitButton?: JSX.Element;
-  additionalSubmissionActions?: (() => void)[]
+  rota?: IRota | undefined
 }
 
-const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaFormProps) => {
+const RotaForm = ({ rota, ContextualSubmissionButton }: IRotaFormProps & IContextualFormProps) => {
 
   const [addEmployeesOpen, setAddEmployeesOpen] = useState(false)
 
@@ -30,11 +28,9 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
     colour: generateColour()
   }]
 
-  const { currentGroup } = useGroupService()
   const { addRota, updateRota } = useRotaService()
 
-  const { getEmployees } = useEmployeeService()
-  const employees = getEmployees()
+  const { employees } = useEmployeeService()
 
   return (
     <>
@@ -48,11 +44,8 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
           checked: false
         }}
         validationSchema={rotaValidationSchema}
-        onSubmit={(values, actions) => {
-          rota?._id ? updateRota(values, rota?._id, currentGroup?._id) : addRota(values, currentGroup?._id)
-
-          additionalSubmissionActions?.forEach(asa => asa())
-          actions.resetForm();
+        onSubmit={(values) => {
+          rota?._id ? updateRota(rota?._id, values) : addRota(values)
         }}
       >
         {({ values, errors, touched, setFieldValue }) => (
@@ -80,12 +73,12 @@ const RotaForm = ({ rota, submitButton, additionalSubmissionActions }: IRotaForm
                 <span>Add employees</span>
                 <ExternalLinkIcon className="w-5 h-5" />
               </button>
-              {submitButton ? submitButton : <Button content='Add rota' />}
+              {ContextualSubmissionButton()}
             </div>
           </Form>
         )}
       </Formik>
-      <AddEmployeeModal isOpen={addEmployeesOpen} close={() => setAddEmployeesOpen(false)} level={2} />
+      <EmployeeModal isOpen={addEmployeesOpen} close={() => setAddEmployeesOpen(false)} level={2} />
     </>
   )
 }
