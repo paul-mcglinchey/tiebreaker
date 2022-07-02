@@ -21,6 +21,7 @@ export { default as AddressForm } from './AddressForm'
 export { default as MultiSelector } from './MultiSelector'
 export { default as ComboboxMultiSelector } from './ComboboxMultiSelector'
 export { default as ListboxSelector } from './ListboxSelector'
+export { default as ListboxMultiSelector } from './ListboxMultiSelector'
 
 export { default as WideIcon } from './WideIcon'
 export { default as SpinnerIcon } from './SpinnerIcon'

@@ -2,7 +2,7 @@ import { Form, Formik } from "formik"
 import { useApplicationService, usePermissionService } from "../../hooks"
 import { IApplication, IContextualFormProps } from "../../models"
 import { applicationValidationSchema } from "../../schema"
-import { ComboboxMultiSelector, StyledField } from "../Common"
+import { ListboxMultiSelector, StyledField } from "../Common"
 
 interface IApplicationFormProps {
   application?: IApplication | undefined
@@ -11,7 +11,6 @@ interface IApplicationFormProps {
 export const ApplicationForm = ({ application, ContextualSubmissionButton }: IApplicationFormProps & IContextualFormProps) => {
 
   const { updateApplication, addApplication } = useApplicationService()
-  const { permissions, getPermission } = usePermissionService()
 
   return (
     <Formik
@@ -30,7 +29,7 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
       }}
       validationSchema={applicationValidationSchema}
     >
-      {({ errors, touched, values, setFieldValue, isValid }) => (
+      {({ errors, touched, isValid, values, setFieldValue }) => (
         <Form className="flex flex-col space-y-4">
           <div className="grid grid-cols-3 gap-2">
             <StyledField name='identifier' label="Identifier" type="number" classes="col-span-1" errors={errors.identifier} touched={touched.identifier} />
@@ -39,11 +38,10 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
             <StyledField name='icon' label="Icon URL" errors={errors.icon} classes="col-span-3" touched={touched.icon} />
             <StyledField name='url' label="URL/Route" errors={errors.url} classes="col-span-3" touched={touched.url} />
           </div>
-          <ComboboxMultiSelector 
+          <ListboxMultiSelector
             label="Required permissions"
-            items={permissions.map(p => ({ label: p.name, value: p.identifier }))}
-            selected={values.requiredPermissions.map(rp => ({ label: getPermission(rp)?.name, value: rp }))}
-            setSelected={values => setFieldValue('requiredPermissions', values.map(v => v.value))}
+            selectedPermissions={values.requiredPermissions}
+            onChange={values => setFieldValue('requiredPermissions', values.map(v => v.identifier))}
           />
           {ContextualSubmissionButton(application ? 'Update application' : 'Add application', undefined, isValid)}
         </Form>
