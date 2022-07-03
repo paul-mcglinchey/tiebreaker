@@ -50,9 +50,7 @@ exports.create = asyncHandler(async (req, res) => {
 
 // Update an employee
 exports.update = asyncHandler(async (req, res) => {
-  const { employeeId } = req.params;
-  
-  const employee = Employee.findByIdAndUpdate(employeeId, {
+  const employee = await Employee.findByIdAndUpdate(req.params.employeeId, {
     ...req.body,
     'audit.updatedBy': req.auth._id
   });

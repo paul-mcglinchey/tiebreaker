@@ -4,7 +4,6 @@ import { IGroup } from "../../models";
 import { dashboardLinks } from "../../config";
 import { Toolbar, NavMenu, SpinnerIcon } from "../Common";
 import { GroupCard, DataPoint, GroupPrompter, GroupModal } from ".";
-import { UserProvider } from "../../contexts";
 
 const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
@@ -24,26 +23,25 @@ const Groups = () => {
           groups.length > 0 ? (
             <div className="flex grow flex-col md:flex-row flex-wrap -m-2 mb-2">
               {groups.map((g: IGroup, i: number) => (
-                <UserProvider key={i} groupId={g._id}>
-                  <GroupCard
-                    g={g}
-                    render={isCardFlipped => (
-                      <div className="flex flex-col grow md:flex-row space-y-2 md:space-y-0 md:space-x-8">
-                        {isCardFlipped ? (
-                          <>
-                            <DataPoint value={g.entities?.users?.length || 0} label="user" />
-                          </>
-                        ) : (
-                          <>
-                            <DataPoint value={g.entities?.clients?.length} label="client" />
-                            <DataPoint value={g.entities?.employees?.length} label="employee" />
-                            <DataPoint value={g.entities?.rotas?.length} label="rota" />
-                          </>
-                        )}
-                      </div>
-                    )}
-                  />
-                </UserProvider>
+                <GroupCard
+                  key={i}
+                  g={g}
+                  render={isCardFlipped => (
+                    <div className="flex flex-col grow md:flex-row space-y-2 md:space-y-0 md:space-x-8">
+                      {isCardFlipped ? (
+                        <>
+                          <DataPoint value={g.entities?.users?.length || 0} label="user" />
+                        </>
+                      ) : (
+                        <>
+                          <DataPoint value={g.entities?.clients?.length} label="client" />
+                          <DataPoint value={g.entities?.employees?.length} label="employee" />
+                          <DataPoint value={g.entities?.rotas?.length} label="rota" />
+                        </>
+                      )}
+                    </div>
+                  )}
+                />
               ))}
             </div>
           ) : (

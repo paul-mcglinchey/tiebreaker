@@ -12,8 +12,8 @@ const usePermissionService = (): IPermissionService => {
   const permissionContext = useContext(PermissionContext)
   const { permissions, setPermissions } = permissionContext
 
-  const getPermission = (permissionIdentifier: string | undefined): IPermission | undefined => {
-    return permissions.find(p => p.identifier?.toString() === permissionIdentifier?.toString())
+  const getPermission = (permissionIdentifier: number | undefined): IPermission | undefined => {
+    return permissions.find(p => p.identifier === permissionIdentifier)
   }
 
   const addPermission = asyncHandler(async (values: IPermission) => {

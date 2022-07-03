@@ -4,17 +4,18 @@ import { combineClassNames } from "../../services";
 import { SquareIconButton, Switch } from ".";
 
 interface IFormSectionProps extends IChildrenProps {
-  title: string,
-  state?: boolean,
-  setState?: (state: boolean) => void,
-  showExpander?: boolean,
+  title: string
+  classes?: string
+  state?: boolean
+  setState?: (state: boolean) => void
+  showExpander?: boolean
   expanded?: boolean
   expanderAction?: () => void
 }
 
-const FormSection = ({ children, title, state, setState, showExpander, expanded, expanderAction }: IFormSectionProps) => {
+const FormSection = ({ children, title, classes, state, setState, showExpander, expanded, expanderAction }: IFormSectionProps) => {
   return (
-    <div className="flex flex-col">
+    <div className={combineClassNames("flex flex-col", classes)}>
       <div className="mb-2">
         <div className="flex justify-between items-center px-2 pb-2">
           <h3 className="text-2xl font-semibold tracking-wide">{title}</h3>

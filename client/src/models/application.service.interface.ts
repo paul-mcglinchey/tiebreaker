@@ -1,7 +1,7 @@
 import { IApplication, IApplicationContext } from ".";
 
 export interface IApplicationService extends IApplicationContext {
-  getApplication: (identifier: string | undefined) => IApplication | undefined
+  getApplication: (identifier: number | undefined) => IApplication | undefined
   addApplication     : (
     values: IApplication
   ) => void

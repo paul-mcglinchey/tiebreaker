@@ -1,19 +1,21 @@
 
 import { useGroupService } from "../../hooks";
 import { ListboxSelector } from ".";
+import { IGroup } from "../../models";
 
 const GroupSelector = () => {
-  const { groups, getGroup, currentGroup, setCurrentGroup } = useGroupService()
+  const { groups, currentGroup, setCurrentGroup } = useGroupService()
 
   return (
-    <div className="flex flex-grow items-center justify-end">
-      <ListboxSelector
+    <div className="flex flex-grow items-center justify-end min-w-">
+      <ListboxSelector<IGroup>
         label="Groups"
-        items={groups.map(g => ({ value: g._id, label: g.name }))} 
-        selected={{ value: currentGroup?._id, label: currentGroup?.name }} 
-        setSelected={(groupId) => setCurrentGroup(getGroup(groupId))}
-        selectorClasses="bg-transparent shadow-none group"
-        optionsClasses="text-gray-800 dark:text-gray-200"
+        items={groups} 
+        initialSelected={currentGroup}
+        labelFieldName="name"
+        buttonClasses="bg-transparent shadow-none group"
+        optionsClasses="min-w-max text-gray-800 dark:text-gray-200"
+        onUpdate={(group) => setCurrentGroup(group)}
       />
     </div>
   )

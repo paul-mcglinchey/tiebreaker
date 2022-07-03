@@ -8,17 +8,17 @@ export interface IPermissionGroup {
 }
 
 export enum PermissionType {
-  Group = 'Group',
-  Application = 'Application'
+  Group = 1,
+  Application = 2
 }
+
 export interface IPermission {
   _id?: string,
-  identifier?: string,
+  identifier?: number,
   name?: string,
   description?: string
   language?: string
   type?: PermissionType
-  application?: string
   audit?: {
     createdBy: string
     updatedBy: string

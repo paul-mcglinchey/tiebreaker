@@ -22,11 +22,12 @@ const Dashboard = () => {
       <NavMenu links={dashboardLinks} />
       <div className="px-2 sm:px-6 lg:px-8">
         <Toolbar title="Applications" />
-        <div className="grid grid-cols-3 tracking-wide gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 tracking-wide gap-4 md:gap-8">
           {getUserAccessibleApps().map((a, i) => (
             <AppCard 
               title={a.name || '--'}
-              backgroundImage={a.icon}
+              backgroundImage={a.backgroundImage}
+              backgroundVideo={a.backgroundVideo}
               href={a.url || '/dashboard'}
               subtitle={a.description}
               key={i}

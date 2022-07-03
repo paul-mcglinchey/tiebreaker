@@ -2,7 +2,8 @@ import { Form, Formik } from "formik"
 import { useApplicationService, usePermissionService } from "../../hooks"
 import { IApplication, IContextualFormProps } from "../../models"
 import { applicationValidationSchema } from "../../schema"
-import { PermissionMultiSelector, StyledField } from "../Common"
+import { generateColour } from "../../services"
+import { ColourPicker, FormSection, PermissionMultiSelector, StyledField } from "../Common"
 
 interface IApplicationFormProps {
   application?: IApplication | undefined
@@ -16,12 +17,15 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
   return (
     <Formik
       initialValues={{
-        identifier: application?.identifier || '',
+        identifier: application?.identifier || NaN,
         name: application?.name || '',
         description: application?.description || '',
         icon: application?.icon || '',
+        backgroundImage: application?.backgroundImage || '',
+        backgroundVideo: application?.backgroundVideo || '',
         url: application?.url || '',
-        requiredPermissions: application?.requiredPermissions || []
+        requiredPermissions: application?.requiredPermissions || [],
+        colour: application?.colour || generateColour()
       }}
       onSubmit={(values) => {
         application
@@ -38,13 +42,22 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
             <PermissionMultiSelector
               label="Required permissions"
               showLabel
-              initialState={permissions.filter(p => p.identifier && values.requiredPermissions.includes(p.identifier))}
+              initialSelected={permissions.filter(p => p.identifier && values.requiredPermissions.includes(p.identifier))}
               onUpdate={values => setFieldValue('requiredPermissions', values.map(v => v.identifier))}
               selectorClasses=""
             />
             <StyledField name='description' label="Description" classes="col-span-3" errors={errors.description} touched={touched.description} />
-            <StyledField name='icon' label="Icon URL" errors={errors.icon} classes="col-span-3" touched={touched.icon} />
             <StyledField name='url' label="URL/Route" errors={errors.url} classes="col-span-3" touched={touched.url} />
+            <FormSection title="Appearance" classes="col-span-3">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="flex grow col-span-3 space-x-2 items-end">
+                  <StyledField name='icon' label="Icon URL" errors={errors.icon} touched={touched.icon} />
+                  <ColourPicker square colour={values.colour} setColour={(colour) => setFieldValue('colour', colour)} />
+                </div>
+                <StyledField name='backgroundImage' label="Background Image URL" errors={errors.backgroundImage} classes="col-span-3" touched={touched.backgroundImage} />
+                <StyledField name='backgroundVideo' label="Background Video URL" errors={errors.backgroundVideo} classes="col-span-3" touched={touched.backgroundVideo} />
+              </div>
+            </FormSection>
           </div>
           {ContextualSubmissionButton(application ? 'Update application' : 'Add application', undefined, isValid)}
         </Form>

@@ -15,7 +15,7 @@ interface IColourPickerProps {
 const ColourPicker = ({ colour, setColour, menuSide, hideIcon, square }: IColourPickerProps) => {
 
   return (
-    <div className="inline-flex flex-grow items-center">
+    <div className="inline-flex items-center">
       <Menu as="div" className="relative w-full">
         <Menu.Button className="flex w-full items-center space-x-2 text-white">
           {!hideIcon && (

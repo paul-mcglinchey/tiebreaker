@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useApplicationService, usePermissionService } from "../../hooks"
-import { IPermission } from "../../models"
+import { usePermissionService } from "../../hooks"
+import { IPermission, PermissionType } from "../../models"
 import { Dialog, InlineButton, TableRow, TableRowItem } from "../Common"
 import { PermissionModal } from '.'
 
@@ -11,7 +11,6 @@ interface IPermissionTableRowProps {
 const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
 
   const { deletePermission } = usePermissionService()
-  const { getApplication } = useApplicationService()
 
   const [editPermissionOpen, setEditPermissionOpen] = useState<boolean>(false)
   const [deletePermissionOpen, setDeletePermissionOpen] = useState<boolean>(false)
@@ -40,12 +39,7 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
       </TableRowItem>
       <TableRowItem>
         <div className="flex items-center space-x-4 min-w-40">
-          <span>{permission.type}</span>
-        </div>
-      </TableRowItem>
-      <TableRowItem>
-        <div className="flex items-center space-x-4 min-w-40">
-          <span>{getApplication(permission.application)?.name || 'N/A'}</span>
+          <span>{permission.type ? PermissionType[permission.type] : '--'}</span>
         </div>
       </TableRowItem>
       <TableRowItem>

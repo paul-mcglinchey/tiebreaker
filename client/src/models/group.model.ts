@@ -4,18 +4,22 @@ interface IGroupEntities {
   clients?: string[]
   employees?: string[]
 } 
+
+export interface IGroupUser {
+  user: string,
+  permissions: number[]
+  applications: {
+    application: number
+    permissions: number[]
+  }[]
+}
+
 export interface IGroup {
   _id?: string
   name?: string
   description?: string
-  applications?: string[]
-  users?: {
-    user: string,
-    applications: {
-      application: string,
-      permissions: string[]
-    }[]
-  }[],
+  applications?: number[]
+  users: IGroupUser[],
   entities?: IGroupEntities
   deletedEntities?: IGroupEntities
   listDefinitions?: string

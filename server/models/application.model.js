@@ -7,7 +7,7 @@ const Application = mongoose.model(
   "Application",
   new Schema({
     identifier: {
-      type: String, required: true, unique: true
+      type: Number, required: true, unique: true
     },
     name: {
       type: String, required: true, unique: true
@@ -18,10 +18,19 @@ const Application = mongoose.model(
     icon: {
       type: String, required: false
     },
+    backgroundImage: {
+      type: String, required: false
+    },
+    backgroundVideo: {
+      type: String, required: false
+    },
     url: {
       type: String, required: true
     },
-    requiredPermissions: [String],
+    requiredPermissions: [Number],
+    colour: {
+      type: String, required: false
+    },
     audit: AuditSchema
   }, { timestamps: true })
 );

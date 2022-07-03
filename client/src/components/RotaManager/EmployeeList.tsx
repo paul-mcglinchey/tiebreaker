@@ -29,11 +29,11 @@ const EmployeeList = ({ setAddEmployeesOpen }: IEmployeeListProps) => {
           <div className="flex flex-col flex-grow space-y-4">
             <Table isLoading={isLoading}>
               <Table.SortableHeader headers={headers} sortField={sortField} setSortField={setSortField} sortDirection={sortDirection} setSortDirection={setSortDirection} />
-              <>
+              <Table.Body>
                 {employees.map((employee: IEmployee, index: number) => (
                   <EmployeeTableRow employee={employee} key={index} />
                 ))}
-              </>
+              </Table.Body>
             </Table>
           </div>
         ) : (

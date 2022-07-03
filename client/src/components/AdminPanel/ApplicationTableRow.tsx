@@ -21,13 +21,10 @@ const ApplicationTableRow = ({ application }: IApplicationTableRowProps) => {
         <span className="text-sm font-medium text-white">{application.identifier}</span>
       </TableRowItem>
       <TableRowItem>
-        <span>{application.name}</span>
+        <span style={{ borderColor: application.colour }} className={`px-2 py-1 rounded-lg border`}>{application.name}</span>
       </TableRowItem>
       <TableRowItem>
         <span className="max-w-xs overflow-hidden text-ellipsis">{application.description}</span>
-      </TableRowItem>
-      <TableRowItem>
-        <span className="max-w-xs overflow-hidden text-ellipsis">{application.icon}</span>
       </TableRowItem>
       <TableRowItem>
         <div className="flex items-center space-x-4 min-w-40">

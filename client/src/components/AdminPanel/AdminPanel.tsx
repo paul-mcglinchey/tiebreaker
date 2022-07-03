@@ -3,30 +3,28 @@ import { SystemListCollectionPanel, ApplicationPanel, PermissionPanel } from "."
 import { Navigate, Route, Routes } from "react-router";
 import { IChildrenProps } from "../../models";
 import { combineClassNames } from "../../services";
-import { ApplicationProvider, PermissionProvider } from "../../contexts";
+import { PermissionProvider } from "../../contexts";
 
 const AdminPanel = () => {
   return (
     <>
       <NavMenu />
-      <ApplicationProvider>
-        <PermissionProvider>
-      <div className="px-2 sm:px-6 lg:px-8 pb-10">
-        <Toolbar title='Admin panel' />
-        <div className="inline-flex space-x-2 mb-4">
-          <TabLink to="lists">Lists</TabLink>
-          <TabLink to="applications">Applications</TabLink>
-          <TabLink to="permissions">Permissions</TabLink>
+      <PermissionProvider>
+        <div className="px-2 sm:px-6 lg:px-8 pb-10">
+          <Toolbar title='Admin panel' />
+          <div className="inline-flex space-x-2 mb-4">
+            <TabLink to="lists">Lists</TabLink>
+            <TabLink to="applications">Applications</TabLink>
+            <TabLink to="permissions">Permissions</TabLink>
+          </div>
+          <Routes>
+            <Route path="lists" element={<SystemListCollectionPanel />} />
+            <Route path="applications" element={<ApplicationPanel />} />
+            <Route path="permissions" element={<PermissionPanel />} />
+            <Route path="/" element={<Navigate to="lists" />} />
+          </Routes>
         </div>
-        <Routes>
-          <Route path="lists" element={<SystemListCollectionPanel />} />
-          <Route path="applications" element={<ApplicationPanel />} />
-          <Route path="permissions" element={<PermissionPanel />} />
-          <Route path="/" element={<Navigate to="lists" />} />
-        </Routes>
-      </div>
-        </PermissionProvider>
-      </ApplicationProvider>
+      </PermissionProvider>
     </>
   )
 }

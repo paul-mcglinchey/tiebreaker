@@ -15,7 +15,6 @@ const ApplicationPanel = () => {
     { name: 'Identifier' },
     { name: 'Name' },
     { name: 'Description' },
-    { name: 'Icon URL' },
     { name: 'URL/Route' },
     { name: 'Options' },
   ]

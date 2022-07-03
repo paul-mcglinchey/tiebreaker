@@ -37,7 +37,14 @@ const EmployeeMultiSelector = ({ formValues, setFieldValue, fieldName = 'employe
       </div>
       <MultiSelector<string | undefined>
         fieldName={fieldName}
-        values={employees.filter(e => e._id && employeeFilter ? e.fullName?.toLowerCase().includes(employeeFilter.toLowerCase()) : true).map(e => e._id).slice(0, showAll ? employees.length : 5)}
+        values={employees.filter(e => 
+          e._id && employeeFilter 
+            ? e.name.firstName.concat(" ", e.name.lastName).toLowerCase().includes(employeeFilter.toLowerCase()) 
+            : true
+          )
+          .map(e => e._id)
+          .slice(0, showAll ? employees.length : 5)
+        }
         totalValuesLength={employees.length}
         toggleShowAll={toggleShowAll}
         formValues={formValues}

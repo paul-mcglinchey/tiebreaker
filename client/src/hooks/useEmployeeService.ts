@@ -31,12 +31,13 @@ const useEmployeeService = (): IEmployeeService => {
   })
 
   const updateEmployee = asyncHandler(async (employeeId: string | undefined, values: IEmployee) => {
+    console.log(employeeId, currentGroup)
     if (!employeeId || !currentGroup?._id) throw new Error()
 
     const res = await fetch(endpoints.employee(employeeId, currentGroup._id), requestBuilder('PUT', undefined, { ...values }))
     const json = await res.json()
 
-    handleResolution(res, json, 'update', 'employee', [() => updateEmployeeInContext(employeeId, json)])
+    handleResolution(res, json, 'update', 'employee', [() => updateEmployeeInContext(employeeId, values)])
   })
 
   const deleteEmployee = asyncHandler(async (employeeId: string | undefined) => {
@@ -58,7 +59,9 @@ const useEmployeeService = (): IEmployeeService => {
 
   const updateEmployeeInContext = (employeeId: string, values: IEmployee) => {
     setEmployees(employees => {
-      return employees.map(e => e._id === employeeId ? values : e)
+      return employees.map(e => {
+        return e._id === employeeId ? { ...e, ...values } : e
+      })
     })
   }
   

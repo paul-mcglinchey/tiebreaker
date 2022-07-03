@@ -12,7 +12,7 @@ const useApplicationService = (): IApplicationService => {
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
 
-  const getApplication = (identifier: string | undefined): IApplication | undefined => {
+  const getApplication = (identifier: number | undefined): IApplication | undefined => {
     return applications.find(a => a.identifier === identifier)
   }
 

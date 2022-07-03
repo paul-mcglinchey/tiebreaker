@@ -1,93 +1,99 @@
-import { CheckCircleIcon, ChevronDownIcon } from "@heroicons/react/solid"
-import { useState } from "react"
-import { useApplicationService, useGroupService, usePermissionService, useUserService } from "../../hooks"
-import { IGroup } from "../../models"
-import { combineClassNames } from "../../services"
+import { useApplicationService, usePermissionService, useUserService } from "../../hooks"
+import { IGroup, IGroupUser } from "../../models"
+import { Switch } from "../Common"
 
 interface IUserPermissionSelectorProps {
   group: IGroup
+  onChange: (users: IGroupUser[]) => void
 }
 
-const UserPermissionSelector = ({ group }: IUserPermissionSelectorProps) => {
+const UserPermissionSelector = ({ group, onChange }: IUserPermissionSelectorProps) => {
 
-  const [expandedUser, setExpandedUser] = useState<string | undefined>()
-
-  const { users } = useUserService()
+  const { getUser } = useUserService()
   const { getApplication } = useApplicationService()
-  const { permissions } = usePermissionService()
-  const { updateGroup } = useGroupService()
+  const { getPermission } = usePermissionService()
 
-  const expandUserPermissions = (userId: string | undefined) => {
-    if (expandedUser === userId) return setExpandedUser(undefined)
+  const userHasApplication = (userId: string | undefined, applicationIdentifer: number | undefined): boolean => {
+    if (!userId || !applicationIdentifer) return false
 
-    setExpandedUser(userId)
+    return group.users?.find(gu => gu.user === userId)?.applications.find(ga => ga.application === applicationIdentifer) ? true : false
   }
 
-  const userHasApplication = (userId: string | undefined, applicationIdentifier: string | undefined): boolean => {
-    if (!userId || !applicationIdentifier) return false
-
-    return group.users?.find(gu => gu.user === userId)?.applications.map(a => a.application).includes(applicationIdentifier) || false
-  }
-
-  const userHasPermission = (userId: string | undefined, applicationIdentifier: string | undefined, permissionIdentifier: string | undefined): boolean => {
+  const userHasPermission = (userId: string | undefined, applicationIdentifier: number | undefined, permissionIdentifier: number | undefined): boolean => {
     if (!userId || !applicationIdentifier || !permissionIdentifier) return false
 
-    return group.users?.find(gu => gu.user === userId)?.applications.find(a => a.application === applicationIdentifier)?.permissions.includes(permissionIdentifier) || false
+    return group.users?.find(gu => gu.user === userId)?.applications.find(ga => ga.application === applicationIdentifier)?.permissions.find(gap => gap === permissionIdentifier) ? true : false
   }
 
-  const togglePermission = (userId: string | undefined, applicationIdentifier: string | undefined, permissionIdentifier: string | undefined) => {
-    let users = group.users || []
+  const applicationExistsInGroup = (groupId: string | undefined, applicationIdentifier: number | undefined): boolean => {
+    if (!groupId || !applicationIdentifier) return false
 
-    if (!userId || !applicationIdentifier || !permissionIdentifier) return
+    return group.applications?.includes(applicationIdentifier) ? true : false
+  }
 
-    users = users?.map(u => u.user === userId ? {
-      user: u.user,
-      applications: userHasApplication(userId, applicationIdentifier) ? u.applications.map(a => a.application === applicationIdentifier ? {
-        application: a.application,
-        permissions: userHasPermission(userId, applicationIdentifier, permissionIdentifier)
-          ? a.permissions.filter(p => p !== permissionIdentifier)
-          : [...a.permissions, permissionIdentifier]
-      } : a) : [...u.applications, {
-        application: applicationIdentifier,
-        permissions: [permissionIdentifier]
-      }]
-    } : u)
+  const toggleUserPermission = (userId: string | undefined, applicationIdentifier: number | undefined, permissionIdentifier: number | undefined) => {
+    let user: IGroupUser | undefined = group.users?.find(gu => gu.user === userId)
+    
+    if (!userId || !applicationIdentifier || !permissionIdentifier || !user || !applicationExistsInGroup) {
+      return console.error("Something went wrong while updating a user's permissions")
+    }
 
-    updateGroup({ users: users }, group._id)
+    let hasPermission: boolean = userHasPermission(userId, applicationIdentifier, permissionIdentifier)
+
+    let tempUser = {
+      user: userId,
+      permissions: user?.permissions || [],
+      applications: userHasApplication(userId, applicationIdentifier)
+        ? user 
+          ? user.applications.map(gua => gua.application === applicationIdentifier 
+            ? ({
+              application: applicationIdentifier,
+              permissions: hasPermission ? gua.permissions.filter(p => p !== permissionIdentifier) : [...gua.permissions, permissionIdentifier]
+            }) 
+            : gua)
+          : []
+        : [...(user?.applications || []), {
+          application: applicationIdentifier,
+          permissions: [permissionIdentifier]
+        }]
+    }
+
+    let tempUsers = group.users?.map(gu => gu.user === userId ? tempUser : gu)
+
+    console.log(tempUser)
+
+    onChange(tempUsers)
   }
 
   return (
-    <>
-      {users.map((u, i) => (
-        <div key={i} className="flex flex-col">
-          <button type="button" onClick={() => expandUserPermissions(u._id)} className="flex justify-between p-4 border-2 border-green-500 rounded-lg items-center group">
-            <h2 className="text-lg font-bold tracking-wider">{u.username}</h2>
-            <ChevronDownIcon className="w-6 h-6 group-hover:text-green-500 transition-colors" />
-          </button>
-          {u._id === expandedUser && (
-            <div className="flex flex-col">
-              {group.applications?.map(ga => getApplication(ga)).map((a, i) => (
-                <div key={i} className="flex flex-col mt-2">
-                  <div className="flex items-center space-x-2 p-2 border-l-2 border-red-500">
-                    <h3 className="font-semibold tracking-wider">{a?.name}</h3>
-                    {permissions.filter(p => p.application === a?.identifier).map((p, i) => (
-                      <button type="button" onClick={() => togglePermission(u._id, a?.identifier, p.identifier)} key={i} className={combineClassNames(userHasPermission(u._id, a?.identifier, p.identifier) ? "border-green-500" : "border-red-500", "border inline-flex items-center rounded-lg p-1")}>
-                        {p.name} {userHasPermission(u._id, a?.identifier, p.identifier) && <CheckCircleIcon className="w-4 h-4 ml-1 mt-0.5" />}
-                      </button>
-                    ))}
-                  </div>
+    <div>
+      {group.users?.map((gu, i) => (
+        <div key={i}>
+          <span className="uppercase font-bold text-xl tracking-wider">
+            {getUser(gu.user)?.username}
+          </span>
+          <div>
+            {group.applications?.map(ga => getApplication(ga)).map((ga, j) => (
+              <div key={j}>
+                <span>
+                  {ga?.name}
+                </span>
+                <div>
+                  {ga?.requiredPermissions.map(arp => getPermission(arp)).map((arp, k) => (
+                    <div>
+                      <div key={k}>
+                        {arp?.name}
+                      </div>
+                      <Switch enabled={userHasPermission(gu.user, ga.identifier, arp?.identifier)} setEnabled={() => toggleUserPermission(gu.user, ga.identifier, arp?.identifier)} description="User access control" />
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {group.users?.find(gu => gu.user === u._id)?.applications.map((a, i) => (
-                <div key={i} className="flex flex-col">
-                  {getApplication(a.application)?.name}
-                </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 

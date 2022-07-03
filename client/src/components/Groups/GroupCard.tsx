@@ -47,7 +47,7 @@ const GroupCard = ({ g, render }: IGroupProps) => {
       <Dialog 
         isOpen={deleteGroupOpen} 
         close={() => setDeleteGroupOpen(false)}
-        positiveActions={[() => deleteGroup(g._id), () => setEditGroupOpen(false)]} 
+        positiveActions={[() => deleteGroup(g._id), () => setDeleteGroupOpen(false)]} 
         title="Delete group"
         description="This action will delete the group for all users"
         content="If you choose to continue you and all other users of this group will no longer have access to it or any of it's application data"

@@ -4,8 +4,8 @@ import { combineClassNames } from "../../services"
 import { MultiSelector } from "../Common"
 
 interface IApplicationMultiSelectorProps {
-  formValues: string[]
-  setFieldValue: (value: (string | undefined)[]) => void
+  formValues: number[]
+  setFieldValue: (value: (number | undefined)[]) => void
   fieldName?: string
 }
 
@@ -14,7 +14,7 @@ const ApplicationMultiSelector = ({ formValues, setFieldValue, fieldName = "appl
   const { applications, getApplication, count } = useApplicationService()
 
   return (
-    <MultiSelector<string | undefined>
+    <MultiSelector<number | undefined>
       fieldName={fieldName}
       values={applications.map(a => a.identifier)}
       totalValuesLength={count}

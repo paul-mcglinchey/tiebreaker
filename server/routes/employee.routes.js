@@ -23,6 +23,15 @@ router.post(
   employees.create
 );
 
+// Update an employee
+router.put(
+  '/:employeeId',
+  middleware.groupMiddleware.checkIfQueryHasGroupId,
+  middleware.employeeMiddleware.checkIfQueryHasEmployeeId,
+  middleware.employeeMiddleware.checkIfEmployeeExists,
+  employees.update
+)
+
 // Delete an employee (soft)
 router.delete(
   '/:employeeId',

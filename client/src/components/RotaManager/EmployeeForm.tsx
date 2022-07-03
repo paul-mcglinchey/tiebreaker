@@ -4,10 +4,15 @@ import { Transition } from "@headlessui/react";
 import { useEmployeeService } from "../../hooks";
 import { employeeValidationSchema } from "../../schema";
 import { IContextualFormProps, IEmployee } from "../../models";
-import { CustomDate, FormSection, Selector, StyledField, AddressForm, ListboxSelector } from "../Common";
+import { CustomDate, FormSection, StyledField, AddressForm, ListboxSelector } from "../Common";
 
 interface IEmployeeFormProps {
   employee?: IEmployee | undefined
+}
+
+interface IRole {
+  label: string
+  value: string
 }
 
 const EmployeeForm = ({ employee, ContextualSubmissionButton }: IEmployeeFormProps & IContextualFormProps) => {
@@ -17,20 +22,6 @@ const EmployeeForm = ({ employee, ContextualSubmissionButton }: IEmployeeFormPro
 
   const toggleShowAddress = () => setShowAddress(!showAddress);
   const toggleShowRequirements = () => setShowRequirements(!showRequirements);
-
-  const getEmployeeOptions = (employees: IEmployee[]): { value: string, label: any }[] => {
-    return employees.map((e: IEmployee) => {
-      return {
-        value: e._id || "",
-        label: (
-          <div className="flex justify-between items-center">
-            <div>{`${e.name.firstName} ${e.name.lastName}`}</div>
-            <div style={{ backgroundColor: e.colour }} className="uppercase text-xs font-semibold text-white rounded px-2 py-1">{e.role}</div>
-          </div>
-        )
-      }
-    })
-  }
 
   const { employees, getEmployee, addEmployee, updateEmployee } = useEmployeeService()
 
@@ -70,49 +61,44 @@ const EmployeeForm = ({ employee, ContextualSubmissionButton }: IEmployeeFormPro
         employee ? updateEmployee(employee._id, values) : addEmployee(values);
       }}
     >
-      {({ errors, touched, values, setFieldValue }) => (
+      {({ errors, touched, values, setFieldValue, isValid }) => (
         <Form>
           <div className="flex flex-grow flex-col space-y-6 content-end">
             <FormSection title="Job description">
-              <div className="flex space-x-4">
-                <ListboxSelector
+              <div className="grid grid-cols-2 gap-4">
+                <ListboxSelector<IRole>
                   label="Employee Role"
                   showLabel
                   items={[{ label: 'Staff', value: 'Staff' }, { label: 'Manager', value: 'Manager' }]}
-                  selected={{ label: values.role, value: values.role }}
-                  setSelected={(value) => setFieldValue('role', value)}
-                  classes="col-span-2"
-                  selectorClasses="bg-gray-900"
-                  optionsClasses="w-full"
+                  initialSelected={{ label: values.role, value: values.role }}
+                  labelFieldName="label"
+                  onUpdate={(role) => setFieldValue('role', role.value)}
                 />
-                <ListboxSelector
+                <ListboxSelector<IEmployee>
                   label="Reports To"
                   showLabel
-                  items={employees.map(e => ({ label: e.fullName, value: e._id }))}
-                  selected={{ label: getEmployee(values.reportsTo)?.fullName, value: values.reportsTo }}
-                  setSelected={(value) => setFieldValue('role', value)}
-                  classes="col-span-2"
-                  selectorClasses="bg-gray-900"
-                  optionsClasses="w-full"
+                  items={employees}
+                  initialSelected={getEmployee(values.reportsTo)}
+                  labelFieldName="fullName"
+                  onUpdate={(employee) => setFieldValue('reportsTo', employee._id)}
                 />
-                {employees && (
-                  <Selector options={getEmployeeOptions(employees)} option={''} setValue={(e) => setFieldValue('reportsTo', e)} label="Reports to" />
-                )}
               </div>
             </FormSection>
             <FormSection title="Employee information">
-              <div className="flex flex-col md:flex-row md:space-x-4 space-x-0 space-y-1 md:space-y-0">
-                <StyledField name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
-                <StyledField name="name.middleNames" label="Middle Names" errors={errors.name?.middleNames} touched={touched.name?.middleNames} />
-                <StyledField name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
-              </div>
-              <div className="flex flex-col md:flex-row justify-between md:space-x-4 space-x-0 space-y-1 md:space-y-0">
-                <StyledField name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />
-                <StyledField name="contactInfo.primaryPhone" label="Phone number" errors={errors.contactInfo?.primaryPhoneNumber} touched={touched.contactInfo?.primaryPhoneNumber} />
+              <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <StyledField name="name.firstName" label="First name" errors={errors.name?.firstName} touched={touched.name?.firstName} />
+                  <StyledField name="name.middleNames" label="Middle Names" errors={errors.name?.middleNames} touched={touched.name?.middleNames} />
+                  <StyledField name="name.lastName" label="Last name" errors={errors.name?.lastName} touched={touched.name?.lastName} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <StyledField name="contactInfo.primaryEmail" label="Email" errors={errors.contactInfo?.primaryEmail} touched={touched.contactInfo?.primaryEmail} />
+                  <StyledField name="contactInfo.primaryPhone" label="Phone number" errors={errors.contactInfo?.primaryPhoneNumber} touched={touched.contactInfo?.primaryPhoneNumber} />
+                  <StyledField type="date" name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
+                  <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
+                </div>
               </div>
               <div className="flex space-x-4">
-                <StyledField type="date" name="birthdate" label="Date of Birth" component={CustomDate} errors={errors.birthdate} touched={touched.birthdate} />
-                <StyledField type="date" name="startDate" label="Start date" component={CustomDate} errors={errors.startDate} touched={touched.startDate} />
               </div>
             </FormSection>
             <FormSection title="Employee address" showExpander expanded={showAddress} expanderAction={toggleShowAddress}>
@@ -147,7 +133,7 @@ const EmployeeForm = ({ employee, ContextualSubmissionButton }: IEmployeeFormPro
               </Transition>
             </FormSection>
           </div>
-          {ContextualSubmissionButton()}
+          {ContextualSubmissionButton(employee ? 'Update employee' : 'Add employee', undefined, isValid)}
         </Form>
       )}
     </Formik>

@@ -5,7 +5,7 @@ import { usePermissionService } from "../../hooks"
 interface IPermissionMultiSelectorProps {
   label: string,
   showLabel?: boolean
-  initialState: IPermission[]
+  initialSelected: IPermission[]
   onUpdate: (permissions: IPermission[]) => void
   classes?: string
   selectorClasses?: string

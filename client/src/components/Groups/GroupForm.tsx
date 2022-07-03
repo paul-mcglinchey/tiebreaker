@@ -20,14 +20,15 @@ const GroupForm = ({ group, ContextualSubmissionButton }: IGroupFormProps & ICon
         name: group?.name || '',
         description: group?.description || '',
         applications: group?.applications || [],
-        colour: group?.colour || generateColour()
+        colour: group?.colour || generateColour(),
+        users: group?.users || []
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
         group?._id ? updateGroup(values, group?._id) : addGroup(values)
       }}
     >
-      {({ errors, touched, values, setFieldValue }) => (
+      {({ errors, touched, values, setFieldValue, isValid }) => (
         <Form className="flex flex-1 flex-col space-y-8">
           <div className="flex flex-col space-y-4">
             <div className="flex flex-col space-y-4">
@@ -48,10 +49,10 @@ const GroupForm = ({ group, ContextualSubmissionButton }: IGroupFormProps & ICon
           </FormSection>
           {group && (
             <FormSection title="User Permissions">
-              <UserPermissionSelector group={group} />
+              <UserPermissionSelector group={values} onChange={(users) => setFieldValue('users', users)} />
             </FormSection>
           )}
-          {ContextualSubmissionButton()}
+          {ContextualSubmissionButton(group ? 'Update group' : 'Create group', undefined, isValid)}
         </Form>
       )}
     </Formik>
