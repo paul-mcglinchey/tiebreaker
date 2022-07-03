@@ -89,7 +89,7 @@ const ListboxOptions = ({ classes, children }: IListboxOptionsProps & IChildrenP
 }
 
 interface IListboxOptionProps {
-  classes?: string
+  classes?: string | undefined
   value: any
 }
 
