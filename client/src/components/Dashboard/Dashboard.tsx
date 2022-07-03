@@ -2,7 +2,6 @@ import { dashboardLinks } from "../../config";
 import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
 import { useAuth, useGroupService, useApplicationService } from "../../hooks";
-import { Permission } from "../../enums";
 import { IApplication } from "../../models";
 
 const Dashboard = () => {
@@ -13,7 +12,7 @@ const Dashboard = () => {
 
   const getUserAccessibleApps = (): IApplication[] => {
     let userApps = currentGroup?.users && currentGroup?.users.find(u => u.user === user?._id)?.applications
-    let userAccessibleApps = applications.filter(a => a.identifier && userApps?.find(ua => ua.application === a.identifier && ua.permissions.includes(Permission.ApplicationAccess)))
+    let userAccessibleApps = applications.filter(a => a.identifier && userApps?.find(ua => ua.application === a.identifier && a.requiredPermissions?.every(rp => ua.permissions.includes(rp))))
 
     return userAccessibleApps
   }

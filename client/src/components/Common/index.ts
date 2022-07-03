@@ -18,10 +18,12 @@ export { default as StyledField } from './StyledField'
 export { default as StyledNumericField } from './StyledNumericField'
 export { default as StyledTagField } from './StyledTagField'
 export { default as AddressForm } from './AddressForm'
+
 export { default as MultiSelector } from './MultiSelector'
 export { default as ComboboxMultiSelector } from './ComboboxMultiSelector'
 export { default as ListboxSelector } from './ListboxSelector'
 export { default as ListboxMultiSelector } from './ListboxMultiSelector'
+export { default as PermissionMultiSelector } from './PermissionMultiSelector'
 
 export { default as WideIcon } from './WideIcon'
 export { default as SpinnerIcon } from './SpinnerIcon'
@@ -60,3 +62,5 @@ export { default as ToolbarCreateButton} from './ToolbarCreateButton'
 export { default as Selector } from './Selector'
 export { default as NavMenu } from './NavMenu'
 export { default as Modal } from './Modal'
+
+export { FadeInOut } from './Transitions'
