@@ -1,4 +1,5 @@
-import { IPermission, IPermissionContext } from ".";
+import { IPermissionContext } from "../../contexts/interfaces"
+import { IPermission } from "../../models"
 
 export interface IPermissionService extends IPermissionContext {
   getPermission: (permissionIdentifer: number | undefined) => IPermission | undefined

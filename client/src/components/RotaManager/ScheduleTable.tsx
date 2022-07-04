@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import { Form, FormikContextType, useFormikContext } from "formik";
 import { LockClosedIcon } from "@heroicons/react/solid";
-import { ButtonType, DayOfWeek, IEmployeeSchedule, ISchedule } from "../../models";
+import { IEmployeeSchedule, ISchedule } from "../../models";
 import { Button } from "../Common";
 import { ScheduleTableRow } from '.'
 import { getInitials } from "../../services";
+import { ButtonType, DayOfWeek } from "../../enums";
 
 interface IScheduleTableProps {
   currentWeek: { firstDay: Date, lastDay: Date }

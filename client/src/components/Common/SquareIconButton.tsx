@@ -1,4 +1,4 @@
-import { IconButtonSize } from "../../models"
+import { IconButtonSize } from "../../enums"
 
 interface IIconButtonProps {
   Icon: any,
@@ -11,7 +11,7 @@ interface IIconButtonProps {
 const SquareIconButton = ({ Icon, action, colour = "text-current", className, buttonSize = IconButtonSize.Medium }: IIconButtonProps) => {
 
   const getButtonSize = (): string => {
-    return `h-${buttonSize} w-${buttonSize}`
+    return `h-${buttonSize - 2} h-${buttonSize - 2} md:h-${buttonSize} md:w-${buttonSize}`
   }
 
   return (

@@ -1,5 +1,6 @@
 import { combineClassNames } from '../../services';
-import { ButtonType, INotification } from '../../models';
+import { INotification } from '../../models';
+import { ButtonType } from '../../enums';
 
 export interface IButtonProps {
   status?: INotification[],

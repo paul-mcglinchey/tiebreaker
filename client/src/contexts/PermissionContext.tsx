@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IPermissionContext, IPermissionsResponse, IPermission } from "../models";
+import { IChildrenProps, IFetch, IPermissionsResponse, IPermission } from "../models";
 import { useFetch, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
+import { IPermissionContext } from "./interfaces";
 
 export const PermissionContext = createContext<IPermissionContext>({
   permissions: [],

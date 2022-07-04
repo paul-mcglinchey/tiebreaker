@@ -1,4 +1,5 @@
-import { ButtonType, IChildrenProps } from "../../models"
+import { ButtonType } from "../../enums"
+import { IChildrenProps } from "../../models"
 import { Button } from "../Common"
 
 interface IPanelProps {

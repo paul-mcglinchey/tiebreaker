@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { IGroup } from "."
+import { IGroup } from "../../models"
 
 export interface IGroupContext {
   currentGroup: IGroup | undefined

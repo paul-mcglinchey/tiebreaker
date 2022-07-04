@@ -2,10 +2,11 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Link } from "react-router-dom";
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { useFormikContext } from "formik";
-import { ButtonType, IRota } from "../../models";
+import { IRota } from "../../models";
 import { useRotaService } from "../../hooks";
 import { Button, Dialog, Dropdown } from "../Common";
 import { RotaModal } from ".";
+import { ButtonType } from "../../enums";
 
 interface IRotaHeaderProps {
   rota: IRota,

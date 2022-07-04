@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, FireIcon, XIcon, MoonIcon, SunIcon } from '@heroicons/react/solid';
 import { Link, PathMatch } from 'react-router-dom';
 import { combineClassNames } from '../../services';
-import { useAuth, useTheme } from '../../hooks';
+import { useAuthService, useTheme } from '../../hooks';
 import { GroupSelector, SmartLink, Switch, ThumbIcon, WideIcon } from '.';
 
 interface INavMenuProps {
@@ -16,7 +16,7 @@ interface INavMenuProps {
 
 const NavMenu = ({ links = [], hideGroupSelector }: INavMenuProps) => {
 
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isAdmin } = useAuthService()
   const { theme, setTheme } = useTheme()
 
   const toggleDarkTheme = () => {

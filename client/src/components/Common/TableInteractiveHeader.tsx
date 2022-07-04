@@ -1,6 +1,7 @@
 import { MenuIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/outline';
-import { IChildrenProps, ISortable, SortDirection } from '../../models';
+import { IChildrenProps, ISortable } from '../../models';
 import { SquareIcon } from '.';
+import { SortDirection } from '../../enums';
 
 interface IInteractiveHeaderProps extends ISortable, IChildrenProps {
   value: string | undefined

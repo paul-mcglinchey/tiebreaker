@@ -27,7 +27,7 @@ const Modal = ({ children, title, description, isOpen, close, level = 1, allowAd
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10 text-color-paragraph" onClose={close}>
         <Transition.Child>
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
+          <div className="fixed inset-0 bg-black bg-opacity-80" />
         </Transition.Child>
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex min-h-full md:items-start justify-center p-0 md:p-4 text-center">
@@ -42,14 +42,14 @@ const Modal = ({ children, title, description, isOpen, close, level = 1, allowAd
             >
               <Dialog.Panel className={
                 combineClassNames(
-                  "w-full max-w-7xl rounded-t-2xl md:rounded-2xl bg-gray-800 p-2 py-6 md:p-6 text-left align-middle transition-all",
+                  "w-full max-w-7xl rounded-t-2xl md:rounded-2xl bg-slate-200 dark:bg-gray-800 p-2 py-6 md:p-6 text-left align-middle transition-all",
                   level === 1 && "mt-16 max-w-7xl", level === 2 && "mt-32 max-w-5xl"
                 )}
               >
                 <div className="flex justify-between mb-6 items-center">
                   <Dialog.Title
                     as="h2"
-                    className="text-2xl font-semibold leading-6 text-gray-200"
+                    className="text-2xl font-semibold leading-6 text-color-header"
                   >
                     {title}
                   </Dialog.Title>

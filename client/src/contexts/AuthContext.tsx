@@ -1,20 +1,19 @@
 import { createContext, useEffect, useState } from "react";
-import { IAuthContext, IChildrenProps, IPermissionGroup, IUser } from "../models";
+import { IChildrenProps, IUser } from "../models";
 import { useCookies } from 'react-cookie'
 import { useFetch, useIsMounted, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
+import { IAuthContext } from "./interfaces";
 
 export const AuthContext = createContext<IAuthContext>({
   user: undefined,
-  updateUser: () => {},
+  setUser: () => {},
   getAccess: () => false,
   getToken: () => undefined,
   getCookie: () => undefined,
   isAdmin: () => false,
   isLoading: false,
-  setIsLoading: () => {},
-  getPermissions: () => [],
-  getGroupPermissions: () => []
+  setIsLoading: () => {}
 });
 
 export const AuthProvider = ({ children }: IChildrenProps) => {
@@ -51,20 +50,16 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
   const getToken = () => user?.token
   const getCookie = () => cookies.UserAuth
   const isAdmin = () => user?.isAdmin || false
-  const getPermissions = () => user?.permissions || []
-  const getGroupPermissions = (groupId: string) => user?.permissions?.filter((p: IPermissionGroup) => p.groupId === groupId)[0]?.permissions || []
 
   const contextValue = {
     user,
-    updateUser,
+    setUser,
     getAccess,
     getToken,
     getCookie,
     isAdmin,
     isLoading,
-    setIsLoading,
-    getPermissions,
-    getGroupPermissions
+    setIsLoading
   }
 
   return (

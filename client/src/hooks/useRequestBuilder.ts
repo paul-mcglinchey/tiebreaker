@@ -1,9 +1,10 @@
-import { useAuthContext } from ".";
+import { useContext } from "react";
+import { AuthContext } from "../contexts";
 import { IFilter } from "../models";
 
 const useRequestBuilder = () => {
 
-  const authToken = useAuthContext().getToken();
+  const token = useContext(AuthContext).getToken()
 
   const requestBuilder = (method: string = "GET", bearerToken: string | undefined = undefined, body: any | undefined = undefined): RequestInit  => {
 
@@ -11,7 +12,7 @@ const useRequestBuilder = () => {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': (bearerToken || authToken) ? `Bearer ${bearerToken || authToken}` : ''
+        'Authorization': (bearerToken || token) ? `Bearer ${bearerToken || token}` : ''
       }
     }
   

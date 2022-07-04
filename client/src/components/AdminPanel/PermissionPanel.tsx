@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePermissionService } from '../../hooks'
-import { ButtonType } from '../../models'
+import { ButtonType } from '../../enums'
 import { Button, Table } from '../Common'
 import { Panel, PermissionTableRow, PermissionModal } from '.'
 import { PlusIcon } from '@heroicons/react/solid'
@@ -17,7 +17,6 @@ const PermissionPanel = () => {
     { name: 'Description', value: 'description', interactive: true },
     { name: 'Language', value: 'language', interactive: true },
     { name: 'Type', value: 'type', interactive: false },
-    { name: 'Application', value: 'application', interactive: false },
     { name: 'options', value: '', interactive: false },
   ]
 

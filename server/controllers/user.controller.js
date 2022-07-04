@@ -65,7 +65,8 @@ const generateUser = (user) => {
     username: user.username,
     email: user.email,
     token: generateToken(user._id),
-    isAdmin: user.isAdmin
+    isAdmin: user.isAdmin,
+    preferences: user.preferences
   }
 }
 
@@ -140,4 +141,13 @@ exports.signup = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('A problem occurred while signing up the user')
   }
+})
+
+exports.update = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndUpdate(req.params.userId, {
+    ...req.body,
+    'audit.updatedBy': req.auth._id
+  })
+
+  return res.status(200).json(user)
 })

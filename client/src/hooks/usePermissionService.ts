@@ -1,8 +1,9 @@
-import { IPermission, IPermissionService } from "../models"
+import { IPermission } from "../models"
 import { endpoints } from "../config"
 import { useAsyncHandler, useResolutionService, useRequestBuilder } from '.'
 import { useContext } from "react"
 import { PermissionContext } from "../contexts"
+import { IPermissionService } from "./interfaces"
 
 const usePermissionService = (): IPermissionService => {
   const { requestBuilder } = useRequestBuilder()

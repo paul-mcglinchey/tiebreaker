@@ -1,5 +1,9 @@
 import { IAudit } from "./audit.model"
-import { IPermission, IPermissionGroup } from "./permission.model"
+import { IPermission } from "./permission.model"
+
+export interface IPreferences {
+  defaultGroup?: string | undefined
+}
 
 export interface IUser {
   _id?: string
@@ -8,7 +12,6 @@ export interface IUser {
   password?: string
   token?: string
   isAdmin?: boolean
-  permissions?: IPermissionGroup[]
   invites?: {
     groupId: string
     permissions: IPermission[]
@@ -16,6 +19,7 @@ export interface IUser {
     updatedAt?: string
     audit: IAudit
   }[]
+  preferences?: IPreferences
   createdAt?: string
   updatedAt?: string
 }

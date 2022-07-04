@@ -15,7 +15,7 @@ interface IDialogProps {
 const Dialog = ({ isOpen, close, positiveActions, title, description, content, keepOpen = false }: IDialogProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <HeadlessDialog as="div" className="relative z-10" onClose={close}>
+      <HeadlessDialog as="div" className="relative z-10 text-color-paragraph" onClose={close}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-200"
@@ -38,10 +38,10 @@ const Dialog = ({ isOpen, close, positiveActions, title, description, content, k
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <HeadlessDialog.Panel className="w-full max-w-prose transform overflow-hidden rounded-2xl bg-gray-800 p-6 mt-16 text-left align-middle shadow-xl transition-all">
+              <HeadlessDialog.Panel className="w-full max-w-prose transform overflow-hidden rounded-2xl bg-slate-200 dark:bg-gray-800 p-6 mt-16 text-left align-middle shadow-xl transition-all">
                 <HeadlessDialog.Title
                   as="h3"
-                  className="text-lg font-semibold leading-6 text-gray-200"
+                  className="text-lg font-semibold leading-6 text-color-header"
                 >
                   {title}
                 </HeadlessDialog.Title>
@@ -50,7 +50,7 @@ const Dialog = ({ isOpen, close, positiveActions, title, description, content, k
                 </HeadlessDialog.Description>
 
                 <div className="mt-2">
-                  <p className="text-base text-gray-400 prose">
+                  <p className="text-base prose">
                     {content}
                   </p>
                 </div>

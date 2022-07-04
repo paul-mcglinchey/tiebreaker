@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { useDelayedRendering } from '../../hooks';
 import { Button } from '.';
-import { ButtonType } from '../../models';
+import { ButtonType } from '../../enums';
 
 interface IconProps {
   childComp?: React.ReactNode

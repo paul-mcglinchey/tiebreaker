@@ -37,4 +37,9 @@ router.get(
   user.getGroupUsers
 )
 
+router.put(
+  '/:userId',
+  user.update
+)
+
 module.exports = router

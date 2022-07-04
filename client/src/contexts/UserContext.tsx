@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { endpoints } from "../config";
 import { useAsyncHandler, useGroupService, useIsMounted, useRequestBuilder } from "../hooks";
-import { IChildrenProps, IUser, IUserContext, IUsersResponse } from "../models";
+import { IChildrenProps, IUser, IUsersResponse } from "../models";
+import { IUserContext } from "./interfaces";
 
 interface IUserProviderProps {
   groupId?: string | undefined

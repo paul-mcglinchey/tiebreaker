@@ -1,4 +1,5 @@
-import { IGroup, IGroupContext } from ".";
+import { IGroupContext } from "../../contexts/interfaces"
+import { IGroup } from "../../models"
 
 export interface IGroupService extends IGroupContext {
   getGroup: (groupId: string | undefined) => IGroup | undefined

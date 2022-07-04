@@ -1,4 +1,5 @@
-import { IRotaContext, IRota, IEmployee } from "."
+import { IRotaContext } from "../../contexts/interfaces"
+import { IRota, IEmployee } from "../../models"
 
 export interface IRotaService extends IRotaContext {
   getRota: (rotaId: string | undefined) => IRota | undefined

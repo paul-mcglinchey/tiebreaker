@@ -1,3 +1,4 @@
+import { CheckIcon } from "@heroicons/react/solid"
 import { FieldArray } from "formik"
 import { combineClassNames } from "../../services"
 
@@ -37,15 +38,16 @@ const MultiSelector = <TValue extends unknown>({ fieldName, values, totalValuesL
                 className={
                   (itemStyles && itemStyles(formValues.includes(value))) || combineClassNames(
                     "flex flex-grow p-4 transition-colors justify-between items-center rounded",
-                    formValues.includes(value) ? 'bg-blue-500 text-gray-800' : 'bg-gray-900 text-gray-300'
+                    formValues.includes(value) ? 'bg-blue-500 text-gray-800' : 'bg-white dark:bg-gray-900'
                   )}
                 onClick={() => setFieldValue(toggleValue(value))}
               >
                 {render(value)}
+                {formValues.includes(value) && <CheckIcon className="w-6 h-6" />}
               </button>
             ))}
           </div>
-          <div className="text-right tracking-wide font-semibold text-gray-300 mt-2">
+          <div className="text-right tracking-wide font-semibold mt-2">
             Showing {values.length} of {totalValuesLength}
             {values.length < totalValuesLength && (
               <button type="button" className="tracking-wide font-semibold" onClick={() => toggleShowAll()}> - show all</button>

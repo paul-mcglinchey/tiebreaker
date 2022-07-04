@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { loginValidationSchema } from '../../schema';
-import { useAuth } from '../../hooks';
+import { useAuthService } from '../../hooks';
 import { IUser } from '../../models';
 import { StyledField, Button } from '.';
 import PublicWrapper from './PublicWrapper';
 
 const Login = () => {
 
-  const { login } = useAuth();
+  const { login } = useAuthService();
 
   const handleSubmit = (user: IUser) => {
     login(user)

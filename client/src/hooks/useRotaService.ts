@@ -1,5 +1,6 @@
 import { useContext } from "react"
-import { IEmployee, IRota, IRotaService } from "../models"
+import { IEmployee, IRota } from "../models"
+import { IRotaService } from "./interfaces"
 import { RotaContext } from "../contexts"
 import { endpoints } from "../config"
 import { useNavigate } from "react-router"

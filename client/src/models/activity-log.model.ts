@@ -1,4 +1,4 @@
-import { Task } from '.'
+import { Task } from '../enums'
 
 export interface IActivityLog {
   task: Task
