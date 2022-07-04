@@ -3,7 +3,8 @@ import { useNavigate } from "react-router"
 import { IUser } from "../models"
 import { AuthContext } from "../contexts"
 import { endpoints } from '../config'
-import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
+import { useRequestBuilder, useAsyncHandler, useResolutionService, useGroupService } from '.'
+import { Permission } from "../enums"
 
 const useAuth = () => {
   const auth = useContext(AuthContext)
@@ -11,6 +12,7 @@ const useAuth = () => {
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
+  const { currentGroup } = useGroupService()
   const navigate = useNavigate()
 
   const login = asyncHandler(async (user: IUser) => {
@@ -39,7 +41,13 @@ const useAuth = () => {
     updateUser(undefined)
   }
 
-  return { ...auth, signup, login, logout }
+  const hasPermission = (userId: string, applicationIdentifier: number, permission: Permission): boolean => {
+    if (currentGroup?.applications?.includes(applicationIdentifier)) return false
+
+    return currentGroup?.users.find(u => u.user === userId)?.applications.find(a => a.application === applicationIdentifier)?.permissions.includes(permission) ? true : false
+  }
+
+  return { ...auth, signup, login, logout, hasPermission }
 }
 
 export default useAuth;

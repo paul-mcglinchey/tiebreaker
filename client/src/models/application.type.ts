@@ -1,4 +1,4 @@
 export enum Application {
-  ClientManager = "Client Manager",
-  RotaManager = "Rota Manager"
+  ClientManager = 1,
+  RotaManager = 2
 }

@@ -14,6 +14,20 @@ import {
   AppLoader
 } from "."
 import { GroupProvider, PermissionProvider, UserProvider } from "../contexts"
+import { Permission } from "../enums"
+
+interface IRestrictedRouteProps {
+  applicationIdentifier: number
+  permission: Permission
+  component: JSX.Element
+  redirect: string
+}
+
+const RestrictedRoute = ({ applicationIdentifier , permission, component, redirect }: IRestrictedRouteProps): JSX.Element => {
+  const { user, hasPermission } = useAuth()
+
+  return (user?._id && hasPermission(user._id, applicationIdentifier, permission)) ? component : <Navigate to={redirect} />
+}
 
 const PrivateApp = () => {
 
@@ -38,7 +52,7 @@ const PrivateApp = () => {
 
                 {/* Client manager specific routes */}
                 <Route path="/clients/*" element={
-                  <ClientManager />
+                  <RestrictedRoute applicationIdentifier={1} permission={Permission.ApplicationAccess} component={<ClientManager />} redirect="/" />
                 }>
                   <Route path="dashboard" element={<ClientDashboard />} />
                   <Route path=":clientId/*" element={<ClientPage />} />
@@ -55,7 +69,6 @@ const PrivateApp = () => {
                 </Route>
 
                 {/* Admin Routes */}
-
                 <Route path="adminpanel/*" element={
                   isAdmin() ? <AdminPanel /> : <Navigate to="/" />
                 } />
