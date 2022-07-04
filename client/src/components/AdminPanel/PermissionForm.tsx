@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik"
+import { PermissionType } from "../../enums"
 import { usePermissionService } from "../../hooks"
-import { IContextualFormProps, IPermission, PermissionType } from "../../models"
+import { IContextualFormProps, IPermission } from "../../models"
 import { permissionValidationSchema } from "../../schema"
 import { ListboxSelector, StyledField } from "../Common"
 

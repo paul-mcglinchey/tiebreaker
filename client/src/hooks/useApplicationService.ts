@@ -1,4 +1,5 @@
-import { IApplication, IApplicationService } from "../models"
+import { IApplication } from "../models"
+import { IApplicationService } from "./interfaces"
 import { endpoints } from "../config"
 import { useAsyncHandler, useResolutionService, useRequestBuilder } from '.'
 import { useContext } from "react"

@@ -1,16 +1,4 @@
-export interface IPermissionGroup {
-  groupId: string
-  permissions: IPermission[]
-  rotas: {
-    rotaId: string,
-    permissions: IPermission[]
-  }[]
-}
-
-export enum PermissionType {
-  Group = 1,
-  Application = 2
-}
+import { PermissionType } from "../enums"
 
 export interface IPermission {
   _id?: string,

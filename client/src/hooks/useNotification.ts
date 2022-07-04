@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Notification } from "../models"
+import { Notification } from "../enums"
 import { NotificationContext } from "../contexts"
 
 const useNotification = () => {

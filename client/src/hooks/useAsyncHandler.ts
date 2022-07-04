@@ -1,7 +1,8 @@
 import { useNotification } from "."
-import { Notification } from "../models"
+import { Notification } from "../enums"
+import { IAsyncHandler } from "./interfaces"
 
-const useAsyncHandler = () => {
+const useAsyncHandler = (): IAsyncHandler => {
   const { addNotification } = useNotification()
   
   const asyncHandler = (fn: (...args: any[]) => any, notify: boolean = true) => async (...args: any) => {

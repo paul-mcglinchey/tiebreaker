@@ -1,8 +1,9 @@
-import { IClient, ISession, IClientService } from "../models"
+import { IClient, ISession } from "../models"
 import { ClientContext } from "../contexts"
 import { endpoints } from '../config'
 import { useRequestBuilder, useAsyncHandler, useResolutionService, useGroupService } from '.'
 import { useContext } from "react"
+import { IClientService } from "./interfaces"
 
 const useClientService = (): IClientService => {
 

@@ -2,9 +2,9 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { combineClassNames } from '../../services';
-import { Notification } from '../../models';
 import { INotification } from '../../models';
 import { useDelayedRendering, useIsMounted } from '../../hooks';
+import { Notification } from '../../enums';
 
 interface INotificationCardProps {
   notification: INotification,

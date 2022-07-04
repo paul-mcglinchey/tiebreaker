@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { IRota, ISchedule, IScheduleService } from "../models"
+import { IRota, ISchedule } from "../models"
+import { IScheduleService } from "./interfaces";
 import { ScheduleContext } from "../contexts";
 import { endpoints } from '../config'
 import { addDays } from "date-fns";

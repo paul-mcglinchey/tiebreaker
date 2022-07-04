@@ -1,8 +1,9 @@
 import { useContext } from "react"
-import { IGroup, IGroupService } from "../models"
+import { IGroup } from "../models"
 import { GroupContext } from "../contexts"
 import { endpoints } from '../config'
 import { useRequestBuilder, useAsyncHandler, useResolutionService } from '.'
+import { IGroupService } from "./interfaces"
 
 const useGroupService = (): IGroupService => {
   const { requestBuilder } = useRequestBuilder()

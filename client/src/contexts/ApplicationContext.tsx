@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IApplicationContext, IApplication, IApplicationsResponse } from "../models";
+import { IChildrenProps, IFetch, IApplication, IApplicationsResponse } from "../models";
 import { useFetch, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
+import { IApplicationContext } from "./interfaces";
 
 export const ApplicationContext = createContext<IApplicationContext>({
   applications: [],

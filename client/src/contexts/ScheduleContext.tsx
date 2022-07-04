@@ -1,7 +1,8 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, ISchedule, IScheduleContext, ISchedulesResponse } from "../models";
+import { IChildrenProps, IFetch, ISchedule, ISchedulesResponse } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from "../hooks";
 import { endpoints } from "../config";
+import { IScheduleContext } from "./interfaces";
 
 export const ScheduleContext = createContext<IScheduleContext>({
   getSchedules: () => [],

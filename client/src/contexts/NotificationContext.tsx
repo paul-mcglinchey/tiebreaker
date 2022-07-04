@@ -1,6 +1,7 @@
 import { createContext, useCallback, useState } from "react";
-import { IChildrenProps, INotification, Notification } from "../models";
+import { IChildrenProps, INotification } from "../models";
 import { v4 as uuid } from 'uuid'
+import { Notification } from "../enums";
 
 interface INotificationContext {
   getNotifications: () => INotification[],

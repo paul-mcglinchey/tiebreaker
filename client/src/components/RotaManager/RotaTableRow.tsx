@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useRotaService, useUserService } from '../../hooks';
-import { ButtonType, IRota } from '../../models';
+import { IRota } from '../../models';
 import { Button, InlineLink, TableRow, TableRowItem } from '../Common';
 import { RotaEmployeesModal } from '.';
+import { ButtonType } from '../../enums';
 
 const RotaTableRow = ({ rota }: { rota: IRota }) => {
 

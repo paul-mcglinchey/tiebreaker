@@ -3,7 +3,7 @@ import { PlusIcon } from '@heroicons/react/solid'
 import { useApplicationService } from '../../hooks'
 import { Button, Table } from '../Common'
 import { Panel, ApplicationTableRow, ApplicationModal } from '.'
-import { ButtonType } from '../../models'
+import { ButtonType } from '../../enums'
 
 const ApplicationPanel = () => {
 

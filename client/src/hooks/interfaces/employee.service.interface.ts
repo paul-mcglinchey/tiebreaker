@@ -1,4 +1,5 @@
-import { IEmployee, IEmployeeContext } from "."
+import { IEmployeeContext } from "../../contexts/interfaces"
+import { IEmployee } from "../../models"
 
 export interface IEmployeeService extends IEmployeeContext {
   getEmployee: (employeeId: string | undefined) => IEmployee | undefined

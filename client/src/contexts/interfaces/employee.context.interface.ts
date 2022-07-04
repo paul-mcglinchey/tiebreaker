@@ -1,15 +1,11 @@
 import { Dispatch, SetStateAction } from "react"
-import { IEmployee, SortDirection } from "."
+import { IEmployee, ISortable } from "../../models"
 
-export interface IEmployeeContext {
+export interface IEmployeeContext extends ISortable {
   employees: IEmployee[]
   setEmployees: Dispatch<SetStateAction<IEmployee[]>>
   count: number
   setCount: Dispatch<SetStateAction<number>>
-  sortField: string | undefined
-  setSortField: Dispatch<SetStateAction<string | undefined>>
-  sortDirection: SortDirection
-  setSortDirection: Dispatch<SetStateAction<SortDirection>>
   isLoading: boolean
   error: any | undefined
   refresh: () => void

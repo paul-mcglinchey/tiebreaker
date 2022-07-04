@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { IApplication } from "."
+import { IApplication } from "../../models"
 
 export interface IApplicationContext {
   applications: IApplication[]

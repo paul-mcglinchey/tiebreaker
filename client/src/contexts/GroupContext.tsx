@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IGroup, IGroupContext, IGroupsResponse } from "../models";
+import { IChildrenProps, IFetch, IGroup, IGroupsResponse } from "../models";
 import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage, setItemInLocalStorage } from "../services";
+import { IGroupContext } from "./interfaces";
 
 export const GroupContext = createContext<IGroupContext>({
   currentGroup: undefined,

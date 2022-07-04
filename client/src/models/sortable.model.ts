@@ -1,4 +1,4 @@
-import { SortDirection } from ".";
+import { SortDirection } from "../enums";
 
 export interface ISortable {
   sortField: string | undefined,

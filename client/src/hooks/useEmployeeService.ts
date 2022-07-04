@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { IEmployee, IEmployeeService } from "../models";
+import { IEmployee } from "../models";
 import { generateColour } from "../services"
 import { EmployeeContext } from "../contexts";
 import { useRequestBuilder, useAsyncHandler, useResolutionService } from '../hooks'
 import { endpoints } from '../config'
 import useGroupService from "./useGroupService";
+import { IEmployeeService } from "./interfaces";
 
 const useEmployeeService = (): IEmployeeService => {
   

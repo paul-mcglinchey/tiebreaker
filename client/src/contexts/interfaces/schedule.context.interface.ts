@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { ISchedule } from "."
+import { ISchedule } from "../../models"
 
 export interface IScheduleContext {
   getSchedules: () => ISchedule[]

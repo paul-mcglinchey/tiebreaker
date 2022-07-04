@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react"
-import { IRota, SortDirection } from "."
+import { IRota } from '../../models'
+import { SortDirection } from "../../enums"
 
 export interface IRotaContext {
   getRotas: () => IRota[]

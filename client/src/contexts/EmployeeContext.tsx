@@ -1,7 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse, SortDirection, IEmployeeContext } from "../models";
+import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
+import { IEmployeeContext } from "./interfaces";
+import { SortDirection } from "../enums";
 
 interface IEmployeeProviderProps extends IChildrenProps {
   includeDeleted?: boolean

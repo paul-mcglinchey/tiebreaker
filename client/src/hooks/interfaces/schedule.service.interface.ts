@@ -1,4 +1,5 @@
-import { ISchedule, IScheduleContext, IRota } from ".";
+import { IScheduleContext } from "../../contexts/interfaces";
+import { ISchedule, IRota } from "../../models";
 
 export interface IScheduleService extends IScheduleContext {
   getSchedule: (startDate: Date, rota: IRota, week: Date[]) => ISchedule

@@ -1,4 +1,5 @@
-import { IClient, ISession, IClientContext } from ".";
+import { IClientContext } from "../../contexts/interfaces";
+import { IClient, ISession } from "../../models";
 
 export interface IClientService extends IClientContext {
   getClient: (clientId: string | undefined) => IClient | undefined

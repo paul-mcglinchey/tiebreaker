@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router"
-import { useAuth } from "../hooks"
+import { useAuthService } from "../hooks"
 import {
   AdminPanel,
   ClientDashboard,
@@ -11,13 +11,15 @@ import {
   RotaDashboard,
   RotaManager,
   RotaPage,
-  AppLoader
+  AppLoader,
+  RestrictedRoute
 } from "."
 import { GroupProvider, PermissionProvider, UserProvider } from "../contexts"
+import { Application, Permission } from "../enums"
 
 const PrivateApp = () => {
 
-  const { isLoading, getAccess, isAdmin } = useAuth()
+  const { isLoading, getAccess, isAdmin } = useAuthService()
 
   return (
     <AppLoader>
@@ -38,7 +40,7 @@ const PrivateApp = () => {
 
                 {/* Client manager specific routes */}
                 <Route path="/clients/*" element={
-                  <ClientManager />
+                  <RestrictedRoute applicationIdentifier={Application.ClientManager} permission={Permission.ApplicationAccess} component={<ClientManager />} />
                 }>
                   <Route path="dashboard" element={<ClientDashboard />} />
                   <Route path=":clientId/*" element={<ClientPage />} />
@@ -46,7 +48,7 @@ const PrivateApp = () => {
 
                 {/* Rota manager specific routes */}
                 <Route path="/rotas/*" element={
-                  <RotaManager />
+                  <RestrictedRoute applicationIdentifier={Application.RotaManager} permission={Permission.ApplicationAccess} component={<RotaManager />} />
                 }>
                   <Route path="dashboard" element={<RotaDashboard />} />
                   <Route path=":rotaId/*" element={<RotaPage />} />
@@ -55,7 +57,6 @@ const PrivateApp = () => {
                 </Route>
 
                 {/* Admin Routes */}
-
                 <Route path="adminpanel/*" element={
                   isAdmin() ? <AdminPanel /> : <Navigate to="/" />
                 } />

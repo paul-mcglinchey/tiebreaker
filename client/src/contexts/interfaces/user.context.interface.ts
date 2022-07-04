@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { IUser } from "."
+import { IUser } from "../../models"
 
 export interface IUserContext {
   users: IUser[]

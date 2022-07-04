@@ -1,12 +1,12 @@
 import { Transition } from "@headlessui/react"
 import { useEffect, useState } from "react"
-import { useAuth, useDelayedRendering, useGroupService, useUserService } from "../hooks"
+import { useAuthService, useDelayedRendering, useGroupService, useUserService } from "../hooks"
 import { combineClassNames } from "../services"
 import { WideIcon } from "./Common"
 
 const AppLoader = ({ children }: { children: any }) => {
 
-  const { isLoading: authLoading } = useAuth()
+  const { isLoading: authLoading } = useAuthService()
   const { isLoading: groupsLoading } = useGroupService()
   const { isLoading: usersLoading } = useUserService()
 

@@ -3,7 +3,7 @@ import { useGroupService } from "../../hooks";
 import { IGroup } from "../../models";
 import { dashboardLinks } from "../../config";
 import { Toolbar, NavMenu, SpinnerIcon } from "../Common";
-import { GroupCard, DataPoint, GroupPrompter, GroupModal } from ".";
+import { GroupCard, GroupPrompter, GroupModal } from ".";
 
 const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
@@ -21,28 +21,9 @@ const Groups = () => {
           </div>
         ) : (
           groups.length > 0 ? (
-            <div className="flex grow flex-col md:flex-row flex-wrap -m-2 mb-2">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
               {groups.map((g: IGroup, i: number) => (
-                <GroupCard
-                  key={i}
-                  g={g}
-                  render={isCardFlipped => (
-                    <div className="flex flex-col grow md:flex-row space-y-2 md:space-y-0 md:space-x-8">
-                      {isCardFlipped ? (
-                        <>
-                          <DataPoint value={g.users?.length || 0} label="user" />
-                        </>
-                      ) : (
-                        <>
-                          <DataPoint value={g.applications?.length} label="application" />
-                          <DataPoint value={g.entities?.clients?.length} label="client" />
-                          <DataPoint value={g.entities?.employees?.length} label="employee" />
-                          <DataPoint value={g.entities?.rotas?.length} label="rota" />
-                        </>
-                      )}
-                    </div>
-                  )}
-                />
+                <GroupCard key={i} g={g} />
               ))}
             </div>
           ) : (

@@ -3,11 +3,12 @@ import { FieldArray, Form, Formik } from "formik"
 import { Persist } from 'formik-persist'
 import { PlusIcon } from "@heroicons/react/solid"
 import { useFetch, useRequestBuilder, useListCollectionService, useRefresh } from "../../hooks"
-import { ButtonType, IFetch, IList, IListCollection, IListValue } from "../../models"
+import { IFetch, IList, IListCollection, IListValue } from "../../models"
 import { generateColour } from "../../services"
 import { endpoints } from "../../config"
 import { Button, Dialog, Fetch, FetchError, SpinnerIcon } from "../Common"
 import { EditableSubPanelTitle, ListItem, Panel, SubPanel, SubPanelContent } from "."
+import { ButtonType } from "../../enums"
 
 const SystemListCollectionPanel = () => {
 

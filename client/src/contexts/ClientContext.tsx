@@ -1,8 +1,10 @@
 import { createContext, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IClient, IClientsResponse, SortDirection, IClientContext, IFilter } from "../models";
+import { IChildrenProps, IFetch, IClient, IClientsResponse, IFilter } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage, setItemInLocalStorage } from "../services";
+import { IClientContext } from "./interfaces";
+import { SortDirection } from "../enums";
 
 interface IClientProviderProps extends IChildrenProps {
   includeDeleted?: boolean

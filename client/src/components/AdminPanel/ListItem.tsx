@@ -1,6 +1,6 @@
 import { Field } from "formik"
 import { TrashIcon } from "@heroicons/react/solid"
-import { ButtonType } from "../../models"
+import { ButtonType } from "../../enums"
 import { generateColour } from "../../services"
 import { Button, ColourPicker } from "../Common"
 

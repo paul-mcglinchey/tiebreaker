@@ -1,7 +1,9 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { IChildrenProps, IFetch, IRota, IRotaContext, IRotasResponse, SortDirection } from "../models";
+import { IChildrenProps, IFetch, IRota, IRotasResponse } from "../models";
 import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
+import { IRotaContext } from "./interfaces";
+import { SortDirection } from "../enums";
 
 export const RotaContext = createContext<IRotaContext>({
   getRotas: () => [],

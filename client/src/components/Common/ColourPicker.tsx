@@ -17,7 +17,7 @@ const ColourPicker = ({ colour, setColour, menuSide, hideIcon, square }: IColour
   return (
     <div className="inline-flex items-center">
       <Menu as="div" className="relative w-full">
-        <Menu.Button className="flex w-full items-center space-x-2 text-white">
+        <Menu.Button className="flex w-full items-center space-x-2">
           {!hideIcon && (
             <ChevronDownIcon className="w-6 h-6" />
           )}
@@ -36,7 +36,7 @@ const ColourPicker = ({ colour, setColour, menuSide, hideIcon, square }: IColour
             className={combineClassNames(menuSide ? (
               menuSide === "LEFT" ? "left-0" : "right-0"
               ) : "right-0",
-              "z-50 origin-top-right mt-4 absolute flex flex-wrap flex-grow w-60 justify-evenly rounded bg-gray-900 p-2"
+              "z-50 origin-top-right mt-4 absolute flex flex-wrap flex-grow w-60 justify-evenly rounded bg-white dark:bg-gray-900 p-2 shadow-md"
             )}
           >
             {colours.map((pc: string, i: number) => (

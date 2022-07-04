@@ -1,0 +1,11 @@
+export * from './client.service.interface'
+export * from './employee.service.interface'
+export * from './group.service.interface'
+export * from './application.service.interface'
+export * from './permission.service.interface'
+export * from './rota.service.interface'
+export * from './schedule.service.interface'
+export * from './user.service.interface'
+export * from './auth.service.interface'
+
+export * from './asynchandler.interface'

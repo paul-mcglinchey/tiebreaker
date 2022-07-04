@@ -36,7 +36,10 @@ const userSchema = mongoose.Schema({
       }]
     }
   }],
-  invites: [InviteSchema]
+  invites: [InviteSchema],
+  preferences: {
+    defaultGroup: { type: String, required: false }
+  }
 }, { timeStamps: true });
 
 module.exports = mongoose.model('User', userSchema);

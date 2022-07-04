@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { usePermissionService } from "../../hooks"
-import { IPermission, PermissionType } from "../../models"
+import { IPermission } from "../../models"
 import { Dialog, InlineButton, TableRow, TableRowItem } from "../Common"
 import { PermissionModal } from '.'
+import { PermissionType } from "../../enums"
 
 interface IPermissionTableRowProps {
   permission: IPermission

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { IPermission } from "."
+import { IPermission } from "../../models"
 
 export interface IPermissionContext {
   permissions: IPermission[]
