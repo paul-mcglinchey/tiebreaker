@@ -42,6 +42,10 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
     currentGroup && setItemInLocalStorage('group-id', currentGroup?._id)
   }, [currentGroup])
 
+  useEffect(() => {
+    setCurrentGroup(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
+  }, [groups])
+
   const contextValue = {
     currentGroup,
     setCurrentGroup,

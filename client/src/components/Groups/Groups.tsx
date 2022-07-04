@@ -30,10 +30,11 @@ const Groups = () => {
                     <div className="flex flex-col grow md:flex-row space-y-2 md:space-y-0 md:space-x-8">
                       {isCardFlipped ? (
                         <>
-                          <DataPoint value={g.entities?.users?.length || 0} label="user" />
+                          <DataPoint value={g.users?.length || 0} label="user" />
                         </>
                       ) : (
                         <>
+                          <DataPoint value={g.applications?.length} label="application" />
                           <DataPoint value={g.entities?.clients?.length} label="client" />
                           <DataPoint value={g.entities?.employees?.length} label="employee" />
                           <DataPoint value={g.entities?.rotas?.length} label="rota" />

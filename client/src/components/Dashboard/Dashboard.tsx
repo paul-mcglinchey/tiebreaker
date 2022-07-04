@@ -11,8 +11,9 @@ const Dashboard = () => {
   const { applications } = useApplicationService()
 
   const getUserAccessibleApps = (): IApplication[] => {
+    let groupApps = applications.filter(a => a.identifier && currentGroup?.applications?.includes(a.identifier))
     let userApps = currentGroup?.users && currentGroup?.users.find(u => u.user === user?._id)?.applications
-    let userAccessibleApps = applications.filter(a => a.identifier && userApps?.find(ua => ua.application === a.identifier && a.requiredPermissions?.every(rp => ua.permissions.includes(rp))))
+    let userAccessibleApps = groupApps?.filter(a => a?.identifier && userApps?.find(ua => ua.application === a.identifier) && a.requiredPermissions.every(rp => userApps?.find(ua => ua.application == a.identifier)?.permissions.includes(rp)))
 
     return userAccessibleApps
   }
