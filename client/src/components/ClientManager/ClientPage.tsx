@@ -4,7 +4,7 @@ import {
   Routes,
   useParams
 } from "react-router";
-import { AddSession, ClientHeader, ViewClient, ClientOverview } from ".";
+import { AddSession, ClientHeader, ClientOverview } from ".";
 import { useClientService } from "../../hooks";
 
 const ClientPage = () => {
@@ -20,10 +20,9 @@ const ClientPage = () => {
         <div className="flex flex-col">
           <ClientHeader client={client} />
           <Routes>
-            <Route path="overview" element={<ClientOverview client={client} />} />
-            <Route path="view" element={<ViewClient />} />
+            <Route path="view" element={<ClientOverview client={client} />} />
             <Route path="addsession" element={<AddSession client={client} />} />
-            <Route path="**" element={<Navigate to="overview" />} />
+            <Route path="**" element={<Navigate to="view" />} />
           </Routes>
         </div>
       )}

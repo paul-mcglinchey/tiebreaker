@@ -18,6 +18,7 @@ const EmployeeModal = ({ employee, isOpen, close, level = 1, compact = false }: 
       isOpen={isOpen}
       close={close}
       level={level}
+      allowAddMultiple={!employee}
     >
       {(ConfirmationButton) => (
         compact ? <CompactEmployeeForm employee={employee} ContextualSubmissionButton={ConfirmationButton}/> : <EmployeeForm employee={employee} ContextualSubmissionButton={ConfirmationButton} />

@@ -4,7 +4,6 @@ export { default as ClientHeader } from './ClientHeader'
 export { default as ClientOverview } from './ClientOverview'
 export { default as ClientPage } from './ClientPage'
 export { default as InfoTabs } from './InfoTabs'
-export { default as ViewClient } from './ViewClient'
 
 export { default as ClientTableRow } from './ClientTableRow'
 
