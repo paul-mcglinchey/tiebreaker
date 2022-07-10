@@ -20,6 +20,10 @@ const Client = mongoose.model(
     colour: String,
     activityLog: [ActivityLogSchema],
     audit: AuditSchema,
+    groupId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Group'
+    },
     deleted: {
       type: Boolean,
       default: false

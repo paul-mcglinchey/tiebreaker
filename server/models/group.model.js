@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
-const { UsersSchema } = require('./common/groupentity.schema');
-const { AuditSchema } = require('./common/audit.schema');
-const GroupEntitySchema = require('./common/groupentity.schema');
+const { AuditSchema } = require('./common/audit.schema')
 
 const Group = mongoose.model(
   "Group",
@@ -28,10 +26,6 @@ const Group = mongoose.model(
         permissions: [Number]
       }]
     }],
-    entities: {
-      type: GroupEntitySchema,
-      required: true
-    },
     listcollections: [{
       type: Schema.Types.ObjectId,
       ref: 'ListCollection'

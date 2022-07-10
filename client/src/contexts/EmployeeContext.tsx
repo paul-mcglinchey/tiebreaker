@@ -5,10 +5,6 @@ import { endpoints } from "../config";
 import { IEmployeeContext } from "./interfaces";
 import { SortDirection } from "../enums";
 
-interface IEmployeeProviderProps extends IChildrenProps {
-  includeDeleted?: boolean
-}
-
 export const EmployeeContext = createContext<IEmployeeContext>({
   employees: [],
   setEmployees: () => {},
@@ -22,7 +18,7 @@ export const EmployeeContext = createContext<IEmployeeContext>({
   error: undefined
 });
 
-export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployeeProviderProps) => {
+export const EmployeeProvider = ({ children }: IChildrenProps) => {
   const [employees, setEmployees] = useState<IEmployee[]>([])
   const [count, setCount] = useState<number>(0)
 
@@ -31,7 +27,7 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
 
   const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || "", includeDeleted), requestBuilder(), [sortField, sortDirection, currentGroup])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || ""), requestBuilder(), [sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {

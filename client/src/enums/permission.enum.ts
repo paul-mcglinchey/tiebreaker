@@ -3,5 +3,6 @@ export enum Permission {
   ViewClients = 2,
   AddEditDeleteClients = 3,
   ViewRotas = 4,
-  AddEditDeleteRotas = 5
+  AddEditDeleteRotas = 5,
+  GroupAccess = 6
 }

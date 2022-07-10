@@ -16,6 +16,10 @@ const SessionSchema = new Schema({
   date: { 
     type: Date 
   },
+  clientId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Client'
+  },
   audit: AuditSchema
 }, { timestamps: true });
 

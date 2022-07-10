@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { IUser } from "../models"
+import { IGroup, IUser } from "../models"
 import { UserContext } from "../contexts"
 import { IUserService } from "./interfaces"
 import { useAsyncHandler, useRequestBuilder, useResolutionService } from "."
@@ -33,7 +33,21 @@ const useUserService = (): IUserService => {
     }))
   }
 
-  return { ...userContext, getUser, updateUser }
+  const userHasApplication = (group: IGroup, userId: string | undefined, applicationIdentifer: number | undefined): boolean => {
+    if (!userId || !applicationIdentifer) return false
+
+    return !!group.users?.find(gu => gu.user === userId)?.applications.map(a => a.application).includes(applicationIdentifer)
+  }
+
+  const userHasPermission = (group: IGroup, userId: string | undefined, applicationIdentifier: number | undefined, permissionIdentifier: number | undefined): boolean => {
+    if (!userId || !permissionIdentifier) return false
+
+    return applicationIdentifier 
+      ? !!group.users.find(gu => gu.user === userId)?.applications.find(ga => ga.application === applicationIdentifier)?.permissions.includes(permissionIdentifier)
+      : !!group.users.find(gu => gu.user === userId)?.permissions.includes(permissionIdentifier)
+  }
+
+  return { ...userContext, getUser, updateUser, userHasApplication, userHasPermission }
 }
 
 export default useUserService

@@ -12,13 +12,6 @@ router.get(
   rotas.get
 );
 
-// Get rota by ID
-router.get(
-  '/:rotaId',
-  middleware.rotaMiddleware.checkIfQueryHasRotaId,
-  rotas.getById
-);
-
 // Add a new rota
 router.post(
   '/',

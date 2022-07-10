@@ -19,12 +19,12 @@ interface IClientListProps {
 
 const ClientList = ({ setAddClientOpen }: IClientListProps) => {
 
-  const { clients, count, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
+  const { clients, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
   const { hasPermission } = useAuthService()
 
   return (
     <div className="rounded-lg flex flex-col space-y-0 pb-2">
-      {count > 0 ? (
+      {clients.length > 0 ? (
         <Fragment>
           <div className="flex flex-col flex-grow space-y-4">
             <SearchBar
@@ -41,7 +41,7 @@ const ClientList = ({ setAddClientOpen }: IClientListProps) => {
               </Table.Body>
             </Table>
           </div>
-          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={count} />
+          <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={clients.length} />
         </Fragment>
       ) : (
         !isLoading && hasPermission(Application.ClientManager, Permission.AddEditDeleteClients) ? (

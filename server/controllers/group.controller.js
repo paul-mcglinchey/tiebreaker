@@ -33,7 +33,6 @@ exports.create = asyncHandler(async (req, res) => {
       user: req.auth._id,
       applications: []
     }],
-    entities: {},
     listcollections: [systemListCollectionId],
     audit: { createdBy: req.auth._id, updatedBy: req.auth._id }
   })

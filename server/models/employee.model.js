@@ -28,6 +28,8 @@ const Employee = mongoose.model(
     colour: String,
     isActive: { type: Boolean, default: true },
     activityLog: [ActivityLogSchema],
+    groupId: { type: Schema.Types.ObjectId, ref: 'Group' },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     audit: AuditSchema,
     deleted: { type: Boolean, default: false }
   }, { timestamps: true })

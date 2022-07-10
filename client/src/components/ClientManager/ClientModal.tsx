@@ -16,6 +16,7 @@ const AddClientModal = ({ isOpen, close, client, compact = false }: IAddClientMo
       description="This dialog can be used to create new clients" 
       isOpen={isOpen}
       close={close}
+      allowAddMultiple={!client}
     >
       {(ConfirmationButton) => (
         compact ? <CompactClientForm ContextualSubmissionButton={ConfirmationButton} client={client} /> : <ClientForm ContextualSubmissionButton={ConfirmationButton} client={client} />

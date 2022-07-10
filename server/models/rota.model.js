@@ -30,6 +30,9 @@ const Rota = mongoose.model(
     colour: { 
       type: String, required: false 
     },
+    groupId: {
+      type: Schema.Types.ObjectId, ref: 'Group'
+    },
     audit: AuditSchema,
     deleted: { type: Boolean, default: false }
   }, { timestamps: true })

@@ -7,3 +7,4 @@ export { default as GroupPrompter } from './GroupPrompter'
 
 export { default as ApplicationMultiSelector } from './ApplicationMultiSelector'
 export { default as UserPermissionSelector } from './UserPermissionSelector'
+export { default as UserPermissionGroup } from './UserPermissionGroup'

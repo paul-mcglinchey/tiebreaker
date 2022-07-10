@@ -56,8 +56,8 @@ app.use(middleware.errorMiddleware.errorHandler);
 // permissionController.createPermissions();
 
 // get the current time to display on restarts of the server
-var currentDateTime = new Date();
-var currentTime = currentDateTime.getUTCHours() + ':' + currentDateTime.getUTCMinutes();
+let currentDateTime = new Date();
+let currentTime = currentDateTime.getUTCHours() + ':' + currentDateTime.getUTCMinutes();
 
 // set port, listen for requests
 app.listen(PORT, () => console.log(`Server running on port ${PORT} in environment ${process.env.NODE_ENV} @ ${currentTime}`))

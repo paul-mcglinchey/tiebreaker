@@ -63,8 +63,7 @@ const Scheduler = ({ rota }: ISchedulerResponse) => {
                 />
               ) : (
                 <Prompter
-                  title="This rota doesn't have any employees"
-                  subtitle="To get started with the rota manager you'll need to add employees to your group, if you already have your employees created within your group you can simply add them to the rota"
+                  title="This rota doesn't have any employees assigned"
                   action={() => { }}
                   Icon={UserAddIcon}
                 />

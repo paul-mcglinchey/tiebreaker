@@ -1,10 +1,3 @@
-interface IGroupEntities {
-  users?: string[]
-  rotas?: string[]
-  clients?: string[]
-  employees?: string[]
-} 
-
 export interface IGroupUser {
   user: string,
   permissions: number[]
@@ -19,9 +12,7 @@ export interface IGroup {
   name?: string
   description?: string
   applications?: number[]
-  users: IGroupUser[],
-  entities?: IGroupEntities
-  deletedEntities?: IGroupEntities
+  users: IGroupUser[]
   listDefinitions?: string
   colour?: string
 }

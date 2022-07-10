@@ -44,7 +44,7 @@ const buildQueryString = (pageNumber: number, pageSize: number, sortField: strin
   return queryString;
 }
 
-export const ClientProvider = ({ includeDeleted = false, children }: IClientProviderProps) => {
+export const ClientProvider = ({ children }: IClientProviderProps) => {
   const [clients, setClients] = useState<IClient[]>([])
   const [count, setCount] = useState<number>(0)
 
@@ -61,7 +61,7 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
   const { requestBuilder } = useRequestBuilder()
   const { response, isLoading, error }: IFetch<IClientsResponse> = useFetch
   (
-    `${endpoints.clients(currentGroup?._id || "", includeDeleted)}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
+    `${endpoints.clients(currentGroup?._id || "")}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
     requestBuilder(), 
     [sortField, sortDirection, pageSize, pageNumber, currentGroup]
   )

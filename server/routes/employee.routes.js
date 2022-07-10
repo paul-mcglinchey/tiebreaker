@@ -8,20 +8,14 @@ router.use(middleware.groupMiddleware.checkIfQueryHasGroupId)
 // Get all employees which the current user has view access to for a specific group
 router.get(
   '/',
-  employees.get(false)
-);
-
-// Get all employees including deleted employees
-router.get(
-  '/deleted',
-  employees.get(true)
+  employees.get
 )
 
 // Add a new employee
 router.post(
   '/',
   employees.create
-);
+)
 
 // Update an employee
 router.put(

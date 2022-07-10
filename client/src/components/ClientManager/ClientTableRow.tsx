@@ -14,7 +14,7 @@ const ClientTableRow = ({ client }: { client: IClient }) => {
     <TableRow>
       <TableRowItem>
         <div className="flex flex-col">
-          <div className="text-sm font-medium text-white">{client.fullName || "--"}</div>
+          <div className="text-sm font-medium text-white">{`${client.name.firstName} ${client.name.lastName}` || "--"}</div>
           <div className="text-sm">{client?.contactInfo?.primaryEmail || "--"}</div>
         </div>
       </TableRowItem>
