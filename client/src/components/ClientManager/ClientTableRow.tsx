@@ -1,9 +1,12 @@
 import { ViewGridAddIcon } from '@heroicons/react/outline';
 import { useUserService } from '../../hooks';
 import { IClient } from '../../models';
-import { InlineLink, TableRow, TableRowItem } from '..';
+import { ClientModal, InlineLink, InlineButton, TableRow, TableRowItem } from '..';
+import { useState } from 'react';
 
 const ClientTableRow = ({ client }: { client: IClient }) => {
+
+  const [editClientOpen, setEditClientOpen] = useState<boolean>(false)
 
   const { getUser } = useUserService()
 
@@ -42,10 +45,14 @@ const ClientTableRow = ({ client }: { client: IClient }) => {
       </TableRowItem>
       <TableRowItem>
         <div className="flex flex-grow items-center space-x-2 justify-end">
-          <InlineLink to={`/clients/${client._id}/overview`} color="text-gray-500">Overview</InlineLink>
           <InlineLink to={`/clients/${client._id}/view`} color="text-gray-500">View</InlineLink>
-          <InlineLink to={`/clients/${client._id}/edit`} color="text-blue-500">Edit</InlineLink>
+          <InlineButton action={() => setEditClientOpen(true)} color="text-blue-500">Edit</InlineButton>
         </div>
+        <ClientModal
+          isOpen={editClientOpen}
+          close={() => setEditClientOpen(false)}
+          client={client}
+        />
       </TableRowItem>
     </TableRow>
   )

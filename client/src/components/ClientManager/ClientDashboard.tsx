@@ -18,7 +18,7 @@ const ClientDashboard = () => {
           <Prompter title="You don't have access to view clients in this group" />
         )}
       </>
-      <ClientModal isOpen={addClientOpen} close={() => setAddClientOpen(false)} />
+      <ClientModal isOpen={addClientOpen} close={() => setAddClientOpen(false)} compact/>
     </>
   )
 }
