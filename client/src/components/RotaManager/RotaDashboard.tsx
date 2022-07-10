@@ -1,34 +1,24 @@
 import { memo, useState } from 'react';
-import { useGroupService } from '../../hooks';
-import { FetchError, Toolbar, SpinnerLoader } from '../Common';
-import { GroupModal, GroupPrompter } from '../Groups';
+import { useAuthService } from '../../hooks';
+import { Prompter, Toolbar } from '../Common';
 import { RotaModal, RotaList } from '.';
+import { Application, Permission } from '../../enums';
 
 const RotaDashboard = () => {
-  const [addGroupOpen, setAddGroupOpen] = useState(false);
   const [addRotaOpen, setAddRotaOpen] = useState(false);
 
-  const { count, isLoading, error, refresh } = useGroupService();
+  const { hasPermission } = useAuthService()
 
   return (
     <>
-      {!error && !isLoading ? (
-        count > 0 ? (
-          <>
-            <Toolbar title="Rotas" addRotaAction={() => setAddRotaOpen(true)} />
-            <RotaList />
-          </>
+      <>
+        <Toolbar title="Rotas" addRotaAction={hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) ? () => setAddRotaOpen(true) : undefined} />
+        {hasPermission(Application.RotaManager, Permission.ViewRotas) ? (
+          <RotaList />
         ) : (
-          <GroupPrompter action={() => setAddGroupOpen(true)} />
-        )
-      ) : (
-        isLoading ? (
-          <SpinnerLoader />
-        ) : (
-          <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
-        )
-      )}
-      <GroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+          <Prompter title="You don't have access to view rotas in this group" />
+        )}
+      </>
       <RotaModal isOpen={addRotaOpen} close={() => setAddRotaOpen(false)} />
     </>
   )

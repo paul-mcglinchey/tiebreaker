@@ -14,9 +14,7 @@ const permissionSchema = mongoose.Schema({
   language: { 
     type: String, required: true, default: 'en-US' 
   },
-  type: {
-    type: Number
-  },
+  applications: [Number],
   audit: AuditSchema
 }, { timeStamps: true });
 

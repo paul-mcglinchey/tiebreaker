@@ -7,7 +7,7 @@ import { ApplicationContext } from "../contexts"
 
 const useApplicationService = (): IApplicationService => {
   const applicationsContext = useContext(ApplicationContext)
-  const { applications, setApplications } = applicationsContext
+  const { applications = [], setApplications } = applicationsContext
 
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
@@ -43,19 +43,19 @@ const useApplicationService = (): IApplicationService => {
   })
 
   const addApplicationInContext = (application: IApplication) => {
-    setApplications(applications => [...applications, application])
+    setApplications(applications => applications ? [...applications, application] : undefined)
   }
 
   const updateApplicationInContext = (applicationId: string, values: IApplication) => {
     setApplications(applications => {
-      return applications.map(a => {
+      return applications ? applications.map(a => {
         return a._id === applicationId ? { ...a, ...values } : a
-      })
+      }) : undefined
     })
   }
 
   const deleteApplicationInContext = (applicationId: string) => {
-    setApplications(applications => applications.filter(a => a._id !== applicationId))
+    setApplications(applications => applications ? applications.filter(a => a._id !== applicationId) : undefined)
   } 
 
   return { ...applicationsContext, getApplication, addApplication, updateApplication, deleteApplication }

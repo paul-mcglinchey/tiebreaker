@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IGroup, IGroupsResponse } from "../models";
-import { useFetch, useIsMounted, useRefresh, useRequestBuilder } from "../hooks";
+import { useAuthService, useFetch, useIsMounted, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage, setItemInLocalStorage } from "../services";
 import { IGroupContext } from "./interfaces";
@@ -12,19 +12,18 @@ export const GroupContext = createContext<IGroupContext>({
   setGroups: () => {},
   count: 0,
   isLoading: false,
-  error: undefined,
-  refresh: () => {}
+  error: undefined
 });
 
 export const GroupProvider = ({ children }: IChildrenProps) => {
-  const [groups, setGroups] = useState<IGroup[]>([])
+  const [groups, setGroups] = useState<IGroup[] | undefined>()
   const [count, setCount] = useState<number>(0)
-  const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups.find(g => g._id === getItemInLocalStorage('group-id')))
+  const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups && groups.find(g => g._id === getItemInLocalStorage('group-id')))
   
   const isMounted = useIsMounted()
   const { requestBuilder } = useRequestBuilder()
-  const { refresh, dependency } = useRefresh()
-  const { response, isLoading, error }: IFetch<IGroupsResponse> = useFetch(endpoints.groups, requestBuilder(), [dependency])
+  const { user } = useAuthService()
+  const { response, isLoading, error }: IFetch<IGroupsResponse> = useFetch(endpoints.groups, requestBuilder(), [user])
 
   useEffect(() => {
     if (isMounted() && response) {
@@ -44,7 +43,7 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
   }, [currentGroup])
 
   useEffect(() => {
-    setCurrentGroup(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
+    groups && setCurrentGroup(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
   }, [groups])
 
   const contextValue = {
@@ -54,8 +53,7 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
     setGroups,
     count,
     isLoading,
-    error,
-    refresh
+    error
   }
 
   return (

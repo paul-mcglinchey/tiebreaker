@@ -10,7 +10,7 @@ interface ICache<T> {
 const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCache: boolean = false): IFetch<T> => {
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState<undefined | Object | string>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const { asyncHandler } = useAsyncHandler()
 
@@ -34,11 +34,13 @@ const useFetch = <T>(url: string, options: RequestInit, deps: any[] = [], useCac
           setError({ message: `${res.status} ${res.statusText}`})
         }
 
-        setIsLoading(false)
       }
-    })
 
+      setIsLoading(false)
+    })
+    
     isMounted() && _fetch()
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
   

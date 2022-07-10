@@ -1,3 +1,7 @@
 export enum Permission {
-  ApplicationAccess = 1
+  ApplicationAccess = 1,
+  ViewClients = 2,
+  AddEditDeleteClients = 3,
+  ViewRotas = 4,
+  AddEditDeleteRotas = 5
 }

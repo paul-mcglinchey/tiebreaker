@@ -9,5 +9,4 @@ export interface IAuthContext {
   getCookie: () => IUser | undefined
   isAdmin: () => boolean
   isLoading: boolean
-  setIsLoading: Dispatch<SetStateAction<boolean>>
 }

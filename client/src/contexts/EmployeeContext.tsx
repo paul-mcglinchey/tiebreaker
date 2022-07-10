@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IEmployee, IEmployeesResponse } from "../models";
-import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
+import { useFetch, useGroupService, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { IEmployeeContext } from "./interfaces";
 import { SortDirection } from "../enums";
@@ -19,9 +19,7 @@ export const EmployeeContext = createContext<IEmployeeContext>({
   sortDirection: SortDirection.Desc,
   setSortDirection: () => {},
   isLoading: false,
-  error: undefined,
-  refresh: () => {},
-  dependency: false
+  error: undefined
 });
 
 export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployeeProviderProps) => {
@@ -31,10 +29,9 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
   const [sortField, setSortField] = useState<string | undefined>(undefined)
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.Desc)
 
-  const { currentGroup, refresh: groupRefresh } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || "", includeDeleted), requestBuilder(), [dependency, sortField, sortDirection, currentGroup])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || "", includeDeleted), requestBuilder(), [sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {
@@ -53,9 +50,7 @@ export const EmployeeProvider = ({ includeDeleted = false, children }: IEmployee
     sortDirection,
     setSortDirection,
     isLoading,
-    error,
-    refresh,
-    dependency
+    error
   }
 
   return (

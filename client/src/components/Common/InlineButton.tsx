@@ -6,9 +6,10 @@ interface IInlineButtonProps {
 
 const InlineButton = ({ children, action, color }: IInlineButtonProps) => {
   return (
-    <button 
+    <button
+      type="button"
       onClick={action} 
-      className={`flex justify-between uppercase text-sm px-2 py-1 font-medium tracking-wider hover:bg-gray-800 rounded-lg ${color}`}
+      className={`flex justify-between uppercase text-sm px-2 py-1 font-medium tracking-wider hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors rounded-lg ${color}`}
     >
       {children}
     </button>

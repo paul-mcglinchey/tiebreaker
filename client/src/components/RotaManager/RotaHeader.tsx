@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { EyeIcon, LockClosedIcon, LockOpenIcon, PencilIcon, TrashIcon, UsersIcon } from "@heroicons/react/solid";
 import { useFormikContext } from "formik";
 import { IRota } from "../../models";
-import { useRotaService } from "../../hooks";
+import { useAuthService, useRotaService } from "../../hooks";
 import { Button, Dialog, Dropdown } from "../Common";
 import { RotaModal } from ".";
-import { ButtonType } from "../../enums";
+import { Application, ButtonType, Permission } from "../../enums";
 
 interface IRotaHeaderProps {
   rota: IRota,
@@ -16,11 +16,12 @@ interface IRotaHeaderProps {
 
 const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
 
-  const { updateRota, deleteRota } = useRotaService()
-  const { handleSubmit, dirty } = useFormikContext()
-
   const [deletionOpen, setDeletionOpen] = useState<boolean>(false);
   const [editRotaOpen, setEditRotaOpen] = useState<boolean>(false);
+
+  const { updateRota, deleteRota } = useRotaService()
+  const { handleSubmit, dirty } = useFormikContext()
+  const { hasPermission } = useAuthService()
 
   const updateEditingStatus = () => {
     dirty && handleSubmit();
@@ -47,22 +48,25 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
         <span> / {editing ? 'Editing' : 'Viewing'}</span>
       </div>
       <div className="flex space-x-4 items-center">
-        {!rota.locked ? (
-          <Button buttonType={ButtonType.Tertiary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => updateEditingStatus()} />
-        ) : (
+        {rota.locked && (
           <LockClosedIcon className="text-gray-400 w-6 h-6" />
         )}
-        <Dropdown options={[
-          { label: 'Edit Rota Details', action: () => setEditRotaOpen(true), Icon: PencilIcon },
-          { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
-          { label: rota.locked ? 'Unlock rota' : 'Lock rota', action: () => updateLockedStatus(), Icon: rota.locked ? LockOpenIcon : LockClosedIcon },
-          { label: 'Delete', action: () => setDeletionOpen(true), Icon: TrashIcon },
-        ]} />
+        {hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) && (
+          <>
+            <Button buttonType={ButtonType.Tertiary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => updateEditingStatus()} />
+            <Dropdown options={[
+              { label: 'Edit Rota Details', action: () => setEditRotaOpen(true), Icon: PencilIcon },
+              { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },
+              { label: rota.locked ? 'Unlock rota' : 'Lock rota', action: () => updateLockedStatus(), Icon: rota.locked ? LockOpenIcon : LockClosedIcon },
+              { label: 'Delete', action: () => setDeletionOpen(true), Icon: TrashIcon },
+            ]} />
+          </>
+        )}
       </div>
       <RotaModal isOpen={editRotaOpen} close={() => setEditRotaOpen(false)} rota={rota} />
       <Dialog
-        isOpen={deletionOpen} 
-        close={() => setDeletionOpen(false)} 
+        isOpen={deletionOpen}
+        close={() => setDeletionOpen(false)}
         positiveActions={[() => deleteRota(rota._id)]}
         title="Delete rota"
         description="This action will delete the rota from the current group"

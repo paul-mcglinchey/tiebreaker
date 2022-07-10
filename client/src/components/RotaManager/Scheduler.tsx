@@ -4,18 +4,22 @@ import { UserAddIcon } from "@heroicons/react/solid";
 import { useRotaService, useScheduleService } from "../../hooks";
 import { Prompter, SpinnerLoader } from "../Common";
 import { RotaHeader, Schedule } from "."
+import { IRota } from "../../models";
 
-const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
+interface ISchedulerResponse {
+  rota: IRota
+}
+
+const Scheduler = ({ rota }: ISchedulerResponse) => {
   const [editing, setEditing] = useState<boolean>(false)
   const [currentWeekModifier, setCurrentWeekModifier] = useState<number>(0)
 
-  const { getRota, isLoading: isRotaLoading, } = useRotaService()
+  const { isLoading: isRotaLoading, } = useRotaService()
   const { getSchedule, updateSchedule, createSchedule, getWeek, isLoading: isScheduleLoading } = useScheduleService()
 
   const currentWeek = getWeek(currentWeekModifier)
   const startDate = currentWeek.firstDay
 
-  const rota = getRota(rotaId)
   const schedule = rota ? getSchedule(startDate, rota, currentWeek.week) : undefined
 
   return (
@@ -32,7 +36,7 @@ const Scheduler = ({ rotaId }: { rotaId: string | undefined }) => {
             }))
           }}
           onSubmit={async (values, actions) => {
-            const updatedSchedule = schedule?._id ? await updateSchedule(values, schedule._id, rotaId) : await createSchedule(values, rotaId)
+            const updatedSchedule = schedule?._id ? await updateSchedule(values, schedule._id, rota._id) : await createSchedule(values, rota._id)
             actions.resetForm({ values: { 
               startDate: updatedSchedule?.startDate || startDate, 
               employeeSchedules: updatedSchedule?.employeeSchedules.map(es => ({

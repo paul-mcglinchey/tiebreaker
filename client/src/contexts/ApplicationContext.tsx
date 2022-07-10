@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IApplication, IApplicationsResponse } from "../models";
-import { useFetch, useRequestBuilder } from "../hooks";
+import { useAuthService, useFetch, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { IApplicationContext } from "./interfaces";
 
@@ -13,11 +13,12 @@ export const ApplicationContext = createContext<IApplicationContext>({
 });
 
 export const ApplicationProvider = ({ children }: IChildrenProps) => {
-  const [applications, setApplications] = useState<IApplication[]>([])
+  const [applications, setApplications] = useState<IApplication[] | undefined>()
   const [count, setCount] = useState<number>(0)
 
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading }: IFetch<IApplicationsResponse> = useFetch(endpoints.applications, requestBuilder(), [])
+  const { user } = useAuthService()
+  const { response, isLoading }: IFetch<IApplicationsResponse> = useFetch(endpoints.applications, requestBuilder(), [user])
 
   useEffect(() => {
     if (response) {

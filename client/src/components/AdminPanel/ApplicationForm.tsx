@@ -1,9 +1,9 @@
 import { Form, Formik } from "formik"
-import { useApplicationService, usePermissionService } from "../../hooks"
+import { useApplicationService } from "../../hooks"
 import { IApplication, IContextualFormProps } from "../../models"
 import { applicationValidationSchema } from "../../schema"
 import { generateColour } from "../../services"
-import { ColourPicker, FormSection, PermissionMultiSelector, StyledField } from "../Common"
+import { ColourPicker, FormSection, StyledField } from "../Common"
 
 interface IApplicationFormProps {
   application?: IApplication | undefined
@@ -12,7 +12,6 @@ interface IApplicationFormProps {
 export const ApplicationForm = ({ application, ContextualSubmissionButton }: IApplicationFormProps & IContextualFormProps) => {
 
   const { updateApplication, addApplication } = useApplicationService()
-  const { permissions } = usePermissionService()
 
   return (
     <Formik
@@ -24,7 +23,6 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
         backgroundImage: application?.backgroundImage || '',
         backgroundVideo: application?.backgroundVideo || '',
         url: application?.url || '',
-        requiredPermissions: application?.requiredPermissions || [],
         colour: application?.colour || generateColour()
       }}
       onSubmit={(values) => {
@@ -39,15 +37,8 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
           <div className="grid grid-cols-3 gap-2">
             <StyledField name='identifier' label="Identifier" type="number" classes="col-span-1" errors={errors.identifier} touched={touched.identifier} />
             <StyledField name='name' label="Name" classes="col-span-1" errors={errors.name} touched={touched.name} />
-            <PermissionMultiSelector
-              label="Required permissions"
-              showLabel
-              initialSelected={permissions.filter(p => p.identifier && values.requiredPermissions.includes(p.identifier))}
-              onUpdate={values => setFieldValue('requiredPermissions', values.map(v => v.identifier))}
-              selectorClasses=""
-            />
+            <StyledField name='url' label="URL/Route" errors={errors.url} classes="col-span-1" touched={touched.url} />
             <StyledField name='description' label="Description" classes="col-span-3" errors={errors.description} touched={touched.description} />
-            <StyledField name='url' label="URL/Route" errors={errors.url} classes="col-span-3" touched={touched.url} />
             <FormSection title="Appearance" classes="col-span-3">
               <div className="grid grid-cols-3 gap-2">
                 <div className="flex grow col-span-3 space-x-2 items-end">

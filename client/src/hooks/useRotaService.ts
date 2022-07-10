@@ -16,12 +16,12 @@ const useRotaService = (): IRotaService => {
   const groupId: string | undefined = currentGroup?._id
 
   const rotaContext = useContext(RotaContext)
-  const { getRotas, setRotas } = rotaContext
+  const { rotas, setRotas } = rotaContext
 
   const { employees } = useEmployeeService()
 
   const getRota = (rotaId: string | undefined): IRota | undefined => {
-    return getRotas().filter((rota: IRota) => rota._id === rotaId)[0]
+    return rotas.find(r => r._id === rotaId)
   }
 
   const getRotaEmployees = (rota: IRota | undefined): IEmployee[] => {
@@ -43,7 +43,7 @@ const useRotaService = (): IRotaService => {
     const res = await fetch(endpoints.rota(rotaId, groupId), requestBuilder('PUT', undefined, values))
     const json = await res.json()
 
-    handleResolution(res, json, 'update', 'rota', [() => updateRotaInContext(rotaId, json)])
+    handleResolution(res, json, 'update', 'rota', [() => updateRotaInContext(rotaId, values)])
   })
 
   const deleteRota = asyncHandler(async (rotaId: string | undefined) => {

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, IClient, IClientsResponse, IFilter } from "../models";
-import { useFetch, useGroupService, useRefresh, useRequestBuilder } from "../hooks";
+import { useFetch, useGroupService, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { getItemInLocalStorage, setItemInLocalStorage } from "../services";
 import { IClientContext } from "./interfaces";
@@ -26,9 +26,7 @@ export const ClientContext = createContext<IClientContext>({
   filters: {},
   setFilters: () => {},
   isLoading: false,
-  error: undefined,
-  refresh: () => {},
-  dependency: false
+  error: undefined
 });
 
 const buildQueryString = (pageNumber: number, pageSize: number, sortField: string | undefined, sortDirection: SortDirection, filters: IFilter) => {
@@ -59,14 +57,13 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     'name': { value: null, label: 'Name' }
   });
 
-  const { currentGroup, refresh: groupRefresh } = useGroupService()
+  const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { refresh, dependency } = useRefresh([groupRefresh])
   const { response, isLoading, error }: IFetch<IClientsResponse> = useFetch
   (
     `${endpoints.clients(currentGroup?._id || "", includeDeleted)}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
     requestBuilder(), 
-    [dependency, sortField, sortDirection, pageSize, pageNumber, currentGroup]
+    [sortField, sortDirection, pageSize, pageNumber, currentGroup]
   )
 
   useEffect(() => {
@@ -100,9 +97,7 @@ export const ClientProvider = ({ includeDeleted = false, children }: IClientProv
     filters,
     setFilters,
     isLoading,
-    error,
-    refresh,
-    dependency
+    error
   }
 
   return (

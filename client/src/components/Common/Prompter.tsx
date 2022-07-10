@@ -11,7 +11,7 @@ interface IconProps {
 interface IPrompterProps {
   title: string,
   subtitle?: string,
-  action: () => void,
+  action?: () => void,
   Icon?: React.FC<IconProps>
 }
 
@@ -41,9 +41,11 @@ const Prompter = ({ Icon, title, subtitle, action }: IPrompterProps) => {
             </p>
           )}
         </div>
-        <div className="flex justify-center">
-          <Button action={() => action()} Icon={Icon} content='Lets go!' buttonType={ButtonType.Tertiary} XL />
-        </div>
+        {action && (
+          <div className="flex justify-center">
+            <Button action={() => action()} Icon={Icon} content='Lets go!' buttonType={ButtonType.Tertiary} XL />
+          </div>
+        )}
       </div>
     </Transition>
   )

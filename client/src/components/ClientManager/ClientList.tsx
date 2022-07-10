@@ -1,9 +1,10 @@
 import { Dispatch, Fragment, SetStateAction } from 'react';
 import { UserAddIcon } from '@heroicons/react/solid';
 import { IClient } from '../../models';
-import { useClientService } from '../../hooks';
+import { useAuthService, useClientService } from '../../hooks';
 import { Paginator, Table, Prompter, SearchBar } from '../Common';
 import { ClientTableRow } from '.';
+import { Application, Permission } from '../../enums';
 
 const headers = [
   { name: "Name", value: "name", interactive: true },
@@ -19,6 +20,7 @@ interface IClientListProps {
 const ClientList = ({ setAddClientOpen }: IClientListProps) => {
 
   const { clients, count, filters, setFilters, sortField, setSortField, sortDirection, setSortDirection, isLoading, pageNumber, setPageNumber, pageSize, setPageSize } = useClientService()
+  const { hasPermission } = useAuthService()
 
   return (
     <div className="rounded-lg flex flex-col space-y-0 pb-2">
@@ -42,8 +44,10 @@ const ClientList = ({ setAddClientOpen }: IClientListProps) => {
           <Paginator pageNumber={pageNumber} pageSize={pageSize} setPageNumber={setPageNumber} setPageSize={setPageSize} totalItems={count} />
         </Fragment>
       ) : (
-        !isLoading && (
+        !isLoading && hasPermission(Application.ClientManager, Permission.AddEditDeleteClients) ? (
           <Prompter title="Add a client to get started" Icon={UserAddIcon} action={() => setAddClientOpen(true)} />
+        ) : (
+          <Prompter title="There are no clients added to this group yet" />
         )
       )}
     </div>

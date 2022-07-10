@@ -11,7 +11,7 @@ const useGroupService = (): IGroupService => {
   const { handleResolution } = useResolutionService()
   
   const groupContext = useContext(GroupContext)
-  const { groups, setGroups } = groupContext
+  const { groups = [], setGroups } = groupContext
 
   const getGroup = (groupId: string | undefined): IGroup | undefined => {
     return groups.find((group: IGroup) => group._id === groupId)
@@ -43,18 +43,18 @@ const useGroupService = (): IGroupService => {
   })
 
   const addGroupInContext = (group: IGroup) => {
-    setGroups(groups => [...groups, group])
+    setGroups(groups => groups ? [...groups, group] : undefined)
   }
 
   const deleteGroupInContext = (groupId: string) => {
-    setGroups(groups => groups.filter(g => g._id !== groupId))
+    setGroups(groups => groups ? groups.filter(g => g._id !== groupId) : undefined)
   }
 
   const updateGroupInContext = (groupId: string, values: IGroup) => {
     setGroups(groups => {
-      return groups.map(g => {
+      return groups ? groups.map(g => {
         return g._id === groupId ? { ...g, ...values } : g
-      })
+      }) : undefined
     })
   }
 

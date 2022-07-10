@@ -3,17 +3,18 @@ import { NavMenu, Toolbar } from "../Common";
 import { AppCard } from ".";
 import { useAuthService, useGroupService, useApplicationService } from "../../hooks";
 import { IApplication } from "../../models";
+import { Permission } from "../../enums";
 
 const Dashboard = () => {
 
   const { user } = useAuthService()
   const { currentGroup } = useGroupService()
-  const { applications } = useApplicationService()
+  const { applications = [] } = useApplicationService()
 
   const getUserAccessibleApps = (): IApplication[] => {
     let groupApps = applications.filter(a => a.identifier && currentGroup?.applications?.includes(a.identifier))
     let userApps = currentGroup?.users && currentGroup?.users.find(u => u.user === user?._id)?.applications
-    let userAccessibleApps = groupApps?.filter(a => a?.identifier && userApps?.find(ua => ua.application === a.identifier) && a.requiredPermissions.every(rp => userApps?.find(ua => ua.application === a.identifier)?.permissions.includes(rp)))
+    let userAccessibleApps = groupApps?.filter(a => a?.identifier && userApps?.find(ua => ua.application === a.identifier) && userApps?.find(ua => ua.application === a.identifier)?.permissions.includes(Permission.ApplicationAccess))
 
     return userAccessibleApps
   }

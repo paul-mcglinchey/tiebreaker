@@ -14,6 +14,4 @@ export interface IClientContext extends ISortable {
   setFilters: (filters: IFilter) => void,
   isLoading: boolean
   error: any | undefined
-  refresh: () => void
-  dependency: boolean
 }

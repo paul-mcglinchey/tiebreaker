@@ -10,7 +10,7 @@ interface IApplicationMultiSelectorProps {
 
 const ApplicationMultiSelector = ({ formValues, setFieldValue, fieldName = "applications" }: IApplicationMultiSelectorProps) => {
 
-  const { applications, getApplication, count } = useApplicationService()
+  const { applications = [], getApplication, count } = useApplicationService()
 
   return (
     <MultiSelector<number | undefined>
