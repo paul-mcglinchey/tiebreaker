@@ -4,10 +4,9 @@ import { IGroup } from "../../models"
 export interface IGroupContext {
   currentGroup: IGroup | undefined
   setCurrentGroup: Dispatch<SetStateAction<IGroup | undefined>>
-  groups: IGroup[]
-  setGroups: Dispatch<SetStateAction<IGroup[]>>
+  groups: IGroup[] | undefined
+  setGroups: Dispatch<SetStateAction<IGroup[] | undefined>>
   count: number
   isLoading: boolean
   error: any | undefined
-  refresh: () => void
 }

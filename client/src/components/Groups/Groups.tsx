@@ -8,7 +8,7 @@ import { GroupCard, GroupPrompter, GroupModal } from ".";
 const Groups = () => {
   const [addGroupOpen, setAddGroupOpen] = useState(false)
 
-  const { groups, isLoading } = useGroupService()
+  const { groups = [], isLoading } = useGroupService()
 
   return (
     <>

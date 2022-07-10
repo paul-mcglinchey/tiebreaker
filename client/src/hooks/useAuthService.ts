@@ -9,7 +9,7 @@ import { IAuthService } from "./interfaces"
 
 const useAuthService = (): IAuthService => {
   const auth = useContext(AuthContext)
-  const { user, setUser, setIsLoading } = auth
+  const { user, setUser } = auth
   const { requestBuilder } = useRequestBuilder()
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
@@ -17,23 +17,15 @@ const useAuthService = (): IAuthService => {
   const navigate = useNavigate()
 
   const login = asyncHandler(async (user: IUser) => {
-    setIsLoading(true)
-
     const res = await fetch(endpoints.login, requestBuilder('POST', undefined, user))
     const json = await res.json()
-    
-    setIsLoading(false)
 
     handleResolution(res, json, undefined, undefined, [() => setUser(json), () => navigate('/dashboard', { replace: true })], undefined, false)
   })
 
   const signup = asyncHandler(async (user: IUser) => {
-    setIsLoading(true)
-
     const res = await fetch(endpoints.signup, requestBuilder('POST', undefined, user))
     const json = await res.json()
-
-    setIsLoading(false)
 
     handleResolution(res, json, undefined, undefined, [() => setUser(json), () => navigate('/dashboard', { replace: true })], undefined, false)
   })

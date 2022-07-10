@@ -1,9 +1,10 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TableIcon } from '@heroicons/react/solid';
-import { useRotaService } from '../../hooks';
+import { useAuthService, useRotaService } from '../../hooks';
 import { IRota } from '../../models';
 import { Prompter, SpinnerLoader, Table } from '../Common';
 import { RotaModal, RotaTableRow } from '.';
+import { Application, Permission } from '../../enums';
 
 const headers = [
   { name: "Rota name", value: "name", interactive: true },
@@ -14,10 +15,11 @@ const headers = [
 ]
 
 const RotaList = () => {
-
-  const { getCount, getRotas, isLoading, sortField, sortDirection, setSortField, setSortDirection } = useRotaService();
-
+  
   const [addRotaOpen, setAddRotaOpen] = useState(false);
+  
+  const { rotas, isLoading, sortField, sortDirection, setSortField, setSortDirection } = useRotaService();
+  const { hasPermission } = useAuthService()
 
   useEffect(() => {
     setSortField(headers[1]!.value)
@@ -26,7 +28,7 @@ const RotaList = () => {
   return (
     <>
       <div className="rounded-lg flex flex-col space-y-0 pb-2 min-h-96">
-        {getCount() > 0 ? (
+        {rotas.length > 0 ? (
           <>
             <div className="flex flex-col flex-grow space-y-4">
               <Table
@@ -34,7 +36,7 @@ const RotaList = () => {
               >
                 <Table.SortableHeader headers={headers} sortField={sortField} sortDirection={sortDirection} setSortField={setSortField} setSortDirection={setSortDirection} />
                 <Table.Body>
-                  {getRotas().map((r: IRota, index: number) => (
+                  {rotas.map((r: IRota, index: number) => (
                     <RotaTableRow rota={r} key={index} />
                   ))}
                 </Table.Body>
@@ -45,7 +47,11 @@ const RotaList = () => {
           isLoading ? (
             <SpinnerLoader />
           ) : (
-            <Prompter title="Add a rota to get started" Icon={TableIcon} action={() => setAddRotaOpen(false)} />
+            hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) ? (
+              <Prompter title="Add a rota to get started" Icon={TableIcon} action={() => setAddRotaOpen(true)} />
+            ) : (
+              <Prompter title="There are no rotas added to this group yet" />
+            )
           )
         )}
       </div>
@@ -54,4 +60,4 @@ const RotaList = () => {
   )
 }
 
-export default memo(RotaList);
+export default RotaList

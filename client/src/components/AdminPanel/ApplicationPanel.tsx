@@ -7,7 +7,7 @@ import { ButtonType } from '../../enums'
 
 const ApplicationPanel = () => {
 
-  const { applications, count, isLoading } = useApplicationService()
+  const { applications = [], count, isLoading } = useApplicationService()
 
   const [addApplicationOpen, setAddApplicationOpen] = useState<boolean>(false)
 

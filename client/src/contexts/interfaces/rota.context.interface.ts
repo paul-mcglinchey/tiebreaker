@@ -3,17 +3,15 @@ import { IRota } from '../../models'
 import { SortDirection } from "../../enums"
 
 export interface IRotaContext {
-  getRotas: () => IRota[]
+  rotas: IRota[]
   setRotas: Dispatch<SetStateAction<IRota[]>>
-  getCount: () => number
+  count: number
   rotaId: string | undefined
-  updateRotaId: (rotaId: string | undefined) => void 
+  setRotaId: Dispatch<SetStateAction<string | undefined>>
   sortField: string | undefined
   setSortField: Dispatch<SetStateAction<string | undefined>>
   sortDirection: SortDirection
   setSortDirection: Dispatch<SetStateAction<SortDirection>>
   isLoading: boolean
   error: any | undefined
-  refresh: () => void
-  dependency: boolean
 }

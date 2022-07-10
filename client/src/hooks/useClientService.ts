@@ -15,7 +15,7 @@ const useClientService = (): IClientService => {
   const groupId: string | undefined = currentGroup?._id
 
   const clientContext = useContext(ClientContext)
-  const { clients } = clientContext
+  const { clients, setClients } = clientContext
 
   const getClient = (clientId: string | undefined): IClient | undefined => {
     return clients.find(c => c._id === clientId)
@@ -27,7 +27,7 @@ const useClientService = (): IClientService => {
     const res = await fetch(endpoints.clients(groupId), requestBuilder('POST', undefined, values))
     const json = await res.json()
 
-    handleResolution(res, json, 'create', 'client', [])
+    handleResolution(res, json, 'create', 'client', [() => addClientInContext(json)])
   })
 
   const updateClient = asyncHandler(async (clientId: string | undefined, values: IClient) => {
@@ -36,7 +36,7 @@ const useClientService = (): IClientService => {
     const res = await fetch(endpoints.client(clientId, groupId), requestBuilder('PUT', undefined, values))
     const json = await res.json()
 
-    handleResolution(res, json, 'update', 'client', [])
+    handleResolution(res, json, 'update', 'client', [() => updateClientInContext(clientId, json)])
   })
 
   const deleteClient = asyncHandler(async (clientId: string | undefined) => {
@@ -45,7 +45,7 @@ const useClientService = (): IClientService => {
     const res = await fetch(endpoints.client(clientId, groupId), requestBuilder("DELETE"))
     const json = await res.json()
 
-    handleResolution(res, json, 'delete', 'client', [])
+    handleResolution(res, json, 'delete', 'client', [() => deleteClientInContext(clientId)])
   })
 
   const addSession = asyncHandler(async (clientId: string | undefined, values: ISession) => {
@@ -56,6 +56,22 @@ const useClientService = (): IClientService => {
 
     handleResolution(res, json, 'create', 'session', [])
   })
+
+  const addClientInContext = (client: IClient) => {
+    setClients(clients => [...clients, client])
+  }
+
+  const deleteClientInContext = (clientId: string) => {
+    setClients(clients => clients.filter(c => c._id !== clientId))
+  }
+
+  const updateClientInContext = (clientId: string, values: IClient) => {
+    setClients(clients => {
+      return clients.map(c => {
+        return c._id === clientId ? { ...c, ...values } : c
+      })
+    })
+  }
 
   return { ...clientContext, getClient, addClient, deleteClient, updateClient, addSession }
 }

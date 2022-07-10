@@ -16,7 +16,6 @@ const PermissionPanel = () => {
     { name: 'Name', value: 'name', interactive: true },
     { name: 'Description', value: 'description', interactive: true },
     { name: 'Language', value: 'language', interactive: true },
-    { name: 'Type', value: 'type', interactive: false },
     { name: 'options', value: '', interactive: false },
   ]
 

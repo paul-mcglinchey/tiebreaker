@@ -4,7 +4,7 @@ import { ListboxSelector } from ".";
 import { IGroup } from "../../models";
 
 const GroupSelector = () => {
-  const { groups, currentGroup, setCurrentGroup } = useGroupService()
+  const { groups = [], currentGroup, setCurrentGroup } = useGroupService()
 
   return (
     <div className="flex flex-grow items-center justify-end min-w-">

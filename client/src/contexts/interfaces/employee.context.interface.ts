@@ -8,6 +8,4 @@ export interface IEmployeeContext extends ISortable {
   setCount: Dispatch<SetStateAction<number>>
   isLoading: boolean
   error: any | undefined
-  refresh: () => void
-  dependency: boolean
 }

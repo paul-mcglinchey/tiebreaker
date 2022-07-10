@@ -27,7 +27,7 @@ const getButtonClasses = (buttonType: ButtonType): string => {
     case ButtonType.Confirm:
       return "text-green-500 bg-transparent hover:text-green-600"
     default:
-      return "border text-gray-300 border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
+      return "border border-gray-300 bg-transparent hover:text-gray-900 hover:bg-gray-300 focus:text-gray-900 focus:bg-gray-300"
   }
 }
 

@@ -7,6 +7,4 @@ export interface IScheduleContext {
   getCount: () => number
   isLoading: boolean
   error: any | undefined
-  refresh: () => void
-  dependency: boolean
 }

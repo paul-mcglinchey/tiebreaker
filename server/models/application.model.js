@@ -27,7 +27,6 @@ const Application = mongoose.model(
     url: {
       type: String, required: true
     },
-    requiredPermissions: [Number],
     colour: {
       type: String, required: false
     },

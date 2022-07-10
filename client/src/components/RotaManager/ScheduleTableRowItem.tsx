@@ -33,7 +33,7 @@ const ScheduleTableRowItem = ({ values, day, employeeIndex, index, editing }: IS
   return (
     <>
       <div className="flex justify-center space-x-1 items-center">
-        <button onDoubleClick={() => setEditShiftOpen(true)} type="button" className="flex items-center space-x-1 rounded-lg p-2 uppercase border-2 border-transparent focus:border-gray-500">
+        <button onDoubleClick={editing ? () => setEditShiftOpen(true) : undefined} type="button" className="flex items-center space-x-1 rounded-lg p-2 uppercase border-2 border-transparent focus:border-gray-500">
           {editing ? (
             <>
               <ScheduleShiftInput name={`employeeSchedules.${employeeIndex}.shifts.${index}.startHour`} />

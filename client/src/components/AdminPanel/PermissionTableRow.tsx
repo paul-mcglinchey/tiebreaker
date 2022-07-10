@@ -3,7 +3,6 @@ import { usePermissionService } from "../../hooks"
 import { IPermission } from "../../models"
 import { Dialog, InlineButton, TableRow, TableRowItem } from "../Common"
 import { PermissionModal } from '.'
-import { PermissionType } from "../../enums"
 
 interface IPermissionTableRowProps {
   permission: IPermission
@@ -36,11 +35,6 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
       <TableRowItem>
         <div className="flex items-center space-x-4 min-w-40">
           <span>{permission.language}</span>
-        </div>
-      </TableRowItem>
-      <TableRowItem>
-        <div className="flex items-center space-x-4 min-w-40">
-          <span>{permission.type ? PermissionType[permission.type] : '--'}</span>
         </div>
       </TableRowItem>
       <TableRowItem>

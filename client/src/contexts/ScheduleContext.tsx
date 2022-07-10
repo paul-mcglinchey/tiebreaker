@@ -1,29 +1,29 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { IChildrenProps, IFetch, ISchedule, ISchedulesResponse } from "../models";
-import { useFetch, useGroupService, useRefresh, useRequestBuilder, useRotaService } from "../hooks";
+import { useFetch, useGroupService, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { IScheduleContext } from "./interfaces";
+
+interface IScheduleProviderProps {
+  rotaId: string | undefined
+}
 
 export const ScheduleContext = createContext<IScheduleContext>({
   getSchedules: () => [],
   setSchedules: () => {},
   getCount: () => 0,
   isLoading: false,
-  error: undefined,
-  refresh: () => {},
-  dependency: false
+  error: undefined
 });
 
-export const ScheduleProvider = ({ children }: IChildrenProps) => {
+export const ScheduleProvider = ({ rotaId, children }: IScheduleProviderProps & IChildrenProps) => {
   const [schedules, setSchedules] = useState<ISchedule[]>([])
   const [count, setCount] = useState<number>(0)
 
-  const { currentGroup, refresh: groupRefresh } = useGroupService()
-  const { rotaId, dependency: rotaDependency } = useRotaService()
+  const { currentGroup } = useGroupService()
 
   const { requestBuilder } = useRequestBuilder()
-  const { refresh, dependency } = useRefresh([groupRefresh])
-  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", currentGroup?._id || ""), requestBuilder(), [rotaDependency, dependency, rotaId, currentGroup])
+  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", currentGroup?._id || ""), requestBuilder(), [rotaId, currentGroup])
 
   useEffect(() => {
     if (response) {
@@ -37,9 +37,7 @@ export const ScheduleProvider = ({ children }: IChildrenProps) => {
     setSchedules,
     getCount: useCallback(() => count, [count]),
     isLoading,
-    error,
-    refresh,
-    dependency
+    error
   }
 
   return (

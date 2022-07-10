@@ -1,34 +1,23 @@
 import { useState } from 'react';
-import { useGroupService } from '../../hooks';
-import { FetchError, Toolbar, SpinnerIcon } from '../Common';
-import { GroupModal, GroupPrompter } from '../Groups';
+import { useAuthService } from '../../hooks';
+import { Toolbar, Prompter } from '../Common';
 import { ClientModal, ClientList } from '.';
+import { Application, Permission } from '../../enums';
 
 const ClientDashboard = () => {
-  const [addGroupOpen, setAddGroupOpen] = useState(false)
   const [addClientOpen, setAddClientOpen] = useState(false)
-
-  const { count, isLoading, error, refresh } = useGroupService()
+  const { hasPermission } = useAuthService()
 
   return (
     <>
-      {!isLoading && count > 0 ? (
-        <>
-          <Toolbar title="Clients" addClientAction={() => setAddClientOpen(true)} />
+      <>
+        <Toolbar title="Clients" addClientAction={hasPermission(Application.ClientManager, Permission.AddEditDeleteClients) ? () => setAddClientOpen(true) : undefined} />
+        {hasPermission(Application.ClientManager, Permission.ViewClients) ? (
           <ClientList setAddClientOpen={setAddClientOpen} />
-        </>
-      ) : (
-        isLoading ? (
-          <SpinnerIcon className="w-6 h-6" />
         ) : (
-          error ? (
-            <FetchError error={error} isLoading={isLoading} toggleRefresh={refresh} />
-          ) : (
-            <GroupPrompter action={() => setAddGroupOpen(true)} />
-          )
-        )
-      )}
-      <GroupModal isOpen={addGroupOpen} close={() => setAddGroupOpen(false)} />
+          <Prompter title="You don't have access to view clients in this group" />
+        )}
+      </>
       <ClientModal isOpen={addClientOpen} close={() => setAddClientOpen(false)} />
     </>
   )

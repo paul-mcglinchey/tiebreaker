@@ -49,7 +49,7 @@ const RotaForm = ({ rota, ContextualSubmissionButton }: IRotaFormProps & IContex
         }}
       >
         {({ values, errors, touched, setFieldValue }) => (
-          <Form className="flex flex-1 flex-col space-y-6 text-gray-200">
+          <Form className="flex flex-1 flex-col space-y-6">
             <div className="flex flex-col space-y-3">
               <div className="flex flex-col md:flex-row space-y-4 md:space-x-4 md:space-y-0 items-end">
                 <StyledField name="name" label="Name" errors={errors.name} touched={touched.name} />
@@ -78,7 +78,7 @@ const RotaForm = ({ rota, ContextualSubmissionButton }: IRotaFormProps & IContex
           </Form>
         )}
       </Formik>
-      <EmployeeModal isOpen={addEmployeesOpen} close={() => setAddEmployeesOpen(false)} level={2} />
+      <EmployeeModal isOpen={addEmployeesOpen} close={() => setAddEmployeesOpen(false)} compact level={2} />
     </>
   )
 }

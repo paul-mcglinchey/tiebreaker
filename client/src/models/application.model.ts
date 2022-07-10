@@ -9,7 +9,6 @@ export interface IApplication {
   backgroundImage?: string
   backgroundVideo?: string
   url?: string
-  requiredPermissions: number[]
   colour?: string
   audit?: IAudit
 }

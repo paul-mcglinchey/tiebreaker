@@ -8,7 +8,7 @@ import { PermissionProvider } from "../../contexts";
 const AdminPanel = () => {
   return (
     <>
-      <NavMenu />
+      <NavMenu hideGroupSelector />
       <PermissionProvider>
         <div className="px-2 sm:px-6 lg:px-8 pb-10">
           <Toolbar title='Admin panel' />

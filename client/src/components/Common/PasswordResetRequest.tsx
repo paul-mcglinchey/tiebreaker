@@ -27,7 +27,7 @@ const PasswordResetRequest = () => {
               </div>
               <div className="flex justify-between">
                 <Link to='/login'>
-                  <button type="button" className="px-4 py-2 font-bold text-gray-500 hover:text-gray-300 transition-all">
+                  <button type="button" className="px-4 py-2 font-bold dark:text-gray-600 dark:hover:text-gray-400 transition-all">
                     Cancel
                   </button>
                 </Link>
