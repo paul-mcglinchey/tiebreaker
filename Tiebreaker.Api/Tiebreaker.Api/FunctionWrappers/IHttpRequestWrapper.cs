@@ -9,8 +9,8 @@ namespace Tiebreaker.Api.FunctionWrappers
 {
     public interface IHttpRequestWrapper<TPermission>
     {
-        public Task<ActionResult> Execute(List<TPermission> requiredPermissions, Func<Task<ActionResult>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null);
+        public Task<ActionResult> ExecuteAsync(List<TPermission> requiredPermissions, Func<Task<ActionResult>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null);
 
-        public Task<ActionResult<TResult>> Execute<TResult>(List<TPermission> requiredPermissions, Func<Task<ActionResult<TResult>>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null);
+        public Task<ActionResult<TResult>> ExecuteAsync<TResult>(List<TPermission> requiredPermissions, Func<Task<ActionResult<TResult>>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null);
     }
 }

@@ -43,14 +43,12 @@ namespace Tiebreaker.Api.AccessControl.Services
 
         private static TokenValidationParameters GetValidationParameters()
         {
-            return new TokenValidationParameters 
+            return new TokenValidationParameters
             {
                 ValidateLifetime = false,
                 ValidateAudience = false,
                 ValidateIssuer = false,
-                ValidIssuer = "Sample",
-                ValidAudience = "Sample",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("localsecret"))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("GXw7gVFJs0yEAiFkPPbkNw=="))
             };
 
         }

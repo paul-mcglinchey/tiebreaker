@@ -7,6 +7,8 @@ namespace Tiebreaker.Api.Extensions
     {
         public static IConfigurationBuilder ConfigureAppConfiguration(this IConfigurationBuilder builder)
         {
+            var environmentName = Environment.GetEnvironmentVariable("EnvironmentName");
+
             return builder.AddAzureAppConfiguration(
                 options =>
                 {

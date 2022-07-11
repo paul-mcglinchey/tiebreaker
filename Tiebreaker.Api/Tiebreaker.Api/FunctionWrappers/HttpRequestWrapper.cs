@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -26,10 +27,10 @@ namespace Tiebreaker.Api.FunctionWrappers
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ActionResult> Execute(List<TPermission> requiredPermissions, Func<Task<ActionResult>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null) =>
-            (await this.Execute<object>(requiredPermissions, async () => await implementation(), cancellationToken, functionName)).Result;
+        public async Task<ActionResult> ExecuteAsync(List<TPermission> requiredPermissions, Func<Task<ActionResult>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null) =>
+            (await this.ExecuteAsync<object>(requiredPermissions, async () => await implementation(), cancellationToken, functionName)).Result;
 
-        public async Task<ActionResult<TResult>> Execute<TResult>(List<TPermission> requiredPermissions, Func<Task<ActionResult<TResult>>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null)
+        public async Task<ActionResult<TResult>> ExecuteAsync<TResult>(List<TPermission> requiredPermissions, Func<Task<ActionResult<TResult>>> implementation, CancellationToken cancellationToken, [CallerMemberName] string functionName = null)
         {
             try
             {
@@ -39,6 +40,11 @@ namespace Tiebreaker.Api.FunctionWrappers
                     this.logger.LogDebug("401: Unable to authenticate");
                     return new StatusCodeResult((int)HttpStatusCode.Unauthorized);
                 }
+            }
+            catch (SecurityTokenSignatureKeyNotFoundException ex)
+            {
+                this.logger.LogError(ex, $"Unable to find JWT signature to authenticate in {functionName}.");
+                return new StatusCodeResult((int)HttpStatusCode.Unauthorized);
             }
             catch (Exception ex)
             {
