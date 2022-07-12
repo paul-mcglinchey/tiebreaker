@@ -9,6 +9,8 @@ using Tiebreaker.Api;
 using Tiebreaker.Api.AccessControl.Interfaces;
 using Tiebreaker.Api.AccessControl.Services;
 using Tiebreaker.Api.Extensions;
+using Tiebreaker.Api.Services;
+using Tiebreaker.Api.Services.Interfaces;
 using Tiebreaker.Data;
 using Tiebreaker.Data.Enums;
 
@@ -18,7 +20,7 @@ namespace Tiebreaker.Api
 {
     public class Startup : FunctionsStartup
     {
-        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder) => builder.ConfigurationBuilder.ConfigureAppConfiguration();
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder) => builder.ConfigurationBuilder.ConfigureAppConfiguration().ConfigureDefaultApiControllers(typeof(Startup));
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
@@ -36,6 +38,10 @@ namespace Tiebreaker.Api
 
             builder.Services.AddDbContext<TiebreakerContext>(options =>
                 options.UseSqlServer(configuration["TiebreakerConnectionString"]));
+
+            builder.Services.AddTransient<IUserService, UserService>();
+
+            builder.Services.AddAutoMapper(typeof(Startup));
         }
 
         private void ConfigureNewtonsoft()
