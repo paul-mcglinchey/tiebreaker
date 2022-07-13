@@ -1,12 +1,19 @@
 import { IAudit } from "./audit.model"
 import { IPermission } from "./permission.model"
 
+export interface IUserRequest {
+  usernameOrEmail?: string
+  username?: string
+  email?: string
+  password: string
+}
+
 export interface IPreferences {
   defaultGroup?: string | undefined
 }
 
 export interface IUser {
-  _id?: string
+  userId?: string
   username?: string,
   email?: string,
   password?: string

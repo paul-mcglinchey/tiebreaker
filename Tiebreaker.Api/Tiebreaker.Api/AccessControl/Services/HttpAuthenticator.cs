@@ -17,7 +17,7 @@ namespace Tiebreaker.Api.AccessControl.Services
         private readonly TiebreakerContext context;
         private readonly JwtSecurityTokenHandler handler;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private Guid? id;
+        private Guid? userId;
 
         public HttpAuthenticator(ILogger<HttpAuthenticator> logger, TiebreakerContext context, JwtSecurityTokenHandler handler, IHttpContextAccessor httpContextAccessor)
         {
@@ -27,30 +27,35 @@ namespace Tiebreaker.Api.AccessControl.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid Id => this.id ?? throw new NotSupportedException("User ID cannot be used before authentication");
+        public Guid UserId => this.userId ?? throw new NotSupportedException("User ID cannot be used before authentication");
 
         public async Task<bool> AuthenticateAsync()
         {
-            if (!this.httpContextAccessor.HttpContext.Request.TryGetAuthHeader(out var token))
+            try
+            {
+                if (!this.httpContextAccessor.HttpContext.Request.TryGetAuthHeader(out var token))
+                {
+                    return false;
+                };
+
+                this.handler.ValidateToken(
+                    token,
+                    new TokenValidationParameters() 
+                    { 
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JwtPrivateKey"))) 
+                    },
+                    out var validatedToken);
+
+                this.userId = Guid.Parse((validatedToken as JwtSecurityToken).Subject);
+
+                return true;
+            }
+            catch (Exception ex)
             {
                 return false;
-            };
-
-            handler.ValidateToken(token, GetValidationParameters(), out var decoded);
-
-            return token is not null;
-        }
-
-        private static TokenValidationParameters GetValidationParameters()
-        {
-            return new TokenValidationParameters
-            {
-                ValidateLifetime = false,
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("GXw7gVFJs0yEAiFkPPbkNw=="))
-            };
-
+            }
         }
     }
 }

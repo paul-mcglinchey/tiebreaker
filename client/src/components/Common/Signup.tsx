@@ -1,17 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { signupValidationSchema } from '../../schema';
-import { IUser } from '../../models';
 import { useAuthService } from '../../hooks';
 import { StyledField, Button } from '.';
-import PublicWrapper from './PublicWrapper';
+import { PublicWrapper, SpinnerIcon } from '.';
+import { useContext } from 'react';
+import { LoadingContext } from '../../contexts';
 
 const Signup = () => {
-  const { signup } = useAuthService();
 
-  const handleSubmit = (user: IUser) => {
-    signup(user);
-  }
+  const { isLoading } = useContext(LoadingContext)
+  const { signup } = useAuthService();
 
   return (
     <PublicWrapper>
@@ -23,7 +22,7 @@ const Signup = () => {
         }}
         validationSchema={signupValidationSchema}
         onSubmit={(values) => {
-          handleSubmit(values);
+          signup(values);
         }}
       >
         {({ errors, touched }) => (
@@ -34,7 +33,10 @@ const Signup = () => {
                 <StyledField name="username" label="Username" errors={errors.username} touched={touched.username} />
                 <StyledField name="password" type="password" label="Password" errors={errors.password} touched={touched.password} />
               </div>
-              <div className="flex flex-grow justify-end">
+              <div className="flex flex-grow justify-end items-center space-x-2">
+                {isLoading && (
+                  <SpinnerIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+                )}
                 <Button content="Sign up" />
               </div>
               <div className="flex justify-center">

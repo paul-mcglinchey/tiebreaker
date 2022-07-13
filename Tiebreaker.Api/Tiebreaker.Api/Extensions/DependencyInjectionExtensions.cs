@@ -13,7 +13,7 @@ namespace Tiebreaker.Api.Extensions
                     .AddHttpContextAccessor();
 
         public static IServiceCollection AddAccessControl(this IServiceCollection services) =>
-            services.AddAccessControl<Permission, UserAuthorizationService>();
+            services.AddAccessControl<PermissionType, UserAuthorizationService>();
 
         public static IServiceCollection AddAccessControl<TPermission, TUserAuthorizationService>(this IServiceCollection services)
             where TUserAuthorizationService : class, IUserAuthorisationService<TPermission>

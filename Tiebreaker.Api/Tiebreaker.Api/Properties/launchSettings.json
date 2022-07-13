@@ -7,7 +7,7 @@
       "environmentVariables": {
         "EnvironmentName": "local",
         "AppConfigConnectionString": "Endpoint=https://appcs-tiebreaker-we.azconfig.io;Id=HHu3-l9-s0:jBalnZCiaS+3LVoSG4pK;Secret=kkg2hSHAwt5eGPDWqFSxnsYa637qSt4LZfiEuFcpwWU=",
-        "TiebreakerConnectionString": "Server=localhost;Initial Catalog=Tiebreaker;User ID=tiebreaker;Password=Paystar!882;",
+        "TiebreakerConnectionString": "Server=localhost;Initial Catalog=Tiebreaker;User ID=tiebreaker;Password=localpassword;",
         "JwtPrivateKey": "a1c94c4a-71b4-4bdd-8795-868909896a3c"
       }
     }

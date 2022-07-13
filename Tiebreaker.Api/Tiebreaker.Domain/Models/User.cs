@@ -12,13 +12,6 @@
 
         public bool IsAdmin { get; set; } = false;
 
-        public Preferences Preferences { get; set; } = new Preferences();
-    }
-
-    public class Preferences
-    {
-        public Guid Id { get; set; }
-
-        public Guid DefaultGroup { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }

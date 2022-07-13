@@ -2,7 +2,11 @@ import { Transition } from "@headlessui/react"
 import { Fragment } from "react"
 import { IChildrenProps } from "../../models"
 
-export const FadeInOut = ({ children }: IChildrenProps) => {
+interface ITransitionProps extends IChildrenProps {
+  show?: boolean
+}
+
+export const FadeInOut = ({ children }: ITransitionProps) => {
 
   return (
     <Transition

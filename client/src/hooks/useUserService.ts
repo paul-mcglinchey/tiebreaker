@@ -15,7 +15,7 @@ const useUserService = (): IUserService => {
   const { users, setUsers } = userContext
 
   const getUser = (userId: string | undefined): IUser | undefined => {
-    return users.find((user: IUser) => user._id === userId)
+    return users.find((user: IUser) => user.userId === userId)
   }
 
   const updateUser = asyncHandler(async (userId: string | undefined, values: IUser) => {
@@ -29,7 +29,7 @@ const useUserService = (): IUserService => {
 
   const updateUserInContext = (userId: string, values: IUser) => {
     setUsers(users => users.map(u => {
-      return u._id === userId ? { ...u, ...values } : u
+      return u.userId === userId ? { ...u, ...values } : u
     }))
   }
 

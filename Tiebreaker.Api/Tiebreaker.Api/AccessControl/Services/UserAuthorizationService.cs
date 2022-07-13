@@ -5,9 +5,9 @@ using Tiebreaker.Data.Enums;
 
 namespace Tiebreaker.Api.AccessControl.Services
 {
-    public class UserAuthorizationService : IUserAuthorisationService<Permission>
+    public class UserAuthorizationService : IUserAuthorisationService<PermissionType>
     {
-        public async Task<bool> IsAuthorised(List<Permission> requiredPermissions)
+        public async Task<bool> IsAuthorised(List<PermissionType> requiredPermissions)
         {
             return true;
         }

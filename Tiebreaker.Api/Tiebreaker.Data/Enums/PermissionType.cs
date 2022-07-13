@@ -1,6 +1,6 @@
 ﻿namespace Tiebreaker.Data.Enums
 {
-    public enum Permission
+    public enum PermissionType
     {
         ApplicationAccess = 1,
     }

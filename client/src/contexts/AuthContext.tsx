@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { IChildrenProps, IUser } from "../models";
 import { useCookies } from 'react-cookie'
-import { useFetch, useRequestBuilder } from "../hooks";
+import { useAsyncHandler, useRequestBuilder } from "../hooks";
 import { endpoints } from "../config";
 import { IAuthContext } from "./interfaces";
+import { useNavigate } from "react-router";
 
 export const AuthContext = createContext<IAuthContext>({
   user: undefined,
@@ -17,16 +18,16 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const AuthProvider = ({ children }: IChildrenProps) => {
   const [cookies, setCookie, removeCookie] = useCookies(['UserAuth'])
-  const { requestBuilder } = useRequestBuilder()
-
   const [user, setUser] = useState<IUser | undefined>(cookies.UserAuth)
-  const { response, isLoading } = useFetch<IUser>(endpoints.authenticate, requestBuilder('GET', user?.token))
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const { asyncHandler } = useAsyncHandler();
+  const { requestBuilder } = useRequestBuilder()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    setUser(response)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response])
+    authenticate()
+  }, [])
 
   useEffect(() => {
     const currentDate = new Date()
@@ -36,6 +37,14 @@ export const AuthProvider = ({ children }: IChildrenProps) => {
       ? setCookie('UserAuth', user, { path: '/', expires: expiryDate })
       : removeCookie('UserAuth')
   }, [user])
+
+  const authenticate = asyncHandler(async () => {
+    const res = await fetch(endpoints.authenticate, requestBuilder('GET', user?.token))
+
+    setIsLoading(false)
+
+    if (!res.ok) throw new Error("Failed to authenticate user.")
+  }, [() => navigate('/login')])
 
   const getAccess = () => user !== undefined
   const getToken = () => user?.token

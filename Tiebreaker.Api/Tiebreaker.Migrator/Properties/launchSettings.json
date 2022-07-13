@@ -1,7 +1,10 @@
 {
   "profiles": {
     "Tiebreaker.Migrator": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "TiebreakerConnectionString": "Server=localhost;Initial Catalog=Tiebreaker;User ID=tiebreaker;Password=localpassword;"
+      }
     }
   }
 }

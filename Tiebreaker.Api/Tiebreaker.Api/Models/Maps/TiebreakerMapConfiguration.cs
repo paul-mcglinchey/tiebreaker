@@ -14,6 +14,7 @@ namespace Tiebreaker.Api.Models.Maps
         {
             this.CreateMap<User, UserDto>().ReverseMap();
             this.CreateMap<User, UserRequest>().ReverseMap();
+            this.CreateMap<Group, GroupDto>().ReverseMap();
         }
     }
 }

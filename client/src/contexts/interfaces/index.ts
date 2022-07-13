@@ -1,4 +1,4 @@
-export * from './progress-context.interface'
+export * from './loading.context.interface'
 export * from './auth.context.interface'
 export * from './schedule.context.interface'
 export * from './rota.context.interface'

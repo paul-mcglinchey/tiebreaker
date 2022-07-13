@@ -5,14 +5,11 @@
     "node": "16.x"
   },
   "description": "",
-  "main": "dist/index.js",
+  "main": ".",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
-    "prestart": "npm run build",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +26,6 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15",
-    "typescript": "^4.7.4"
+    "nodemon": "^2.0.15"
   }
 }

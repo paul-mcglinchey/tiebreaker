@@ -29,7 +29,11 @@ namespace Tiebreaker.Api.Services
         }
 
         public async Task<bool> UserExistsAsync(UserRequest user, CancellationToken cancellationToken) =>
-            await this.context.Users.Where(u => u.Username.Equals(user.Username) || u.Email.Equals(user.Email)).SingleOrDefaultAsync(cancellationToken) != null;
+            await this.context.Users.Where(u => 
+                u.Username.Equals(user.Username) || 
+                u.Email.Equals(user.Email) || 
+                (u.Username.Equals(user.UsernameOrEmail) || u.Email.Equals(user.UsernameOrEmail)))
+            .SingleOrDefaultAsync(cancellationToken) != null;
 
         public async Task<UserDto> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
@@ -78,7 +82,7 @@ namespace Tiebreaker.Api.Services
                 signingCredentials: credentials,
                 claims: new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 },
                 expires: DateTime.UtcNow.AddDays(14));

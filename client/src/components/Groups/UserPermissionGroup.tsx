@@ -76,7 +76,7 @@ const UserPermissionGroup = ({ group, onChange, label, permissions, user, applic
             <div key={k}>
               {p?.name}
             </div>
-            <Switch enabled={userHasPermission(group, user._id, applicationIdentifier, p?.identifier)} setEnabled={() => toggleUserPermission(user._id, applicationIdentifier, p?.identifier)} description="User access control" />
+            <Switch enabled={userHasPermission(group, user.userId, applicationIdentifier, p?.identifier)} setEnabled={() => toggleUserPermission(user.userId, applicationIdentifier, p?.identifier)} description="User access control" />
           </div>
         ))}
       </div>

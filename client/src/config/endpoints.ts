@@ -1,11 +1,12 @@
 const BASE_API_URL = process.env['REACT_APP_API_URL'] || 'http://localhost:3001/api/';
+const DOTNET_API_URL = process.env['REACT_APP_DOTNET_API_URL'] || 'http://localhost:7193/api/';
 
 export const endpoints = {
     "origin"    : BASE_API_URL,
 
-    "login"         : BASE_API_URL + `users/login`,
-    "signup"        : BASE_API_URL + `users/signup`,
-    "authenticate"  : BASE_API_URL + `users/authenticate`,
+    "login"         : DOTNET_API_URL + `users/login`,
+    "signup"        : DOTNET_API_URL + `users/signup`,
+    "authenticate"  : DOTNET_API_URL + `users/authenticate`,
 
     "groups"    : BASE_API_URL + 'groups',
     "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`, 

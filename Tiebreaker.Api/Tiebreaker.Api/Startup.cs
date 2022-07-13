@@ -24,9 +24,9 @@ namespace Tiebreaker.Api
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddTransient<IUserAuthorisationService<Permission>, UserAuthorizationService>();
+            builder.Services.AddTransient<IUserAuthorisationService<PermissionType>, UserAuthorizationService>();
 
-            builder.Services.AddAccessControl<Permission, UserAuthorizationService>();
+            builder.Services.AddAccessControl<PermissionType, UserAuthorizationService>();
 
             this.ConfigureServices(builder, builder.GetContext().Configuration);
             this.ConfigureNewtonsoft();
@@ -40,6 +40,8 @@ namespace Tiebreaker.Api
                 options.UseSqlServer(configuration["TiebreakerConnectionString"]));
 
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IGroupService, GroupService>();
+            builder.Services.AddTransient<IUserContextProvider, UserContextProvider>();
 
             builder.Services.AddAutoMapper(typeof(Startup));
         }

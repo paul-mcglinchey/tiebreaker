@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Tiebreaker.Api.AccessControl.Interfaces;
 using Tiebreaker.Api.FunctionWrappers;
 using Tiebreaker.Api.Models;
 using Tiebreaker.Api.Services.Interfaces;
@@ -22,12 +22,20 @@ namespace Tiebreaker.Api.Controllers
     {
         private readonly ILogger<UserController> logger;
         private readonly IFunctionWrapper functionWrapper;
-        private readonly IHttpRequestWrapper<Permission> httpRequestWrapper;
+        private readonly IHttpRequestWrapper<PermissionType> httpRequestWrapper;
         private readonly TiebreakerContext context;
         private readonly IUserService userService;
         private readonly IMapper mapper;
+        private readonly IUserContextProvider userContextProvider;
 
-        public UserController(ILogger<UserController> logger, IFunctionWrapper functionWrapper, IHttpRequestWrapper<Permission> httpRequestWrapper, TiebreakerContext context, IUserService userService, IMapper mapper)
+        public UserController(
+            ILogger<UserController> logger,
+            IFunctionWrapper functionWrapper,
+            IHttpRequestWrapper<PermissionType> httpRequestWrapper,
+            TiebreakerContext context,
+            IUserService userService,
+            IMapper mapper, 
+            IUserContextProvider userContextProvider)
         {
             this.logger = logger;
             this.functionWrapper = functionWrapper;
@@ -35,6 +43,7 @@ namespace Tiebreaker.Api.Controllers
             this.context = context;
             this.userService = userService;
             this.mapper = mapper;
+            this.userContextProvider = userContextProvider;
         }
 
         [FunctionName("Signup")]
@@ -97,10 +106,13 @@ namespace Tiebreaker.Api.Controllers
             ILogger logger,
             CancellationToken cancellationToken) =>
             await this.httpRequestWrapper.ExecuteAsync(
-                new List<Permission> { Permission.ApplicationAccess },
+                new List<PermissionType> { PermissionType.ApplicationAccess },
                 async () =>
                 {
-                    return new StatusCodeResult((int)HttpStatusCode.OK);
+                    return new OkObjectResult(new
+                    {
+                        UserId = this.userContextProvider.UserId
+                    });
                 },
                 cancellationToken);
 

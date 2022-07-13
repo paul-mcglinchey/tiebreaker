@@ -5,7 +5,7 @@ namespace Tiebreaker.Api.AccessControl.Interfaces
 {
     public interface IAuthenticator
     {
-        public Guid Id { get; }
+        public Guid UserId { get; }
 
         Task<bool> AuthenticateAsync();
     }
