@@ -6,7 +6,6 @@ ISSUES
 	- update server / db when colour is generated for a client / user without colour
 - create tag component
 	- use composition to create a user tag component
-- status and usergroup should use context, currently performing too much props drilling with these states - DONE
 - activity log changes
 	- should expose an enumerated type which allows for a task to be set (CRUD)
 	- should allow an object to be set for reference (Client, session, group etc)
