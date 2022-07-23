@@ -15,6 +15,11 @@ namespace Tiebreaker.Api.Models.Maps
             this.CreateMap<User, UserDto>().ReverseMap();
             this.CreateMap<User, UserRequest>().ReverseMap();
             this.CreateMap<Group, GroupDto>().ReverseMap();
+            this.CreateMap<Application, ApplicationDto>().ReverseMap();
+            this.CreateMap<GroupUser, GroupUserDto>().ReverseMap();
+            this.CreateMap<GroupUserApplication, GroupUserApplicationDto>().ReverseMap();
+            this.CreateMap<Role, RoleDto>().ReverseMap();
+            this.CreateMap<Permission, PermissionDto>().ReverseMap();
         }
     }
 }

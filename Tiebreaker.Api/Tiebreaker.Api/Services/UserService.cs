@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,14 +19,17 @@ namespace Tiebreaker.Api.Services
 {
     public class UserService : IUserService
     {
-        private TiebreakerContext context;
-        private IMapper mapper;
         private HashingManager hashing = new();
 
-        public UserService(TiebreakerContext context, IMapper mapper)
+        private TiebreakerContext context;
+        private IMapper mapper;
+        private IConfiguration configuration;
+
+        public UserService(TiebreakerContext context, IMapper mapper, IConfiguration configuration)
         {
             this.context = context;
             this.mapper = mapper;
+            this.configuration = configuration;
         }
 
         public async Task<bool> UserExistsAsync(UserRequest user, CancellationToken cancellationToken) =>
@@ -71,9 +75,9 @@ namespace Tiebreaker.Api.Services
                 : null;
         }
 
-        private static string GenerateToken(User user)
+        private string GenerateToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JwtPrivateKey")));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtPrivateKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var secToken = new JwtSecurityToken(

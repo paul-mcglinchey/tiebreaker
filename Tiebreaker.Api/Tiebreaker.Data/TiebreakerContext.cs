@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tiebreaker.Data.Extensions;
 using Tiebreaker.Domain.Models;
 
 namespace Tiebreaker.Data
@@ -17,8 +18,6 @@ namespace Tiebreaker.Data
         public DbSet<Application>? Applications { get; set; }
 
         public DbSet<ApplicationPermission>? ApplicationPermissions { get; set; }
-
-        public DbSet<ApplicationRole>? ApplicationRoles { get; set; }
 
         public DbSet<Audit>? Audits { get; set; }
 
@@ -44,25 +43,25 @@ namespace Tiebreaker.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Extension method for seeding base Applications, Roles & Permissions
+            modelBuilder.Seed();
+
             modelBuilder.Entity<Application>()
                 .HasMany<Permission>(a => a.Permissions)
                 .WithMany(p => p.Applications)
                 .UsingEntity<ApplicationPermission>();
-
-            modelBuilder.Entity<Application>()
-                .HasMany<Role>(a => a.Roles)
-                .WithMany(r => r.Applications)
-                .UsingEntity<ApplicationRole>();
 
             modelBuilder.Entity<Group>()
                 .HasMany<Application>(g => g.Applications)
                 .WithMany(a => a.Groups)
                 .UsingEntity<GroupApplication>();
 
-            modelBuilder.Entity<User>()
-                .HasMany<Group>(u => u.Groups)
-                .WithMany(g => g.Users)
-                .UsingEntity<GroupUser>();
+            modelBuilder.Entity<Group>()
+                .HasMany<GroupUser>(g => g.GroupUsers)
+                .WithOne(gu => gu.Group);
+
+            modelBuilder.Entity<GroupUser>()
+                .HasOne(gu => gu.User);
 
             modelBuilder.Entity<GroupUserApplication>()
                 .HasMany<Role>(gua => gua.Roles)

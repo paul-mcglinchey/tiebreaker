@@ -3,19 +3,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Tiebreaker.Api.AccessControl.Interfaces;
 using Tiebreaker.Api.FunctionWrappers;
 using Tiebreaker.Api.Models;
 using Tiebreaker.Api.Services.Interfaces;
-using Tiebreaker.Data;
 using Tiebreaker.Data.Enums;
 using Tiebreaker.Domain.Models;
 
@@ -25,24 +22,18 @@ namespace Tiebreaker.Api.Controllers
     {
         private readonly ILogger<GroupController> logger;
         private readonly IHttpRequestWrapper<PermissionType> httpRequestWrapper;
-        private readonly TiebreakerContext context;
         private readonly IMapper mapper;
-        private readonly IUserContextProvider userContextProvider;
         private readonly IGroupService groupService;
 
         public GroupController(
             ILogger<GroupController> logger,
             IHttpRequestWrapper<PermissionType> httpRequestWrapper,
-            TiebreakerContext context,
             IMapper mapper,
-            IUserContextProvider userContextProvider,
             IGroupService groupService)
         {
             this.logger = logger;
             this.httpRequestWrapper = httpRequestWrapper;
-            this.context = context;
             this.mapper = mapper;
-            this.userContextProvider = userContextProvider;
             this.groupService = groupService;
         }
 
@@ -53,7 +44,7 @@ namespace Tiebreaker.Api.Controllers
             CancellationToken cancellationToken) =>
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.ApplicationAccess },
-                async () => new OkObjectResult(this.groupService.GetGroupsAsync(cancellationToken)), cancellationToken);
+                async () => new OkObjectResult(await this.groupService.GetGroupsAsync(cancellationToken)), cancellationToken);
 
         [FunctionName("CreateGroup")]
         public async Task<ActionResult> CreateGroup(
@@ -65,22 +56,46 @@ namespace Tiebreaker.Api.Controllers
                 async () =>
                 {
                     var requestBody = await ConstructRequestModelAsync<GroupDto>(req);
-
                     var group = this.mapper.Map<Group>(requestBody);
 
-                    var currentUser = await this.context.Users.Where(u => u.Id == this.userContextProvider.UserId).SingleOrDefaultAsync(cancellationToken);
-                    
-                    group.Users.Add(currentUser);
+                    var groupId = await this.groupService.CreateGroupAsync(group, cancellationToken);
 
-                    var currentGroupUser = await this.context.GroupUsers.Where(gu => gu.UserId == currentUser.Id && gu.GroupId == group.Id).SingleOrDefaultAsync(cancellationToken);
+                    return new CreatedAtRouteResult("groups", new { groupId = groupId });
+                },
+                cancellationToken);
 
-                    currentGroupUser.Roles.Add(await this.context.Roles.Where(r => r.Name == "Group Admin").SingleOrDefaultAsync(cancellationToken));
-                    
-                    this.context.Groups.Add(group);
+        [FunctionName("UpdateGroup")]
+        public async Task<ActionResult> UpdateGroup(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "groups/{groupId}")] HttpRequest req,
+            string groupId,
+            ILogger logger,
+            CancellationToken cancellationToken) =>
+            await this.httpRequestWrapper.ExecuteAsync(
+                new List<PermissionType> { PermissionType.GroupAdminAccess },
+                async () =>
+                {
+                    var requestBody = await ConstructRequestModelAsync<GroupDto>(req);
+                    var group = this.mapper.Map<Group>(requestBody);
 
-                    await this.context.SaveChangesAsync(cancellationToken);
+                    var groupIdGuid = Guid.Parse(groupId);
 
-                    return new CreatedAtRouteResult("groups", new { groupId = group.Id });
+                    return new OkObjectResult(new { groupId = await this.groupService.UpdateGroupAsync(groupIdGuid, group, cancellationToken) });
+                },
+                cancellationToken);
+
+        [FunctionName("DeleteGroup")]
+        public async Task<ActionResult> DeleteGroup(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "groups/{groupId}")] HttpRequest req,
+            string groupId,
+            ILogger logger,
+            CancellationToken cancellationToken) =>
+            await this.httpRequestWrapper.ExecuteAsync(
+                new List<PermissionType> { PermissionType.GroupAdminAccess },
+                async () =>
+                {
+                    var groupIdGuid = Guid.Parse(groupId);
+
+                    return new OkObjectResult(new { groupId = await this.groupService.DeleteGroupAsync(groupIdGuid, cancellationToken) });
                 },
                 cancellationToken);
 

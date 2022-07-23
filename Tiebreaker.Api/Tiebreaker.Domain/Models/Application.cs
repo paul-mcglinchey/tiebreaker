@@ -25,8 +25,6 @@ namespace Tiebreaker.Domain.Models
 
         public virtual ICollection<Permission> Permissions { get; set; }
 
-        public virtual ICollection<Role> Roles { get; set; }
-
         public virtual ICollection<Group> Groups { get; set; }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tiebreaker.Api.AccessControl.Interfaces;
@@ -17,14 +20,16 @@ namespace Tiebreaker.Api.AccessControl.Services
         private readonly TiebreakerContext context;
         private readonly JwtSecurityTokenHandler handler;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IConfiguration configuration;
         private Guid? userId;
 
-        public HttpAuthenticator(ILogger<HttpAuthenticator> logger, TiebreakerContext context, JwtSecurityTokenHandler handler, IHttpContextAccessor httpContextAccessor)
+        public HttpAuthenticator(ILogger<HttpAuthenticator> logger, TiebreakerContext context, JwtSecurityTokenHandler handler, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             this.logger = logger;
             this.context = context;
             this.handler = handler;
             this.httpContextAccessor = httpContextAccessor;
+            this.configuration = configuration;
         }
 
         public Guid UserId => this.userId ?? throw new NotSupportedException("User ID cannot be used before authentication");
@@ -44,11 +49,19 @@ namespace Tiebreaker.Api.AccessControl.Services
                     { 
                         ValidateAudience = false,
                         ValidateIssuer = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JwtPrivateKey"))) 
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtPrivateKey"])) 
                     },
                     out var validatedToken);
 
-                this.userId = Guid.Parse((validatedToken as JwtSecurityToken).Subject);
+                if (!Guid.TryParse((validatedToken as JwtSecurityToken).Subject, out var userId))
+                {
+                    return false;
+                }
+
+                // Will throw an exception if the user doesn't exist causing a 401
+                await this.context.Users.Where(u => u.Id == userId).SingleAsync();
+
+                this.userId = userId;
 
                 return true;
             }

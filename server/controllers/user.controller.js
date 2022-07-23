@@ -144,7 +144,7 @@ exports.signup = asyncHandler(async (req, res) => {
 })
 
 exports.update = asyncHandler(async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.userId, {
+  const user = await User.findByIdAndUpdate(req.params.id, {
     ...req.body,
     'audit.updatedBy': req.auth._id
   })

@@ -1,11 +1,32 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Azure.Identity;
+using Microsoft.Extensions.Configuration;
 using System;
 using Tiebreaker.Api.Controllers.Builder;
+using Tiebreaker.Api.Extensions.Options;
 
 namespace Tiebreaker.Api.Extensions
 {
     public static class ConfigurationExtensions
     {
+        public static IConfigurationBuilder ConfigureAppConfiguration(this IConfigurationBuilder builder)
+        {
+            var environmentName = Environment.GetEnvironmentVariable("EnvironmentName");
+
+            return builder.ConfigureAppConfiguration(
+                new AppConfigOptions
+                {
+                    ConnectionString = Environment.GetEnvironmentVariable("AppConfigConnectionString"),
+                    EnvironmentName = environmentName != null ? environmentName : "local",
+                });
+        }
+
+        public static IConfigurationBuilder ConfigureAppConfiguration(this IConfigurationBuilder builder, Action<AppConfigOptions> action)
+        {
+            var appConfigOptions = new AppConfigOptions();
+            action.Invoke(appConfigOptions);
+            return builder.ConfigureAppConfiguration(appConfigOptions);
+        }
+
         public static IConfigurationBuilder ConfigureDefaultApiControllers(this IConfigurationBuilder builder, Type startupType) =>
             builder.ConfigureControllers()
                 .WithVersionController(startupType)
@@ -15,15 +36,23 @@ namespace Tiebreaker.Api.Extensions
         public static IFunctionsControllerBuilder ConfigureControllers(this IConfigurationBuilder builder) =>
             new FunctionsControllerBuilder(builder);
 
-        public static IConfigurationBuilder ConfigureAppConfiguration(this IConfigurationBuilder builder)
+        public static IConfigurationBuilder ConfigureAppConfiguration(this IConfigurationBuilder builder, AppConfigOptions appConfigOptions)
         {
-            var environmentName = Environment.GetEnvironmentVariable("EnvironmentName");
-
             return builder.AddAzureAppConfiguration(
                 options =>
                 {
-                    options.Connect(Environment.GetEnvironmentVariable("AppConfigConnectionString"));
-                }, true);
+                    options.Connect(appConfigOptions.ConnectionString);
+
+                    options.Select("*", appConfigOptions.EnvironmentName);
+
+                    options.UseFeatureFlags(featureFlagOptions => featureFlagOptions.Label = appConfigOptions.EnvironmentName);
+
+                    options.ConfigureKeyVault(kv =>
+                    {
+                        kv.SetCredential(new DefaultAzureCredential());
+                    });
+                },
+                true);
         }
     }
 }

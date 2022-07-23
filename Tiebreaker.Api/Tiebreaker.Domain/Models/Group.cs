@@ -10,8 +10,8 @@
 
         public string? Colour { get; set; }
 
-        public virtual ICollection<Application> Applications { get; set; }
+        public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public virtual ICollection<GroupUser> GroupUsers { get; set; } = new List<GroupUser>();
     }
 }

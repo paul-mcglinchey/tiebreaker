@@ -2,6 +2,8 @@
 {
     public enum PermissionType
     {
-        ApplicationAccess = 1,
+        GroupAccess = 1,
+        GroupAdminAccess = 2,
+        ApplicationAccess = 101,
     }
 }

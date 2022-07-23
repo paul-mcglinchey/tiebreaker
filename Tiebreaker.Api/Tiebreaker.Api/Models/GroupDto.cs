@@ -11,5 +11,9 @@ namespace Tiebreaker.Api.Models
         public string? Description { get; set; }
 
         public string? Colour { get; set; }
+
+        public ApplicationDto[] Applications { get; set; }
+
+        public GroupUserDto[] GroupUsers { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,6 +9,7 @@ using Tiebreaker.Api.AccessControl.Interfaces;
 using Tiebreaker.Api.Models;
 using Tiebreaker.Api.Services.Interfaces;
 using Tiebreaker.Data;
+using Tiebreaker.Domain.Models;
 
 namespace Tiebreaker.Api.Services
 {
@@ -26,9 +28,56 @@ namespace Tiebreaker.Api.Services
         
         public async Task<List<GroupDto>> GetGroupsAsync(CancellationToken cancellationToken)
         {
-            var groups = await this.context.Groups.Where(g => g.Users.Any(u => u.Id == this.userContextProvider.UserId)).ToListAsync(cancellationToken);
+            var groups = await this.context.Groups
+                .Where(g => g.GroupUsers.Any(gu => gu.UserId == this.userContextProvider.UserId))
+                .Include(g => g.Applications)
+                .Include(g => g.GroupUsers)
+                    .ThenInclude(gu => gu.Roles)
+                        .ThenInclude(r => r.Permissions)
+                    .ThenInclude(gu => gu.Applications)
+                .ToListAsync(cancellationToken);
 
-            return this.mapper.Map<List<GroupDto>>(groups);
+            return this.mapper.Map<List<Group>, List<GroupDto>>(groups);
+        }
+
+        public async Task<Guid> CreateGroupAsync(Group group, CancellationToken cancellationToken)
+        {
+            var currentUser = await this.context.Users
+                        .Where(u => u.Id == this.userContextProvider.UserId)
+                        .SingleOrDefaultAsync(cancellationToken);
+
+            var rolesToAdd = await this.context.Roles
+                .Where(r => r.Permissions.Any(p => p.Applications.Count == 0))
+                .ToListAsync(cancellationToken);
+
+            group.GroupUsers.Add(new GroupUser { User = currentUser, Roles = rolesToAdd });
+
+            this.context.Groups.Add(group);
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            return group.Id;
+        }
+
+        public async Task<Guid> UpdateGroupAsync(Guid groupId, Group group, CancellationToken cancellationToken)
+        {
+            var groupToUpdate = await this.context.Groups.Where(g => g.Id == groupId).SingleOrDefaultAsync(cancellationToken);
+
+            groupToUpdate = group;
+
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            return groupToUpdate.Id;
+        }
+
+        public async Task<Guid> DeleteGroupAsync(Guid groupId, CancellationToken cancellationToken)
+        {
+            var group = await this.context.Groups.Where(g => g.Id == groupId).SingleOrDefaultAsync(cancellationToken);
+            
+            this.context.Groups.Remove(group);
+
+            await this.context.SaveChangesAsync(cancellationToken);
+
+            return group.Id;
         }
     }
 }

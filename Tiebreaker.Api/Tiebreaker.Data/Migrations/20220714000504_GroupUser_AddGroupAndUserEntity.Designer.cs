@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tiebreaker.Data;
 
@@ -11,9 +12,10 @@ using Tiebreaker.Data;
 namespace Tiebreaker.Data.Migrations
 {
     [DbContext(typeof(TiebreakerContext))]
-    partial class TiebreakerContextModelSnapshot : ModelSnapshot
+    [Migration("20220714000504_GroupUser_AddGroupAndUserEntity")]
+    partial class GroupUser_AddGroupAndUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,12 +105,12 @@ namespace Tiebreaker.Data.Migrations
                         new
                         {
                             ApplicationId = 1,
-                            PermissionId = 101
+                            PermissionId = 2
                         },
                         new
                         {
                             ApplicationId = 2,
-                            PermissionId = 101
+                            PermissionId = 2
                         });
                 });
 
@@ -276,15 +278,7 @@ namespace Tiebreaker.Data.Migrations
                         {
                             Id = 2,
                             AuditId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Grants admin access to a group",
-                            Language = "en-US",
-                            Name = "Group Admin Access"
-                        },
-                        new
-                        {
-                            Id = 101,
-                            AuditId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Grants access to an application.",
+                            Description = "Grants access to an application",
                             Language = "en-US",
                             Name = "Application Access"
                         });
@@ -335,11 +329,6 @@ namespace Tiebreaker.Data.Migrations
                         new
                         {
                             PermissionId = 1,
-                            RoleId = new Guid("1ba0c5a2-00a5-4b37-9e97-cc354ad6d9e2")
-                        },
-                        new
-                        {
-                            PermissionId = 2,
                             RoleId = new Guid("1ba0c5a2-00a5-4b37-9e97-cc354ad6d9e2")
                         });
                 });
@@ -403,7 +392,7 @@ namespace Tiebreaker.Data.Migrations
             modelBuilder.Entity("Tiebreaker.Domain.Models.GroupUser", b =>
                 {
                     b.HasOne("Tiebreaker.Domain.Models.Group", "Group")
-                        .WithMany("GroupUsers")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -428,7 +417,7 @@ namespace Tiebreaker.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tiebreaker.Domain.Models.GroupUser", "GroupUser")
-                        .WithMany("Applications")
+                        .WithMany()
                         .HasForeignKey("GroupUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -481,16 +470,6 @@ namespace Tiebreaker.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Tiebreaker.Domain.Models.Group", b =>
-                {
-                    b.Navigation("GroupUsers");
-                });
-
-            modelBuilder.Entity("Tiebreaker.Domain.Models.GroupUser", b =>
-                {
-                    b.Navigation("Applications");
                 });
 #pragma warning restore 612, 618
         }

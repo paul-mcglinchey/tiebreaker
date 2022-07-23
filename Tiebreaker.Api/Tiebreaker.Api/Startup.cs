@@ -56,7 +56,8 @@ namespace Tiebreaker.Api
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
-                ContractResolver = resolver
+                ContractResolver = resolver,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             };
         }
     }

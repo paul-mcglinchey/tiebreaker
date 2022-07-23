@@ -37,13 +37,13 @@ const useAuthService = (): IAuthService => {
   const hasPermission = (applicationIdentifier: number, permission: Permission): boolean => {
     if (!currentGroup?.applications?.includes(applicationIdentifier)) return false
 
-    return currentGroup?.users.find(u => u.user === user?.userId)?.applications.find(a => a.application === applicationIdentifier)?.permissions.includes(permission) ? true : false
+    return currentGroup?.users.find(u => u.user === user?.id)?.applications.find(a => a.application === applicationIdentifier)?.permissions.includes(permission) ? true : false
   }
 
   const updatePreferences = asyncHandler(async (values: IPreferences) => {
-    if (!user?.userId) throw new Error()
+    if (!user?.id) throw new Error()
     
-    const res = await fetch(endpoints.user(user.userId), requestBuilder('PUT', undefined, { preferences: values }))
+    const res = await fetch(endpoints.user(user.id), requestBuilder('PUT', undefined, { preferences: values }))
     const json = await res.json()
 
     handleResolution(res, json, 'update', 'preferences', [() => setUser({ ...user, preferences: values })])

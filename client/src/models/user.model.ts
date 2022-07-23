@@ -13,7 +13,7 @@ export interface IPreferences {
 }
 
 export interface IUser {
-  userId?: string
+  id?: string
   username?: string,
   email?: string,
   password?: string
