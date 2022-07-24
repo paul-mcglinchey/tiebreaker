@@ -12,6 +12,8 @@
 
         public User User { get; set; }
 
+        public bool HasJoined { get; set; } = false;
+
         public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 
         public virtual ICollection<GroupUserApplication> Applications { get; set; } = new List<GroupUserApplication>();

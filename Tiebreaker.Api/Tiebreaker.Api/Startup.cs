@@ -41,6 +41,7 @@ namespace Tiebreaker.Api
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IGroupService, GroupService>();
+            builder.Services.AddTransient<IGroupUserService, GroupUserService>();
             builder.Services.AddTransient<IUserContextProvider, UserContextProvider>();
 
             builder.Services.AddAutoMapper(typeof(Startup));

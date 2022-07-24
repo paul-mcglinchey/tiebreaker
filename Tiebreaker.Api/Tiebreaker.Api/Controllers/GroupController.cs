@@ -46,6 +46,15 @@ namespace Tiebreaker.Api.Controllers
                 new List<PermissionType> { PermissionType.ApplicationAccess },
                 async () => new OkObjectResult(await this.groupService.GetGroupsAsync(cancellationToken)), cancellationToken);
 
+        [FunctionName("GetPendingGroups")]
+        public async Task<ActionResult> GetPendingGroups(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "groups/pending")] HttpRequest req,
+            ILogger logger,
+            CancellationToken cancellationToken) =>
+            await this.httpRequestWrapper.ExecuteAsync(
+                new List<PermissionType> { PermissionType.ApplicationAccess },
+                async () => new OkObjectResult(await this.groupService.GetPendingGroupsAsync(cancellationToken)), cancellationToken);
+
         [FunctionName("CreateGroup")]
         public async Task<ActionResult> CreateGroup(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "groups")] HttpRequest req,
@@ -57,6 +66,11 @@ namespace Tiebreaker.Api.Controllers
                 {
                     var requestBody = await ConstructRequestModelAsync<GroupDto>(req);
                     var group = this.mapper.Map<Group>(requestBody);
+
+                    if (await this.groupService.GroupNameExistsAsync(group.Name, cancellationToken))
+                    {
+                        return new BadRequestObjectResult("Group name already exists.");
+                    }
 
                     var groupId = await this.groupService.CreateGroupAsync(group, cancellationToken);
 
@@ -78,6 +92,11 @@ namespace Tiebreaker.Api.Controllers
                     var group = this.mapper.Map<Group>(requestBody);
 
                     var groupIdGuid = Guid.Parse(groupId);
+
+                    if (group.Name != null && await this.groupService.GroupNameExistsAsync(groupIdGuid, group.Name, cancellationToken))
+                    {
+                        return new BadRequestObjectResult("Group name already exists.");
+                    }
 
                     return new OkObjectResult(new { groupId = await this.groupService.UpdateGroupAsync(groupIdGuid, group, cancellationToken) });
                 },

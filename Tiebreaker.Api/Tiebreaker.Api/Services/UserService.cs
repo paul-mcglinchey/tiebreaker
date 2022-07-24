@@ -33,9 +33,9 @@ namespace Tiebreaker.Api.Services
         }
 
         public async Task<bool> UserExistsAsync(UserRequest user, CancellationToken cancellationToken) =>
-            await this.context.Users.Where(u => 
-                u.Username.Equals(user.Username) || 
-                u.Email.Equals(user.Email) || 
+            await this.context.Users.Where(u =>
+                u.Username.Equals(user.Username) ||
+                u.Email.Equals(user.Email) ||
                 (u.Username.Equals(user.UsernameOrEmail) || u.Email.Equals(user.UsernameOrEmail)))
             .SingleOrDefaultAsync(cancellationToken) != null;
 
@@ -62,7 +62,7 @@ namespace Tiebreaker.Api.Services
 
             await this.context.Users.AddAsync(user, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
-            
+
             return await this.GetUserByIdAsync(user.Id, cancellationToken);
         }
 
