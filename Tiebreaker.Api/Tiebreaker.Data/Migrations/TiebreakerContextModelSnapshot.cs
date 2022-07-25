@@ -303,11 +303,16 @@ namespace Tiebreaker.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Roles");
 
@@ -471,6 +476,15 @@ namespace Tiebreaker.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tiebreaker.Domain.Models.Role", b =>
+                {
+                    b.HasOne("Tiebreaker.Domain.Models.Group", "Group")
+                        .WithMany("Roles")
+                        .HasForeignKey("GroupId");
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("Tiebreaker.Domain.Models.RolePermission", b =>
                 {
                     b.HasOne("Tiebreaker.Domain.Models.Permission", null)
@@ -489,6 +503,8 @@ namespace Tiebreaker.Data.Migrations
             modelBuilder.Entity("Tiebreaker.Domain.Models.Group", b =>
                 {
                     b.Navigation("GroupUsers");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("Tiebreaker.Domain.Models.GroupUser", b =>

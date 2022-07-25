@@ -14,7 +14,7 @@ const useGroupService = (): IGroupService => {
   const { groups = [], setGroups } = groupContext
 
   const getGroup = (groupId: string | undefined): IGroup | undefined => {
-    return groups.find((group: IGroup) => group._id === groupId)
+    return groups.find((group: IGroup) => group.id === groupId)
   }
 
   const addGroup = asyncHandler(async (values: IGroup) => {
@@ -47,13 +47,13 @@ const useGroupService = (): IGroupService => {
   }
 
   const deleteGroupInContext = (groupId: string) => {
-    setGroups(groups => groups ? groups.filter(g => g._id !== groupId) : undefined)
+    setGroups(groups => groups ? groups.filter(g => g.id !== groupId) : undefined)
   }
 
   const updateGroupInContext = (groupId: string, values: IGroup) => {
     setGroups(groups => {
       return groups ? groups.map(g => {
-        return g._id === groupId ? { ...g, ...values } : g
+        return g.id === groupId ? { ...g, ...values } : g
       }) : undefined
     })
   }

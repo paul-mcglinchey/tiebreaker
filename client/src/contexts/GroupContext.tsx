@@ -9,6 +9,7 @@ export const GroupContext = createContext<IGroupContext>({
   currentGroup: undefined,
   setCurrentGroup: () => {},
   groups: [],
+  invites: [],
   setGroups: () => {},
   count: 0,
   isLoading: false,
@@ -18,7 +19,7 @@ export const GroupContext = createContext<IGroupContext>({
 export const GroupProvider = ({ children }: IChildrenProps) => {
   const [groups, setGroups] = useState<IGroup[] | undefined>()
   const [count, setCount] = useState<number>(0)
-  const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups && groups.find(g => g._id === getItemInLocalStorage('group-id')))
+  const [currentGroup, setCurrentGroup] = useState<IGroup | undefined>(groups && groups.find(g => g.id === getItemInLocalStorage('group-id')))
   
   const isMounted = useIsMounted()
   const { requestBuilder } = useRequestBuilder()
@@ -27,11 +28,11 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
 
   useEffect(() => {
     if (isMounted() && response) {
-      setGroups(response.groups)
+      setGroups(response.items)
       setCount(response.count)
 
       if (!currentGroup) {
-        response.groups[0] && setCurrentGroup(response.groups.find(g => g._id === getItemInLocalStorage('group-id')) || response.groups[0])
+        response.items[0] && setCurrentGroup(response.items.find(g => g.id === getItemInLocalStorage('group-id')) || response.items[0])
       }
     }
 
@@ -39,17 +40,18 @@ export const GroupProvider = ({ children }: IChildrenProps) => {
   }, [response])
 
   useEffect(() => {
-    currentGroup && setItemInLocalStorage('group-id', currentGroup?._id)
+    currentGroup && setItemInLocalStorage('group-id', currentGroup?.id)
   }, [currentGroup])
 
   useEffect(() => {
-    groups && setCurrentGroup(groups.find(g => g._id === getItemInLocalStorage('group-id')) || groups[0])
+    groups && setCurrentGroup(groups.find(g => g.id === getItemInLocalStorage('group-id')) || groups[0])
   }, [groups])
 
   const contextValue = {
     currentGroup,
     setCurrentGroup,
-    groups,
+    groups: groups?.filter(g => g.groupUsers.find(gu => gu.userId === user?.id)?.hasJoined),
+    invites: groups?.filter(g => !g.groupUsers.find(gu => gu.userId === user?.id)?.hasJoined),
     setGroups,
     count,
     isLoading,

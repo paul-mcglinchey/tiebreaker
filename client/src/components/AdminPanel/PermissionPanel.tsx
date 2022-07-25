@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { usePermissionService } from '../../hooks'
-import { ButtonType } from '../../enums'
 import { Button, Table } from '../Common'
 import { Panel, PermissionTableRow, PermissionModal } from '.'
 import { PlusIcon } from '@heroicons/react/solid'
@@ -27,7 +26,7 @@ const PermissionPanel = () => {
           subtitle={`Number of permissions: ${count}`}
           hideSave
           HeaderActions={
-            <Button buttonType={ButtonType.Tertiary} content='Add permission' Icon={PlusIcon} action={() => setAddPermissionOpen(true)} />
+            <Button content='Add permission' Icon={PlusIcon} action={() => setAddPermissionOpen(true)} />
           }
         >
           <Table

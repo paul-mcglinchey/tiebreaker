@@ -37,14 +37,14 @@ export const UserProvider = ({ groupId, children }: IUserProviderProps & IChildr
     const res = await fetch(endpoints.groupusers(groupId), requestBuilder())
     const json: IUsersResponse = await res.json()
     
-    setUsers(json.users)
+    setUsers(json.items)
     setCount(json.count)
 
     setIsLoading(false)
   })
 
   useEffect(() => {
-    isMounted() && currentGroup && fetchUsers(groupId || currentGroup._id)
+    isMounted() && currentGroup && fetchUsers(groupId || currentGroup.id)
   }, [currentGroup, groupId])
 
   const contextValue = {

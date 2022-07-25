@@ -1,4 +1,3 @@
-import { ButtonType } from "../../enums"
 import { IChildrenProps } from "../../models"
 import { Button } from "../Common"
 
@@ -30,7 +29,7 @@ const Panel = ({ title, subtitle, HeaderActions, hideSave, children }: IPanelPro
       </div>
       {!hideSave && (
         <div className="flex justify-end">
-          <Button content="Save changes" buttonType={ButtonType.Primary} />
+          <Button content="Save changes" buttonType="Primary" />
         </div>
       )}
     </div>

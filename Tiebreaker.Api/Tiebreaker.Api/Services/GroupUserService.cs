@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Tiebreaker.Api.AccessControl.Interfaces;
+using Tiebreaker.Api.Models;
 using Tiebreaker.Api.Services.Interfaces;
 using Tiebreaker.Data;
 using Tiebreaker.Domain.Models;
@@ -33,7 +34,26 @@ namespace Tiebreaker.Api.Services
                 .SingleOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Guid> InviteUserAsync(Guid groupId, Guid userId, CancellationToken cancellationToken)
+        public async Task<bool> GroupUserExistsAsync(Guid groupId, Guid userId, CancellationToken cancellationToken) =>
+            await GetGroupUserAsync(groupId, userId, cancellationToken) != null;
+
+        public async Task<ListResponse<UserDto>> GetGroupUsersAsync(Guid groupId, CancellationToken cancellationToken)
+        {
+            var group = await this.context.Groups
+                .Where(g => g.Id.Equals(groupId))
+                .Include(g => g.GroupUsers)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            var users = await this.context.Users.Where(u => group.GroupUsers.Select(gu => gu.UserId).Contains(u.Id)).ToListAsync(cancellationToken);
+
+            return new ListResponse<UserDto>
+            {
+                Items = this.mapper.Map<List<UserDto>>(users),
+                Count = users.Count,
+            };
+        }
+
+        public async Task<Guid> AddUserAsync(Guid groupId, Guid userId, CancellationToken cancellationToken)
         {
             var groupUser = new GroupUser { GroupId = groupId, UserId = userId };
             this.context.GroupUsers.Add(groupUser);
@@ -42,7 +62,7 @@ namespace Tiebreaker.Api.Services
             return groupUser.Id;
         }
 
-        public async Task<Guid> KickUserAsync(Guid groupId, Guid userId, CancellationToken cancellationToken)
+        public async Task<Guid> DeleteUserAsync(Guid groupId, Guid userId, CancellationToken cancellationToken)
         {
             var groupUser = await GetGroupUserAsync(groupId, userId, cancellationToken);
             this.context.GroupUsers.Remove(groupUser);

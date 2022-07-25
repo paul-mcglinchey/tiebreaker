@@ -6,7 +6,7 @@ import { IRota } from "../../models";
 import { useAuthService, useRotaService } from "../../hooks";
 import { Button, Dialog, Dropdown } from "../Common";
 import { RotaModal } from ".";
-import { Application, ButtonType, Permission } from "../../enums";
+import { Application, Permission } from "../../enums";
 
 interface IRotaHeaderProps {
   rota: IRota,
@@ -35,7 +35,7 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
   return (
     <div className="flex justify-between items-center text-gray-200">
       <Link to="/rotas/dashboard" className="flex sm:hidden rounded-lg">
-        <Button content="Back to rotas" buttonType={ButtonType.Tertiary} />
+        <Button content="Back to rotas" buttonType="Tertiary" />
       </Link>
       <div className="hidden sm:flex items-center pb-0.5 space-x-3 text-white text-base md:text-2xl font-semibold tracking-wider">
         <Link to="/rotas/dashboard">
@@ -53,7 +53,7 @@ const RotaHeader = ({ rota, editing, setEditing }: IRotaHeaderProps) => {
         )}
         {hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) && (
           <>
-            <Button buttonType={ButtonType.Tertiary} content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => updateEditingStatus()} />
+            <Button buttonType="Tertiary" content={editing ? 'View' : 'Edit'} Icon={editing ? EyeIcon : PencilIcon} action={() => updateEditingStatus()} />
             <Dropdown options={[
               { label: 'Edit Rota Details', action: () => setEditRotaOpen(true), Icon: PencilIcon },
               { label: 'Modify Employees', action: () => { }, Icon: UsersIcon },

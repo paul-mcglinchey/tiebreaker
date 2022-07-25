@@ -1,6 +1,7 @@
 export * from './client.service.interface'
 export * from './employee.service.interface'
 export * from './group.service.interface'
+export * from './groupuser.service.interface'
 export * from './application.service.interface'
 export * from './permission.service.interface'
 export * from './rota.service.interface'

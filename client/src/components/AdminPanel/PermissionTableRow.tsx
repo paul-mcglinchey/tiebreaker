@@ -19,7 +19,7 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
     <TableRow>
       <TableRowItem>
         <div className="flex flex-col">
-          <div className="text-sm font-medium text-white">{permission.identifier}</div>
+          <div className="text-sm font-medium text-white">{permission.id}</div>
         </div>
       </TableRowItem>
       <TableRowItem>
@@ -52,7 +52,7 @@ const PermissionTableRow = ({ permission }: IPermissionTableRowProps) => {
             content="Deleting this permission from the application will cause any users or roles to no longer be able to utilize the permission unless a new permission is created with the same identifier"
             isOpen={deletePermissionOpen}
             close={() => setDeletePermissionOpen(false)}
-            positiveActions={[() => deletePermission(permission._id)]}
+            positiveActions={[() => deletePermission(permission.id)]}
           />
         </div>
       </TableRowItem>

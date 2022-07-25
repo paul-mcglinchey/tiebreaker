@@ -19,6 +19,7 @@ export * from './group.model'
 export * from './listcollection.model'
 export * from './table.model'
 export * from './user.model'
+export * from './role.model'
 export * from './permission.model'
 
 export * from './props.model'

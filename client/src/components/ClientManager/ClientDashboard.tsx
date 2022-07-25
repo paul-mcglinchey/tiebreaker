@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthService } from '../../hooks';
-import { Toolbar, Prompter } from '../Common';
+import { Toolbar, Prompter, Button } from '../Common';
 import { ClientModal, ClientList } from '.';
 import { Application, Permission } from '../../enums';
 
@@ -11,7 +11,9 @@ const ClientDashboard = () => {
   return (
     <>
       <>
-        <Toolbar title="Clients" addClientAction={hasPermission(Application.ClientManager, Permission.AddEditDeleteClients) ? () => setAddClientOpen(true) : undefined} />
+        <Toolbar title="Clients">
+          <Button buttonType="Toolbar" content="Add client" action={() => hasPermission(Application.ClientManager, Permission.AddEditDeleteClients) ? () => setAddClientOpen(true) : undefined} />
+        </Toolbar>
         {hasPermission(Application.ClientManager, Permission.ViewClients) ? (
           <ClientList setAddClientOpen={setAddClientOpen} />
         ) : (

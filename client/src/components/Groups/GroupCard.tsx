@@ -21,10 +21,10 @@ const GroupCard = ({ g }: IGroupCardProps) => {
   const { deleteGroup } = useGroupService()
   const { user, updatePreferences } = useAuthService()
 
-  const isDefaultGroup = () => user?.preferences?.defaultGroup === g._id
+  const isDefaultGroup = () => user?.preferences?.defaultGroup === g.id
 
   const toggleDefaultGroup = () => {
-    updatePreferences({ defaultGroup: isDefaultGroup() ? undefined : g._id })
+    updatePreferences({ defaultGroup: isDefaultGroup() ? undefined : g.id })
   }
 
   return (
@@ -43,7 +43,7 @@ const GroupCard = ({ g }: IGroupCardProps) => {
         </div>
         <div className="flex justify-between items-end my-4">
           <div>
-            {cardFlipped ? <DataPoint value={g.users?.length || 0} label="user" /> : <DataPoint value={g.applications?.length} label="application" />}
+            {cardFlipped ? <DataPoint value={g.groupUsers?.length || 0} label="user" /> : <DataPoint value={g.applications?.length} label="application" />}
           </div>
           {cardFlipped && (
             <div>
@@ -56,7 +56,7 @@ const GroupCard = ({ g }: IGroupCardProps) => {
       <Dialog
         isOpen={deleteGroupOpen}
         close={() => setDeleteGroupOpen(false)}
-        positiveActions={[() => deleteGroup(g._id), () => setDeleteGroupOpen(false)]}
+        positiveActions={[() => deleteGroup(g.id), () => setDeleteGroupOpen(false)]}
         title="Delete group"
         description="This action will delete the group for all users"
         content="If you choose to continue you and all other users of this group will no longer have access to it or any of it's application data"

@@ -1,23 +1,29 @@
+import { IRole, IApplication } from "."
+
+export interface IGroupUserApplication {
+  applicationId: number
+  roles: IRole[]
+}
+
 export interface IGroupUser {
-  user: string,
-  permissions: number[]
-  applications: {
-    application: number
-    permissions: number[]
-  }[]
+  id: string
+  userId: string
+  hasJoined: boolean
+  roles: IRole[]
+  applications: IGroupUserApplication[]
 }
 
 export interface IGroup {
-  _id?: string
+  id?: string
   name?: string
   description?: string
-  applications?: number[]
-  users: IGroupUser[]
+  applications: IApplication[]
+  groupUsers: IGroupUser[]
   listDefinitions?: string
   colour?: string
 }
 
 export interface IGroupsResponse {
   count: number,
-  groups: IGroup[]
+  items: IGroup[]
 }

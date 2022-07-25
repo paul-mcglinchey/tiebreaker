@@ -20,6 +20,7 @@ namespace Tiebreaker.Api.Extensions
         {
             return services.AddScoped<IAuthenticator, HttpAuthenticator>()
                     .AddScoped<IHttpRequestWrapper<TPermission>, HttpRequestWrapper<TPermission>>()
+                    .AddScoped<IGroupValidationWrapper, GroupValidationWrapper>()
                     .AddScoped<IUserAuthorisationService<TPermission>, TUserAuthorizationService>()
                     .AddFunctionWrapper();
         }

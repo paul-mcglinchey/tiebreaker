@@ -13,8 +13,8 @@ const usePermissionService = (): IPermissionService => {
   const permissionContext = useContext(PermissionContext)
   const { permissions, setPermissions } = permissionContext
 
-  const getPermission = (permissionIdentifier: number | undefined): IPermission | undefined => {
-    return permissions.find(p => p.identifier === permissionIdentifier)
+  const getPermission = (permissionId: number | undefined): IPermission | undefined => {
+    return permissions.find(p => p.id === permissionId)
   }
 
   const addPermission = asyncHandler(async (values: IPermission) => {
@@ -24,7 +24,7 @@ const usePermissionService = (): IPermissionService => {
     handleResolution(res, json, 'create', 'permission', [() => addPermissionInContext(json)])
   })
 
-  const updatePermission = asyncHandler(async (values: IPermission, permissionId: string | undefined) => {
+  const updatePermission = asyncHandler(async (values: IPermission, permissionId: number | undefined) => {
     if (!permissionId) throw new Error(`Permission ID not set`)
     
     const res = await fetch(endpoints.permission(permissionId), requestBuilder('PUT', undefined, values))
@@ -33,7 +33,7 @@ const usePermissionService = (): IPermissionService => {
     handleResolution(res, json, 'update', 'permission', [() => updatePermissionInContext(permissionId, values)])
   })
 
-  const deletePermission = asyncHandler(async (permissionId: string | undefined) => {
+  const deletePermission = asyncHandler(async (permissionId: number | undefined) => {
     if (!permissionId) throw new Error(`Permission ID not set`)
 
     const res = await fetch(endpoints.permission(permissionId), requestBuilder("DELETE"))
@@ -46,16 +46,16 @@ const usePermissionService = (): IPermissionService => {
     setPermissions(permissions => [...permissions, permission])
   }
 
-  const updatePermissionInContext = (permissionId: string, values: IPermission) => {
+  const updatePermissionInContext = (permissionId: number, values: IPermission) => {
     setPermissions(permissions => {
       return permissions.map(p => {
-        return p._id === permissionId ? { ...p, ...values } : p
+        return p.id === permissionId ? { ...p, ...values } : p
       })
     })
   }
 
-  const deletePermissionInContext = (permissionId: string) => {
-    setPermissions(permissions => permissions.filter(p => p._id !== permissionId))
+  const deletePermissionInContext = (permissionId: number) => {
+    setPermissions(permissions => permissions.filter(p => p.id !== permissionId))
   }
 
   return { ...permissionContext, getPermission, addPermission, updatePermission, deletePermission }

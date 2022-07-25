@@ -23,9 +23,9 @@ const useEmployeeService = (): IEmployeeService => {
   }
 
   const addEmployee = asyncHandler(async (values: IEmployee) => {
-    if (!currentGroup?._id) throw new Error()
+    if (!currentGroup?.id) throw new Error()
 
-    const res = await fetch(endpoints.employees(currentGroup._id), requestBuilder('POST', undefined, { ...values, colour: generateColour() }))
+    const res = await fetch(endpoints.employees(currentGroup.id), requestBuilder('POST', undefined, { ...values, colour: generateColour() }))
     const json = await res.json()
 
     handleResolution(res, json, 'create', 'employee', [() => addEmployeeInContext(json)])
@@ -33,18 +33,18 @@ const useEmployeeService = (): IEmployeeService => {
 
   const updateEmployee = asyncHandler(async (employeeId: string | undefined, values: IEmployee) => {
     console.log(employeeId, currentGroup)
-    if (!employeeId || !currentGroup?._id) throw new Error()
+    if (!employeeId || !currentGroup?.id) throw new Error()
 
-    const res = await fetch(endpoints.employee(employeeId, currentGroup._id), requestBuilder('PUT', undefined, { ...values }))
+    const res = await fetch(endpoints.employee(employeeId, currentGroup.id), requestBuilder('PUT', undefined, { ...values }))
     const json = await res.json()
 
     handleResolution(res, json, 'update', 'employee', [() => updateEmployeeInContext(employeeId, values)])
   })
 
   const deleteEmployee = asyncHandler(async (employeeId: string | undefined) => {
-    if (!employeeId || !currentGroup?._id) throw new Error()
+    if (!employeeId || !currentGroup?.id) throw new Error()
 
-    const res = await fetch(endpoints.employee(employeeId, currentGroup?._id), requestBuilder('DELETE'))
+    const res = await fetch(endpoints.employee(employeeId, currentGroup?.id), requestBuilder('DELETE'))
     const json = await res.json()
 
     handleResolution(res, json, 'delete', 'employee', [() => deleteEmployeeInContext(employeeId)])

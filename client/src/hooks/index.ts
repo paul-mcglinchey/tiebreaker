@@ -15,6 +15,7 @@ export { default as useAuthService } from './useAuthService';
 export { default as useClientService } from './useClientService'
 export { default as useEmployeeService } from './useEmployeeService'
 export { default as useGroupService } from './useGroupService'
+export { default as useGroupUserService } from './useGroupUserService'
 export { default as useRotaService } from './useRotaService'
 export { default as useApplicationService } from './useApplicationService'
 export { default as usePermissionService } from './usePermissionService'

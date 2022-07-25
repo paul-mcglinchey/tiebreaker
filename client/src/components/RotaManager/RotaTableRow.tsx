@@ -3,8 +3,6 @@ import { useRotaService, useUserService } from '../../hooks';
 import { IRota } from '../../models';
 import { Button, InlineLink, TableRow, TableRowItem } from '../Common';
 import { RotaEmployeesModal } from '.';
-import { ButtonType } from '../../enums';
-
 const RotaTableRow = ({ rota }: { rota: IRota }) => {
 
   const [editRotaEmployeesOpen, setEditRotaEmployeesOpen] = useState(false)
@@ -33,7 +31,7 @@ const RotaTableRow = ({ rota }: { rota: IRota }) => {
         <div className="text-sm font-medium text-white">
           <Button
             type="button"
-            buttonType={ButtonType.Tertiary}
+            buttonType="Tertiary"
             content={employees.length > 0 ? `${employees.length} employees` : 'Add employees'}
             action={() => setEditRotaEmployeesOpen(true)}
           />

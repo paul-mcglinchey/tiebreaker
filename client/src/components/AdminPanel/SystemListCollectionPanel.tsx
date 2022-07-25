@@ -8,7 +8,6 @@ import { generateColour } from "../../services"
 import { endpoints } from "../../config"
 import { Button, Dialog, Fetch, FetchError, SpinnerIcon } from "../Common"
 import { EditableSubPanelTitle, ListItem, Panel, SubPanel, SubPanelContent } from "."
-import { ButtonType } from "../../enums"
 
 const SystemListCollectionPanel = () => {
 
@@ -39,7 +38,6 @@ const SystemListCollectionPanel = () => {
                         HeaderActions={
                           <Button
                             content="Add list"
-                            buttonType={ButtonType.Tertiary}
                             type="button"
                             Icon={PlusIcon}
                             action={() => arrayHelpers.push({ name: '', description: '', values: [] })}
@@ -54,7 +52,7 @@ const SystemListCollectionPanel = () => {
                               Subtitle={<EditableSubPanelTitle name={`lists.${index}.name`} placeholder="Internal field name" subtitle />}
                               HeaderActions={
                                 <>
-                                  <Button type="button" buttonType={ButtonType.Cancel} content="Delete" action={() => setDeleteDialogOpen(true)} />
+                                  <Button type="button" buttonType="Cancel" content="Delete" action={() => setDeleteDialogOpen(true)} />
                                   <Dialog
                                     isOpen={deleteDialogOpen}
                                     close={() => setDeleteDialogOpen(false)}
@@ -72,7 +70,7 @@ const SystemListCollectionPanel = () => {
                                   <SubPanelContent
                                     SubPanelActions={
                                       <div className="flex justify-end">
-                                        <Button content="Add item" buttonType={ButtonType.Tertiary} type="button" action={() => arrayHelpers.push({ short: '', long: '', colour: generateColour() })} />
+                                        <Button content="Add item" type="button" action={() => arrayHelpers.push({ short: '', long: '', colour: generateColour() })} />
                                       </div>
                                     }
                                   >

@@ -1,14 +1,11 @@
+import { IApplication } from "."
+
 export interface IPermission {
-  _id?: string,
-  identifier?: number,
+  id: number
   name?: string,
   description?: string
   language?: string,
-  applications?: number[],
-  audit?: {
-    createdBy: string
-    updatedBy: string
-  }
+  applications?: IApplication[]
 }
 
 export interface IPermissionsResponse {

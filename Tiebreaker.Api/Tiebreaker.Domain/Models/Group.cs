@@ -13,5 +13,7 @@
         public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
         public virtual ICollection<GroupUser> GroupUsers { get; set; } = new List<GroupUser>();
+
+        public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }

@@ -12,7 +12,7 @@ const useClientService = (): IClientService => {
   const { handleResolution } = useResolutionService()
   const { currentGroup } = useGroupService()
 
-  const groupId: string | undefined = currentGroup?._id
+  const groupId: string | undefined = currentGroup?.id
 
   const clientContext = useContext(ClientContext)
   const { clients, setClients } = clientContext

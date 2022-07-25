@@ -21,11 +21,11 @@ const GroupForm = ({ group, ContextualSubmissionButton }: IGroupFormProps & ICon
         description: group?.description || '',
         applications: group?.applications || [],
         colour: group?.colour || generateColour(),
-        users: group?.users || []
+        groupUsers: group?.groupUsers || []
       }}
       validationSchema={groupValidationSchema}
       onSubmit={(values) => {
-        group?._id ? updateGroup(values, group?._id) : addGroup(values)
+        group?.id ? updateGroup(values, group?.id) : addGroup(values)
       }}
     >
       {({ errors, touched, values, setFieldValue, isValid }) => (

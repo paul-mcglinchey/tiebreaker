@@ -6,7 +6,7 @@ import {
   ClientManager,
   ClientPage,
   Dashboard,
-  Groups,
+  GroupDashboard,
   EmployeeDashboard,
   RotaDashboard,
   RotaManager,
@@ -29,11 +29,11 @@ const PrivateApp = () => {
           <Route path="/dashboard" element={
             <Dashboard />
           } />
-          <Route path="/groups" element={
+          <Route path="/groups/*" element={
             <PermissionProvider>
-              <Groups />
+              <GroupDashboard />
             </PermissionProvider>
-          } />
+          }/>
 
           {/* Client manager specific routes */}
           <Route path="/clients/*" element={

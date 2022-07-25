@@ -38,7 +38,7 @@ namespace Tiebreaker.Api.Controllers
         }
 
         [FunctionName("GetGroups")]
-        public async Task<ActionResult> GetGroups(
+        public async Task<ActionResult<ListResponse<GroupDto>>> GetGroups(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "groups")] HttpRequest req,
             ILogger logger,
             CancellationToken cancellationToken) =>
@@ -46,14 +46,7 @@ namespace Tiebreaker.Api.Controllers
                 new List<PermissionType> { PermissionType.ApplicationAccess },
                 async () => new OkObjectResult(await this.groupService.GetGroupsAsync(cancellationToken)), cancellationToken);
 
-        [FunctionName("GetPendingGroups")]
-        public async Task<ActionResult> GetPendingGroups(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "groups/pending")] HttpRequest req,
-            ILogger logger,
-            CancellationToken cancellationToken) =>
-            await this.httpRequestWrapper.ExecuteAsync(
-                new List<PermissionType> { PermissionType.ApplicationAccess },
-                async () => new OkObjectResult(await this.groupService.GetPendingGroupsAsync(cancellationToken)), cancellationToken);
+
 
         [FunctionName("CreateGroup")]
         public async Task<ActionResult> CreateGroup(

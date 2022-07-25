@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useApplicationService, usePermissionService, useUserService } from "../../hooks"
-import { IApplication, IGroup, IGroupUser, IUser } from "../../models"
+import { usePermissionService, useUserService } from "../../hooks"
+import { IGroup, IGroupUser, IUser } from "../../models"
 import { InlineButton, Modal } from "../Common"
 import { UserPermissionGroup } from '.'
 
@@ -14,12 +14,13 @@ const UserPermissionSelector = ({ group, onChange }: IUserPermissionSelectorProp
   const [editUserPermissionsOpen, setEditUserPermissionsOpen] = useState<boolean>(false)
 
   const { getUser } = useUserService()
-  const { getApplication } = useApplicationService()
   const { permissions } = usePermissionService()
+
+  console.log(group.groupUsers?.map(gu => getUser(gu.userId)), group.groupUsers?.map(gu => getUser(gu.userId)).filter((u): u is IUser => !!u))
 
   return (
     <div>
-      {group.users?.map(u => getUser(u.user)).filter((u): u is IUser => !!u).map((gu, i) => (
+      {group.groupUsers?.map(gu => getUser(gu.userId)).filter((u): u is IUser => !!u).map((gu, i) => (
         <div key={i}>
           <div className="flex justify-between">
             <div className="flex flex-col">
@@ -48,15 +49,15 @@ const UserPermissionSelector = ({ group, onChange }: IUserPermissionSelectorProp
                   permissions={permissions.filter(p => p.applications?.length === 0)}
                   user={gu}
                 />
-                {group.applications?.map(ga => getApplication(ga)).filter((ga): ga is IApplication => !!ga).map((ga, j) => (
+                {group.applications?.map((ga, j) => (
                   <UserPermissionGroup
                     key={j}
                     group={group}
                     onChange={onChange}
                     label={ga.name}
-                    permissions={permissions.filter(p => ga.identifier && p.applications?.includes(ga.identifier))}
+                    permissions={permissions.filter(p => p.applications?.map(a => a.id).includes(ga.id))}
                     user={gu}
-                    applicationIdentifier={ga.identifier}
+                    applicationId={ga.id}
                   />
                 ))}
                 {ConfirmSubmission("Ok")}

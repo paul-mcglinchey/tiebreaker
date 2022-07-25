@@ -22,7 +22,7 @@ export const ApplicationProvider = ({ children }: IChildrenProps) => {
 
   useEffect(() => {
     if (response) {
-      setApplications(response.applications)
+      setApplications(response.items)
       setCount(response.count)
     }
   }, [response])

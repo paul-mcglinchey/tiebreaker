@@ -3,7 +3,6 @@ import { PlusIcon } from '@heroicons/react/solid'
 import { useApplicationService } from '../../hooks'
 import { Button, Table } from '../Common'
 import { Panel, ApplicationTableRow, ApplicationModal } from '.'
-import { ButtonType } from '../../enums'
 
 const ApplicationPanel = () => {
 
@@ -27,7 +26,7 @@ const ApplicationPanel = () => {
           subtitle={`Number of applications: ${count}`}
           hideSave
           HeaderActions={
-            <Button buttonType={ButtonType.Tertiary} content='Add application' Icon={PlusIcon} action={() => setAddApplicationOpen(true)} />
+            <Button content='Add application' Icon={PlusIcon} action={() => setAddApplicationOpen(true)} />
           }
         >
           <Table isLoading={isLoading}>

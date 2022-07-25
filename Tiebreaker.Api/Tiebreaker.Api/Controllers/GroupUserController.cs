@@ -5,7 +5,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -22,20 +21,41 @@ namespace Tiebreaker.Api.Controllers
     {
         private readonly ILogger<GroupUserController> logger;
         private readonly IHttpRequestWrapper<PermissionType> httpRequestWrapper;
+        private readonly IGroupValidationWrapper groupValidationWrapper;
         private readonly IMapper mapper;
         private readonly IGroupUserService groupUserService;
 
         public GroupUserController(
             ILogger<GroupUserController> logger,
             IHttpRequestWrapper<PermissionType> httpRequestWrapper,
+            IGroupValidationWrapper groupValidationWrapper,
             IMapper mapper,
             IGroupUserService groupUserService)
         {
             this.logger = logger;
             this.httpRequestWrapper = httpRequestWrapper;
+            this.groupValidationWrapper = groupValidationWrapper;
             this.mapper = mapper;
             this.groupUserService = groupUserService;
         }
+
+        [FunctionName("GetGroupUsers")]
+        public async Task<ActionResult> GetGroupUsers(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "groups/{groupId}/users")] HttpRequest req,
+            string groupId,
+            ILogger logger,
+            CancellationToken cancellationToken) =>
+            await this.httpRequestWrapper.ExecuteAsync(
+                new List<PermissionType> { PermissionType.GroupAdminAccess },
+                async () =>
+                    await this.groupValidationWrapper.Validate(
+                        groupId,
+                        async (groupIdGuid) =>
+                        {
+                            return new OkObjectResult(await this.groupUserService.GetGroupUsersAsync(groupIdGuid, cancellationToken));
+                        },
+                        cancellationToken),
+                    cancellationToken);
 
         [FunctionName("AddGroupUser")]
         public async Task<ActionResult> AddGroupUser(
@@ -47,13 +67,15 @@ namespace Tiebreaker.Api.Controllers
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.GroupAdminAccess },
                 async () =>
-                {
-                    var groupIdGuid = Guid.Parse(groupId);
-                    var userIdGuid = Guid.Parse(userId);
-
-                    return new OkObjectResult(new { groupUserId = await this.groupUserService.InviteUserAsync(groupIdGuid, userIdGuid, cancellationToken) });
-                },
-                cancellationToken);
+                    await this.groupValidationWrapper.Validate(
+                        groupId,
+                        userId,
+                        async (groupIdGuid, userIdGuid) =>
+                        {
+                            return new OkObjectResult(new { groupUserId = await this.groupUserService.AddUserAsync(groupIdGuid, userIdGuid, cancellationToken) });
+                        },
+                        cancellationToken),
+                    cancellationToken);
 
         [FunctionName("UpdateGroupUserRoles")]
         public async Task<ActionResult> UpdateGroupUserRoles(
@@ -65,20 +87,23 @@ namespace Tiebreaker.Api.Controllers
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.GroupAdminAccess },
                 async () =>
-                {
-                    var requestBody = await ConstructRequestModelAsync<List<RoleDto>>(req);
-                    var roles = this.mapper.Map<List<Role>>(requestBody);
+                    await this.groupValidationWrapper.Validate(
+                        groupId,
+                        userId,
+                        true,
+                        async (groupIdGuid, userIdGuid) =>
+                        {
+                            var requestBody = await ConstructRequestModelAsync<List<RoleDto>>(req);
+                            var roles = this.mapper.Map<List<Role>>(requestBody);
 
-                    if (!roles.TrueForAll(r => r.Id != null))
-                    {
-                        return new BadRequestObjectResult("Invalid collection of roles.");
-                    }
+                            if (!roles.TrueForAll(r => r.Id != null))
+                            {
+                                return new BadRequestObjectResult("Invalid collection of roles.");
+                            }
 
-                    var groupIdGuid = Guid.Parse(groupId);
-                    var userIdGuid = Guid.Parse(userId);
-
-                    return new OkObjectResult(new { groupUserId = await this.groupUserService.UpdateUserRolesAsync(groupIdGuid, userIdGuid, roles, cancellationToken) });
-                },
+                            return new OkObjectResult(new { groupUserId = await this.groupUserService.UpdateUserRolesAsync(groupIdGuid, userIdGuid, roles, cancellationToken) });
+                        },
+                        cancellationToken),
                 cancellationToken);
 
         [FunctionName("DeleteUser")]
@@ -91,12 +116,15 @@ namespace Tiebreaker.Api.Controllers
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.GroupAdminAccess },
                 async () =>
-                {
-                    var groupIdGuid = Guid.Parse(groupId);
-                    var userIdGuid = Guid.Parse(userId);
-
-                    return new OkObjectResult(new { groupUserId = await this.groupUserService.KickUserAsync(groupIdGuid, userIdGuid, cancellationToken) });
-                },
+                    await this.groupValidationWrapper.Validate(
+                        groupId,
+                        userId,
+                        true,
+                        async (groupIdGuid, userIdGuid) =>
+                        {
+                            return new OkObjectResult(new { groupUserId = await this.groupUserService.DeleteUserAsync(groupIdGuid, userIdGuid, cancellationToken) });
+                        }, 
+                        cancellationToken),
                 cancellationToken);
 
         [FunctionName("JoinGroup")]
@@ -108,11 +136,12 @@ namespace Tiebreaker.Api.Controllers
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.GroupAdminAccess },
                 async () =>
-                {
-                    var groupIdGuid = Guid.Parse(groupId);
-
-                    return new OkObjectResult(new { groupUserId = await this.groupUserService.JoinGroupAsync(groupIdGuid, cancellationToken) });
-                },
+                await this.groupValidationWrapper.Validate(
+                    groupId,
+                    true,
+                    true,
+                    async (groupIdGuid) => new OkObjectResult(new { groupUserId = await this.groupUserService.JoinGroupAsync(groupIdGuid, cancellationToken) }),
+                    cancellationToken),
                 cancellationToken);
 
         [FunctionName("LeaveGroup")]
@@ -124,11 +153,12 @@ namespace Tiebreaker.Api.Controllers
             await this.httpRequestWrapper.ExecuteAsync(
                 new List<PermissionType> { PermissionType.GroupAdminAccess },
                 async () =>
-                {
-                    var groupIdGuid = Guid.Parse(groupId);
-
-                    return new OkObjectResult(new { groupUserId = await this.groupUserService.LeaveGroupAsync(groupIdGuid, cancellationToken) });
-                },
+                await this.groupValidationWrapper.Validate(
+                    groupId,
+                    true,
+                    true,
+                    async (groupIdGuid) => new OkObjectResult(new { groupUserId = await this.groupUserService.LeaveGroupAsync(groupIdGuid, cancellationToken) }),
+                    cancellationToken),
                 cancellationToken);
 
         protected static async Task<T> ConstructRequestModelAsync<T>(HttpRequest req)

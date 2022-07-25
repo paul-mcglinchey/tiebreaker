@@ -1,8 +1,7 @@
 import { IAudit } from "."
 
 export interface IApplication {
-  _id?: string
-  identifier?: number
+  id: number
   name?: string
   description?: string
   icon?: string
@@ -14,6 +13,6 @@ export interface IApplication {
 }
 
 export interface IApplicationsResponse {
+  items: IApplication[]
   count: number
-  applications: IApplication[]
 }

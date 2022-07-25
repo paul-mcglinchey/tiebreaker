@@ -18,7 +18,7 @@ const ApplicationTableRow = ({ application }: IApplicationTableRowProps) => {
   return (
     <TableRow>
       <TableRowItem>
-        <span className="text-sm font-medium text-white">{application.identifier}</span>
+        <span className="text-sm font-medium text-white">{application.id}</span>
       </TableRowItem>
       <TableRowItem>
         <span style={{ borderColor: application.colour }} className={`px-2 py-1 rounded-lg border`}>{application.name}</span>
@@ -46,7 +46,7 @@ const ApplicationTableRow = ({ application }: IApplicationTableRowProps) => {
             content="Deleting this application will cause any subscribing groups to be unsubscribed and all feature access to be revoked until a new application is created with the same identifier"
             isOpen={deleteApplicationOpen}
             close={() => setDeleteApplicationOpen(false)}
-            positiveActions={[() => deleteApplication(application._id)]}
+            positiveActions={[() => deleteApplication(application.id)]}
           />
         </div>
       </TableRowItem>

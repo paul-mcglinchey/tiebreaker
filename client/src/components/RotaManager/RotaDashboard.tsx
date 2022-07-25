@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { useAuthService } from '../../hooks';
-import { Prompter, Toolbar } from '../Common';
+import { Button, Prompter, Toolbar } from '../Common';
 import { RotaModal, RotaList } from '.';
 import { Application, Permission } from '../../enums';
 
@@ -12,7 +12,9 @@ const RotaDashboard = () => {
   return (
     <>
       <>
-        <Toolbar title="Rotas" addRotaAction={hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) ? () => setAddRotaOpen(true) : undefined} />
+        <Toolbar title="Rotas">
+          <Button buttonType="Toolbar" content="Add rota" action={() => hasPermission(Application.RotaManager, Permission.AddEditDeleteRotas) ? () => setAddRotaOpen(true) : undefined} />
+        </Toolbar>
         {hasPermission(Application.RotaManager, Permission.ViewRotas) ? (
           <RotaList />
         ) : (

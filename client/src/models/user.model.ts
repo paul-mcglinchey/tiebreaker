@@ -32,6 +32,6 @@ export interface IUser {
 }
 
 export interface IUsersResponse {
+  items: IUser[]
   count: number,
-  users: IUser[]
 }

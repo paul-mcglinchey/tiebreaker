@@ -3,8 +3,8 @@ import { IApplication } from "../../models"
 import { MultiSelector } from "../Common"
 
 interface IApplicationMultiSelectorProps {
-  formValues: number[]
-  setFieldValue: (value: (number | undefined)[]) => void
+  formValues: IApplication[]
+  setFieldValue: (value: (IApplication | undefined)[]) => void
   fieldName?: string
 }
 
@@ -15,14 +15,14 @@ const ApplicationMultiSelector = ({ formValues, setFieldValue, fieldName = "appl
   return (
     <MultiSelector<number | undefined>
       fieldName={fieldName}
-      values={applications.map(a => a.identifier)}
+      values={applications.map(a => a.id)}
       totalValuesLength={count}
       toggleShowAll={() => { }}
-      formValues={formValues}
-      setFieldValue={(a) => setFieldValue(a)}
-      render={(identifier) => (
+      formValues={formValues.map(fv => fv.id)}
+      setFieldValue={(a) => setFieldValue(a.map(a => getApplication(a)))}
+      render={(a) => (
         <div>
-          <ApplicationSelector a={getApplication(identifier)} />
+          <ApplicationSelector a={getApplication(a)} />
         </div>
       )}
     />

@@ -5,7 +5,7 @@ import { IEmployeeSchedule, ISchedule } from "../../models";
 import { Button } from "../Common";
 import { ScheduleTableRow } from '.'
 import { getInitials } from "../../services";
-import { ButtonType, DayOfWeek } from "../../enums";
+import { DayOfWeek } from "../../enums";
 
 interface IScheduleTableProps {
   currentWeek: { firstDay: Date, lastDay: Date }
@@ -31,7 +31,7 @@ const ScheduleTable = ({ currentWeek, editing }: IScheduleTableProps) => {
                     </div>
                   ) : (
                     editing && dirty && (
-                      <Button buttonType={ButtonType.Tertiary} content='Save' type="submit" />
+                      <Button buttonType="Tertiary" content='Save' type="submit" />
                     )
                   )}
                 </div>

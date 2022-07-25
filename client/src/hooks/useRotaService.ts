@@ -13,7 +13,7 @@ const useRotaService = (): IRotaService => {
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
   const { currentGroup } = useGroupService()
-  const groupId: string | undefined = currentGroup?._id
+  const groupId: string | undefined = currentGroup?.id
 
   const rotaContext = useContext(RotaContext)
   const { rotas, setRotas } = rotaContext

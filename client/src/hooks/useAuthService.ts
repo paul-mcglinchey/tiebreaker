@@ -3,7 +3,7 @@ import { useNavigate } from "react-router"
 import { IPreferences, IUserRequest } from "../models"
 import { AuthContext } from "../contexts"
 import { endpoints } from '../config'
-import { useRequestBuilder, useAsyncHandler, useResolutionService, useGroupService } from '.'
+import { useRequestBuilder, useAsyncHandler, useResolutionService, useGroupService, useUserService } from '.'
 import { Permission } from "../enums"
 import { IAuthService } from "./interfaces"
 
@@ -14,6 +14,7 @@ const useAuthService = (): IAuthService => {
   const { asyncHandler } = useAsyncHandler()
   const { handleResolution } = useResolutionService()
   const { currentGroup } = useGroupService()
+  const { userHasPermission } = useUserService()
   const navigate = useNavigate()
 
   const login = asyncHandler(async (user: IUserRequest) => {
@@ -34,10 +35,10 @@ const useAuthService = (): IAuthService => {
     setUser(undefined)
   }
 
-  const hasPermission = (applicationIdentifier: number, permission: Permission): boolean => {
-    if (!currentGroup?.applications?.includes(applicationIdentifier)) return false
+  const hasPermission = (applicationId: number, permission: Permission): boolean => {
+    if (!currentGroup?.applications?.map(a => a.id).includes(applicationId)) return false
 
-    return currentGroup?.users.find(u => u.user === user?.id)?.applications.find(a => a.application === applicationIdentifier)?.permissions.includes(permission) ? true : false
+    return userHasPermission(currentGroup, user?.id, applicationId, permission)
   }
 
   const updatePreferences = asyncHandler(async (values: IPreferences) => {

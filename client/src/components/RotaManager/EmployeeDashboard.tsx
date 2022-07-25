@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { Toolbar } from "../Common";
+import { Button, Toolbar } from "../Common";
 import { EmployeeModal, EmployeeList } from ".";
 
 const EmployeeDashboard = () => {
@@ -11,7 +11,9 @@ const EmployeeDashboard = () => {
   return (
     <>
       <>
-        <Toolbar title="Employees" addEmployeeAction={() => setAddEmployeeOpen(true)} />
+        <Toolbar title="Employees">
+          <Button buttonType="Toolbar" content="Add employee" action={() => setAddEmployeeOpen(true)} />
+        </Toolbar>
         <EmployeeList setAddEmployeesOpen={setAddEmployeeOpen} />
       </>
       <>

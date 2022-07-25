@@ -26,10 +26,10 @@ namespace Tiebreaker.Api.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<GroupDto>> GetGroupsAsync(CancellationToken cancellationToken)
+        public async Task<ListResponse<GroupDto>> GetGroupsAsync(CancellationToken cancellationToken)
         {
             var groups = await this.context.Groups
-                .Where(g => g.GroupUsers.Any(gu => gu.UserId == this.userContextProvider.UserId))
+                .Where(g => g.GroupUsers.Any(gu => gu.UserId.Equals(this.userContextProvider.UserId)))
                 .Include(g => g.Applications)
                 .Include(g => g.GroupUsers)
                     .ThenInclude(gu => gu.Roles)
@@ -37,21 +37,11 @@ namespace Tiebreaker.Api.Services
                     .ThenInclude(gu => gu.Applications)
                 .ToListAsync(cancellationToken);
 
-            return this.mapper.Map<List<Group>, List<GroupDto>>(groups);
-        }
-
-        public async Task<List<GroupDto>> GetPendingGroupsAsync(CancellationToken cancellationToken)
-        {
-            var groups = await this.context.Groups
-                .Where(g => g.GroupUsers.Any(gu => gu.UserId.Equals(this.userContextProvider.UserId) && !gu.HasJoined))
-                .Include(g => g.Applications)
-                .Include(g => g.GroupUsers)
-                    .ThenInclude(gu => gu.Roles)
-                        .ThenInclude(r => r.Permissions)
-                    .ThenInclude(gu => gu.Applications)
-                .ToListAsync(cancellationToken);
-
-            return this.mapper.Map<List<Group>, List<GroupDto>>(groups);
+            return new ListResponse<GroupDto>
+            {
+                Items = this.mapper.Map<List<Group>, List<GroupDto>>(groups),
+                Count = groups.Count,
+            };
         }
 
         public async Task<Guid> CreateGroupAsync(Group group, CancellationToken cancellationToken)
@@ -64,7 +54,7 @@ namespace Tiebreaker.Api.Services
                 .Where(r => r.Permissions.Any(p => p.Applications.Count == 0))
                 .ToListAsync(cancellationToken);
 
-            group.GroupUsers.Add(new GroupUser { User = currentUser, Roles = rolesToAdd });
+            group.GroupUsers.Add(new GroupUser { User = currentUser, Roles = rolesToAdd, HasJoined = true });
 
             this.context.Groups.Add(group);
             await this.context.SaveChangesAsync(cancellationToken);
@@ -74,11 +64,17 @@ namespace Tiebreaker.Api.Services
 
         public async Task<Guid> UpdateGroupAsync(Guid groupId, Group group, CancellationToken cancellationToken)
         {
-            var groupToUpdate = await this.context.Groups.Where(g => g.Id == groupId).SingleOrDefaultAsync(cancellationToken);
+            var groupToUpdate = await this.context.Groups
+                .Where(g => g.Id == groupId)
+                .Include(g => g.Applications)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            var groupApplications = await this.context.Applications.Where(a => group.Applications.Select(ga => ga.Id).Contains(a.Id)).ToListAsync(cancellationToken);
 
             groupToUpdate.Name = group.Name;
             groupToUpdate.Description = group.Description;
             groupToUpdate.Colour = group.Colour;
+            groupToUpdate.Applications = groupApplications;
 
             await this.context.SaveChangesAsync(cancellationToken);
 
@@ -94,14 +90,13 @@ namespace Tiebreaker.Api.Services
             return group.Id;
         }
 
-        public async Task<bool> GroupNameExistsAsync(string groupName, CancellationToken cancellationToken)
-        {
-            return await this.context.Groups.Where(g => g.Name.Equals(groupName)).SingleOrDefaultAsync(cancellationToken) != null;
-        }
+        public async Task<bool> GroupExistsAsync(Guid groupId, CancellationToken cancellationToken) =>
+            await this.context.Groups.Where(g => g.Id.Equals(groupId)).SingleOrDefaultAsync(cancellationToken) != null;
 
-        public async Task<bool> GroupNameExistsAsync(Guid groupId, string groupName, CancellationToken cancellationToken)
-        {
-            return await this.context.Groups.Where(g => !g.Id.Equals(groupId) && g.Name.Equals(groupName)).SingleOrDefaultAsync(cancellationToken) != null;
-        }
+        public async Task<bool> GroupNameExistsAsync(string groupName, CancellationToken cancellationToken) => 
+            await this.context.Groups.Where(g => g.Name.Equals(groupName)).SingleOrDefaultAsync(cancellationToken) != null;
+
+        public async Task<bool> GroupNameExistsAsync(Guid groupId, string groupName, CancellationToken cancellationToken) =>
+            await this.context.Groups.Where(g => !g.Id.Equals(groupId) && g.Name.Equals(groupName)).SingleOrDefaultAsync(cancellationToken) != null;
     }
 }

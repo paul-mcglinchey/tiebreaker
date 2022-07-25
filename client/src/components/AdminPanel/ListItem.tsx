@@ -1,6 +1,5 @@
 import { Field } from "formik"
 import { TrashIcon } from "@heroicons/react/solid"
-import { ButtonType } from "../../enums"
 import { generateColour } from "../../services"
 import { Button, ColourPicker } from "../Common"
 
@@ -41,7 +40,7 @@ const ListItem = ({ name, setFieldValue, remove, index, colour }: IListItemProps
           colour={colour || generateColour()}
           setColour={(pc) => setFieldValue(`${name}.colour`, pc)}
         />
-        <Button type="button" buttonType={ButtonType.Cancel} action={() => remove(index)} Icon={TrashIcon} />
+        <Button type="button" buttonType="Cancel" action={() => remove(index)} Icon={TrashIcon} />
       </div>
     </div>
   )

@@ -29,7 +29,7 @@ export const RotaProvider = ({ children }: IChildrenProps) => {
 
   const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading, error }: IFetch<IRotasResponse> = useFetch(endpoints.rotas(currentGroup?._id || ""), requestBuilder(), [sortField, sortDirection, currentGroup])
+  const { response, isLoading, error }: IFetch<IRotasResponse> = useFetch(endpoints.rotas(currentGroup?.id || ""), requestBuilder(), [sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {

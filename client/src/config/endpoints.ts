@@ -8,11 +8,13 @@ export const endpoints = {
     "signup"        : DOTNET_API_URL + `users/signup`,
     "authenticate"  : DOTNET_API_URL + `users/authenticate`,
 
-    "groups"    : BASE_API_URL + 'groups',
-    "group"     : (groupId: string) => BASE_API_URL + `groups/${groupId}`, 
+    "groups"        : DOTNET_API_URL + 'groups',
+    "group"         : (groupId: string) => DOTNET_API_URL + `groups/${groupId}`,
+    "joingroup"     : (groupId: string) => DOTNET_API_URL + `groups/${groupId}/join`,
+    "leavegroup"    : (groupId: string) => DOTNET_API_URL + `groups/${groupId}/leave`,
     
-    "applications": BASE_API_URL + `applications`,
-    "application": (applicationId: string) => BASE_API_URL + `applications/${applicationId}`,
+    "applications": DOTNET_API_URL + `applications`,
+    "application": (applicationId: number) => DOTNET_API_URL + `applications/${applicationId}`,
 
     "clients"   : (groupId: string) => BASE_API_URL + `groups/${groupId}/clients`,
     "client"    : (clientId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/clients/${clientId}`, 
@@ -29,13 +31,13 @@ export const endpoints = {
     "employees" : (groupId: string) => BASE_API_URL + `groups/${groupId}/employees`,
     "employee"  : (employeeId: string, groupId: string) => BASE_API_URL + `groups/${groupId}/employees/${employeeId}`,
     
-    "user"          : (userId: string) => BASE_API_URL + `users/${userId}`,
-    "groupusers"    : (groupId: string) => BASE_API_URL + `groups/${groupId}/users`,
-    "currentuser"   : BASE_API_URL + "users/current",
+    "user"          : (userId: string) => DOTNET_API_URL + `users/${userId}`,
+    "groupusers"    : (groupId: string) => DOTNET_API_URL + `groups/${groupId}/users`,
+    "currentuser"   : DOTNET_API_URL + "users/current",
     
     "systemlistcollection"  : (listcollectionId: string) => BASE_API_URL + `listcollections/system/${listcollectionId}`,
     "systemlistcollections" : BASE_API_URL + "listcollections/system",
 
     "permissions"           : BASE_API_URL + "permissions",
-    "permission"            : (permissionId: string) => BASE_API_URL + `permissions/${permissionId}`,
+    "permission"            : (permissionId: number) => BASE_API_URL + `permissions/${permissionId}`,
 }

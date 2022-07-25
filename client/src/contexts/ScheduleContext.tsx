@@ -23,7 +23,7 @@ export const ScheduleProvider = ({ rotaId, children }: IScheduleProviderProps & 
   const { currentGroup } = useGroupService()
 
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", currentGroup?._id || ""), requestBuilder(), [rotaId, currentGroup])
+  const { response, isLoading, error }: IFetch<ISchedulesResponse> = useFetch(endpoints.schedules(rotaId || "", currentGroup?.id || ""), requestBuilder(), [rotaId, currentGroup])
 
   useEffect(() => {
     if (response) {

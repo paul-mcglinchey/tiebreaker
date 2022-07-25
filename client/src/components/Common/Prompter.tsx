@@ -1,7 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { useDelayedRendering } from '../../hooks';
 import { Button } from '.';
-import { ButtonType } from '../../enums';
 
 interface IconProps {
   childComp?: React.ReactNode
@@ -43,7 +42,7 @@ const Prompter = ({ Icon, title, subtitle, action }: IPrompterProps) => {
         </div>
         {action && (
           <div className="flex justify-center">
-            <Button action={() => action()} Icon={Icon} content='Lets go!' buttonType={ButtonType.Tertiary} XL />
+            <Button action={() => action()} Icon={Icon} content='Lets go!' buttonType="Tertiary" XL />
           </div>
         )}
       </div>

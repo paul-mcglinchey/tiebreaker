@@ -61,7 +61,7 @@ export const ClientProvider = ({ children }: IClientProviderProps) => {
   const { requestBuilder } = useRequestBuilder()
   const { response, isLoading, error }: IFetch<IClientsResponse> = useFetch
   (
-    `${endpoints.clients(currentGroup?._id || "")}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
+    `${endpoints.clients(currentGroup?.id || "")}?${buildQueryString(pageNumber, pageSize, sortField, sortDirection, filters)}`, 
     requestBuilder(), 
     [sortField, sortDirection, pageSize, pageNumber, currentGroup]
   )

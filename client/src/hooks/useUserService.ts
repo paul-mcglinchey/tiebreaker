@@ -33,18 +33,39 @@ const useUserService = (): IUserService => {
     }))
   }
 
-  const userHasApplication = (group: IGroup, userId: string | undefined, applicationIdentifer: number | undefined): boolean => {
-    if (!userId || !applicationIdentifer) return false
+  const userHasApplication = (group: IGroup, userId: string | undefined, applicationId: number | undefined): boolean => {
+    if (!userId || !applicationId) return false
 
-    return !!group.users?.find(gu => gu.user === userId)?.applications.map(a => a.application).includes(applicationIdentifer)
+    return !!group.groupUsers.find(gu => gu.userId === userId)?.applications.map(a => a.applicationId).includes(applicationId)
   }
 
-  const userHasPermission = (group: IGroup, userId: string | undefined, applicationIdentifier: number | undefined, permissionIdentifier: number | undefined): boolean => {
-    if (!userId || !permissionIdentifier) return false
+  const userHasPermission = (group: IGroup, userId: string | undefined, applicationId: number | undefined, permissionId: number | undefined): boolean => {
+    if (!userId || !permissionId) return false
 
-    return applicationIdentifier 
-      ? !!group.users.find(gu => gu.user === userId)?.applications.find(ga => ga.application === applicationIdentifier)?.permissions.includes(permissionIdentifier)
-      : !!group.users.find(gu => gu.user === userId)?.permissions.includes(permissionIdentifier)
+    return applicationId
+      ? !!getApplicationPermissions(group, userId, applicationId).includes(permissionId)
+      : !!getGroupPermissions(group, userId).includes(permissionId)
+  }
+
+  const getGroupPermissions = (group: IGroup, userId: string): number[] => {
+    const permissions: number[] = []
+    group.groupUsers
+      .find(gu => gu.userId === userId)?.roles
+      .forEach(r => r.permissions
+        .forEach(p => !permissions.includes(p.id) && permissions.push(p.id)))
+
+    return permissions
+  }
+
+  const getApplicationPermissions = (group: IGroup, userId: string, applicationId: number): number[] => {
+    const permissions: number[] = []
+    group.groupUsers
+      .find(gu => gu.userId === userId)?.applications
+      .find(ga => ga.applicationId === applicationId)?.roles
+      .forEach(r => r.permissions
+        .forEach(p => !permissions.includes(p.id) && permissions.push(p.id)))
+
+    return permissions
   }
 
   return { ...userContext, getUser, updateUser, userHasApplication, userHasPermission }

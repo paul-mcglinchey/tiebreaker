@@ -39,6 +39,9 @@ namespace Tiebreaker.Api.Services
                 (u.Username.Equals(user.UsernameOrEmail) || u.Email.Equals(user.UsernameOrEmail)))
             .SingleOrDefaultAsync(cancellationToken) != null;
 
+        public async Task<bool> UserExistsAsync(Guid userId, CancellationToken cancellationToken) =>
+            await this.context.Users.Where(u => u.Id.Equals(userId)).SingleOrDefaultAsync(cancellationToken) != null;
+
         public async Task<UserDto> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await this.context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync(cancellationToken);

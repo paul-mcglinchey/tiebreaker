@@ -27,7 +27,7 @@ export const EmployeeProvider = ({ children }: IChildrenProps) => {
 
   const { currentGroup } = useGroupService()
   const { requestBuilder } = useRequestBuilder()
-  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?._id || ""), requestBuilder(), [sortField, sortDirection, currentGroup])
+  const { response, isLoading, error }: IFetch<IEmployeesResponse> = useFetch(endpoints.employees(currentGroup?.id || ""), requestBuilder(), [sortField, sortDirection, currentGroup])
 
   useEffect(() => {
     if (response) {

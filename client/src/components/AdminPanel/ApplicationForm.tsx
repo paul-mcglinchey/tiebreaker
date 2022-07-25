@@ -16,7 +16,7 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
   return (
     <Formik
       initialValues={{
-        identifier: application?.identifier || NaN,
+        id: application?.id || NaN,
         name: application?.name || '',
         description: application?.description || '',
         icon: application?.icon || '',
@@ -27,7 +27,7 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
       }}
       onSubmit={(values) => {
         application
-          ? updateApplication(values, application._id)
+          ? updateApplication(values, application.id)
           : addApplication(values)
       }}
       validationSchema={applicationValidationSchema}
@@ -35,7 +35,7 @@ export const ApplicationForm = ({ application, ContextualSubmissionButton }: IAp
       {({ errors, touched, isValid, values, setFieldValue }) => (
         <Form className="flex flex-col space-y-4">
           <div className="grid grid-cols-3 gap-2">
-            <StyledField name='identifier' label="Identifier" type="number" classes="col-span-1" errors={errors.identifier} touched={touched.identifier} />
+            <StyledField name='identifier' label="Identifier" type="number" classes="col-span-1" errors={errors.id} touched={touched.id} />
             <StyledField name='name' label="Name" classes="col-span-1" errors={errors.name} touched={touched.name} />
             <StyledField name='url' label="URL/Route" errors={errors.url} classes="col-span-1" touched={touched.url} />
             <StyledField name='description' label="Description" classes="col-span-3" errors={errors.description} touched={touched.description} />
